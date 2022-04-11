@@ -5,7 +5,6 @@
     参数接收
 '''
 
-from ensurepip import version
 from lib.initial.language import language
 from optparse import OptionParser
 

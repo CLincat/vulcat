@@ -40,7 +40,7 @@
 工具基于python3开发, 推荐使用python3.8及以上版本
 
 * Git: `git clone https://github.com/CLincat/vulcat.git`
-* Zip: [点我](https://github.com/CLincat/vulcat/releases/download/vulcat-1.0.0/vulcat-1.0.0.zip)
+* Zip: [点我](https://github.com/CLincat/vulcat/releases/download/vulcat-1.0.0/vulcat-v1.0.0.zip)
 
 ```
 git clone https://github.com/CLincat/vulcat.git

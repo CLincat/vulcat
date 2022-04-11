@@ -1,0 +1,120 @@
+#!/usr/bin/env python3
+# -*- coding:utf-8 -*-
+
+from lib.initial.config import config
+from lib.tool.logger import logger
+from lib.tool import check
+from lib.report import output
+from payloads.AlibabaDruid import alidruid
+from payloads.AlibabaNacos import nacos
+from payloads.ApacheTomcat import tomcat
+from payloads.Cisco import cisco
+from payloads.ThinkPHP import thinkphp
+# from payloads.Keycloak import keycloak
+from payloads.Spring import spring
+from payloads.Weblogic import weblogic
+from payloads.Yonyou import yonyou
+from thirdparty.tqdm import tqdm
+from queue import Queue
+from time import sleep
+from os import _exit
+
+class coreScan():
+    def __init__(self):
+        self.thread = config.get('thread')                                                          # * 线程数
+        self.delay = config.get('delay')                                                            # * 延时
+        self.url_list = config.get('url_list')                                                      # * url列表
+        self.app_list = config.get('app_list')                                                      # * 框架列表
+        self.thread_list = []                                                                       # * 已经运行的线程列表
+        self.results = []                                                                           # * 结果列表
+        self.queue = Queue()                                                                        # * 创建线程池
+        self.txt_filename = config.get('txt_filename')
+        self.json_filename = config.get('json_filename')
+        # self.self_modify = ['thread', 'delay']
+        # self.global_modify = ['timeout', 'http-proxy', 'user-agent', 'log']
+
+    def start(self):
+        ''' 开始扫描, 添加poc并启动 '''
+        for u in self.url_list:                                                                     # * 遍历urls
+            logger.info('yellow_ex', '[INFO] Start scanning target ' + u)                           # ? 提示, 开始扫描当前url
+            if check.check_connect(u):
+                self.addPOC(u)                                                                      # * 为url添加poc 并加入线程池
+                self.scanning()                                                                     # * 开始扫描该url
+            else:
+                logger.info('red', '[WARN] Unable to connect to ' + u)                              # ? 提示, 无法访问当前url
+                continue
+        self.end()                                                                                  # * 扫描结束, 处理所有poc扫描结果
+
+    def addPOC(self, url):                                                                          # * 为相应url添加poc
+        ''' 为某个url添加相应poc '''
+        try:
+            for app in self.app_list:                                                               # * 根据框架列表app_list, 获取相应poc
+                app = app.lower()                                                                   # * 转小写
+                pocs = eval('{}.addscan("{}")'.format(app, url))
+                for poc in pocs:                                                                    # * 将每个poc加入线程池
+                    self.queue.put(poc)
+        except NameError:
+            logger.info('red_ex', '[ERROR] The application not found: ' + app)                      # ? 出错, 未找到该框架
+            logger.info('reset', '', notime=True, print_end='')                                     # * 重置文字颜色
+            _exit(0)
+        except:
+            logger.info('red_ex', '[ERROR] The addPOC is error')                                    # ? 出错, 添加poc时出现错误
+            logger.info('reset', '', notime=True, print_end='')                                     # * 重置文字颜色
+            _exit(0)
+
+    def scanning(self):
+        ''' 正在扫描, 根据线程数启动poc '''
+        queue_thread = int(self.queue.qsize() / self.thread)+1                                      # * 循环次数
+        queue_thread = 1 if queue_thread <=0 else queue_thread                                      # * 最小为1
+
+        for q in tqdm(range(queue_thread), ncols=65, unit='poc'):                                   # * 单个url的扫描进度条
+            try:
+                for i in range(self.thread):                                                        # * 根据线程数, 每次运行相应次数的poc
+                    if not self.queue.empty():                                                      # * 如果线程池不为空, 开始扫描
+                        t = self.queue.get()                                                        # * 从线程池取出一个poc
+                        t.start()                                                                   # * 运行一个poc
+                        self.thread_list.append(t)                                                  # * 往线程列表添加一个已经运行的poc
+                    else:                                                                       
+                        break                                                                       # * 如果线程池为空, 结束扫描
+                sleep(self.delay)                                                                   # * 扫描时间间隔
+            except KeyboardInterrupt:
+                if self.stop():
+                    continue
+    def stop(self):
+        ''' # ! 功能还没写好
+        Ctrl+C暂停扫描
+            q(uit)              退出扫描
+            c(ontinue)          继续扫描
+            m(odify)            (还没写好)修改参数, 输入参数名和值(如-t 3)然后回车, 修改相应参数, 并继续扫描
+            wq(save and exit)   等待已经运行的poc, 保存并输出已有的漏洞结果, 有--output参数的话则同步保存至文件
+        '''
+        while True:
+            logger.info('reset', '[CTRL+C] q(uit)/c(ontinue)/wq(save and exit): ')                  # ? 提示信息
+            operation = input('\r'.ljust(70))                                                       # * 接收参数
+            if operation == 'q':                                                                    # * 退出
+                _exit(0)
+            elif operation == 'c':                                                                  # * 继续扫描
+                logger.info('yellow_ex', '[INFO] Continue to scan')                                 # ? 日志, 继续扫描
+                return True
+            elif operation == 'wq':                                                                 # * 保存退出
+                self.end()
+
+    def end(self):
+        ''' 结束扫描, 等待所有线程运行完毕, 生成漏洞结果并输出/保存'''
+        logger.info('cyan_ex', '[INFO] Wait for all threads to finish. Please wait...')             # ? 日志, 等待所有线程运行完毕, 时间长短取决于timeout参数
+        for t in self.thread_list:                                                                  # * 遍历线程列表
+            t.join()                                                                                # * 阻塞未完成的子线程, 等待主线程运行完毕
+            self.results.append(t.get_result())                                                     # * 添加扫描结果
+        output.output_info(self.results)                                                            # * output处理扫描结果, 在命令行输出结果信息
+
+        if self.txt_filename:                                                                       # * 是否保存结果为.txt
+            output.output_text(self.results, self.txt_filename)
+        if self.json_filename:                                                                      # * 是否保存结果为.json
+            output.output_json(self.results, self.json_filename)
+
+        logger.info('yellow_ex', '[INFO] Scan is completed')                                        # ? 日志, 扫描完全结束, 退出运行
+        logger.info('reset', '', notime=True, print_end='')                                         # * 重置文字颜色
+        print('\r'.ljust(70), end='\r')                                                             # * 解决wq的BUG
+        _exit(0)
+
+corescan = coreScan()

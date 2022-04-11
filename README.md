@@ -39,11 +39,11 @@
 ## Installation & Usage
 工具基于python3开发, 推荐使用python3.8及以上版本
 
-* Git: `git clone https://github.com/starcat_l/vulcat.git`
-* Zip: [点我](https://github.com/starcat_l/vulcat.zip)
+* Git: `git clone https://github.com/CLincat/vulcat.git`
+* Zip: [点我](https://github.com/CLincat/vulcat/releases/download/vulcat-1.0.0/vulcat-1.0.0.zip)
 
 ```
-git clone https://github.com/starcat_l/vulcat.git
+git clone https://github.com/CLincat/vulcat.git
 cd vulcat
 python3 vulcat.py -h
 ```

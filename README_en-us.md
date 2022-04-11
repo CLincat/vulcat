@@ -38,11 +38,11 @@
 ## Installation & Usage
 The tool is developed based on python3. Python3.8 or later is recommended
 
-* Git: `git clone https://github.com/starcat_l/vulcat.git`
-* Zip: [click me](https://github.com/starcat_l/vulcat.zip)
+* Git: `git clone https://github.com/CLincat/vulcat.git`
+* Zip: [click me](https://github.com/CLincat/vulcat/releases/download/vulcat-1.0.0/vulcat-1.0.0.zip)
 
 ```
-git clone https://github.com/starcat_l/vulcat.git
+git clone https://github.com/CLincat/vulcat.git
 cd vulcat
 python3 vulcat.py -h
 ```

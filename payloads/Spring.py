@@ -88,7 +88,7 @@ class Spring():
                         allow_redirects=False
                     )
 
-                if ((verify_res.status_code == 200) and (check.check_res(verify_res.text, '22965'))):
+                if ((verify_res.status_code == 200) and ('22965' in verify_res.text)):
                     results = {
                         'Target': target,
                         'Verify': verify_url,

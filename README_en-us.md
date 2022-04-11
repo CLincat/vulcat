@@ -39,7 +39,7 @@
 The tool is developed based on python3. Python3.8 or later is recommended
 
 * Git: `git clone https://github.com/CLincat/vulcat.git`
-* Zip: [click me](https://github.com/CLincat/vulcat/releases/download/vulcat-1.0.0/vulcat-v1.0.0.zip)
+* Zip: [click me](https://github.com/CLincat/vulcat/archive/refs/heads/main.zip)
 
 ```
 git clone https://github.com/CLincat/vulcat.git

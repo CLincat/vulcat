@@ -49,13 +49,15 @@ class Config():
         'Accept': '*/*',
         'Connection': 'close'
         }
+        if args.cookie:
+            args.headers['Cookie'] = args.cookie
 
         args.proxies = {
             'http': args.http_proxy,
             'https': args.http_proxy
         }
 
-        app_list = ['alidruid', 'cisco', 'thinkphp', 'tomcat', 'nacos', 'spring', 'weblogic', 'yonyou']
+        app_list = ['alidruid', 'cisco', 'django', 'thinkphp', 'tomcat', 'nacos', 'spring', 'weblogic', 'yonyou']
         if args.application == 'all':                                   # * -a参数
             args.app_list = app_list
         else:

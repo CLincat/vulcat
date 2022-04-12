@@ -32,6 +32,9 @@ class Weblogic():
         ]
 
     def cve_2020_14750_scan(self, url):
+        ''' Weblogic 权限验证绕过漏洞
+                可通过目录跳转符../回到上一级目录, 然后在../后面拼接console后台目录, 即可绕过后台登录, 直接进入后台
+        '''
         vul_info = {}
         vul_info['app_name'] = self.app_name
         vul_info['vul_type'] = 'unAuthorized'
@@ -71,7 +74,7 @@ class Weblogic():
                 logger.logging(vul_info)
                 return None
 
-            if ('RAC' in res.text):
+            if (('管理控制台' in res.text) or ('Information and Resources' in res.text) or ('Overloaded' in res.text)):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],

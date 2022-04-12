@@ -28,6 +28,7 @@ lang = {
             'timeout': 'Timeout/s (default: 10)',
             'http_proxy': 'The HTTP/HTTPS proxy (e.g. --http-proxy 127.0.0.1:8080)',
             'user_agent': 'Customize the User-Agent',
+            'cookie': 'Add a cookie',
             'log': 'The log level, Optional 1-3 (default: 1)'
         },
         'application_help': {
@@ -48,7 +49,7 @@ lang = {
         },
         'app_list_help': {
             'title': 'Supported target types(Case insensitive)',
-            'name': 'AliDruid,cisco,thinkphp,tomcat,nacos,spring,weblogic,yonyou'
+            'name': 'AliDruid,cisco,django,thinkphp,tomcat,nacos,spring,weblogic,yonyou'
         }
     },
     'zh_cn': {
@@ -67,6 +68,7 @@ lang = {
             'timeout': '超时时间/秒 (默认: 10)',
             'http_proxy': 'http/https代理 (如: --http-proxy 127.0.0.1:8080)',
             'user_agent': '自定义User-Agent',
+            'cookie': '添加cookie',
             'log': '日志等级, 可选1-3 (默认: 1)'
         },
         'application_help': {
@@ -87,7 +89,7 @@ lang = {
         },
         'app_list_help': {
             'title': '支持的目标类型(-a参数, 不区分大小写)',
-            'name': 'AliDruid,cisco,thinkphp,tomcat,nacos,spring,weblogic,yonyou'
+            'name': 'AliDruid,cisco,django,thinkphp,tomcat,nacos,spring,weblogic,yonyou'
         }
     }
 }

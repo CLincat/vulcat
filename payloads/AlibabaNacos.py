@@ -39,6 +39,9 @@ class Nacos():
         ]
 
     def cve_2021_29441_scan(self, url):
+        ''' 阿里巴巴Nacos未授权访问漏洞
+                可以通过该漏洞添加nacos后台用户, 并登录nacos管理后台
+        '''
         vul_info = {}
         vul_info['app_name'] = self.app_name
         vul_info['vul_type'] = 'unAuthorized'
@@ -80,7 +83,7 @@ class Nacos():
                 logger.logging(vul_info)
                 return None
 
-            if ('username' in res.text):
+            if (('pagesAvailable' in res.text) or ('"username":"nacos"' in res.text)):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],

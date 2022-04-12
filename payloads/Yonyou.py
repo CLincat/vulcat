@@ -39,6 +39,9 @@ class Yonyou():
         ]
 
     def cnvd_2021_30167_scan(self, url):
+        ''' 用友NC BeanShell远程命令执行漏洞
+                给了一个命令执行的页面, 在框框内输入命令, 然后点击按钮就可以运行任意代码
+        '''
         vul_info = {}
         vul_info['app_name'] = self.app_name + 'NC'
         vul_info['vul_type'] = 'RCE'
@@ -91,6 +94,9 @@ class Yonyou():
                 return results
 
     def yonyou_nc_fileRead_scan(self, url):
+        ''' 用友ERP-NC NCFindWeb接口任意文件读取/下载漏洞
+                也可以目录遍历
+        '''
         vul_info = {}
         vul_info['app_name'] = self.app_name + 'ERP-NC'
         vul_info['vul_type'] = 'FileRead'
@@ -130,7 +136,7 @@ class Yonyou():
                 logger.logging(vul_info)
                 return None
 
-            if ('XML' in res.text):
+            if (('nc.bs.framework.server' in res.text) or ('WebApplicationStartupHook' in res.text)):
                 results = {
                     'Target': target,
                     'Type': [vul_info['vul_type'], vul_info['app_name'], vul_info['vul_id']],

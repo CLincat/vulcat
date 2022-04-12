@@ -32,9 +32,12 @@ class Tomcat():
         ]
 
     def cve_2017_12615_scan(self, url):
+        ''' Tomcat PUT方法任意文件写入漏洞
+                PUT方法可用, 上传未做过滤, 可以写入任意文件
+        '''
         vul_info = {}
         vul_info['app_name'] = self.app_name
-        vul_info['vul_type'] = 'Write-File'
+        vul_info['vul_type'] = 'File-Upload'
         vul_info['vul_id'] = 'CVE-2017-12615'
         vul_info['vul_method'] = 'PUT'
         vul_info['headers'] = {}

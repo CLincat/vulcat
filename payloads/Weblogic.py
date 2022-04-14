@@ -121,14 +121,17 @@ class Weblogic():
                     timeout=self.timeout, 
                     headers=headers, 
                     data=data, 
-                    proxies=self.proxies, 
-                    verify=False
+                    proxies=self.proxies,
+                    verify=False,
+                    allow_redirects=False
                 )
                 vul_info['status_code'] = str(res.status_code)
                 logger.logging(vul_info)                        # * LOG
 
                 if (res.status_code == 302):
-                    cookie = res.headers['Set-Cookie']
+                    cookie = {
+                        'Cookie': res.headers['Set-Cookie']
+                    }
                     headers.update(cookie)
 
                     res = requests.get(

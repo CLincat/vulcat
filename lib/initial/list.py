@@ -15,7 +15,7 @@ def list():
             vul_list += ' {}|'.format(info['vul_id'].ljust(17))
             vul_list += ' {}|'.format(info['type'].ljust(11))
             vul_list += ' {}|'.format(info['method'].ljust(9))
-            vul_list += ' {}\t|'.format(info['description'].ljust(45))
+            vul_list += ' {}\t|'.format(info['description'].ljust(49))
             vul_list += '\n'
         vul_list += '+' + ('-'*15) + '+' + ('-'*18) + '+' + ('-'*12) + '+' + ('-'*10) + '+' + ('-'*60) + '+\n'
 
@@ -60,7 +60,7 @@ vul_info = {
             'vul_id': 'CVE-2020-3580',
             'type': 'XSS',
             'method': 'POST',
-            'description': '思科ASA/FTD软件跨站脚本攻击'
+            'description': '思科ASA/FTD XSS跨站脚本攻击'
         }
     ],
     'Django': [
@@ -74,7 +74,7 @@ vul_info = {
             'vul_id': 'CVE-2019-14234',
             'type': 'SQLinject',
             'method': 'GET',
-            'description': 'Django JSONfield sql注入'
+            'description': 'Django JSONfield SQL注入'
         }
     ],
     # 'Keycloak': [
@@ -91,6 +91,18 @@ vul_info = {
             'type': 'RCE',
             'method': 'POST',
             'description': 'Spring Framework远程代码执行'
+        },
+        {
+            'vul_id': 'CVE-2021-21234',
+            'type': 'FileRead',
+            'method': 'GET',
+            'description': 'Spring Boot目录遍历'
+        },
+        {
+            'vul_id': 'CVE-2020-5410',
+            'type': 'FileRead',
+            'method': 'GET',
+            'description': 'Spring Cloud目录遍历'
         }
     ],
     'ThinkPHP': [
@@ -113,6 +125,18 @@ vul_info = {
             'type': 'unAuth',
             'method': 'GET',
             'description': 'Weblogic权限验证绕过'
+        },
+        {
+            'vul_id': 'CVE-2019-2725',
+            'type': 'deSerializa',
+            'method': 'POST',
+            'description': 'Weblogic wls9_async反序列化'
+        },
+        {
+            'vul_id': 'CVE-2017-10271',
+            'type': 'deSerializa',
+            'method': 'POST',
+            'description': 'Weblogic XMLDecoder反序列化'
         }
     ],
     'Yonyou': [
@@ -126,7 +150,7 @@ vul_info = {
             'vul_id': 'None',
             'type': 'FileRead',
             'method': 'GET',
-            'description': '用友ERP-NC NCFindWeb接口任意文件读取/下载'
+            'description': '用友ERP-NC NCFindWeb目录遍历'
         }
     ]
 }

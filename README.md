@@ -19,22 +19,26 @@
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | AlibabaNacos  | CVE-2021-29441   | unAuth     | GET/POST | 阿里巴巴Nacos未授权访问                                      |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
-| ApacheTomcat  | CVE-2017-12615   | FileUpload | PUT      | PUT方法任意文件写                                            |
+| ApacheTomcat  | CVE-2017-12615   | FileUpload | PUT      | PUT方法任意文件写入                                          |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
-| Cisco         | CVE-2020-3580    | XSS        | POST     | 思科ASA/FTD软件跨站脚本攻击                                  |
+| Cisco         | CVE-2020-3580    | XSS        | POST     | 思科ASA/FTD XSS跨站脚本攻击                                  |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
-| Django        | CVE-2017-12794   | XSS        | GET      | Django debug page XSS漏洞                                  |
-| Django        | CVE-2019-14234   | SQLinject  | GET      | Django JSONfield sql注入漏洞                                |
+| Django        | CVE-2017-12794   | XSS        | GET      | Django debug page XSS跨站脚本攻击                           |
+| Django        | CVE-2019-14234   | SQLinject  | GET      | Django JSONfield SQL注入                                   |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | Spring        | CVE-2022-22965   | RCE        | POST     | Spring Framework远程代码执行                                |
+| Spring        | CVE-2021-21234   | FileRead   | GET      | Spring Boot目录遍历                                         |
+| Spring        | CVE-2020-5410    | FileRead   | GET      | Spring Cloud目录遍历                                        |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | ThinkPHP      | CNVD-2018-24942  | RCE        | GET      | 未开启强制路由导致RCE                                        |
 | ThinkPHP      | CNNVD-201901-445 | RCE        | POST     | 核心类Request远程代码执行                                    |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | Weblogic      | CVE-2020-14750   | unAuth     | GET      | Weblogic权限验证绕过                                        |
+| Weblogic      | CVE-2019-2725    | deSerializa| POST     | Weblogic wls9_async反序列化                                 |
+| Weblogic      | CVE-2017-10271   | deSerializa| POST     | Weblogic XMLDecoder反序列化                                 |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | Yonyou        | CNVD-2021-30167  | RCE        | GET      | 用友NC BeanShell远程命令执行                                |
-| Yonyou        | None             | FileRead   | GET      | 用友ERP-NC NCFindWeb接口任意文件读取/下载                    |
+| Yonyou        | None             | FileRead   | GET      | 用友ERP-NC NCFindWeb目录遍历                                |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 ```
 </details>
@@ -83,6 +87,7 @@ Options:
     --http-proxy=HTTP_PROXY
                         http/https代理 (如: --http-proxy 127.0.0.1:8080)
     --user-agent=UA     自定义User-Agent
+    --cookie=COOKIE     添加cookie
     --log=LOG           日志等级, 可选1-3 (默认: 1)
 
   Application:
@@ -107,7 +112,7 @@ Options:
     --list              查看所有Payload
 
   支持的目标类型(-a参数, 不区分大小写):
-    AliDruid,cisco,thinkphp,tomcat,nacos,spring,weblogic,yonyou
+    AliDruid,cisco,django,thinkphp,tomcat,nacos,spring,weblogic,yonyou
 ```
 
 ## language

@@ -5,7 +5,7 @@
     Yonyou扫描类: 
         用友NC BeanShell远程命令执行漏洞
             CNVD-2021-30167
-        用友ERP-NC NCFindWeb接口任意文件读取/下载漏洞
+        用友ERP-NC NCFindWeb接口任意文件读取/下载/目录遍历
             暂无编号
 '''
 

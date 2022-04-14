@@ -32,6 +32,9 @@ class Druid():
         ]
 
     def alibaba_druid_unauthorized_scan(self, url):
+        ''' druid未授权访问漏洞
+                攻击者可利用druid管理面板, 查看Session信息, 并利用泄露的Session登录后台(有时候可能没有Session)
+        '''
         vul_info = {}
         vul_info['app_name'] = self.app_name
         vul_info['vul_type'] = 'unAuthorized'

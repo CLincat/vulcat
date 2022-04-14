@@ -18,7 +18,7 @@ python3 vulcat.py -u https://www.example.com/
 python3 vulcat.py -u https://www.example.com/ -a thinkphp --log 3
 python3 vulcat.py -f url.txt -t 10
 python3 vulcat.py --list
-''', version='vulcat.py-1.0.1\n')
+''', version='vulcat.py-1.0.2\n')
     # * 指定目标
     target = parser.add_option_group(lang['target_help']['title'], lang['target_help']['name'])
     target.add_option('-u', '--url', type='string', dest='url', default=None, help=lang['target_help']['url'])

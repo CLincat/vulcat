@@ -6,7 +6,7 @@
 * 如果有什么想法、建议或者遇到了BUG, 都可以issues
 
 **目前支持扫描的web应用程序有:**
-> AlibabaDruid, AlibabaNacos, ApacheTomcat, Cicso, Spring, ThinkPHP, Weblogic, Yonyou
+> AlibabaDruid, AlibabaNacos, ApacheTomcat, Cicso, Django, Spring, ThinkPHP, Weblogic, Yonyou
 
 <details>
 <summary><b>目前支持扫描的web漏洞有: [点击展开]</b></summary>

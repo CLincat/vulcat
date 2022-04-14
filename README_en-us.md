@@ -5,7 +5,7 @@
 * If you have any ideas, suggestions, or bugs, you can issue
 
 **Web applications that currently support scanning:**
-> AlibabaDruid, AlibabaNacos, ApacheTomcat, Cicso, Spring, ThinkPHP, Weblogic, Yonyou
+> AlibabaDruid, AlibabaNacos, ApacheTomcat, Cicso, Django, Spring, ThinkPHP, Weblogic, Yonyou
 
 <details>
 <summary><b>The current web vulnerabilities that support scanning: [Click on]</b></summary>

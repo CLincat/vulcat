@@ -126,6 +126,21 @@ class Weblogic():
                 )
                 vul_info['status_code'] = str(res.status_code)
                 logger.logging(vul_info)                        # * LOG
+
+                if (res.status_code == 302):
+                    cookie = res.headers['Set-Cookie']
+                    headers.update(cookie)
+
+                    res = requests.get(
+                    target, 
+                    timeout=self.timeout, 
+                    headers=headers, 
+                    data=data, 
+                    proxies=self.proxies, 
+                    verify=False
+                )
+                vul_info['status_code'] = str(res.status_code)
+                logger.logging(vul_info)                        # * LOG
             except requests.ConnectTimeout:
                 vul_info['status_code'] = 'Timeout'
                 logger.logging(vul_info)
@@ -155,7 +170,7 @@ class Weblogic():
         vul_info = {}
         vul_info['app_name'] = self.app_name
         vul_info['vul_type'] = 'DeSerialization'
-        vul_info['vul_id'] = 'CVE-2017-10271'
+        vul_info['vul_id'] = 'CVE-2019-2725'
         vul_info['vul_method'] = 'POST'
         vul_info['headers'] = {
             'Content-Type': 'text/xml'
@@ -164,7 +179,7 @@ class Weblogic():
         headers = self.headers
         headers.update(vul_info['headers'])
 
-        for payload in self.cve_2017_10271_payloads:    # * Payload
+        for payload in self.cve_2019_2725_payloads:     # * Payload
             path = payload['path']                      # * Path
             data = payload['data']                      # * Data
             target = url + path                         # * Target

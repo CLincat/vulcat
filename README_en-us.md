@@ -5,7 +5,7 @@
 * If you have any ideas, suggestions, or bugs, you can issue
 
 **Web applications that currently support scanning:**
-> AlibabaDruid, AlibabaNacos, ApacheTomcat, Cicso, Django, Spring, ThinkPHP, Weblogic, Yonyou
+> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheStruts2, ApacheTomcat, Cicso, Django, Spring, ThinkPHP, Weblogic, Yonyou
 
 <details>
 <summary><b>The current web vulnerabilities that support scanning: [Click on]</b></summary>
@@ -17,6 +17,12 @@
 | AlibabaDruid  | None             | unAuth     | GET      | 阿里巴巴Druid未授权访问                                      |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | AlibabaNacos  | CVE-2021-29441   | unAuth     | GET/POST | 阿里巴巴Nacos未授权访问                                      |
++---------------+------------------+------------+----------+------------------------------------------------------------+
+| ApacheAirflow | CVE-2020-17526   | unAuth     | GET      | Airflow身份验证绕过                                         |
++---------------+------------------+------------+----------+------------------------------------------------------------+
+| ApacheStruts2 | S2-001           | RCE        | POST     | Struts2远程代码执行                                         |
+| ApacheStruts2 | S2-005           | RCE        | GET      | Struts2远程代码执行                                         |
+| ApacheStruts2 | S2-007           | RCE        | GET      | Struts2远程代码执行                                         |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | ApacheTomcat  | CVE-2017-12615   | FileUpload | PUT      | PUT方法任意文件写入                                          |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
@@ -32,6 +38,7 @@
 | ThinkPHP      | CNVD-2018-24942  | RCE        | GET      | 未开启强制路由导致RCE                                        |
 | ThinkPHP      | CNNVD-201901-445 | RCE        | POST     | 核心类Request远程代码执行                                    |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
+| Weblogic      | CVE-2020-14882   | RCE        | GET      | Weblogic未授权命令执行                                      |
 | Weblogic      | CVE-2020-14750   | unAuth     | GET      | Weblogic权限验证绕过                                        |
 | Weblogic      | CVE-2019-2725    | deSerializa| POST     | Weblogic wls9_async反序列化                                 |
 | Weblogic      | CVE-2017-10271   | deSerializa| POST     | Weblogic XMLDecoder反序列化                                 |
@@ -123,37 +130,164 @@ You can change the language of -h/--help, currently only Chinese and English
 
 * Open the vulcat/lib/initial/language.py
 * Switching the "return" order and then saving the file implements the -h/--help language switch
-![Language](images/language.png)
+
+```
+def language():
+    return lang['zh_cn']
+    return lang['en_us']
+```
 
 ## Custom POC
 * How do I write my own vulnerability POC and add it to vulcat
 * Find vulcat/payloads/demo.py, which is a POC template in Vulcat (semi-finished) and requires the user to fill in the rest of the code
 
 * **Modify the steps:**
-1. Make a copy of demo.py and save it to prevent template loss. Then change the name of the POC file (for example, thinkphp.py)
-![custom_1](images/custom_1.png)
-2. Modify the comment at the beginning of the file↓
-![custom_2](images/custom_2.png)
-3. Modify according to the prompt next to the code↓
-![custom_3_1](images/custom_3_1.png)
-If payloads have multiple, add multiple paths and data
-![custom_3_2](images/custom_3_2.png)
-4. Modify the content as prompted↓
-![custom_4_1](images/custom_4_1.png)
-![custom_4_2](images/custom_4_2.png)
-4. Modify the content as prompted↓
-![custom_5_1](images/custom_5_1.png)
-![custom_5_2](images/custom_5_2.png)
-4. Modify the content as prompted↓
-![custom_6_1](images/custom_6_1.png)
-![custom_6_2](images/custom_6_2.png)
-7. Open the vulcat/lib/initial/config.py, and add the application name (note: shall be the same name, see image below↓)
+1. Make a copy of demo.py and save it to prevent template loss. Then change the name of the POC (such as test.py)
+
+2. **Script description:** Modify the notes at the beginning of the file, and the scanned framework, vulnerability description, and vulnerability number of the script
+
+```
+#!/usr/bin/env python3
+# -*- coding:utf-8 -*-
+
+'''
+    XXXXX扫描类: 
+        XXXXX 未开启强制路由RCE
+            CNVD-2018-24942
+'''
+```
+3. **Class name**: frame name, and payload
+
+```
+class Demo():		   					 # ! Demo需要改为自定义的名称, 例如ABC(一般为框架名称, 例如ThinkPHP)
+    def __init__(self):
+        self.timeout = config.get('timeout')
+        self.headers = config.get('headers')
+        self.proxies = config.get('proxies')
+
+        self.app_name = '!!!'                # ! 漏洞框架/应用程序/CMS名称等, 例如ThinkPHP
+        self.md = md5(self.app_name)
+        self.cmd = 'echo ' + self.md
+
+        self.!!!_payloads = [                # ! 对应漏洞的Payload, 格式为: 漏洞编号_payloads, 例如cnvd_2018_24942_payloads
+            {
+                'path': '!!!',               # ! 漏洞的URL路径, 最前面没有斜杠/, 例如abc/qwe/index.php
+                'data': '!!!'                # ! POST数据, 没有的话可以为空
+            },
+        ]
+
+```
+4. **Multiple payload:** You can add multiple dictionaries (path and data). Each dictionary corresponds to one payload, for example:
+
+```
+self.!!!_payloads = [
+	{
+	    'path': '',
+	    'data': ''
+	},
+	{
+	    'path': '',
+	    'data': ''
+	},
+	{
+	    'path': '',
+	    'data': ''
+	}
+]
+# ↑↑↑现在有3个payload
+```
+5. **Vulnerability information, request mode:** Define vulnerability information, headers, payload, requests (GET, POST, etc.)
+
+```
+    def !!!_scan(self, url):                            # ! POC的名称, 格式为: 漏洞编号_scan, 例如cnvd_2018_24942_scan
+        vul_info = {}
+        vul_info['app_name'] = self.app_name
+        vul_info['vul_type'] = '!!!'                    # ! 漏洞类型
+        vul_info['vul_id'] = '!!!'                      # ! 漏洞编号
+        vul_info['vul_method'] = '!!!'                  # ! 请求方式
+        vul_info['headers'] = {}                        # ! 如果该漏洞需要特殊的Headers,如User-Agent:Nacos-Server、Content-Type: text/xml之类的, 则需要填写, 没有的话为空
+
+        headers = self.headers
+        headers.update(vul_info['headers'])
+
+        for payload in self.!!!_payloads:               # ! Payload的名称, 就是在步骤3定义的payload
+            path = payload['path']
+            data = payload['data']
+            target = url + path
+
+            vul_info['path'] = path
+            vul_info['data'] = data
+            vul_info['target'] = target
+
+            try:
+                res = requests.!!!(                     # ! 请求方式, 根据你的漏洞来选择(get、post、put等)
+                    target, 
+                    timeout=self.timeout, 
+                    headers=headers, 
+                    data=data, 
+                    proxies=self.proxies, 
+                    verify=False
+                )
+                vul_info['status_code'] = str(res.status_code)
+                logger.logging(vul_info)
+            except requests.ConnectTimeout:
+                vul_info['status_code'] = 'Timeout'
+                logger.logging(vul_info)
+                return None
+            except requests.ConnectionError:
+                vul_info['status_code'] = 'Faild'
+                logger.logging(vul_info)
+                return None
+```
+6. **Results:** Information returned when vulnerabilities exist results: Vulnerability information and display format
+
+```
+'''
+可以自定义results中的信息, 格式:
+    标题: 值(str/list/dict)
+        str类型: key: value的格式进行显示
+        list类型: 会以key: value value value ...的格式进行显示
+        dict类型: 会以↓的格式进行显示
+                dict:
+                    key1: value1
+                    key2: value2
+                    ...
+'''
+
+if ('!!!'):               # ! 判断扫描结果
+    results = {
+        'Target': target,
+        'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
+        'Method': vul_info['vul_method'],
+        'Payload': {
+            'Url': url,
+            'Path': path
+        }
+    }
+    return results
+```
+7. **Return the thread of the POC:**
+
+```
+def addscan(self, url):
+        return [
+            thread(target=self.!!!_scan, url=url)    # ! POC的名称, 就是步骤5定义的POC名称, 例如cnvd_2018_24942_scan
+        ]
+
+demo = Demo()										# ! 创建poc对象, xxx = 类名称, xxx可以自定义(一般为框架名称小写), 类名称就是步骤3中定义的名称
+```
+8. **POC is added in the configuration file:** open vulcat/lib/initial/config.py, and add the application name (note: shall be the same name, see below left)
 ![custom_7_1](images/custom_7_1.png)
 ![custom_7_2](images/custom_7_2.png)
-8. Open vulcat/lib/core/coreScan.py, import your POC, so far, vulcat can use your POC, you can now run the vulcat.py try out the effect of POC
-![custom_8](images/custom_8.png)
-9. 如果你想在-h/--help中显示你的POC的应用程序名称, 打开vulcat/lib/initial/language.py, 找到以下代码并继续添加即可↓
-9. If you want to in -h/--help show your POC application name, open the vulcat/lib/initial/language.py, find the following code and continue to add
+9. **POC is added in the scanner:** open vulcat/lib/core/coreScan.py, import your POC, so far, vulcat can use your POC, you can now run the vulcat.py try out the effect of POC
+
+```
+from payloads.文件名 import xxx
+
+# 文件名: 步骤1定义的文件名
+# xxx: 同步骤8
+```
+10. If you want to display in -h/--help your POC application name, open the vulcat/lib/initial/language.py, find and can be left to continue to add the following code添加即可↓
 ![custom_9_1](images/custom_9_1.png)
 ![custom_9_2](images/custom_9_2.png)
 

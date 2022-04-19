@@ -24,10 +24,13 @@ def check_connect(url):
             timeout=timeout, 
             headers=headers, 
             proxies=proxies, 
-            verify=False
+            verify=False,
+            allow_redirects=False
         )
 
         return True
+    except Exception as e:
+        print(e)
     except requests.ConnectTimeout:
         return False
     except requests.ConnectionError:

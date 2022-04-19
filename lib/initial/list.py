@@ -47,6 +47,34 @@ vul_info = {
             'description': '阿里巴巴Nacos未授权访问'
         }
     ],
+    'ApacheAirflow': [
+        {
+            'vul_id': 'CVE-2020-17526',
+            'type': 'unAuth',
+            'method': 'GET',
+            'description': 'Airflow身份验证绕过'
+        }
+    ],
+    'ApacheStruts2': [
+        {
+            'vul_id': 'S2-001',
+            'type': 'RCE',
+            'method': 'POST',
+            'description': 'Struts2远程代码执行'
+        },
+        {
+            'vul_id': 'S2-005',
+            'type': 'RCE',
+            'method': 'GET',
+            'description': 'Struts2远程代码执行'
+        },
+        {
+            'vul_id': 'S2-007',
+            'type': 'RCE',
+            'method': 'GET',
+            'description': 'Struts2远程代码执行'
+        }
+    ],
     'ApacheTomcat': [
         {
             'vul_id': 'CVE-2017-12615',
@@ -120,6 +148,12 @@ vul_info = {
         }
     ],
     'Weblogic': [
+        {
+            'vul_id': 'CVE-2020-14882',
+            'type': 'RCE',
+            'method': 'GET',
+            'description': 'Weblogic未授权命令执行'
+        },
         {
             'vul_id': 'CVE-2020-14750',
             'type': 'unAuth',

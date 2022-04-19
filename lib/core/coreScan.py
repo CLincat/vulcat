@@ -7,7 +7,9 @@ from lib.tool import check
 from lib.report import output
 from payloads.AlibabaDruid import alidruid
 from payloads.AlibabaNacos import nacos
+from payloads.ApacheAirflow import airflow
 from payloads.ApacheTomcat import tomcat
+from payloads.ApacheStruts2 import struts2
 from payloads.Cisco import cisco
 from payloads.Django import django
 from payloads.ThinkPHP import thinkphp
@@ -22,6 +24,7 @@ from os import _exit
 
 class coreScan():
     def __init__(self):
+        self.lang = config.get('lang')                                                              # * 语言
         self.thread = config.get('thread')                                                          # * 线程数
         self.delay = config.get('delay')                                                            # * 延时
         self.url_list = config.get('url_list')                                                      # * url列表
@@ -37,12 +40,12 @@ class coreScan():
     def start(self):
         ''' 开始扫描, 添加poc并启动 '''
         for u in self.url_list:                                                                     # * 遍历urls
-            logger.info('yellow_ex', '[INFO] Start scanning target ' + u)                           # ? 提示, 开始扫描当前url
+            logger.info('yellow_ex', self.lang['core']['start']['start'] + u)                       # ? 提示, 开始扫描当前url
             if check.check_connect(u):
                 self.addPOC(u)                                                                      # * 为url添加poc 并加入线程池
                 self.scanning()                                                                     # * 开始扫描该url
             else:
-                logger.info('red', '[WARN] Unable to connect to ' + u)                              # ? 提示, 无法访问当前url
+                logger.info('red', self.lang['core']['start']['unable'] + u)                        # ? 提示, 无法访问当前url
                 continue
         self.end()                                                                                  # * 扫描结束, 处理所有poc扫描结果
 
@@ -55,11 +58,11 @@ class coreScan():
                 for poc in pocs:                                                                    # * 将每个poc加入线程池
                     self.queue.put(poc)
         except NameError:
-            logger.info('red_ex', '[ERROR] The application not found: ' + app)                      # ? 出错, 未找到该框架
+            logger.info('red_ex', self.lang['core']['addpoc']['notfound'] + app)                    # ? 出错, 未找到该框架
             logger.info('reset', '', notime=True, print_end='')                                     # * 重置文字颜色
             _exit(0)
         except:
-            logger.info('red_ex', '[ERROR] The addPOC is error')                                    # ? 出错, 添加poc时出现错误
+            logger.info('red_ex', self.lang['core']['addpoc']['error'])                             # ? 出错, 添加poc时出现错误
             logger.info('reset', '', notime=True, print_end='')                                     # * 重置文字颜色
             _exit(0)
 
@@ -95,14 +98,14 @@ class coreScan():
             if operation == 'q':                                                                    # * 退出
                 _exit(0)
             elif operation == 'c':                                                                  # * 继续扫描
-                logger.info('yellow_ex', '[INFO] Continue to scan')                                 # ? 日志, 继续扫描
+                logger.info('yellow_ex', self.lang['core']['stop']['continue'])                     # ? 日志, 继续扫描
                 return True
             elif operation == 'wq':                                                                 # * 保存退出
                 self.end()
 
     def end(self):
         ''' 结束扫描, 等待所有线程运行完毕, 生成漏洞结果并输出/保存'''
-        logger.info('cyan_ex', '[INFO] Wait for all threads to finish. Please wait...')             # ? 日志, 等待所有线程运行完毕, 时间长短取决于timeout参数
+        logger.info('cyan_ex', self.lang['core']['end']['wait'])                                    # ? 日志, 等待所有线程运行完毕, 时间长短取决于timeout参数
         for t in self.thread_list:                                                                  # * 遍历线程列表
             t.join()                                                                                # * 阻塞未完成的子线程, 等待主线程运行完毕
             self.results.append(t.get_result())                                                     # * 添加扫描结果
@@ -113,7 +116,7 @@ class coreScan():
         if self.json_filename:                                                                      # * 是否保存结果为.json
             output.output_json(self.results, self.json_filename)
 
-        logger.info('yellow_ex', '[INFO] Scan is completed')                                        # ? 日志, 扫描完全结束, 退出运行
+        logger.info('yellow_ex', self.lang['core']['end']['completed'])                             # ? 日志, 扫描完全结束, 退出运行
         logger.info('reset', '', notime=True, print_end='')                                         # * 重置文字颜色
         print('\r'.ljust(70), end='\r')                                                             # * 解决wq的BUG
         _exit(0)

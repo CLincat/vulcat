@@ -5,7 +5,9 @@
     参数配置
 '''
 
+from lib.initial.language import language
 from thirdparty.requests import packages
+import http.client
 
 global config
 
@@ -14,6 +16,10 @@ class Config():
     def __init__(self, args):
         # global global_args
         packages.urllib3.disable_warnings()                             # * requests忽略ssl证书警告
+        http.client.HTTPConnection._http_vsn = 10
+        http.client.HTTPConnection._http_vsn_str = 'HTTP/1.0'           # * 设置HTTP版本为1.0
+
+        args.lang = language()
 
         args.url_list = []                                              # * url列表
         if args.url:
@@ -57,7 +63,7 @@ class Config():
             'https': args.http_proxy
         }
 
-        app_list = ['alidruid', 'cisco', 'django', 'thinkphp', 'tomcat', 'nacos', 'spring', 'weblogic', 'yonyou']
+        app_list = ['alidruid', 'airflow', 'cisco', 'django', 'thinkphp', 'tomcat', 'nacos', 'spring', 'struts2', 'weblogic', 'yonyou']
         if args.application == 'all':                                   # * -a参数
             args.app_list = app_list
         else:

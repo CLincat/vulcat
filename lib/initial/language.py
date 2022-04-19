@@ -3,8 +3,8 @@
 
 '''
     语言:
-        -h/--help的英文
-        -h/--help的中文
+        vulcat的英文
+        vulcat的中文
 '''
 
 def language():
@@ -49,7 +49,39 @@ lang = {
         },
         'app_list_help': {
             'title': 'Supported target types(Case insensitive)',
-            'name': 'AliDruid,cisco,django,thinkphp,tomcat,nacos,spring,weblogic,yonyou'
+            'name': 'AliDruid,airflow,cisco,django,thinkphp,tomcat,nacos,spring,weblogic,yonyou'
+        },
+        'core': {
+            'start': {
+                'start': '[INFO] Start scanning target ',
+                'unable': '[WARN] Unable to connect to '
+            },
+            'addpoc': {
+                'notfound': '[ERROR] The application not found: ',
+                'error': '[ERROR] The addPOC is error'
+            },
+            'stop': {
+                'continue': '[INFO] Continue to scan'
+            },
+            'end': {
+                'wait': '[INFO] Wait for all threads to finish. Please wait...',
+                'completed': '[INFO] Scan is completed'
+            }
+        },
+        'output': {
+            'info': {
+                'wait': '[INFO] Analyzing the results. Please wait...',
+                'vul': '[+] Find vulnerable. A total of {} HTTP(s) requests:',
+                'notvul': '[-] The target does not seem vulnerable. A total of {} HTTP(s) requests'
+            },
+            'text': {
+                'success': '[INFO] The results have been saved to ',
+                'faild': '[ERROR] Failed to save txt'
+            },
+            'json': {
+                'success': '[INFO] The results have been saved to ',
+                'faild': '[ERROR] Failed to save json'
+            }
         }
     },
     'zh_cn': {
@@ -89,7 +121,39 @@ lang = {
         },
         'app_list_help': {
             'title': '支持的目标类型(-a参数, 不区分大小写)',
-            'name': 'AliDruid,cisco,django,thinkphp,tomcat,nacos,spring,weblogic,yonyou'
+            'name': 'AliDruid,airflow,cisco,django,thinkphp,tomcat,nacos,spring,weblogic,yonyou'
+        },
+        'core': {
+            'start': {
+                'start': '[INFO] 开始扫描目标 ',
+                'unable': '[WARN] 无法连接到 '
+            },
+            'addpoc': {
+                'notfound': '[ERROR] 未找到应用程序: ',
+                'error': '[ERROR] 添加POC时出现错误'
+            },
+            'stop': {
+                'continue': '[INFO] 继续扫描'
+            },
+            'end': {
+                'wait': '[INFO] 等待所有线程结束, 请稍等...',
+                'completed': '[INFO] 扫描完成'
+            }
+        },
+        'output': {
+            'info': {
+                'wait': '[INFO] 分析扫描结果中, 请稍等...',
+                'vul': '[+] 发现漏洞, 共发送了{}个HTTP(s)请求:',
+                'notvul': '[-] 目标似乎没有漏洞, 共发送了{}个HTTP(s)请求'
+            },
+            'text': {
+                'success': '[INFO] 结果已经被保存到 ',
+                'faild': '[ERROR] 保存txt文件失败'
+            },
+            'json': {
+                'success': '[INFO] 结果已经被保存到 ',
+                'faild': '[ERROR] 保存json文件失败'
+            }
         }
     }
 }

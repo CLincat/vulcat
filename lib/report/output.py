@@ -7,8 +7,8 @@ from lib.tool.timed import nowtime_year
 from lib.tool.logger import logger
 import json
 
-def output_info(results):
-    logger.info('cyan_ex', '[INFO] Analyzing the results. Please wait...')              # ? 日志, 正在处理扫描结果
+def output_info(results, lang):
+    logger.info('cyan_ex', lang['output']['info']['wait'])                              # ? 日志, 正在处理扫描结果
     results_info_list = []
 
     for result in results:
@@ -19,15 +19,15 @@ def output_info(results):
     results_info_list = set(results_info_list)                                          # * 去重
 
     if results_info_list:                                                                                                           # * 有漏洞   
-        logger.info('green_ex', '[+] Find vulnerable. A total of {} HTTP(s) requests:'.format(logger.requests_number))              # ? 日志, 发现漏洞, 发送的请求包数量为xxx个
+        logger.info('green_ex', lang['output']['info']['vul'].format(logger.requests_number))              # ? 日志, 发现漏洞, 发送的请求包数量为xxx个
         for result in results_info_list:
             print(result, end='')
         logger.info('reset', '---', notime=True)                                                                                    # ? 结果, 重置文字颜色, 输出漏洞结果, 不显示时间
     else:                                                                                                                           # * 没有漏洞
-        logger.info('red', '[-] The target does not seem vulnerable. A total of {} HTTP(s) requests'.format(logger.requests_number))# ? 日志, 目标看起来没有漏洞, 发送的请求包数量为xxx个
+        logger.info('red', lang['output']['info']['notvul'].format(logger.requests_number))                # ? 日志, 目标看起来没有漏洞, 发送的请求包数量为xxx个
     return None
 
-def output_text(results, filename):
+def output_text(results, filename, lang):
     ''' 以txt格式保存扫描结果至文件中 '''
     try:
         f = open(filename, 'a')
@@ -44,13 +44,13 @@ def output_text(results, filename):
         if results_info_list:  
             for result in results_info_list:
                 f.write(result)
-            logger.info('cyan_ex', '[INFO] The results have been saved to ' + filename)     # ? 日志, 已保存结果至XXX.txt文件中
+            logger.info('cyan_ex', lang['output']['text']['success'] + filename)        # ? 日志, 已保存结果至XXX.txt文件中
         f.close()
     except:
-        logger.info('red_ex', '[ERROR] Failed to save txt')
+        logger.info('red_ex', lang['output']['text']['faild'])
     return None
 
-def output_json(results, filename):
+def output_json(results, filename, lang):
     ''' 以json格式保存扫描结果至文件中 '''
     try:
         f = open(filename, 'a')
@@ -69,10 +69,10 @@ def output_json(results, filename):
                 # result = result.replace('{', '{\n\t')
                 # result = result.replace(', ', ',\n\t')
                 f.write(result)
-            logger.info('cyan_ex', '[INFO] The results have been saved to ' + filename)        # ? 日志, 已保存结果至XXX.json文件中
+            logger.info('cyan_ex', lang['output']['json']['success'] + filename)        # ? 日志, 已保存结果至XXX.json文件中
         f.close()
     except:
-        logger.info('red_ex', '[ERROR] Failed to save json')
+        logger.info('red_ex', lang['output']['json']['faild'])
     return None
 
 def output_html(result):

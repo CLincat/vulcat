@@ -118,7 +118,7 @@ class Weblogic():
             'cmd': self.cmd
         }
 
-        headers = self.headers
+        headers = self.headers.copy()
         headers.update(vul_info['headers'])
 
         for payload in self.cve_2020_14882_payloads:    # * Payload
@@ -253,7 +253,7 @@ class Weblogic():
             'Content-Type': 'text/xml'
         }
 
-        headers = self.headers
+        headers = self.headers.copy()
         headers.update(vul_info['headers'])
 
         for payload in self.cve_2019_2725_payloads:     # * Payload
@@ -325,7 +325,7 @@ class Weblogic():
             'Content-Type': 'text/xml'
         }
 
-        headers = self.headers
+        headers = self.headers.copy()
         headers.update(vul_info['headers'])
 
         for payload in self.cve_2017_10271_payloads:    # * Payload

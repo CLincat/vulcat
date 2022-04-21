@@ -6,7 +6,7 @@
 * 如果有什么想法、建议或者遇到了BUG, 都可以issues
 
 **目前支持扫描的web应用程序有:**
-> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheStruts2, ApacheTomcat, Cicso, Django, Spring, ThinkPHP, Weblogic, Yonyou
+> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheFlink, ApacheSolr, ApacheStruts2, ApacheTomcat, Cicso, Django, Spring, ThinkPHP, Weblogic, Yonyou
 
 <details>
 <summary><b>目前支持扫描的web漏洞有: [点击展开]</b></summary>
@@ -20,6 +20,10 @@
 | AlibabaNacos  | CVE-2021-29441   | unAuth     | GET/POST | 阿里巴巴Nacos未授权访问                                      |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | ApacheAirflow | CVE-2020-17526   | unAuth     | GET      | Airflow身份验证绕过                                         |
++---------------+------------------+------------+----------+------------------------------------------------------------+
+| ApacheFlink   | CVE-2020-17519   | FileRead   | GET      | Flink目录遍历                                               |
++---------------+------------------+------------+----------+------------------------------------------------------------+
+| ApacheSolr    | CVE-2021-27905   | SSRF       | GET/POST | Solr SSRF/任意文件读取                                      |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | ApacheStruts2 | S2-001           | RCE        | POST     | Struts2远程代码执行                                         |
 | ApacheStruts2 | S2-005           | RCE        | GET      | Struts2远程代码执行                                         |
@@ -202,7 +206,7 @@ self.!!!_payloads = [
         vul_info['vul_method'] = '!!!'                  # ! 请求方式
         vul_info['headers'] = {}                        # ! 如果该漏洞需要特殊的Headers,如User-Agent:Nacos-Server、Content-Type: text/xml之类的, 则需要填写, 没有的话为空
 
-        headers = self.headers
+        headers = self.headers.copy()                   # * 复制一份headers, 防止污染全局headers
         headers.update(vul_info['headers'])
 
         for payload in self.!!!_payloads:               # ! Payload的名称, 就是在步骤3定义的payload
@@ -218,7 +222,7 @@ self.!!!_payloads = [
                 res = requests.!!!(                     # ! 请求方式, 根据你的漏洞来选择(get、post、put等)
                     target, 
                     timeout=self.timeout, 
-                    headers=headers, 
+                    headers=headers,                    # * 使用该漏洞的特殊Headers为headers, 使用正常的Headers为self.headers
                     data=data, 
                     proxies=self.proxies, 
                     verify=False

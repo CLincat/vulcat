@@ -35,6 +35,7 @@ class Demo():
         ]
 
     def !!!_scan(self, url):                            # ! POC的名称, 格式为: 漏洞编号_scan, 例如cnvd_2018_24942_scan
+        '''  '''
         vul_info = {}
         vul_info['app_name'] = self.app_name
         vul_info['vul_type'] = '!!!'                    # ! 漏洞类型
@@ -42,7 +43,7 @@ class Demo():
         vul_info['vul_method'] = '!!!'                  # ! 请求方式
         vul_info['headers'] = {}                        # ! 如果该漏洞需要特殊的Headers,如User-Agent:Nacos-Server, 则需要填写, 没有的话就不用填
 
-        headers = self.headers
+        headers = self.headers.copy()                   # * 复制一份headers, 防止污染全局headers
         headers.update(vul_info['headers'])             # * 合并Headers
 
         for payload in self.!!!_payloads:               # * Payload
@@ -58,7 +59,7 @@ class Demo():
                 res = requests.!!!(                     # ! 请求方式
                     target, 
                     timeout=self.timeout, 
-                    headers=headers, 
+                    headers=headers,                    # * 使用该漏洞的特殊headers为headers, 使用正常的headers为self.headers
                     data=data, 
                     proxies=self.proxies, 
                     verify=False

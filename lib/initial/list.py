@@ -55,6 +55,22 @@ vul_info = {
             'description': 'Airflow身份验证绕过'
         }
     ],
+    'ApacheFlink': [
+        {
+            'vul_id': 'CVE-2020-17519',
+            'type': 'FileRead',
+            'method': 'GET',
+            'description': 'Flink目录遍历'
+        }
+    ],
+    'ApacheSolr': [
+        {
+            'vul_id': 'CVE-2021-27905',
+            'type': 'SSRF',
+            'method': 'GET/POST',
+            'description': 'Solr SSRF/任意文件读取'
+        }
+    ],
     'ApacheStruts2': [
         {
             'vul_id': 'S2-001',

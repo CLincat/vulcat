@@ -8,6 +8,8 @@ from lib.report import output
 from payloads.AlibabaDruid import alidruid
 from payloads.AlibabaNacos import nacos
 from payloads.ApacheAirflow import airflow
+from payloads.ApacheFlink import flink
+from payloads.ApacheSolr import solr
 from payloads.ApacheTomcat import tomcat
 from payloads.ApacheStruts2 import struts2
 from payloads.Cisco import cisco
@@ -109,12 +111,12 @@ class coreScan():
         for t in self.thread_list:                                                                  # * 遍历线程列表
             t.join()                                                                                # * 阻塞未完成的子线程, 等待主线程运行完毕
             self.results.append(t.get_result())                                                     # * 添加扫描结果
-        output.output_info(self.results)                                                            # * output处理扫描结果, 在命令行输出结果信息
+        output.output_info(self.results, self.lang)                                                 # * output处理扫描结果, 在命令行输出结果信息
 
         if self.txt_filename:                                                                       # * 是否保存结果为.txt
-            output.output_text(self.results, self.txt_filename)
+            output.output_text(self.results, self.txt_filename, self.lang)
         if self.json_filename:                                                                      # * 是否保存结果为.json
-            output.output_json(self.results, self.json_filename)
+            output.output_json(self.results, self.json_filename, self.lang)
 
         logger.info('yellow_ex', self.lang['core']['end']['completed'])                             # ? 日志, 扫描完全结束, 退出运行
         logger.info('reset', '', notime=True, print_end='')                                         # * 重置文字颜色

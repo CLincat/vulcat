@@ -5,7 +5,7 @@
 * If you have any ideas, suggestions, or bugs, you can issue
 
 **Web applications that currently support scanning:**
-> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheStruts2, ApacheTomcat, Cicso, Django, Spring, ThinkPHP, Weblogic, Yonyou
+> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheFlink, ApacheSolr, ApacheStruts2, ApacheTomcat, Cicso, Django, Spring, ThinkPHP, Weblogic, Yonyou
 
 <details>
 <summary><b>The current web vulnerabilities that support scanning: [Click on]</b></summary>
@@ -14,37 +14,41 @@
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | Target        | Vul_id           | Type       | Method   | Description                                                |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
-| AlibabaDruid  | None             | unAuth     | GET      | 阿里巴巴Druid未授权访问                                      |
+| AlibabaDruid  | None             | unAuth     | GET      | Alibaba Druid unAuthorized                                 |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
-| AlibabaNacos  | CVE-2021-29441   | unAuth     | GET/POST | 阿里巴巴Nacos未授权访问                                      |
+| AlibabaNacos  | CVE-2021-29441   | unAuth     | GET/POST | Alibaba Nacos unAuthorized                                 |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
-| ApacheAirflow | CVE-2020-17526   | unAuth     | GET      | Airflow身份验证绕过                                         |
+| ApacheAirflow | CVE-2020-17526   | unAuth     | GET      | Airflow Authentication bypass                              |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
-| ApacheStruts2 | S2-001           | RCE        | POST     | Struts2远程代码执行                                         |
-| ApacheStruts2 | S2-005           | RCE        | GET      | Struts2远程代码执行                                         |
-| ApacheStruts2 | S2-007           | RCE        | GET      | Struts2远程代码执行                                         |
+| ApacheFlink   | CVE-2020-17519   | FileRead   | GET      | Flink Directory traversal                                  |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
-| ApacheTomcat  | CVE-2017-12615   | FileUpload | PUT      | PUT方法任意文件写入                                          |
+| ApacheSolr    | CVE-2021-27905   | SSRF       | GET/POST | Solr SSRF/FileRead                                         |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
-| Cisco         | CVE-2020-3580    | XSS        | POST     | 思科ASA/FTD XSS跨站脚本攻击                                  |
+| ApacheStruts2 | S2-001           | RCE        | POST     | Struts2 Remote code execution                              |
+| ApacheStruts2 | S2-005           | RCE        | GET      | Struts2 Remote code execution                              |
+| ApacheStruts2 | S2-007           | RCE        | GET      | Struts2 Remote code execution                              |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
-| Django        | CVE-2017-12794   | XSS        | GET      | Django debug page XSS跨站脚本攻击                           |
-| Django        | CVE-2019-14234   | SQLinject  | GET      | Django JSONfield SQL注入                                   |
+| ApacheTomcat  | CVE-2017-12615   | FileUpload | PUT      | Put method writes to any file                              |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
-| Spring        | CVE-2022-22965   | RCE        | POST     | Spring Framework远程代码执行                                |
-| Spring        | CVE-2021-21234   | FileRead   | GET      | Spring Boot目录遍历                                         |
-| Spring        | CVE-2020-5410    | FileRead   | GET      | Spring Cloud目录遍历                                        |
+| Cisco         | CVE-2020-3580    | XSS        | POST     | Cisco ASA/FTD XSS                                          |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
-| ThinkPHP      | CNVD-2018-24942  | RCE        | GET      | 未开启强制路由导致RCE                                        |
-| ThinkPHP      | CNNVD-201901-445 | RCE        | POST     | 核心类Request远程代码执行                                    |
+| Django        | CVE-2017-12794   | XSS        | GET      | Django debug page XSS                                      |
+| Django        | CVE-2019-14234   | SQLinject  | GET      | Django JSONfield SQLinject                                 |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
-| Weblogic      | CVE-2020-14882   | RCE        | GET      | Weblogic未授权命令执行                                      |
-| Weblogic      | CVE-2020-14750   | unAuth     | GET      | Weblogic权限验证绕过                                        |
-| Weblogic      | CVE-2019-2725    | deSerializa| POST     | Weblogic wls9_async反序列化                                 |
-| Weblogic      | CVE-2017-10271   | deSerializa| POST     | Weblogic XMLDecoder反序列化                                 |
+| Spring        | CVE-2022-22965   | RCE        | POST     | Spring Framework Remote code execution                     |
+| Spring        | CVE-2021-21234   | FileRead   | GET      | Spring Boot Directory traversal                            |
+| Spring        | CVE-2020-5410    | FileRead   | GET      | Spring Cloud Directory traversal                           |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
-| Yonyou        | CNVD-2021-30167  | RCE        | GET      | 用友NC BeanShell远程命令执行                                |
-| Yonyou        | None             | FileRead   | GET      | 用友ERP-NC NCFindWeb目录遍历                                |
+| ThinkPHP      | CNVD-2018-24942  | RCE        | GET      | The forced route is not enabled Remote code execution      |
+| ThinkPHP      | CNNVD-201901-445 | RCE        | POST     | Core class Request Remote code execution                   |
++---------------+------------------+------------+----------+------------------------------------------------------------+
+| Weblogic      | CVE-2020-14882   | RCE        | GET      | Weblogic Unauthorized command execution                    |
+| Weblogic      | CVE-2020-14750   | unAuth     | GET      | Weblogic Authentication bypass                             |
+| Weblogic      | CVE-2019-2725    | deSerializa| POST     | Weblogic wls9_async deSerialization                        |
+| Weblogic      | CVE-2017-10271   | deSerializa| POST     | Weblogic XMLDecoder deSerialization                        |
++---------------+------------------+------------+----------+------------------------------------------------------------+
+| Yonyou        | CNVD-2021-30167  | RCE        | GET      | Yonyou-NC BeanShell Remote code execution                  |
+| Yonyou        | None             | FileRead   | GET      | Yonyou-ERP-NC NCFindWeb Directory traversal                |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 ```
 </details>
@@ -207,7 +211,7 @@ self.!!!_payloads = [
         vul_info['vul_method'] = '!!!'                  # ! 请求方式
         vul_info['headers'] = {}                        # ! 如果该漏洞需要特殊的Headers,如User-Agent:Nacos-Server、Content-Type: text/xml之类的, 则需要填写, 没有的话为空
 
-        headers = self.headers
+        headers = self.headers.copy()                   # * 复制一份headers, 防止污染全局headers
         headers.update(vul_info['headers'])
 
         for payload in self.!!!_payloads:               # ! Payload的名称, 就是在步骤3定义的payload
@@ -223,7 +227,7 @@ self.!!!_payloads = [
                 res = requests.!!!(                     # ! 请求方式, 根据你的漏洞来选择(get、post、put等)
                     target, 
                     timeout=self.timeout, 
-                    headers=headers, 
+                    headers=headers,                    # * 使用该漏洞的特殊Headers为headers, 使用正常的Headers为self.headers
                     data=data, 
                     proxies=self.proxies, 
                     verify=False

@@ -82,6 +82,10 @@ class Nacos():
                 vul_info['status_code'] = 'Faild'
                 logger.logging(vul_info)
                 return None
+            except:
+                vul_info['status_code'] = 'Error'
+                logger.logging(vul_info)
+                return None
 
             if (('pagesAvailable' in res.text) or ('"username":"nacos"' in res.text)):
                 results = {

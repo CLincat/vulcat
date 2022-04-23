@@ -126,6 +126,10 @@ class Solr():
                 vul_info['status_code'] = 'Faild'
                 logger.logging(vul_info)
                 return None
+            except:
+                vul_info['status_code'] = 'Error'
+                logger.logging(vul_info)
+                return None
 
             if (('/sbin/nologin' in res.text) or ('root:x:0:0:root' in res.text) or ('Microsoft Corp' in res.text) or ('Microsoft TCP/IP for Windows' in res.text)):
                 results = {

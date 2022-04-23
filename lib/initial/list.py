@@ -121,6 +121,20 @@ vul_info = {
             'description': 'Django JSONfield SQL注入'
         }
     ],
+    'Fastjson': [
+        {
+            'vul_id': 'CNVD-2019-22238',
+            'type': 'unSerialize',
+            'method': 'POST',
+            'description': 'Fastjson <=1.2.47 反序列化'
+        },
+        {
+            'vul_id': 'CVE-2017-18349',
+            'type': 'unSerialize',
+            'method': 'POST',
+            'description': 'Fastjson <= 1.2.24 反序列化'
+        }
+    ],
     # 'Keycloak': [
     #     {
     #         'vul_id': 'CVE-2020-10770',
@@ -178,15 +192,21 @@ vul_info = {
         },
         {
             'vul_id': 'CVE-2019-2725',
-            'type': 'deSerializa',
+            'type': 'unSerialize',
             'method': 'POST',
             'description': 'Weblogic wls9_async反序列化'
         },
         {
             'vul_id': 'CVE-2017-10271',
-            'type': 'deSerializa',
+            'type': 'unSerialize',
             'method': 'POST',
             'description': 'Weblogic XMLDecoder反序列化'
+        },
+        {
+            'vul_id': 'CVE-2014-4210',
+            'type': 'SSRF',
+            'method': 'GET',
+            'description': 'Weblogic 服务端请求伪造'
         }
     ],
     'Yonyou': [

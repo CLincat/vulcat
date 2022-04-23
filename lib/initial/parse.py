@@ -39,6 +39,10 @@ python3 vulcat.py --list
     application = parser.add_option_group(lang['application_help']['title'], lang['application_help']['name'])
     application.add_option('-a', '--application', type='string', dest='application', default='all', help=lang['application_help']['application'])
 
+    # * 第三方api, 例如dnslog/ceye
+    api = parser.add_option_group(lang['api_help']['title'], lang['api_help']['name'])
+    api.add_option('--dns', type='string', dest='dns', default='dnslog/ceye', help=lang['api_help']['dns'])
+
     # * 保存扫描结果到文件中
     save = parser.add_option_group(lang['save_help']['title'], lang['save_help']['name'])
     save.add_option('--output-text', type='string', dest='txt_filename',default=None, help=lang['save_help']['output_text'])

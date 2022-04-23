@@ -36,6 +36,11 @@ lang = {
             'name': 'Specify the target type for the scan',
             'application': 'Specifies the target type, separated by commas (e.g. thinkphp / thinkphp,weblogic) (default: all)'
         },
+        'api_help': {
+            'title': 'Api',
+            'name': 'The third party Api',
+            'dns': 'DNS platform, auxiliary verification without echo vulnerability. dnslog.cn/ceye.io (optional parameter: dnslog/ceye e.g. --dns ceye) (automatically selected by default, ceye is preferred, and dnglog is automatically changed when ceye is unavailable)'
+        },
         'save_help': {
             'title': 'Save',
             'name': 'Save scan results',
@@ -49,7 +54,7 @@ lang = {
         },
         'app_list_help': {
             'title': 'Supported target types(Case insensitive)',
-            'name': 'AliDruid,airflow,cisco,django,thinkphp,tomcat,nacos,spring,weblogic,yonyou'
+            'name': 'AliDruid,airflow,cisco,django,fastjson,thinkphp,tomcat,nacos,spring,weblogic,yonyou'
         },
         'core': {
             'start': {
@@ -108,6 +113,11 @@ lang = {
             'name': '指定扫描的目标类型',
             'application': '指定目标类型, 多个使用逗号分隔 (如: thinkphp 或者 thinkphp,weblogic) (默认为全部)'
         },
+        'api_help': {
+            'title': 'Api',
+            'name': '第三方api',
+            'dns': 'dns平台, 辅助无回显漏洞的验证, 支持dnslog.cn和ceye.io(可选参数: dnslog/ceye 如: --dns ceye) (默认自动选择, 优先ceye, ceye不可用时自动改为dnslog)'
+        },
         'save_help': {
             'title': 'Save',
             'name': '保存扫描结果',
@@ -121,7 +131,7 @@ lang = {
         },
         'app_list_help': {
             'title': '支持的目标类型(-a参数, 不区分大小写)',
-            'name': 'AliDruid,airflow,cisco,django,thinkphp,tomcat,nacos,spring,weblogic,yonyou'
+            'name': 'AliDruid,airflow,cisco,django,fastjson,thinkphp,tomcat,nacos,spring,weblogic,yonyou'
         },
         'core': {
             'start': {

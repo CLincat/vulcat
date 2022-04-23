@@ -14,6 +14,7 @@ from payloads.ApacheTomcat import tomcat
 from payloads.ApacheStruts2 import struts2
 from payloads.Cisco import cisco
 from payloads.Django import django
+from payloads.Fastjson import fastjson
 from payloads.ThinkPHP import thinkphp
 # from payloads.Keycloak import keycloak
 from payloads.Spring import spring

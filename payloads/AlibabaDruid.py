@@ -73,6 +73,10 @@ class Druid():
                 vul_info['status_code'] = 'Faild'
                 logger.logging(vul_info)
                 return None
+            except:
+                vul_info['status_code'] = 'Error'
+                logger.logging(vul_info)
+                return None
 
             if ('Stat Index' in res.text):
                 results = {

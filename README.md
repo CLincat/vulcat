@@ -36,6 +36,9 @@
 | Django        | CVE-2017-12794   | XSS        | GET      | Django debug page XSS跨站脚本攻击                           |
 | Django        | CVE-2019-14234   | SQLinject  | GET      | Django JSONfield SQL注入                                   |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
+| Fastjson      | CNVD-2019-22238  | unSerialize| POST     | Fastjson <=1.2.47 反序列化                                  |
+| Fastjson      | CVE-2017-18349   | unSerialize| POST     | Fastjson <= 1.2.24 反序列化                                 |
++---------------+------------------+------------+----------+------------------------------------------------------------+
 | Spring        | CVE-2022-22965   | RCE        | POST     | Spring Framework远程代码执行                                |
 | Spring        | CVE-2021-21234   | FileRead   | GET      | Spring Boot目录遍历                                         |
 | Spring        | CVE-2020-5410    | FileRead   | GET      | Spring Cloud目录遍历                                        |
@@ -45,8 +48,9 @@
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | Weblogic      | CVE-2020-14882   | RCE        | GET      | Weblogic未授权命令执行                                      |
 | Weblogic      | CVE-2020-14750   | unAuth     | GET      | Weblogic权限验证绕过                                        |
-| Weblogic      | CVE-2019-2725    | deSerializa| POST     | Weblogic wls9_async反序列化                                 |
-| Weblogic      | CVE-2017-10271   | deSerializa| POST     | Weblogic XMLDecoder反序列化                                 |
+| Weblogic      | CVE-2019-2725    | unSerialize| POST     | Weblogic wls9_async反序列化                                 |
+| Weblogic      | CVE-2017-10271   | unSerialize| POST     | Weblogic XMLDecoder反序列化                                 |
+| Weblogic      | CVE-2014-4210    | SSRF       | GET      | Weblogic 服务端请求伪造                                     |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | Yonyou        | CNVD-2021-30167  | RCE        | GET      | 用友NC BeanShell远程命令执行                                |
 | Yonyou        | None             | FileRead   | GET      | 用友ERP-NC NCFindWeb目录遍历                                |
@@ -108,6 +112,13 @@ Options:
                         指定目标类型, 多个使用逗号分隔 (如: thinkphp 或者 thinkphp,weblogic)
                         (默认为全部)
 
+  Api:
+    第三方api
+
+    --dns=DNS           dns平台, 辅助无回显漏洞的验证, 支持dnslog.cn和ceye.io(可选参数:
+                        dnslog/ceye 如: --dns ceye) (默认自动选择, 优先ceye,
+                        ceye不可用时自动改为dnslog)
+
   Save:
     保存扫描结果
 
@@ -123,7 +134,8 @@ Options:
     --list              查看所有Payload
 
   支持的目标类型(-a参数, 不区分大小写):
-    AliDruid,cisco,django,thinkphp,tomcat,nacos,spring,weblogic,yonyou
+    AliDruid,airflow,cisco,django,fastjson,thinkphp,tomcat,nacos,spring,we
+    blogic,yonyou
 ```
 
 ## language
@@ -135,6 +147,16 @@ Options:
 def language():
     return lang['zh_cn']
     return lang['en_us']
+```
+
+## Dnslog
+可以定义自己的http://ceye.io
+
+* 打开vulcat/lib/initial/config.py
+* 找到以下代码, 填写自己的域名和token, 保存文件即可
+```
+args.ceye_domain = ''
+args.ceye_token = ''
 ```
 
 ## Custom POC

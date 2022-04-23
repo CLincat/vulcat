@@ -100,6 +100,10 @@ class Django():
                 vul_info['status_code'] = 'Faild'
                 logger.logging(vul_info)
                 return None
+            except:
+                vul_info['status_code'] = 'Error'
+                logger.logging(vul_info)
+                return None
 
             if ("prompt('12794')" in res.text):
                 results = {
@@ -153,6 +157,10 @@ class Django():
                 return None
             except requests.ConnectionError:
                 vul_info['status_code'] = 'Faild'
+                logger.logging(vul_info)
+                return None
+            except:
+                vul_info['status_code'] = 'Error'
                 logger.logging(vul_info)
                 return None
 

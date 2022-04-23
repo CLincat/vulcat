@@ -74,6 +74,10 @@ class Demo():
                 vul_info['status_code'] = 'Faild'
                 logger.logging(vul_info)
                 return None
+            except:
+                vul_info['status_code'] = 'Error'
+                logger.logging(vul_info)
+                return None
 
             '''!!!
                 可以自定义results中的信息, 格式:

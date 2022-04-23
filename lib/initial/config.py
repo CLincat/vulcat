@@ -14,10 +14,12 @@ global config
 class Config():
 
     def __init__(self, args):
-        # global global_args
         packages.urllib3.disable_warnings()                             # * requests忽略ssl证书警告
 
-        args.lang = language()
+        args.ceye_domain = ''                                           # * http://ceye.io/ 平台的域名
+        args.ceye_token = ''                                            # * http://ceye.io/ 平台的token
+
+        args.lang = language()                                          # * 语言
 
         args.url_list = []                                              # * url列表
         if args.url:
@@ -61,7 +63,7 @@ class Config():
             'https': args.http_proxy
         }
 
-        app_list = ['alidruid', 'airflow', 'cisco', 'django', 'flink', 'thinkphp', 'tomcat', 'nacos', 'spring', 'solr', 'struts2', 'weblogic', 'yonyou']
+        app_list = ['alidruid', 'airflow', 'cisco', 'django', 'fastjson', 'flink', 'thinkphp', 'tomcat', 'nacos', 'spring', 'solr', 'struts2', 'weblogic', 'yonyou']
         if args.application == 'all':                                   # * -a参数
             args.app_list = app_list
         else:

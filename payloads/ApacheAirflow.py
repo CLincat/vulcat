@@ -114,6 +114,8 @@ class Airflow():
                 logger.logging(vul_info)
                 return None
             except:
+                vul_info['status_code'] = 'Error'
+                logger.logging(vul_info)
                 return None
 
             if ((res.status_code == 200) and (('Schedule' in res.text) or ('Recent Tasks' in res.text))):

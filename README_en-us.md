@@ -35,6 +35,9 @@
 | Django        | CVE-2017-12794   | XSS        | GET      | Django debug page XSS                                      |
 | Django        | CVE-2019-14234   | SQLinject  | GET      | Django JSONfield SQLinject                                 |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
+| Fastjson      | CNVD-2019-22238  | unSerialize| POST     | Fastjson <=1.2.47 deSerialization                          |
+| Fastjson      | CVE-2017-18349   | unSerialize| POST     | Fastjson <= 1.2.24 deSerialization                         |
++---------------+------------------+------------+----------+------------------------------------------------------------+
 | Spring        | CVE-2022-22965   | RCE        | POST     | Spring Framework Remote code execution                     |
 | Spring        | CVE-2021-21234   | FileRead   | GET      | Spring Boot Directory traversal                            |
 | Spring        | CVE-2020-5410    | FileRead   | GET      | Spring Cloud Directory traversal                           |
@@ -44,8 +47,9 @@
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | Weblogic      | CVE-2020-14882   | RCE        | GET      | Weblogic Unauthorized command execution                    |
 | Weblogic      | CVE-2020-14750   | unAuth     | GET      | Weblogic Authentication bypass                             |
-| Weblogic      | CVE-2019-2725    | deSerializa| POST     | Weblogic wls9_async deSerialization                        |
-| Weblogic      | CVE-2017-10271   | deSerializa| POST     | Weblogic XMLDecoder deSerialization                        |
+| Weblogic      | CVE-2019-2725    | unSerialize| POST     | Weblogic wls9_async deSerialization                        |
+| Weblogic      | CVE-2017-10271   | unSerialize| POST     | Weblogic XMLDecoder deSerialization                        |
+| Weblogic      | CVE-2014-4210    | SSRF       | GET      | Weblogic SSRF                                              |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | Yonyou        | CNVD-2021-30167  | RCE        | GET      | Yonyou-NC BeanShell Remote code execution                  |
 | Yonyou        | None             | FileRead   | GET      | Yonyou-ERP-NC NCFindWeb Directory traversal                |
@@ -109,6 +113,15 @@ Options:
                         Specifies the target type, separated by commas (e.g.
                         thinkphp / thinkphp,weblogic) (default: all)
 
+  Api:
+    The third party Api
+
+    --dns=DNS           DNS platform, auxiliary verification without echo
+                        vulnerability. dnslog.cn/ceye.io (optional parameter:
+                        dnslog/ceye e.g. --dns ceye) (automatically selected
+                        by default, ceye is preferred, and dnglog is
+                        automatically changed when ceye is unavailable)
+
   Save:
     Save scan results
 
@@ -126,7 +139,8 @@ Options:
     --list              View all payload
 
   Supported target types(Case insensitive):
-    AliDruid,cisco,django,thinkphp,tomcat,nacos,spring,weblogic,yonyou
+    AliDruid,airflow,cisco,django,fastjson,thinkphp,tomcat,nacos,spring,we
+    blogic,yonyou
 ```
 
 ## language
@@ -139,6 +153,16 @@ You can change the language of -h/--help, currently only Chinese and English
 def language():
     return lang['zh_cn']
     return lang['en_us']
+```
+
+## Dnslog
+You can customize http://ceye.io
+
+* Open the vulcat/lib/initial/config.py
+* Find the code below, fill in your domain name and token, and save the file
+```
+args.ceye_domain = ''
+args.ceye_token = ''
 ```
 
 ## Custom POC

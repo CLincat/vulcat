@@ -74,6 +74,10 @@ class Tomcat():
                 vul_info['status_code'] = 'Faild'
                 logger.logging(vul_info)
                 return None
+            except:
+                vul_info['status_code'] = 'Error'
+                logger.logging(vul_info)
+                return None
 
             verify_url = url + 'mouse.jsp'
             verify_res = requests.get(

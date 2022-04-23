@@ -88,6 +88,10 @@ class Struts2():
                 vul_info['status_code'] = 'Faild'
                 logger.logging(vul_info)
                 return None
+            except:
+                vul_info['status_code'] = 'Error'
+                logger.logging(vul_info)
+                return None
 
             if (self.md in check.check_res(res.text, self.md)):
                 results = {
@@ -141,6 +145,10 @@ class Struts2():
                 vul_info['status_code'] = 'Faild'
                 logger.logging(vul_info)
                 return None
+            except:
+                vul_info['status_code'] = 'Error'
+                logger.logging(vul_info)
+                return None
 
             if (self.md in check.check_res(res.text, self.md)):
                 results = {
@@ -191,6 +199,10 @@ class Struts2():
                 return None
             except requests.ConnectionError:
                 vul_info['status_code'] = 'Faild'
+                logger.logging(vul_info)
+                return None
+            except:
+                vul_info['status_code'] = 'Error'
                 logger.logging(vul_info)
                 return None
 

@@ -92,6 +92,10 @@ class ThinkPHP():
                 vul_info['status_code'] = 'Faild'
                 logger.logging(vul_info)
                 return None
+            except:
+                vul_info['status_code'] = 'Error'
+                logger.logging(vul_info)
+                return None
 
             # * 判断扫描结果
             if (self.md in check.check_res(res.text, self.md)) or ('PHP Version' in res.text):
@@ -144,6 +148,10 @@ class ThinkPHP():
                 return None
             except requests.ConnectionError:
                 vul_info['status_code'] = 'Faild'
+                logger.logging(vul_info)
+                return None
+            except:
+                vul_info['status_code'] = 'Error'
                 logger.logging(vul_info)
                 return None
 

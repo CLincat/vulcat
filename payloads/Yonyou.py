@@ -80,6 +80,10 @@ class Yonyou():
                 vul_info['status_code'] = 'Faild'
                 logger.logging(vul_info)
                 return None
+            except:
+                vul_info['status_code'] = 'Error'
+                logger.logging(vul_info)
+                return None
 
             if ('BeanShell' in res.text):
                 results = {
@@ -133,6 +137,10 @@ class Yonyou():
                 return None
             except requests.ConnectionError:
                 vul_info['status_code'] = 'Faild'
+                logger.logging(vul_info)
+                return None
+            except:
+                vul_info['status_code'] = 'Error'
                 logger.logging(vul_info)
                 return None
 

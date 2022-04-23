@@ -2,8 +2,8 @@
 # -*- coding:utf-8 -*-
 
 '''
-还！！！没！！！写！！！好！！！
-差dnslog或者ceye.io, 等我学到再说qwq
+还！！！没！！！写！！！好！！！ 还没加dnslog
+网上没有漏洞环境, 还没测试POC准确性
     Keycloak扫描类: 
         Keycloak SSRF
             CVE-2020-10770
@@ -72,6 +72,10 @@ class Keycloak():
                 vul_info['status_code'] = 'Faild'
                 logger.logging(vul_info)
                 return None
+            except:
+                vul_info['status_code'] = 'Error'
+                logger.logging(vul_info)
+                return None                
 
             if res.status_code == 400:
                 results = {

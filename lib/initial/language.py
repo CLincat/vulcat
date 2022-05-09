@@ -8,8 +8,8 @@
 '''
 
 def language():
-    return lang['zh_cn']
     return lang['en_us']
+    return lang['zh_cn']
 
 lang = {
     'en_us': {
@@ -29,7 +29,7 @@ lang = {
             'http_proxy': 'The HTTP/HTTPS proxy (e.g. --http-proxy 127.0.0.1:8080)',
             'user_agent': 'Customize the User-Agent',
             'cookie': 'Add a cookie',
-            'log': 'The log level, Optional 1-3 (default: 1)'
+            'log': 'The log level, Optional 1-5 (default: 1) [level 2: Framework name + Vulnerability number + status code] [level 3: Level 2 content + request method + request target +POST data] [level 4: Level 2 content + request packet] [Level 5: Level 4 content + response header] [level 6: Level 5 content + response content]'
         },
         'application_help': {
             'title': 'Application',
@@ -54,7 +54,7 @@ lang = {
         },
         'app_list_help': {
             'title': 'Supported target types(Case insensitive)',
-            'name': 'AliDruid,airflow,cisco,django,fastjson,thinkphp,tomcat,nacos,spring,weblogic,yonyou'
+            'name': 'AliDruid,airflow,apisix,cisco,django,fastjson,flink,thinkphp,tomcat,nacos,spring,solr,struts2,weblogic,yonyou'
         },
         'core': {
             'start': {
@@ -106,7 +106,7 @@ lang = {
             'http_proxy': 'http/https代理 (如: --http-proxy 127.0.0.1:8080)',
             'user_agent': '自定义User-Agent',
             'cookie': '添加cookie',
-            'log': '日志等级, 可选1-3 (默认: 1)'
+            'log': '日志等级, 可选1-5 (默认: 1) [日志2级: 框架名称+漏洞编号+状态码] [日志3级: 2级内容+请求方法+请求目标+POST数据] [日志4级: 2级内容+请求数据包] [日志5级: 4级内容+响应头] [日志6级: 5级内容+响应内容]'
         },
         'application_help': {
             'title': 'Application',
@@ -131,7 +131,7 @@ lang = {
         },
         'app_list_help': {
             'title': '支持的目标类型(-a参数, 不区分大小写)',
-            'name': 'AliDruid,airflow,cisco,django,fastjson,thinkphp,tomcat,nacos,spring,weblogic,yonyou'
+            'name': 'AliDruid,airflow,apisix,cisco,django,fastjson,flink,thinkphp,tomcat,nacos,spring,solr,struts2,weblogic,yonyou'
         },
         'core': {
             'start': {

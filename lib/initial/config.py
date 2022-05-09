@@ -63,7 +63,7 @@ class Config():
             'https': args.http_proxy
         }
 
-        app_list = ['alidruid', 'airflow', 'cisco', 'django', 'fastjson', 'flink', 'thinkphp', 'tomcat', 'nacos', 'spring', 'solr', 'struts2', 'weblogic', 'yonyou']
+        app_list = ['alidruid', 'airflow', 'apisix', 'cisco', 'django', 'fastjson', 'flink', 'thinkphp', 'tomcat', 'nacos', 'spring', 'solr', 'struts2', 'weblogic', 'yonyou']
         if args.application == 'all':                                   # * -a参数
             args.app_list = app_list
         else:

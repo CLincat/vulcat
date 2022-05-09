@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
+# ! 12: from payloads.文件名 import 对象名称
+
 from lib.initial.config import config
 from lib.tool.logger import logger
 from lib.tool import check
@@ -8,6 +10,7 @@ from lib.report import output
 from payloads.AlibabaDruid import alidruid
 from payloads.AlibabaNacos import nacos
 from payloads.ApacheAirflow import airflow
+from payloads.ApacheAPISIX import apisix
 from payloads.ApacheFlink import flink
 from payloads.ApacheSolr import solr
 from payloads.ApacheTomcat import tomcat

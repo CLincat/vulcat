@@ -57,7 +57,7 @@ class Airflow():
             vul_info['target'] = target
 
             try:
-                res = requests.get(
+                res1 = requests.get(
                     target, 
                     timeout=self.timeout, 
                     headers=headers, 
@@ -66,11 +66,10 @@ class Airflow():
                     verify=False,
                     allow_redirects=False
                 )
-                vul_info['status_code'] = str(res.status_code)
-                logger.logging(vul_info)                        # * LOG
+                logger.logging(vul_info, res1.status_code, res1)          # * LOG
 
-                if ((res.status_code == 200) and ('Set-Cookie' in res.headers)):        # * 判断响应包中是否有Set-Cookie
-                    set_cookie = res.headers['Set-Cookie']
+                if ((res1.status_code == 200) and ('Set-Cookie' in res1.headers)):      # * 判断响应包中是否有Set-Cookie
+                    set_cookie = res1.headers['Set-Cookie']
                     cookie = re.search(r'.{76}\.{1}.{6}\.{1}.{27}', set_cookie)         # * 是否存在Flask Cookie
                     if cookie:
                         cookie = cookie.group()                                         # * 获取Flask Cookie
@@ -94,31 +93,32 @@ class Airflow():
                             }
                             headers.update(cookie)                                      # * 更新headers
 
-                    res = requests.get(
-                    url + 'admin/', 
-                    timeout=self.timeout, 
-                    headers=headers, 
-                    data=data, 
-                    proxies=self.proxies, 
-                    verify=False
-                )
-                vul_info['target'] = url + 'admin/'
-                vul_info['status_code'] = str(res.status_code)
-                logger.logging(vul_info)                        # * LOG
+                        verify_url = url + 'admin/'
+                        verify_res = requests.get(
+                        verify_url, 
+                        timeout=self.timeout, 
+                        headers=headers, 
+                        data=data, 
+                        proxies=self.proxies, 
+                        verify=False
+                    )
+                        logger.logging(vul_info, verify_res.status_code, verify_res)          # * LOG
+                    else:
+                        return None
+                else:
+                    return None
+                # vul_info['target'] = url + 'admin/'
             except requests.ConnectTimeout:
-                vul_info['status_code'] = 'Timeout'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Timeout')
                 return None
             except requests.ConnectionError:
-                vul_info['status_code'] = 'Faild'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Faild')
                 return None
             except:
-                vul_info['status_code'] = 'Error'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Error')
                 return None
 
-            if ((res.status_code == 200) and (('Schedule' in res.text) or ('Recent Tasks' in res.text))):
+            if ((verify_res.status_code == 200) and (('Schedule' in verify_res.text) or ('Recent Tasks' in verify_res.text))):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],

@@ -86,7 +86,6 @@ class Solr():
                             verify=False,
                             allow_redirects=False
                         )
-                    vul_info['vul_method'] = 'POST'
                 elif self.db_name:                      # * 如果成功获取了solr的数据库名称, 尝试开启目标的RemoteStreaming功能
                     res = requests.post(
                         target, 
@@ -97,7 +96,6 @@ class Solr():
                         verify=False,
                         allow_redirects=False
                     )
-                    vul_info['vul_method'] = 'POST'
                     if (res.status_code == 200):
                         self.RemoteStreaming = True     # * 成功启用RemoteStreaming功能
                 else:
@@ -109,26 +107,21 @@ class Solr():
                         proxies=self.proxies, 
                         verify=False
                     )
-                    vul_info['vul_method'] = 'GET'
                     db_name = re.search(r'"name":".+"', res.text, re.M|re.I)         # * 如果存在solr的数据库名称
                     if db_name:
                         db_name = db_name.group()
                         db_name = db_name.replace('"name":', '')
                         self.db_name = db_name.strip('"')                            # * 只保留双引号内的数据库名称
 
-                vul_info['status_code'] = str(res.status_code)
-                logger.logging(vul_info)                        # * LOG
+                logger.logging(vul_info, res.status_code, res)                       # * LOG
             except requests.ConnectTimeout:
-                vul_info['status_code'] = 'Timeout'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Timeout')
                 return None
             except requests.ConnectionError:
-                vul_info['status_code'] = 'Faild'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Faild')
                 return None
             except:
-                vul_info['status_code'] = 'Error'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Error')
                 return None
 
             if (('/sbin/nologin' in res.text) or ('root:x:0:0:root' in res.text) or ('Microsoft Corp' in res.text) or ('Microsoft TCP/IP for Windows' in res.text)):

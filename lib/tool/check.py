@@ -29,12 +29,13 @@ def check_connect(url):
         )
 
         return True
-    except Exception as e:
-        print(e)
     except requests.ConnectTimeout:
         return False
     except requests.ConnectionError:
         return False
+    except Exception as e:
+        return False
+        # print(e)
 
 def check_res(res, md):
     ''' 检查poc误报

@@ -16,67 +16,63 @@ from lib.tool.thread import thread
 from lib.tool import check
 from thirdparty import requests
 
-class Demo():
-    ''' 标有感叹号!的都需要自己填写 '''
+class 1():                                              # ! 1: 类名(例如 ThinkPHP)
+    ''' 标有数字的地方都需要自己填写 '''
     def __init__(self):
         self.timeout = config.get('timeout')
         self.headers = config.get('headers')
         self.proxies = config.get('proxies')
 
-        self.app_name = ''                              # ! 漏洞框架/应用程序/CMS等
+        self.app_name = '2'                             # ! 2: 漏洞框架/应用程序/CMS等(例如 thinkphp)
         self.md = md5(self.app_name)
         self.cmd = 'echo ' + self.md
 
-        self.!!!_payloads = [                           # ! 对应漏洞的Payload, 格式为: 漏洞编号_payloads, 例如cnvd_2018_24942_payloads
+        self.3_payloads = [                             # ! 3: Payload的名称(例如 cnvd_2018_24942_payloads)
             {
-                'path': '!!!',                          # ! 漏洞路径
-                'data': ''                              # ! POST数据, 没有的话可以不写
+                'path': '4',                            # ! 4: url路径(例如/admin/login)
+                'data': '5'                             # ! 5: POST数据, 没有的话可以不写
             },
         ]
 
-    def !!!_scan(self, url):                            # ! POC的名称, 格式为: 漏洞编号_scan, 例如cnvd_2018_24942_scan
+    def 6_scan(self, url):                              # ! 6: POC的名称(例如 cnvd_2018_24942_scan)
         '''  '''
         vul_info = {}
         vul_info['app_name'] = self.app_name
-        vul_info['vul_type'] = '!!!'                    # ! 漏洞类型
-        vul_info['vul_id'] = '!!!'                      # ! 漏洞编号
-        vul_info['vul_method'] = '!!!'                  # ! 请求方式
-        vul_info['headers'] = {}                        # ! 如果该漏洞需要特殊的Headers,如User-Agent:Nacos-Server, 则需要填写, 没有的话就不用填
+        vul_info['vul_type'] = '7'                      # ! 7: 漏洞类型(例如 RCE)
+        vul_info['vul_id'] = '8'                        # ! 8: 漏洞编号(例如 CNVD-2018-24942)
+        vul_info['vul_method'] = '9'                    # ! 9: 请求方式(例如 GET)
+        vul_info['headers'] = {}                        # ! 如果该漏洞需要特殊的Headers,例如 User-Agent:Nacos-Server, 则需要填写, 没有的话就不用填
 
-        headers = self.headers.copy()                   # * 复制一份headers, 防止污染全局headers
-        headers.update(vul_info['headers'])             # * 合并Headers
+        headers = self.headers.copy()
+        headers.update(vul_info['headers'])
 
-        for payload in self.!!!_payloads:               # * Payload
-            path = payload['path']                      # * Path
-            data = payload['data']                      # * Data
-            target = url + path                         # * Target
+        for payload in self.3_payloads:                 # ! 3: 同上, Payload的名称
+            path = payload['path']
+            data = payload['data']
+            target = url + path
 
             vul_info['path'] = path
             vul_info['data'] = data
             vul_info['target'] = target
 
             try:
-                res = requests.!!!(                     # ! 请求方式
+                res = requests.10(                      # ! 10: 请求方式(例如 get)
                     target, 
                     timeout=self.timeout, 
-                    headers=headers,                    # * 使用该漏洞的特殊headers为headers, 使用正常的headers为self.headers
+                    headers=headers,
                     data=data, 
                     proxies=self.proxies, 
                     verify=False
                 )
-                vul_info['status_code'] = str(res.status_code)
-                logger.logging(vul_info)                        # * LOG
+                logger.logging(vul_info, res.status_code, res)                        # * LOG
             except requests.ConnectTimeout:
-                vul_info['status_code'] = 'Timeout'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Timeout')
                 return None
             except requests.ConnectionError:
-                vul_info['status_code'] = 'Faild'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Faild')
                 return None
             except:
-                vul_info['status_code'] = 'Error'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Error')
                 return None
 
             '''!!!
@@ -90,7 +86,7 @@ class Demo():
                                     key2: value2
                                     ...
             '''
-            if ('!!!'):               # ! 判断扫描结果
+            if ('11'):               # ! 11: 判断扫描结果
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
@@ -104,8 +100,16 @@ class Demo():
 
     def addscan(self, url):
         return [
-            # * thread(target=self.cnvd_2018_24942_scan, url=url),
-            thread(target=self.!!!_scan, url=url)                  # ! POC的名称, 参考上一行
+            thread(target=self.6_scan, url=url)                  # ! 6: 同上, POC的名称
         ]
 
-demo = Demo()
+12 = 1()                                                         # ! 1: 同上, 类名
+
+'''
+    # ! 12: 对象名称
+    # ! 需要在vulcat/lib/initial/config.py加入对象名称, 找到以下代码并继续添加
+                                                        app_list = ['alidruid', 'airflow', 'apisix', 'cisco', 'django', 'fastjson']
+    # ! 然后在vulcat/lib/core/coreScan.py引入POC, 引入方式为
+                                                        from payloads.文件名 import 对象名称
+    # ! 引入完成后, 自定义POC就成功了, 可以运行vulcat试试效果
+'''

@@ -71,7 +71,7 @@ class Django():
             vul_info['target'] = target
 
             try:
-                res = requests.get(
+                res1 = requests.get(
                     target, 
                     timeout=self.timeout, 
                     headers=headers, 
@@ -79,10 +79,10 @@ class Django():
                     proxies=self.proxies, 
                     verify=False
                 )
-                vul_info['status_code'] = str(res.status_code)
-                logger.logging(vul_info)                        # * LOG
+                logger.logging(vul_info, res1.status_code, res1)                        # * LOG
+
                 # * 该XSS漏洞较奇怪, 需要请求2次, 2次的payload必须一模一样
-                res = requests.get(
+                res2 = requests.get(
                     target, 
                     timeout=self.timeout, 
                     headers=headers, 
@@ -90,22 +90,18 @@ class Django():
                     proxies=self.proxies, 
                     verify=False
                 )
-                vul_info['status_code'] = str(res.status_code)
-                logger.logging(vul_info)                        # * LOG
+                logger.logging(vul_info, res2.status_code, res2)                        # * LOG
             except requests.ConnectTimeout:
-                vul_info['status_code'] = 'Timeout'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Timeout')
                 return None
             except requests.ConnectionError:
-                vul_info['status_code'] = 'Faild'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Faild')
                 return None
             except:
-                vul_info['status_code'] = 'Error'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Error')
                 return None
 
-            if ("prompt('12794')" in res.text):
+            if ("prompt('12794')" in res2.text):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
@@ -149,19 +145,15 @@ class Django():
                     proxies=self.proxies, 
                     verify=False
                 )
-                vul_info['status_code'] = str(res.status_code)
-                logger.logging(vul_info)                        # * LOG
+                logger.logging(vul_info, res.status_code, res)                        # * LOG
             except requests.ConnectTimeout:
-                vul_info['status_code'] = 'Timeout'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Timeout')
                 return None
             except requests.ConnectionError:
-                vul_info['status_code'] = 'Faild'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Faild')
                 return None
             except:
-                vul_info['status_code'] = 'Error'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Error')
                 return None
 
             if (('ProgrammingError' in res.text) or ('Request information' in res.text)):

@@ -63,19 +63,15 @@ class Druid():
                     proxies=self.proxies, 
                     verify=False
                 )
-                vul_info['status_code'] = str(res.status_code)
-                logger.logging(vul_info)                        # * LOG
+                logger.logging(vul_info, res.status_code, res)                        # * LOG
             except requests.ConnectTimeout:
-                vul_info['status_code'] = 'Timeout'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Timeout')
                 return None
             except requests.ConnectionError:
-                vul_info['status_code'] = 'Faild'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Faild')
                 return None
             except:
-                vul_info['status_code'] = 'Error'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Error')
                 return None
 
             if ('Stat Index' in res.text):

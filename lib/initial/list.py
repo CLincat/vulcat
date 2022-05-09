@@ -55,6 +55,14 @@ vul_info = {
             'description': 'Airflow身份验证绕过'
         }
     ],
+    'ApacheAPISIX': [
+        {
+            'vul_id': 'CVE-2020-13945',
+            'type': 'unAuth',
+            'method': 'GET',
+            'description': 'Apache APISIX默认密钥'
+        }
+    ],
     'ApacheFlink': [
         {
             'vul_id': 'CVE-2020-17519',
@@ -86,6 +94,24 @@ vul_info = {
         },
         {
             'vul_id': 'S2-007',
+            'type': 'RCE',
+            'method': 'GET',
+            'description': 'Struts2远程代码执行'
+        },
+        {
+            'vul_id': 'S2-008',
+            'type': 'RCE',
+            'method': 'GET',
+            'description': 'Struts2远程代码执行'
+        },
+        {
+            'vul_id': 'S2-009',
+            'type': 'RCE',
+            'method': 'GET',
+            'description': 'Struts2远程代码执行'
+        },
+        {
+            'vul_id': 'S2-012',
             'type': 'RCE',
             'method': 'GET',
             'description': 'Struts2远程代码执行'
@@ -126,7 +152,7 @@ vul_info = {
             'vul_id': 'CNVD-2019-22238',
             'type': 'unSerialize',
             'method': 'POST',
-            'description': 'Fastjson <=1.2.47 反序列化'
+            'description': 'Fastjson <= 1.2.47 反序列化'
         },
         {
             'vul_id': 'CVE-2017-18349',
@@ -147,7 +173,7 @@ vul_info = {
         {
             'vul_id': 'CVE-2022-22965',
             'type': 'RCE',
-            'method': 'POST',
+            'method': 'GET/POST',
             'description': 'Spring Framework远程代码执行'
         },
         {
@@ -182,13 +208,13 @@ vul_info = {
             'vul_id': 'CVE-2020-14882',
             'type': 'RCE',
             'method': 'GET',
-            'description': 'Weblogic未授权命令执行'
+            'description': 'Weblogic 未授权命令执行'
         },
         {
             'vul_id': 'CVE-2020-14750',
             'type': 'unAuth',
             'method': 'GET',
-            'description': 'Weblogic权限验证绕过'
+            'description': 'Weblogic 权限验证绕过'
         },
         {
             'vul_id': 'CVE-2019-2725',

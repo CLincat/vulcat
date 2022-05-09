@@ -149,15 +149,15 @@ class Weblogic():
                     proxies=self.proxies, 
                     verify=False
                 )
-                vul_info['status_code'] = str(res.status_code)
-                logger.logging(vul_info)                        # * LOG
+                logger.logging(vul_info, res.status_code, res)                        # * LOG
             except requests.ConnectTimeout:
-                vul_info['status_code'] = 'Timeout'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Timeout')
                 return None
             except requests.ConnectionError:
-                vul_info['status_code'] = 'Faild'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Faild')
+                return None
+            except:
+                logger.logging(vul_info, 'Error')
                 return None
 
             if (self.md in check.check_res(res.text, self.md)):
@@ -197,7 +197,7 @@ class Weblogic():
             vul_info['target'] = target
 
             try:
-                res = requests.get(
+                res1 = requests.get(
                     target, 
                     timeout=self.timeout, 
                     headers=headers, 
@@ -206,19 +206,18 @@ class Weblogic():
                     verify=False,
                     allow_redirects=False
                 )
-                vul_info['status_code'] = str(res.status_code)
-                logger.logging(vul_info)                        # * LOG
+                logger.logging(vul_info, res1.status_code, res1)                        # * LOG
 
-                if ((res.status_code == 302) and ('Set-Cookie' in res.headers)):
+                if ((res1.status_code == 302) and ('Set-Cookie' in res1.headers)):
                     try:
                         cookie = {
-                            'Cookie': res.headers['Set-Cookie']
+                            'Cookie': res1.headers['Set-Cookie']
                         }
                         headers.update(cookie)
                     except KeyError:
                         continue
 
-                    res = requests.get(
+                    res2 = requests.get(
                     target, 
                     timeout=self.timeout, 
                     headers=headers, 
@@ -226,18 +225,20 @@ class Weblogic():
                     proxies=self.proxies, 
                     verify=False
                 )
-                vul_info['status_code'] = str(res.status_code)
-                logger.logging(vul_info)                        # * LOG
+                    logger.logging(vul_info, res2.status_code, res2)                        # * LOG
+                else:
+                    return None
             except requests.ConnectTimeout:
-                vul_info['status_code'] = 'Timeout'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Timeout')
                 return None
             except requests.ConnectionError:
-                vul_info['status_code'] = 'Faild'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Faild')
+                return None
+            except:
+                logger.logging(vul_info, 'Error')
                 return None
 
-            if (('管理控制台' in res.text) or ('Information and Resources' in res.text) or ('Overloaded' in res.text)):
+            if (('管理控制台' in res2.text) or ('Information and Resources' in res2.text) or ('Overloaded' in res2.text)):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
@@ -284,15 +285,15 @@ class Weblogic():
                     proxies=self.proxies, 
                     verify=False
                 )
-                vul_info['status_code'] = str(res.status_code)
-                logger.logging(vul_info)                        # * LOG
+                logger.logging(vul_info, res.status_code, res)                        # * LOG
             except requests.ConnectTimeout:
-                vul_info['status_code'] = 'Timeout'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Timeout')
                 return None
             except requests.ConnectionError:
-                vul_info['status_code'] = 'Faild'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Faild')
+                return None
+            except:
+                logger.logging(vul_info, 'Error')
                 return None
 
             if (res.status_code == 202):
@@ -305,6 +306,7 @@ class Weblogic():
                         verify=False,
                         allow_redirects=False
                     )
+                logger.logging(vul_info, verify_res.status_code, verify_res)
 
                 if ((verify_res.status_code == 200) and ('CVE/2019/2725' in verify_res.text)):
                     results = {
@@ -356,15 +358,15 @@ class Weblogic():
                     proxies=self.proxies, 
                     verify=False
                 )
-                vul_info['status_code'] = str(res.status_code)
-                logger.logging(vul_info)                        # * LOG
+                logger.logging(vul_info, res.status_code, res)                        # * LOG
             except requests.ConnectTimeout:
-                vul_info['status_code'] = 'Timeout'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Timeout')
                 return None
             except requests.ConnectionError:
-                vul_info['status_code'] = 'Faild'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Faild')
+                return None
+            except:
+                logger.logging(vul_info, 'Error')
                 return None
 
             if (res.status_code == 500):
@@ -377,6 +379,7 @@ class Weblogic():
                         verify=False,
                         allow_redirects=False
                     )
+                logger.logging(vul_info, verify_res.status_code, verify_res)
 
                 if ((verify_res.status_code == 200) and ('CVE/2017/10271' in verify_res.text)):
                     results = {
@@ -429,15 +432,15 @@ class Weblogic():
                     proxies=self.proxies, 
                     verify=False
                 )
-                vul_info['status_code'] = str(res.status_code)
-                logger.logging(vul_info)                            # * LOG
+                logger.logging(vul_info, res.status_code, res)                        # * LOG
             except requests.ConnectTimeout:
-                vul_info['status_code'] = 'Timeout'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Timeout')
                 return None
             except requests.ConnectionError:
-                vul_info['status_code'] = 'Faild'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Faild')
+                return None
+            except:
+                logger.logging(vul_info, 'Error')
                 return None
 
             sleep(3)                                                # * dns查询可能较慢, 等一会

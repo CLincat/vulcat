@@ -64,19 +64,15 @@ class Tomcat():
                     verify=False
                 )
 
-                vul_info['status_code'] = str(res.status_code)
-                logger.logging(vul_info)                        # * LOG
+                logger.logging(vul_info, res.status_code, res)                        # * LOG
             except requests.ConnectTimeout:
-                vul_info['status_code'] = 'Timeout'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Timeout')
                 return None
             except requests.ConnectionError:
-                vul_info['status_code'] = 'Faild'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Faild')
                 return None
             except:
-                vul_info['status_code'] = 'Error'
-                logger.logging(vul_info)
+                logger.logging(vul_info, 'Error')
                 return None
 
             verify_url = url + 'mouse.jsp'
@@ -87,6 +83,7 @@ class Tomcat():
                     verify=False,
                     allow_redirects=False
                 )
+            logger.logging(vul_info, verify_res.status_code, verify_res)
 
             if ((verify_res.status_code == 200) and ('12615' in verify_res.text)):
                 results = {

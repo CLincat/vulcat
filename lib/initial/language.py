@@ -157,11 +157,11 @@ lang = {
                 'notvul': '[-] 目标似乎没有漏洞, 共发送了{}个HTTP(s)请求'
             },
             'text': {
-                'success': '[INFO] 结果已经被保存到 ',
+                'success': '[INFO] 结果已经被保存到文件 ',
                 'faild': '[ERROR] 保存txt文件失败'
             },
             'json': {
-                'success': '[INFO] 结果已经被保存到 ',
+                'success': '[INFO] 结果已经被保存到文件 ',
                 'faild': '[ERROR] 保存json文件失败'
             }
         }

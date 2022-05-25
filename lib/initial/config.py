@@ -7,6 +7,7 @@
 
 from lib.initial.language import language
 from thirdparty.requests import packages
+import re
 import http.client
 
 global config
@@ -34,19 +35,32 @@ class Config():
 
         url_list_temp = args.url_list.copy()
         for url in url_list_temp:
-            if url[-1] != '/':                                          # * url最后的斜杠/
+            mark_index = url.find('?')
+            if (mark_index + 1):
+                url = url[:mark_index]
+            del args.url_list[0]
+
+            
+            if (url[-1] != '/') and ((re.search(r'(([0-9]{0,3})\.([0-9]{0,3})\.([0-9]{0,3})\.([0-9]{0,3}):([0-9]*))$', url)) or (not re.search(r'(.*\..*)$', url))): # * url的斜杠/(目录)
                 url += '/'
+
             if args.recursive:                                          # * -r参数
-                url_index = 8
-                while url_index:
-                    url_index = url.find('/', url_index)
-                    url_index += 1
-                    args.url_list.append(url[0:url_index])
-                else:
-                    del args.url_list[0]
-                    del args.url_list[-1]
+                url = url.replace('//', 'This_is_a_placeholder', 1)
+                dir_list = url.split('/')
+                url = dir_list[0].replace('This_is_a_placeholder', '//', 1) + '/'
+                del dir_list[0]
+                args.url_list.append(url)
+
+                for dir in range(len(dir_list)):
+                    if ((dir_list[dir]) and (not re.search(r'(.*\..*)$', dir_list[dir]))):
+                        url += dir_list[dir] + '/'
+                        args.url_list.append(url)
+                    else:
+                        url += dir_list[dir]
+                        if (url not in args.url_list):
+                            args.url_list.append(url)
+                        break
             else:
-                del args.url_list[0]
                 args.url_list.append(url)
 
         args.headers = {
@@ -63,7 +77,7 @@ class Config():
             'https': args.http_proxy
         }
 
-        app_list = ['alidruid', 'airflow', 'apisix', 'cisco', 'django', 'fastjson', 'flink', 'thinkphp', 'tomcat', 'nacos', 'spring', 'solr', 'struts2', 'weblogic', 'yonyou']
+        app_list = ['alidruid', 'airflow', 'apisix', 'appweb', 'cisco', 'django', 'f5bigip', 'fastjson', 'flink', 'keycloak', 'nacos', 'solr', 'struts2', 'spring', 'thinkphp', 'tomcat', 'ueditor', 'weblogic', 'yonyou']
         if args.application == 'all':                                   # * -a参数
             args.app_list = app_list
         else:

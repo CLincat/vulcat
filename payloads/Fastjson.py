@@ -64,6 +64,7 @@ class Fastjson():
         ''' fastjson <= 1.2.47 反序列化漏洞 '''
         url = url.rstrip('/')
         sessid = '7741b152f4f34cf03332b54c1d1f4320'
+
         vul_info = {}
         vul_info['app_name'] = self.app_name
         vul_info['vul_type'] = 'unSerialize'
@@ -116,8 +117,8 @@ class Fastjson():
                     'Method': vul_info['vul_method'],
                     'Payload': {
                         'Url': url,
-                        'Headers': str(vul_info['headers']),
-                        'Data': data
+                        'Data': data,
+                        'Headers': vul_info['headers']
                     }
                 }
                 return results
@@ -178,8 +179,8 @@ class Fastjson():
                     'Method': vul_info['vul_method'],
                     'Payload': {
                         'Url': url,
-                        'Headers': str(vul_info['headers']),
-                        'Data': data
+                        'Data': data,
+                        'Headers': vul_info['headers']
                     }
                 }
                 return results

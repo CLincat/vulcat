@@ -5,7 +5,7 @@
 * If you have any ideas, suggestions, or bugs, you can issue
 
 **Web applications that currently support scanning:**
-> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheAPISIX, ApacheFlink, ApacheSolr, ApacheStruts2, ApacheTomcat, Cicso, Django, Fastjson, Spring, ThinkPHP, Weblogic, Yonyou
+> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheAPISIX, ApacheFlink, ApacheSolr, ApacheStruts2, ApacheTomcat, AppWeb, Cicso, Django, F5-BIG-IP, Fastjson, Keycloak, Spring, ThinkPHP, Ueditor, Weblogic, Yonyou
 
 <details>
 <summary><b>The current web vulnerabilities that support scanning: [Click on]</b></summary>
@@ -35,20 +35,36 @@
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | ApacheTomcat  | CVE-2017-12615   | FileUpload | PUT      | Put method writes to any file                              |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
+| AppWeb        | CVE-2018-8715    | unAuth     | GET      | AppWeb Authentication bypass                               |
++---------------+------------------+------------+----------+------------------------------------------------------------+
 | Cisco         | CVE-2020-3580    | XSS        | POST     | Cisco ASA/FTD XSS                                          |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | Django        | CVE-2017-12794   | XSS        | GET      | Django debug page XSS                                      |
 | Django        | CVE-2019-14234   | SQLinject  | GET      | Django JSONfield SQLinject                                 |
+| Django        | CVE-2018-14574   | Redirect   | GET      | Django CommonMiddleware URL Redirect                       |
+| Django        | CVE-2020-9402    | SQLinject  | GET      | Django GIS SQLinject                                       |
+| Django        | CVE-2021-35042   | SQLinject  | GET      | Django QuerySet.order_by SQLinject                         |
++---------------+------------------+------------+----------+------------------------------------------------------------+
+| F5-BIG-IP     | CVE-2020-5902    | RCE        | GET      | BIG-IP Remote code execution                               |
+| F5-BIG-IP     | CVE-2022-1388    | unAuth     | POST     | BIG-IP Authentication bypass                               |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | Fastjson      | CNVD-2019-22238  | unSerialize| POST     | Fastjson <=1.2.47 deSerialization                          |
 | Fastjson      | CVE-2017-18349   | unSerialize| POST     | Fastjson <= 1.2.24 deSerialization                         |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
+| Keycloak      | CVE-2020-10770   | SSRF       | GET      | request_uri SSRF                                           |
++---------------+------------------+------------+----------+------------------------------------------------------------+
 | Spring        | CVE-2022-22965   | RCE        | GET/POST | Spring Framework Remote code execution                     |
 | Spring        | CVE-2021-21234   | FileRead   | GET      | Spring Boot Directory traversal                            |
 | Spring        | CVE-2020-5410    | FileRead   | GET      | Spring Cloud Directory traversal                           |
+| Spring        | CVE-2022-22963   | RCE        | POST     | Spring Cloud Function SpEL Remote code execution           |
+| Spring        | CVE-2022-22947   | RCE        | POST     | Spring Cloud Gateway SpEl Remote code execution            |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | ThinkPHP      | CNVD-2018-24942  | RCE        | GET      | The forced route is not enabled Remote code execution      |
 | ThinkPHP      | CNNVD-201901-445 | RCE        | POST     | Core class Request Remote code execution                   |
+| ThinkPHP      | None             | RCE        | GET      | ThinkPHP2.x Remote code execution                          |
+| ThinkPHP      | None             | RCE        | GET      | ThinkPHP5 ids SQLinject                                    |
++---------------+------------------+------------+----------+------------------------------------------------------------+
+| Ueditor       | None             | SSRF       | GET      | Ueditor SSRF                                               |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | Weblogic      | CVE-2020-14882   | RCE        | GET      | Weblogic Unauthorized command execution                    |
 | Weblogic      | CVE-2020-14750   | unAuth     | GET      | Weblogic Authentication bypass                             |
@@ -78,6 +94,7 @@ The tool is developed based on python3. Python3.8 or later is recommended
 ```
 git clone https://github.com/CLincat/vulcat.git
 cd vulcat
+pip3 install -r requirements.txt
 python3 vulcat.py -h
 ```
 ```
@@ -156,8 +173,9 @@ Options:
     --list              View all payload
 
   Supported target types(Case insensitive):
-    AliDruid,airflow,apisix,cisco,django,fastjson,flink,thinkphp,tomcat,na
-    cos,spring,solr,struts2,weblogic,yonyou
+    AliDruid,airflow,apisix,appweb,cisco,django,f5bigip,fastjson,flink,key
+    cloak,nacos,thinkphp,tomcat,spring,solr,struts2,ueditor,weblogic,yonyo
+    u
 ```
 
 ## language

@@ -1,12 +1,12 @@
 # vulcat
-除了代码写得有亿点点烂, 误报率有亿点点高, 等亿点点小问题以外，还是阔以的......吧
+除了代码写得有亿点点烂, BUG有亿点点多, 误报率有亿点点高, 等亿点点小问题以外，还是阔以的......吧
 
 * vulcat可用于扫描web端漏洞(框架、中间件、CMS等), 发现漏洞时会提示目标url和payload, 使用者可以根据提示对漏洞进行手工验证<br/>
 * 使用者还可以自己编写POC, 并添加到vulcat中进行扫描, 本项目也欢迎大家贡献自己的POC(白嫖)
 * 如果有什么想法、建议或者遇到了BUG, 都可以issues
 
 **目前支持扫描的web应用程序有:**
-> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheAPISIX, ApacheFlink, ApacheSolr, ApacheStruts2, ApacheTomcat, Cicso, Django, Fastjson, Spring, ThinkPHP, Weblogic, Yonyou
+> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheAPISIX, ApacheFlink, ApacheSolr, ApacheStruts2, ApacheTomcat, AppWeb, Cicso, Django, F5-BIG-IP, Fastjson, Keycloak, Spring, ThinkPHP, Ueditor, Weblogic, Yonyou
 
 <details>
 <summary><b>目前支持扫描的web漏洞有: [点击展开]</b></summary>
@@ -36,20 +36,36 @@
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | ApacheTomcat  | CVE-2017-12615   | FileUpload | PUT      | PUT方法任意文件写入                                          |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
+| AppWeb        | CVE-2018-8715    | unAuth     | GET      | AppWeb身份认证绕过                                          |
++---------------+------------------+------------+----------+------------------------------------------------------------+
 | Cisco         | CVE-2020-3580    | XSS        | POST     | 思科ASA/FTD XSS跨站脚本攻击                                  |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | Django        | CVE-2017-12794   | XSS        | GET      | Django debug page XSS跨站脚本攻击                           |
 | Django        | CVE-2019-14234   | SQLinject  | GET      | Django JSONfield SQL注入                                   |
+| Django        | CVE-2018-14574   | Redirect   | GET      | CommonMiddleware url重定向                                  |
+| Django        | CVE-2020-9402    | SQLinject  | GET      | GIS SQL注入                                                |
+| Django        | CVE-2021-35042   | SQLinject  | GET      | QuerySet.order_by SQL注入                                  |
++---------------+------------------+------------+----------+------------------------------------------------------------+
+| F5-BIG-IP     | CVE-2020-5902    | RCE        | GET      | BIG-IP远程代码执行                                          |
+| F5-BIG-IP     | CVE-2022-1388    | unAuth     | POST     | BIG-IP身份认证绕过                                          |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | Fastjson      | CNVD-2019-22238  | unSerialize| POST     | Fastjson <=1.2.47 反序列化                                  |
 | Fastjson      | CVE-2017-18349   | unSerialize| POST     | Fastjson <= 1.2.24 反序列化                                 |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
+| Keycloak      | CVE-2020-10770   | SSRF       | GET      | 使用request_uri调用未经验证的URL                             |
++---------------+------------------+------------+----------+------------------------------------------------------------+
 | Spring        | CVE-2022-22965   | RCE        | GET/POST | Spring Framework远程代码执行                                |
 | Spring        | CVE-2021-21234   | FileRead   | GET      | Spring Boot目录遍历                                         |
 | Spring        | CVE-2020-5410    | FileRead   | GET      | Spring Cloud目录遍历                                        |
+| Spring        | CVE-2022-22963   | RCE        | POST     | Spring Cloud Function SpEL远程代码执行                      |
+| Spring        | CVE-2022-22947   | RCE        | POST     | Spring Cloud Gateway SpEl远程代码执行                       |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | ThinkPHP      | CNVD-2018-24942  | RCE        | GET      | 未开启强制路由导致RCE                                        |
 | ThinkPHP      | CNNVD-201901-445 | RCE        | POST     | 核心类Request远程代码执行                                    |
+| ThinkPHP      | None             | RCE        | GET      | ThinkPHP2.x 远程代码执行                                    |
+| ThinkPHP      | None             | RCE        | GET      | ThinkPHP5 ids参数SQL注入                                    |
++---------------+------------------+------------+----------+------------------------------------------------------------+
+| Ueditor       | None             | SSRF       | GET      | Ueditor编辑器SSRF                                          |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | Weblogic      | CVE-2020-14882   | RCE        | GET      | Weblogic未授权命令执行                                      |
 | Weblogic      | CVE-2020-14750   | unAuth     | GET      | Weblogic权限验证绕过                                        |
@@ -80,6 +96,7 @@
 ```
 git clone https://github.com/CLincat/vulcat.git
 cd vulcat
+pip3 install -r requirements.txt
 python3 vulcat.py -h
 ```
 ```
@@ -149,8 +166,9 @@ Options:
     --list              查看所有Payload
 
   支持的目标类型(-a参数, 不区分大小写):
-    AliDruid,airflow,apisix,cisco,django,fastjson,flink,thinkphp,tomcat,na
-    cos,spring,solr,struts2,weblogic,yonyou
+    AliDruid,airflow,apisix,appweb,cisco,django,f5bigip,fastjson,flink,key
+    cloak,nacos,thinkphp,tomcat,spring,solr,struts2,ueditor,weblogic,yonyo
+    u
 ```
 
 ## language

@@ -54,7 +54,7 @@ lang = {
         },
         'app_list_help': {
             'title': 'Supported target types(Case insensitive)',
-            'name': 'AliDruid,airflow,apisix,cisco,django,fastjson,flink,thinkphp,tomcat,nacos,spring,solr,struts2,weblogic,yonyou'
+            'name': 'AliDruid,airflow,apisix,appweb,cisco,django,f5bigip,fastjson,flink,keycloak,nacos,thinkphp,tomcat,spring,solr,struts2,ueditor,weblogic,yonyou'
         },
         'core': {
             'start': {
@@ -81,11 +81,13 @@ lang = {
             },
             'text': {
                 'success': '[INFO] The results have been saved to ',
-                'faild': '[ERROR] Failed to save txt'
+                'faild': '[ERROR] Failed to save txt',
+                'notvul': '[-] The result is not saved to '
             },
             'json': {
                 'success': '[INFO] The results have been saved to ',
-                'faild': '[ERROR] Failed to save json'
+                'faild': '[ERROR] Failed to save json',
+                'notvul': '[-] The result is not saved to '
             }
         }
     },
@@ -131,7 +133,7 @@ lang = {
         },
         'app_list_help': {
             'title': '支持的目标类型(-a参数, 不区分大小写)',
-            'name': 'AliDruid,airflow,apisix,cisco,django,fastjson,flink,thinkphp,tomcat,nacos,spring,solr,struts2,weblogic,yonyou'
+            'name': 'AliDruid,airflow,apisix,appweb,cisco,django,f5bigip,fastjson,flink,keycloak,nacos,thinkphp,tomcat,spring,solr,struts2,ueditor,weblogic,yonyou'
         },
         'core': {
             'start': {
@@ -158,11 +160,13 @@ lang = {
             },
             'text': {
                 'success': '[INFO] 结果已经被保存到文件 ',
-                'faild': '[ERROR] 保存txt文件失败'
+                'faild': '[ERROR] 保存txt文件失败',
+                'notvul': '[-] 未保存结果至'
             },
             'json': {
                 'success': '[INFO] 结果已经被保存到文件 ',
-                'faild': '[ERROR] 保存json文件失败'
+                'faild': '[ERROR] 保存json文件失败',
+                'notvul': '[-] 未保存结果至'
             }
         }
     }

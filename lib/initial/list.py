@@ -125,6 +125,14 @@ vul_info = {
             'description': 'PUT方法任意文件写入'
         }
     ],
+    'AppWeb': [
+        {
+            'vul_id': 'CVE-2018-8715',
+            'type': 'unAuth',
+            'method': 'GET',
+            'description': 'AppWeb身份认证绕过'
+        }
+    ],
     'Cisco': [
         {
             'vul_id': 'CVE-2020-3580',
@@ -138,13 +146,45 @@ vul_info = {
             'vul_id': 'CVE-2017-12794',
             'type': 'XSS',
             'method': 'GET',
-            'description': 'Django debug page XSS跨站脚本攻击'
+            'description': 'debug page XSS跨站脚本攻击'
         },
         {
             'vul_id': 'CVE-2019-14234',
             'type': 'SQLinject',
             'method': 'GET',
-            'description': 'Django JSONfield SQL注入'
+            'description': 'JSONfield SQL注入'
+        },
+        {
+            'vul_id': 'CVE-2018-14574',
+            'type': 'Redirect',
+            'method': 'GET',
+            'description': 'CommonMiddleware url重定向'
+        },
+        {
+            'vul_id': 'CVE-2020-9402',
+            'type': 'SQLinject',
+            'method': 'GET',
+            'description': 'GIS SQL注入'
+        },
+        {
+            'vul_id': 'CVE-2021-35042',
+            'type': 'SQLinject',
+            'method': 'GET',
+            'description': 'QuerySet.order_by SQL注入'
+        }
+    ],
+    'F5-BIG-IP': [
+        {
+            'vul_id': 'CVE-2020-5902',
+            'type': 'RCE',
+            'method': 'GET',
+            'description': 'BIG-IP远程代码执行'
+        },
+        {
+            'vul_id': 'CVE-2022-1388',
+            'type': 'unAuth',
+            'method': 'POST',
+            'description': 'BIG-IP身份认证绕过'
         }
     ],
     'Fastjson': [
@@ -161,14 +201,14 @@ vul_info = {
             'description': 'Fastjson <= 1.2.24 反序列化'
         }
     ],
-    # 'Keycloak': [
-    #     {
-    #         'vul_id': 'CVE-2020-10770',
-    #         'type': 'SSRF',
-    #         'method': 'GET',
-    #         'description': '使用request_uri参数调用未经验证的URL'
-    #     }
-    # ],
+    'Keycloak': [
+        {
+            'vul_id': 'CVE-2020-10770',
+            'type': 'SSRF',
+            'method': 'GET',
+            'description': '使用request_uri调用未经验证的URL'
+        }
+    ],
     'Spring': [
         {
             'vul_id': 'CVE-2022-22965',
@@ -187,6 +227,18 @@ vul_info = {
             'type': 'FileRead',
             'method': 'GET',
             'description': 'Spring Cloud目录遍历'
+        },
+        {
+            'vul_id': 'CVE-2022-22963',
+            'type': 'RCE',
+            'method': 'POST',
+            'description': 'Spring Cloud Function SpEL远程代码执行'
+        },
+        {
+            'vul_id': 'CVE-2022-22947',
+            'type': 'RCE',
+            'method': 'POST',
+            'description': 'Spring Cloud Gateway SpEl远程代码执行'
         }
     ],
     'ThinkPHP': [
@@ -201,6 +253,26 @@ vul_info = {
             'type': 'RCE',
             'method': 'POST',
             'description': '核心类Request远程代码执行'
+        },
+        {
+            'vul_id': 'None',
+            'type': 'RCE',
+            'method': 'GET',
+            'description': 'ThinkPHP2.x 远程代码执行'
+        },
+        {
+            'vul_id': 'None',
+            'type': 'RCE',
+            'method': 'GET',
+            'description': 'ThinkPHP5 ids参数SQL注入'
+        }
+    ],
+    'Ueditor': [
+        {
+            'vul_id': 'None',
+            'type': 'SSRF',
+            'method': 'GET',
+            'description': 'Ueditor编辑器SSRF'
         }
     ],
     'Weblogic': [

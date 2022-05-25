@@ -15,12 +15,15 @@ from payloads.ApacheFlink import flink
 from payloads.ApacheSolr import solr
 from payloads.ApacheTomcat import tomcat
 from payloads.ApacheStruts2 import struts2
+from payloads.AppWeb import appweb
 from payloads.Cisco import cisco
 from payloads.Django import django
+from payloads.F5BIGIP import f5bigip
 from payloads.Fastjson import fastjson
 from payloads.ThinkPHP import thinkphp
-# from payloads.Keycloak import keycloak
+from payloads.Keycloak import keycloak
 from payloads.Spring import spring
+from payloads.Ueditor import ueditor
 from payloads.Weblogic import weblogic
 from payloads.Yonyou import yonyou
 from thirdparty.tqdm import tqdm

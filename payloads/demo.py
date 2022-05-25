@@ -9,12 +9,14 @@ file:///etc/passwd
 file:///C:\Windows\System32\drivers\etc\hosts
 '''
 
+from lib.api.dns import dns
 from lib.initial.config import config
-from lib.tool.md5 import md5
+from lib.tool.md5 import md5, random_md5
 from lib.tool.logger import logger
 from lib.tool.thread import thread
 from lib.tool import check
 from thirdparty import requests
+from time import sleep
 
 class 1():                                              # ! 1: 类名(例如 ThinkPHP)
     ''' 标有数字的地方都需要自己填写 '''
@@ -93,7 +95,10 @@ class 1():                                              # ! 1: 类名(例如 Thi
                     'Method': vul_info['vul_method'],
                     'Payload': {
                         'Url': url,
-                        'Path': path
+                        'Path': path,
+                        'Data': data,
+                        'Cookie': 'xxx',
+                        'Headers': vul_info['headers']
                     }
                 }
                 return results

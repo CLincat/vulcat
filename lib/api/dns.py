@@ -38,12 +38,12 @@ class DNS():
             else:
                 return 'NotDns'
         except requests.ConnectTimeout:
-            return 'dns_timeout'
+            return 'dnslog_timeout'
         except requests.ConnectionError:
-            return 'dns_error'
+            return 'dnslog_error'
         except Exception as e:
             # print(e)
-            return 'error'
+            return 'dnslog_error'
 
     def result(self, md, sessid):
         try:
@@ -54,12 +54,12 @@ class DNS():
             else:
                 return 'NotRes'
         except requests.ConnectTimeout:
-            return 'dns_timeout'
+            return 'dnslog_timeout'
         except requests.ConnectionError:
-            return 'dns_error'
+            return 'dnslog_error'
         except Exception as e:
             # print(e)
-            return 'error'
+            return 'dnslog_error'
 
     # * 不同的dns平台
     def get_dnslog_domain(self, sessid):

@@ -36,15 +36,15 @@ class Logger():
         pass
 
     def logging_2(self, vul_info, status_code, *args):
-        ''' 日志2级, 框架名称+漏洞编号+状态码'''
-        info_2 = color.red_ex('[LOG-{}-{}]'.format(vul_info['app_name'], str(self.requests_number)))
+        ''' 日志2级, 框架名称+状态码+漏洞编号'''
+        info_2 = color.red_ex('[LOG-{}-{}]'.format(str(self.requests_number), vul_info['app_name']))
         info_2 += color.red_ex(' [') + color.magenta_ex(str(status_code)) + color.red_ex(']')
         info_2 += color.red_ex(' [') + color.black_ex(vul_info['vul_id']) + color.red_ex(']')
 
         return info_2
 
     def logging_3(self, vul_info, status_code, res):
-        ''' 日志3级, (框架名称+漏洞编号+状态码)+请求方法+请求目标+POST数据 '''
+        ''' 日志3级, (框架名称+状态码+漏洞编号)+请求方法+请求目标+POST数据 '''
         info_3 = self.logging_2(vul_info, status_code)
 
         try:
@@ -58,12 +58,13 @@ class Logger():
         return info_3
 
     def logging_4(self, vul_info, status_code, res):
-        ''' 日志4级, (框架名称+漏洞编号+状态码)+请求数据包 '''
+        ''' 日志4级, (框架名称+状态码+漏洞编号)+请求数据包 '''
         info_4 = self.logging_2(vul_info, status_code)
         try:
             info_4 += color.red_ex(' [Request')
-
             info_4 += color.black_ex('\n' + res.request.method + ' ' + res.request.path_url + ' ' + 'HTTP/1.1')
+            info_4 += color.black_ex('\n' + 'Host' + ': ' + self.get_domain(res.request.url))
+
             for key, value in res.request.headers.items():
                 info_4 += color.black_ex('\n' + key + ': ' + value)
             if res.request.body:
@@ -75,7 +76,7 @@ class Logger():
         return info_4
 
     def logging_5(self, vul_info, status_code, res):
-        ''' 日志5级, (框架名称+漏洞编号+状态码)+请求包+响应头 '''
+        ''' 日志5级, (框架名称+状态码+漏洞编号)+请求包+响应头 '''
         info_5 = self.logging_4(vul_info, status_code, res)
         try:
             info_5 += color.red_ex(' [Response')
@@ -89,7 +90,7 @@ class Logger():
         return info_5
 
     def logging_6(self, vul_info, status_code, res):
-        ''' 日志6级, (框架名称+漏洞编号+状态码)+请求包+响应头+响应内容 '''
+        ''' 日志6级, (框架名称+状态码+漏洞编号)+请求包+响应头+响应内容 '''
         info_6 = self.logging_5(vul_info, status_code, res)
         try:
             info_6 = info_6[:-1]
@@ -99,5 +100,18 @@ class Logger():
         except:
             return info_6
         return info_6
+
+    def get_domain(self, url):
+        try:
+            start_index = url.find('//')
+            if start_index:
+                start_index += 2
+            else:
+                return 'None'
+            end_index = url.find('/', start_index)
+            domain = url[start_index:end_index]
+            return domain
+        except:
+            return 'Error'
 
 logger = Logger()

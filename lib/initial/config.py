@@ -41,7 +41,7 @@ class Config():
             del args.url_list[0]
 
             
-            if (url[-1] != '/') and ((re.search(r'(([0-9]{0,3})\.([0-9]{0,3})\.([0-9]{0,3})\.([0-9]{0,3}):([0-9]*))$', url)) or (not re.search(r'(.*\..*)$', url))): # * url的斜杠/(目录)
+            if (url[-1] != '/') and ((re.search(r'(([0-9]{0,3})\.([0-9]{0,3})\.([0-9]{0,3})\.([0-9]{0,3}):?([0-9]{0,5}))$', url)) or (not re.search(r'(.*\..*)$', url))): # * url的斜杠/(目录)
                 url += '/'
 
             if args.recursive:                                          # * -r参数

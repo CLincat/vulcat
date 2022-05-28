@@ -22,6 +22,6 @@ except ImportError:
 
 # Exports
 # =============================================================================
-from flask_unsign.exceptions import FlaskUnsignException, DecodeError
-from flask_unsign.session import sign, decode, verify
-from flask_unsign.cracker import Cracker
+from thirdparty.flask_unsign.exceptions import FlaskUnsignException, DecodeError
+from thirdparty.flask_unsign.session import sign, decode, verify
+from thirdparty.flask_unsign.cracker import Cracker

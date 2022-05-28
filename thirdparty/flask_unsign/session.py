@@ -11,9 +11,9 @@ from itsdangerous import base64_decode, URLSafeTimedSerializer, BadSignature, Ti
 from markupsafe import Markup
 from werkzeug.http import parse_date
 
-from flask_unsign import DecodeError, DEFAULT_SALT
-from flask_unsign.exceptions import SigningError, FlaskUnsignException
-from flask_unsign.helpers import LegacyTimestampSigner
+from thirdparty.flask_unsign import DecodeError, DEFAULT_SALT
+from thirdparty.flask_unsign.exceptions import SigningError, FlaskUnsignException
+from thirdparty.flask_unsign.helpers import LegacyTimestampSigner
 
 
 def verify(value: str, secret: str, legacy: bool=False, salt: str=DEFAULT_SALT) -> bool:

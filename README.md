@@ -63,7 +63,7 @@
 | ThinkPHP      | CNVD-2018-24942  | RCE        | GET      | 未开启强制路由导致RCE                                        |
 | ThinkPHP      | CNNVD-201901-445 | RCE        | POST     | 核心类Request远程代码执行                                    |
 | ThinkPHP      | None             | RCE        | GET      | ThinkPHP2.x 远程代码执行                                    |
-| ThinkPHP      | None             | RCE        | GET      | ThinkPHP5 ids参数SQL注入                                    |
+| ThinkPHP      | None             | SQLinject  | GET      | ThinkPHP5 ids参数SQL注入                                    |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | Ueditor       | None             | SSRF       | GET      | Ueditor编辑器SSRF                                          |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
@@ -96,7 +96,7 @@
 ```
 git clone https://github.com/CLincat/vulcat.git
 cd vulcat
-pip3 install -r requirements.txt
+pip3 install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple
 python3 vulcat.py -h
 ```
 ```

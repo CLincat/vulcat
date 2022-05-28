@@ -62,7 +62,7 @@
 | ThinkPHP      | CNVD-2018-24942  | RCE        | GET      | The forced route is not enabled Remote code execution      |
 | ThinkPHP      | CNNVD-201901-445 | RCE        | POST     | Core class Request Remote code execution                   |
 | ThinkPHP      | None             | RCE        | GET      | ThinkPHP2.x Remote code execution                          |
-| ThinkPHP      | None             | RCE        | GET      | ThinkPHP5 ids SQLinject                                    |
+| ThinkPHP      | None             | SQLinject  | GET      | ThinkPHP5 ids SQLinject                                    |
 +---------------+------------------+------------+----------+------------------------------------------------------------+
 | Ueditor       | None             | SSRF       | GET      | Ueditor SSRF                                               |
 +---------------+------------------+------------+----------+------------------------------------------------------------+

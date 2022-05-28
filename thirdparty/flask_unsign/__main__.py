@@ -3,11 +3,11 @@ from datetime import datetime
 from argparse import ArgumentParser
 from typing import Optional
 
-import requests
+from thirdparty import requests
 
-from flask_unsign.cracker import Cracker
+from thirdparty.flask_unsign.cracker import Cracker
 
-from flask_unsign.helpers import (
+from thirdparty.flask_unsign.helpers import (
     CustomHelpFormatter, wordlist, parse,
     extract_error, handle_interrupt, fix_stdout)
 

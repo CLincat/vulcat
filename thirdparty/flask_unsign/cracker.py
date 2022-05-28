@@ -6,7 +6,7 @@ from traceback import print_tb
 from typing import Iterable
 from multiprocessing.pool import ThreadPool
 
-from flask_unsign import session, logger, __url__
+from thirdparty.flask_unsign import session, logger, __url__
 
 
 class Cracker:

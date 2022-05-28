@@ -262,7 +262,7 @@ vul_info = {
         },
         {
             'vul_id': 'None',
-            'type': 'RCE',
+            'type': 'SQLinject',
             'method': 'GET',
             'description': 'ThinkPHP5 ids参数SQL注入'
         }

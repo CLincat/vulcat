@@ -9,10 +9,10 @@ from datetime import datetime
 from functools import wraps
 
 from itsdangerous import TimestampSigner
-from requests import RequestException
+from thirdparty.requests import RequestException
 from typing import Union
 
-from flask_unsign import logger, FlaskUnsignException
+from thirdparty.flask_unsign import logger, FlaskUnsignException
 
 
 class CustomHelpFormatter(HelpFormatter):

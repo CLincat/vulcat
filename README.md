@@ -6,76 +6,87 @@
 * 如果有什么想法、建议或者遇到了BUG, 都可以issues
 
 **目前支持扫描的web应用程序有:**
-> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheAPISIX, ApacheFlink, ApacheSolr, ApacheStruts2, ApacheTomcat, AppWeb, Cicso, Django, F5-BIG-IP, Fastjson, Keycloak, Spring, ThinkPHP, Ueditor, Weblogic, Yonyou
+> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheAPISIX, ApacheFlink, ApacheSolr, ApacheStruts2, ApacheTomcat, AppWeb, AtlassianConfluence, Cicso, Django, ElasticSearch, F5-BIG-IP, Fastjson, Keycloak, Spring, ThinkPHP, Ueditor, Weblogic, Yonyou
 
 <details>
 <summary><b>目前支持扫描的web漏洞有: [点击展开]</b></summary>
 
 ```
-+---------------+------------------+------------+----------+------------------------------------------------------------+
-| Target        | Vul_id           | Type       | Method   | Description                                                |
-+---------------+------------------+------------+----------+------------------------------------------------------------+
-| AlibabaDruid  | None             | unAuth     | GET      | 阿里巴巴Druid未授权访问                                      |
-+---------------+------------------+------------+----------+------------------------------------------------------------+
-| AlibabaNacos  | CVE-2021-29441   | unAuth     | GET/POST | 阿里巴巴Nacos未授权访问                                      |
-+---------------+------------------+------------+----------+------------------------------------------------------------+
-| ApacheAirflow | CVE-2020-17526   | unAuth     | GET      | Airflow身份验证绕过                                         |
-+---------------+------------------+------------+----------+------------------------------------------------------------+
-| ApacheAPISIX  | CVE-2020-13945   | unAuth     | GET      | Apache APISIX默认密钥                                       |
-+---------------+------------------+------------+----------+------------------------------------------------------------+
-| ApacheFlink   | CVE-2020-17519   | FileRead   | GET      | Flink目录遍历                                               |
-+---------------+------------------+------------+----------+------------------------------------------------------------+
-| ApacheSolr    | CVE-2021-27905   | SSRF       | GET/POST | Solr SSRF/任意文件读取                                      |
-+---------------+------------------+------------+----------+------------------------------------------------------------+
-| ApacheStruts2 | S2-001           | RCE        | POST     | Struts2远程代码执行                                         |
-| ApacheStruts2 | S2-005           | RCE        | GET      | Struts2远程代码执行                                         |
-| ApacheStruts2 | S2-007           | RCE        | GET      | Struts2远程代码执行                                         |
-| ApacheStruts2 | S2-008           | RCE        | GET      | Struts2远程代码执行                                         |
-| ApacheStruts2 | S2-009           | RCE        | GET      | Struts2远程代码执行                                         |
-| ApacheStruts2 | S2-012           | RCE        | GET      | Struts2远程代码执行                                         |
-+---------------+------------------+------------+----------+------------------------------------------------------------+
-| ApacheTomcat  | CVE-2017-12615   | FileUpload | PUT      | PUT方法任意文件写入                                          |
-+---------------+------------------+------------+----------+------------------------------------------------------------+
-| AppWeb        | CVE-2018-8715    | unAuth     | GET      | AppWeb身份认证绕过                                          |
-+---------------+------------------+------------+----------+------------------------------------------------------------+
-| Cisco         | CVE-2020-3580    | XSS        | POST     | 思科ASA/FTD XSS跨站脚本攻击                                  |
-+---------------+------------------+------------+----------+------------------------------------------------------------+
-| Django        | CVE-2017-12794   | XSS        | GET      | Django debug page XSS跨站脚本攻击                           |
-| Django        | CVE-2019-14234   | SQLinject  | GET      | Django JSONfield SQL注入                                   |
-| Django        | CVE-2018-14574   | Redirect   | GET      | CommonMiddleware url重定向                                  |
-| Django        | CVE-2020-9402    | SQLinject  | GET      | GIS SQL注入                                                |
-| Django        | CVE-2021-35042   | SQLinject  | GET      | QuerySet.order_by SQL注入                                  |
-+---------------+------------------+------------+----------+------------------------------------------------------------+
-| F5-BIG-IP     | CVE-2020-5902    | RCE        | GET      | BIG-IP远程代码执行                                          |
-| F5-BIG-IP     | CVE-2022-1388    | unAuth     | POST     | BIG-IP身份认证绕过                                          |
-+---------------+------------------+------------+----------+------------------------------------------------------------+
-| Fastjson      | CNVD-2019-22238  | unSerialize| POST     | Fastjson <=1.2.47 反序列化                                  |
-| Fastjson      | CVE-2017-18349   | unSerialize| POST     | Fastjson <= 1.2.24 反序列化                                 |
-+---------------+------------------+------------+----------+------------------------------------------------------------+
-| Keycloak      | CVE-2020-10770   | SSRF       | GET      | 使用request_uri调用未经验证的URL                             |
-+---------------+------------------+------------+----------+------------------------------------------------------------+
-| Spring        | CVE-2022-22965   | RCE        | GET/POST | Spring Framework远程代码执行                                |
-| Spring        | CVE-2021-21234   | FileRead   | GET      | Spring Boot目录遍历                                         |
-| Spring        | CVE-2020-5410    | FileRead   | GET      | Spring Cloud目录遍历                                        |
-| Spring        | CVE-2022-22963   | RCE        | POST     | Spring Cloud Function SpEL远程代码执行                      |
-| Spring        | CVE-2022-22947   | RCE        | POST     | Spring Cloud Gateway SpEl远程代码执行                       |
-+---------------+------------------+------------+----------+------------------------------------------------------------+
-| ThinkPHP      | CNVD-2018-24942  | RCE        | GET      | 未开启强制路由导致RCE                                        |
-| ThinkPHP      | CNNVD-201901-445 | RCE        | POST     | 核心类Request远程代码执行                                    |
-| ThinkPHP      | None             | RCE        | GET      | ThinkPHP2.x 远程代码执行                                    |
-| ThinkPHP      | None             | SQLinject  | GET      | ThinkPHP5 ids参数SQL注入                                    |
-+---------------+------------------+------------+----------+------------------------------------------------------------+
-| Ueditor       | None             | SSRF       | GET      | Ueditor编辑器SSRF                                          |
-+---------------+------------------+------------+----------+------------------------------------------------------------+
-| Weblogic      | CVE-2020-14882   | RCE        | GET      | Weblogic未授权命令执行                                      |
-| Weblogic      | CVE-2020-14750   | unAuth     | GET      | Weblogic权限验证绕过                                        |
-| Weblogic      | CVE-2019-2725    | unSerialize| POST     | Weblogic wls9_async反序列化                                 |
-| Weblogic      | CVE-2017-10271   | unSerialize| POST     | Weblogic XMLDecoder反序列化                                 |
-| Weblogic      | CVE-2014-4210    | SSRF       | GET      | Weblogic 服务端请求伪造                                     |
-+---------------+------------------+------------+----------+------------------------------------------------------------+
-| Yonyou        | CNVD-2021-30167  | RCE        | GET      | 用友NC BeanShell远程命令执行                                |
-| Yonyou        | None             | FileRead   | GET      | 用友ERP-NC NCFindWeb目录遍历                                |
-+---------------+------------------+------------+----------+------------------------------------------------------------+
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Target               | Vul_id           | Type         | Method   | Description                                                |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Alibaba Druid        | None             | unAuth       | GET      | 阿里巴巴Druid未授权访问                                      |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Alibaba Nacos        | CVE-2021-29441   | unAuth       | GET/POST | 阿里巴巴Nacos未授权访问                                      |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Apache Airflow       | CVE-2020-17526   | unAuth       | GET      | Airflow身份验证绕过                                         |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Apache APISIX        | CVE-2020-13945   | unAuth       | GET      | Apache APISIX默认密钥                                       |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Apache Flink         | CVE-2020-17519   | FileRead     | GET      | Flink目录遍历                                               |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Apache Solr          | CVE-2021-27905   | SSRF         | GET/POST | Solr SSRF/任意文件读取                                      |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Apache Struts2       | S2-001           | RCE          | POST     | Struts2远程代码执行                                         |
+| Apache Struts2       | S2-005           | RCE          | GET      | Struts2远程代码执行                                         |
+| Apache Struts2       | S2-007           | RCE          | GET      | Struts2远程代码执行                                         |
+| Apache Struts2       | S2-008           | RCE          | GET      | Struts2远程代码执行                                         |
+| Apache Struts2       | S2-009           | RCE          | GET      | Struts2远程代码执行                                         |
+| Apache Struts2       | S2-012           | RCE          | GET      | Struts2远程代码执行                                         |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Apache Tomcat        | CVE-2017-12615   | FileUpload   | PUT      | PUT方法任意文件写入                                          |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| AppWeb               | CVE-2018-8715    | unAuth       | GET      | AppWeb身份认证绕过                                          |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Atlassian Confluence | CVE-2015-8399    | FileRead     | GET      | Confluence任意文件包含                                      |
+| Atlassian Confluence | CVE-2019-3396    | RCE/FileRead | POST     | Confluence路径遍历和命令执行                                 |
+| Atlassian Confluence | CVE-2021-26084   | RCE          | POST     | Confluence Webwork Pre-Auth OGNL表达式命令注入              |
+| Atlassian Confluence | CVE-2022-26134   | RCE          | GET      | Confluence远程代码执行                                      |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Cisco                | CVE-2020-3580    | XSS          | POST     | 思科ASA/FTD XSS跨站脚本攻击                                  |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Django               | CVE-2017-12794   | XSS          | GET      | Django debug page XSS跨站脚本攻击                           |
+| Django               | CVE-2018-14574   | Redirect     | GET      | CommonMiddleware url重定向                                  |
+| Django               | CVE-2019-14234   | SQLinject    | GET      | Django JSONfield SQL注入                                   |
+| Django               | CVE-2020-9402    | SQLinject    | GET      | GIS SQL注入                                                |
+| Django               | CVE-2021-35042   | SQLinject    | GET      | QuerySet.order_by SQL注入                                  |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| ElasticSearch        | CVE-2014-3120    | RCE          | POST     | ElasticSearch命令执行                                       |
+| ElasticSearch        | CVE-2015-1427    | RCE          | POST     | ElasticSearch Groovy 沙盒绕过&&代码执行                      |
+| ElasticSearch        | CVE-2015-3337    | FileRead     | GET      | ElasticSearch 目录穿越                                      |
+| ElasticSearch        | CVE-2015-5531    | FileRead     | PUT/GET  | ElasticSearch 目录穿越                                      |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| F5 BIG-IP            | CVE-2020-5902    | RCE          | GET      | BIG-IP远程代码执行                                          |
+| F5 BIG-IP            | CVE-2022-1388    | unAuth       | POST     | BIG-IP身份认证绕过                                          |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Fastjson             | CNVD-2017-02833  | unSerialize  | POST     | Fastjson <= 1.2.24 反序列化                                 |
+| Fastjson             | CNVD-2019-22238  | unSerialize  | POST     | Fastjson <=1.2.47 反序列化                                  |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Keycloak             | CVE-2020-10770   | SSRF         | GET      | 使用request_uri调用未经验证的URL                             |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Spring               | CVE-2020-5410    | FileRead     | GET      | Spring Cloud目录遍历                                        |
+| Spring               | CVE-2021-21234   | FileRead     | GET      | Spring Boot目录遍历                                         |
+| Spring               | CVE-2022-22947   | RCE          | POST     | Spring Cloud Gateway SpEl远程代码执行                       |
+| Spring               | CVE-2022-22963   | RCE          | POST     | Spring Cloud Function SpEL远程代码执行                      |
+| Spring               | CVE-2022-22965   | RCE          | GET/POST | Spring Framework远程代码执行                                |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| ThinkPHP             | CVE-2018-1002015 | RCE          | GET      | ThinkPHP5.x 远程代码执行                                    |
+| ThinkPHP             | CNVD-2018-24942  | RCE          | GET      | 未开启强制路由导致RCE                                        |
+| ThinkPHP             | CNNVD-201901-445 | RCE          | POST     | 核心类Request远程代码执行                                    |
+| ThinkPHP             | None             | RCE          | GET      | ThinkPHP2.x 远程代码执行                                    |
+| ThinkPHP             | None             | SQLinject    | GET      | ThinkPHP5 ids参数SQL注入                                    |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Ueditor              | None             | SSRF         | GET      | Ueditor编辑器SSRF                                          |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Oracle Weblogic      | CVE-2014-4210    | SSRF         | GET      | Weblogic 服务端请求伪造                                     |
+| Oracle Weblogic      | CVE-2017-10271   | unSerialize  | POST     | Weblogic XMLDecoder反序列化                                 |
+| Oracle Weblogic      | CVE-2019-2725    | unSerialize  | POST     | Weblogic wls9_async反序列化                                 |
+| Oracle Weblogic      | CVE-2020-14750   | unAuth       | GET      | Weblogic权限验证绕过                                        |
+| Oracle Weblogic      | CVE-2020-14882   | RCE          | GET      | Weblogic未授权命令执行                                      |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Yonyou               | CNVD-2021-30167  | RCE          | GET      | 用友NC BeanShell远程命令执行                                |
+| Yonyou               | None             | FileRead     | GET      | 用友ERP-NC NCFindWeb目录遍历                                |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
 ```
 </details>
 
@@ -133,7 +144,7 @@ Options:
                         http/https代理 (如: --http-proxy 127.0.0.1:8080)
     --user-agent=UA     自定义User-Agent
     --cookie=COOKIE     添加cookie
-    --log=LOG           日志等级, 可选1-5 (默认: 1) [日志2级: 框架名称+漏洞编号+状态码] [日志3级:
+    --log=LOG           日志等级, 可选1-6 (默认: 1) [日志2级: 框架名称+漏洞编号+状态码] [日志3级:
                         2级内容+请求方法+请求目标+POST数据] [日志4级: 2级内容+请求数据包] [日志5级:
                         4级内容+响应头] [日志6级: 5级内容+响应内容]
 
@@ -160,15 +171,21 @@ Options:
                         以json格式保存扫描结果, 无漏洞时不会生成文件(如: --output-text
                         result.json)
 
+  General:
+    通用工作参数
+
+    --no-waf            禁用waf检测
+    --batch             yes/no的选项不需要用户输入, 使用默认选项
+
   Lists:
     漏洞列表
 
     --list              查看所有Payload
 
   支持的目标类型(-a参数, 不区分大小写):
-    AliDruid,airflow,apisix,appweb,cisco,django,f5bigip,fastjson,flink,key
-    cloak,nacos,thinkphp,tomcat,spring,solr,struts2,ueditor,weblogic,yonyo
-    u
+    AliDruid,airflow,apisix,appweb,cisco,confluence,django,elasticsearch,f
+    5bigip,fastjson,flink,keycloak,nacos,thinkphp,tomcat,spring,solr,strut
+    s2,ueditor,weblogic,yonyou
 ```
 
 ## language

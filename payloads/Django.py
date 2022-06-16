@@ -363,7 +363,8 @@ class Django():
                 logger.logging(vul_info, 'Error')
                 return None
 
-            if ((('OperationalError' in res.text) or ('DatabaseError' in res.text)) and ('Request information' in res.text)):
+            if ((('OperationalError' in res.text) or ('DatabaseError' in res.text)) 
+                and ('Request information' in res.text)):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],

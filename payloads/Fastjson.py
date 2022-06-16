@@ -130,7 +130,7 @@ class Fastjson():
         vul_info = {}
         vul_info['app_name'] = self.app_name
         vul_info['vul_type'] = 'unSerialize'
-        vul_info['vul_id'] = 'CVE-2017-18349'
+        vul_info['vul_id'] = 'CNVD-2017-02833'
         vul_info['vul_method'] = 'POST'
         vul_info['headers'] = {
             'Content-Type': 'application/json'

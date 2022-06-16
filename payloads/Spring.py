@@ -306,7 +306,11 @@ class Spring():
                 logger.logging(vul_info, 'Error')
                 return None
 
-            if (('/sbin/nologin' in res.text) or ('root:x:0:0:root' in res.text) or ('Microsoft Corp' in res.text) or ('Microsoft TCP/IP for Windows' in res.text)):
+            if (('/sbin/nologin' in res.text) 
+                or ('root:x:0:0:root' in res.text) 
+                or ('Microsoft Corp' in res.text) 
+                or ('Microsoft TCP/IP for Windows' in res.text)
+            ):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
@@ -446,7 +450,9 @@ class Spring():
                     )
                         logger.logging(vul_info, res3.status_code, res3)                        # * LOG
 
-                        if ((res3.status_code == 200) and (('/sbin/nologin' in res3.text) or ('root:x:0:0:root' in res3.text))):
+                        if ((res3.status_code == 200) 
+                            and (('/sbin/nologin' in res3.text) 
+                                or ('root:x:0:0:root' in res3.text))):
                             results = {
                                 'Target': target,
                                 'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
@@ -474,7 +480,7 @@ class Spring():
         return [
             thread(target=self.cve_2020_5410_scan, url=url),
             thread(target=self.cve_2021_21234_scan, url=url),
-            # thread(target=self.cve_2022_22965_scan, url=url),
+            thread(target=self.cve_2022_22965_scan, url=url),
             thread(target=self.cve_2022_22963_scan, url=url),
             thread(target=self.cve_2022_22947_scan, url=url)
         ]

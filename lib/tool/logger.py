@@ -91,6 +91,7 @@ class Logger():
 
     def logging_6(self, vul_info, status_code, res):
         ''' 日志6级, (框架名称+状态码+漏洞编号)+请求包+响应头+响应内容 '''
+        res.encoding = 'utf-8'
         info_6 = self.logging_5(vul_info, status_code, res)
         try:
             info_6 = info_6[:-1]

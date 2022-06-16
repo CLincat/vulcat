@@ -7,6 +7,7 @@ from lib.initial.config import config
 from lib.tool.logger import logger
 from lib.tool import check
 from lib.report import output
+from lib.tool.fingerprint import identify
 from payloads.AlibabaDruid import alidruid
 from payloads.AlibabaNacos import nacos
 from payloads.ApacheAirflow import airflow
@@ -16,8 +17,10 @@ from payloads.ApacheSolr import solr
 from payloads.ApacheTomcat import tomcat
 from payloads.ApacheStruts2 import struts2
 from payloads.AppWeb import appweb
+from payloads.AtlassianConfluence import confluence
 from payloads.Cisco import cisco
 from payloads.Django import django
+from payloads.ElasticSearch import elasticsearch
 from payloads.F5BIGIP import f5bigip
 from payloads.Fastjson import fastjson
 from payloads.ThinkPHP import thinkphp
@@ -38,6 +41,9 @@ class coreScan():
         self.delay = config.get('delay')                                                            # * 延时
         self.url_list = config.get('url_list')                                                      # * url列表
         self.app_list = config.get('app_list')                                                      # * 框架列表
+        self.batch = config.get('batch')
+        self.no_waf = config.get('no_waf')                                                          # * 是否启用WAF指纹识别
+        # self.web_app = config.get('web_app')                                                        # * 是否启用框架指纹识别
         self.thread_list = []                                                                       # * 已经运行的线程列表
         self.results = []                                                                           # * 结果列表
         self.queue = Queue()                                                                        # * 创建线程池
@@ -48,8 +54,37 @@ class coreScan():
 
     def start(self):
         ''' 开始扫描, 添加poc并启动 '''
-        for u in self.url_list:                                                                     # * 遍历urls
-            logger.info('yellow_ex', self.lang['core']['start']['start'] + u)                       # ? 提示, 开始扫描当前url
+        for u in self.url_list:                                                                         # * 遍历urls
+            logger.info('yellow_ex', self.lang['core']['start']['start'] + u)                           # ? 提示, 开始扫描当前url
+
+            # * --------------------WAF指纹识别--------------------
+            if (not self.no_waf):
+                waf_info = identify.waf_identify(u)                                                     # * WAF指纹识别
+                if waf_info:
+                    while True:
+                        if (not self.batch):                                                            # * 是否使用默认选项
+                            logger.info('red', '', print_end='')
+                            operation = input(self.lang['core']['start']['waf_find'].format(waf_info))       # * 接收参数
+                        else:
+                            logger.info('red', self.lang['core']['start']['waf_find'].format(waf_info), print_end='')
+                            operation = 'no'                                                            # * 默认选项No
+                            logger.info('red', 'no', notime=True)
+
+                        operation = operation.lower()                                                   # * 字母转小写
+                        if operation in ['y', 'yes']:                                                   # * 继续扫描
+                            logger.info('yellow_ex', self.lang['core']['stop']['continue'])             # ? 日志, 继续扫描
+                            break
+                        elif operation in ['n', 'no']:
+                            logger.info('yellow_ex', self.lang['core']['stop']['next'])                 # ? 日志, 下一个
+                            u = 'next'
+                            break
+                else:
+                    logger.info('yellow_ex', self.lang['core']['start']['waf_not_find'])
+
+            if u == 'next':
+                continue
+            # * --------------------WAF指纹识别--------------------
+
             if check.check_connect(u):
                 self.addPOC(u)                                                                      # * 为url添加poc 并加入线程池
                 self.scanning()                                                                     # * 开始扫描该url
@@ -75,6 +110,7 @@ class coreScan():
             logger.info('reset', '', notime=True, print_end='')                                     # * 重置文字颜色
             _exit(0)
 
+
     def scanning(self):
         ''' 正在扫描, 根据线程数启动poc '''
         queue_thread = int(self.queue.qsize() / self.thread)+1                                      # * 循环次数
@@ -93,24 +129,36 @@ class coreScan():
             except KeyboardInterrupt:
                 if self.stop():
                     continue
+                else:
+                    self.queue.queue.clear()                                                        # * 清空当前url的扫描队列
+                    break                                                                           # * 停止当前url的扫描, 并扫描下一个url
+
+
     def stop(self):
         ''' # ! 功能还没写好
         Ctrl+C暂停扫描
             q(uit)              退出扫描
             c(ontinue)          继续扫描
+            n(ext)              跳过当前url的扫描
             m(odify)            (还没写好)修改参数, 输入参数名和值(如-t 3)然后回车, 修改相应参数, 并继续扫描
             wq(save and exit)   等待已经运行的poc, 保存并输出已有的漏洞结果, 有--output参数的话则同步保存至文件
         '''
         while True:
-            logger.info('reset', '[CTRL+C] q(uit)/c(ontinue)/wq(save and exit): ')                  # ? 提示信息
-            operation = input('\r'.ljust(70))                                                       # * 接收参数
-            if operation == 'q':                                                                    # * 退出
+            logger.info('reset', '', print_end='')                  # ? 提示信息
+            operation = input('\r[CTRL+C] - q(uit)/c(ontinue)/n(ext)/wq(save and exit): '.ljust(70))# * 接收参数
+            operation = operation.lower()                                                           # * 字母转小写
+
+            if operation in ['q', 'quit']:                                                          # * 退出扫描
                 _exit(0)
-            elif operation == 'c':                                                                  # * 继续扫描
+            elif operation in ['c', 'continue']:                                                    # * 继续扫描
                 logger.info('yellow_ex', self.lang['core']['stop']['continue'])                     # ? 日志, 继续扫描
                 return True
-            elif operation == 'wq':                                                                 # * 保存退出
+            elif operation in ['wq', 'save and exit']:                                              # * 保存结果并退出
                 self.end()
+            elif operation in ['n', 'next']:
+                logger.info('yellow_ex', self.lang['core']['stop']['next'])                         # ? 日志, 扫描下一个目标
+
+                return False
 
     def end(self):
         ''' 结束扫描, 等待所有线程运行完毕, 生成漏洞结果并输出/保存'''

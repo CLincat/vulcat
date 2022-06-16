@@ -47,6 +47,12 @@ lang = {
             'output_text': 'Save the scan results in TXT format, no vulnerability will not generate files(e.g. --output-text result.txt)',
             'output_json': 'Save the scan results in JSON format, no vulnerability will not generate files(e.g. --output-text result.json)'
         },
+        'general_help': {
+            'title': 'General',
+            'name': 'General operating parameter',
+            'no_waf': 'Disable WAF detection',
+            'batch': 'The yes/no option does not require user input. The default option is used'
+        },
         'lists_help': {
             'title': 'Lists',
             'name': 'Vulnerability list',
@@ -54,19 +60,26 @@ lang = {
         },
         'app_list_help': {
             'title': 'Supported target types(Case insensitive)',
-            'name': 'AliDruid,airflow,apisix,appweb,cisco,django,f5bigip,fastjson,flink,keycloak,nacos,thinkphp,tomcat,spring,solr,struts2,ueditor,weblogic,yonyou'
+            'name': 'AliDruid,airflow,apisix,appweb,cisco,confluence,django,elasticsearch,f5bigip,fastjson,flink,keycloak,nacos,thinkphp,tomcat,spring,solr,struts2,ueditor,weblogic,yonyou'
         },
         'core': {
             'start': {
                 'start': '[INFO] Start scanning target ',
-                'unable': '[WARN] Unable to connect to '
+                'unable': '[WARN] Unable to connect to ',
+                'waf': '[WAF] The WAF detection for the current URL starts',
+                'waf_find': '[WAF] {} is detected, Whether to continue scanning the current URL? - y(es)/N(o): ',
+                'waf_not_find': 'Not found the WAF',
+                'waf_timeout': 'WAF recognizes timeout and the target is not responding',
+                'waf_conn_error': 'WAF recognition error, unable to connect to destination URL',
+                'waf_error': 'WAF identification error, unknown error'
             },
             'addpoc': {
                 'notfound': '[ERROR] The application not found: ',
                 'error': '[ERROR] The addPOC is error'
             },
             'stop': {
-                'continue': '[INFO] Continue to scan'
+                'continue': '[INFO] Continue to scan',
+                'next': '[INFO] Skip current URL'
             },
             'end': {
                 'wait': '[INFO] Wait for all threads to finish. Please wait...',
@@ -126,6 +139,12 @@ lang = {
             'output_text': '以txt格式保存扫描结果, 无漏洞时不会生成文件(如: --output-text result.txt)',
             'output_json': '以json格式保存扫描结果, 无漏洞时不会生成文件(如: --output-text result.json)'
         },
+        'general_help': {
+            'title': 'General',
+            'name': '通用工作参数',
+            'no_waf': '禁用waf检测',
+            'batch': 'yes/no的选项不需要用户输入, 使用默认选项'
+        },
         'lists_help': {
             'title': 'Lists',
             'name': '漏洞列表',
@@ -133,19 +152,26 @@ lang = {
         },
         'app_list_help': {
             'title': '支持的目标类型(-a参数, 不区分大小写)',
-            'name': 'AliDruid,airflow,apisix,appweb,cisco,django,f5bigip,fastjson,flink,keycloak,nacos,thinkphp,tomcat,spring,solr,struts2,ueditor,weblogic,yonyou'
+            'name': 'AliDruid,airflow,apisix,appweb,cisco,confluence,django,elasticsearch,f5bigip,fastjson,flink,keycloak,nacos,thinkphp,tomcat,spring,solr,struts2,ueditor,weblogic,yonyou'
         },
         'core': {
             'start': {
                 'start': '[INFO] 开始扫描目标 ',
-                'unable': '[WARN] 无法连接到 '
+                'unable': '[WARN] 无法连接到 ',
+                'waf': '[WAF] 开始对当前url进行WAF检测',
+                'waf_find': '[WAF] 目标疑似存在{} 是否继续扫描当前url? - y(es)/N(o): ',
+                'waf_not_find': '[WAF] 未发现WAF',
+                'waf_timeout': 'WAF识别超时, 目标没有响应',
+                'waf_conn_error': 'WAF识别出错, 无法连接至目标url',
+                'waf_error': 'WAF识别出错, 未知错误'
             },
             'addpoc': {
                 'notfound': '[ERROR] 未找到应用程序: ',
                 'error': '[ERROR] 添加POC时出现错误'
             },
             'stop': {
-                'continue': '[INFO] 继续扫描'
+                'continue': '[INFO] 继续扫描',
+                'next': '[INFO] 跳过当前url'
             },
             'end': {
                 'wait': '[INFO] 等待所有线程结束, 请稍等...',

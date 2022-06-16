@@ -41,7 +41,7 @@ def check_res(res, md):
     ''' 检查poc误报
     来自: https://github.com/zhzyker/vulmap/blob/main/core/verify.py
     '''
-    res_info = "echo.{0,10}" + md
+    res_info = "echo.{0,20}" + md
     if(re.search(res_info, res) != None):
         return "not_vul"
     else:

@@ -61,10 +61,10 @@ class Identify():
             logger.info('red_ex', self.lang['core']['start']['waf_timeout'])
             return None
         except requests.ConnectionError:
-            logger.logging('red_ex', self.lang['core']['start']['waf_conn_error'])
+            logger.info('red_ex', self.lang['core']['start']['waf_conn_error'])
             return None
         except:
-            logger.logging('red_ex', self.lang['core']['start']['waf_error'])
+            logger.info('red_ex', self.lang['core']['start']['waf_error'])
             return None
 
 

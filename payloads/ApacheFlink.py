@@ -91,7 +91,10 @@ class Flink():
                 }
                 return results
 
-    def addscan(self, url):
+    def addscan(self, url, vuln=None):
+        if vuln:
+            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+
         return [
             thread(target=self.cve_2020_17519_scan, url=url)
         ]

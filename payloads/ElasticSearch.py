@@ -358,7 +358,10 @@ class ElasticSearch():
                 }
                 return results
 
-    def addscan(self, url):
+    def addscan(self, url, vuln=None):
+        if vuln:
+            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+
         return [
             thread(target=self.cve_2014_3120_scan, url=url),
             thread(target=self.cve_2015_1427_scan, url=url),

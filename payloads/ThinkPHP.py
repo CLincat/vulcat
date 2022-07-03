@@ -416,7 +416,10 @@ class ThinkPHP():
                 }
                 return results
 
-    def addscan(self, url):
+    def addscan(self, url, vuln=None):
+        if vuln:
+            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+
         return [
             thread(target=self.cnvd_2018_24942_scan, url=url),
             thread(target=self.cnnvd_201901_445_scan, url=url),

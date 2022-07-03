@@ -6,10 +6,10 @@
 * 如果有什么想法、建议或者遇到了BUG, 都可以issues
 
 **目前支持扫描的web应用程序有:**
-> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheAPISIX, ApacheFlink, ApacheSolr, ApacheStruts2, ApacheTomcat, AppWeb, AtlassianConfluence, Cicso, Django, ElasticSearch, F5-BIG-IP, Fastjson, Keycloak, Spring, ThinkPHP, Ueditor, Weblogic, Yonyou
+> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheAPISIX, ApacheFlink, ApacheSolr, ApacheStruts2, ApacheTomcat, AppWeb, AtlassianConfluence, Cicso, Django, Drupal, ElasticSearch, F5-BIG-IP, Fastjson, Jenkins, Keycloak, NodeRED, ShowDoc, Spring, ThinkPHP, Ueditor, Weblogic, Webmin, Yonyou
 
 <details>
-<summary><b>目前支持扫描的web漏洞有: [点击展开]</b></summary>
+<summary><strong>目前支持扫描的web漏洞有: [点击展开]</strong></summary>
 
 ```
 +----------------------+------------------+--------------+----------+------------------------------------------------------------+
@@ -51,6 +51,8 @@
 | Django               | CVE-2020-9402    | SQLinject    | GET      | GIS SQL注入                                                |
 | Django               | CVE-2021-35042   | SQLinject    | GET      | QuerySet.order_by SQL注入                                  |
 +----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Drupal               | CVE-2018-7600    | RCE          | POST     | Drupal Drupalgeddon 2 远程代码执行                          |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
 | ElasticSearch        | CVE-2014-3120    | RCE          | POST     | ElasticSearch命令执行                                       |
 | ElasticSearch        | CVE-2015-1427    | RCE          | POST     | ElasticSearch Groovy 沙盒绕过&&代码执行                      |
 | ElasticSearch        | CVE-2015-3337    | FileRead     | GET      | ElasticSearch 目录穿越                                      |
@@ -62,7 +64,13 @@
 | Fastjson             | CNVD-2017-02833  | unSerialize  | POST     | Fastjson <= 1.2.24 反序列化                                 |
 | Fastjson             | CNVD-2019-22238  | unSerialize  | POST     | Fastjson <=1.2.47 反序列化                                  |
 +----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Jenkins              | CVE-2018-1000861 | RCE          | POST     | jenkins 远程命令执行                                        |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
 | Keycloak             | CVE-2020-10770   | SSRF         | GET      | 使用request_uri调用未经验证的URL                             |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| NodeRED              | CVE-2021-3223    | FileRead     | GET      | Node-RED 任意文件读取                                       |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| ShowDoc              | CNVD-2020-26585  | FileUpload   | POST     | ShowDoc 任意文件上传                                        |
 +----------------------+------------------+--------------+----------+------------------------------------------------------------+
 | Spring               | CVE-2020-5410    | FileRead     | GET      | Spring Cloud目录遍历                                        |
 | Spring               | CVE-2021-21234   | FileRead     | GET      | Spring Boot目录遍历                                         |
@@ -83,6 +91,8 @@
 | Oracle Weblogic      | CVE-2019-2725    | unSerialize  | POST     | Weblogic wls9_async反序列化                                 |
 | Oracle Weblogic      | CVE-2020-14750   | unAuth       | GET      | Weblogic权限验证绕过                                        |
 | Oracle Weblogic      | CVE-2020-14882   | RCE          | GET      | Weblogic未授权命令执行                                      |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Webmin               | CVE-2019-15107   | RCE          | POST     | Webmin Pre-Auth 远程代码执行                                |
 +----------------------+------------------+--------------+----------+------------------------------------------------------------+
 | Yonyou               | CNVD-2021-30167  | RCE          | GET      | 用友NC BeanShell远程命令执行                                |
 | Yonyou               | None             | FileRead     | GET      | 用友ERP-NC NCFindWeb目录遍历                                |
@@ -115,6 +125,7 @@ Usage: python3 vulcat.py <options>
 Examples:
 python3 vulcat.py -u https://www.example.com/
 python3 vulcat.py -u https://www.example.com/ -a thinkphp --log 3
+python3 vulcat.py -u https://www.example.com/ -a tomcat -v CVE-2017-12615
 python3 vulcat.py -f url.txt -t 10
 python3 vulcat.py --list
 ```
@@ -137,8 +148,8 @@ Options:
     可选功能选项
 
     -t THREAD, --thread=THREAD
-                        线程数 (默认: 3)
-    --delay=DELAY       延迟时间/秒 (默认: 0.5)
+                        线程数 (默认: 2)
+    --delay=DELAY       延迟时间/秒 (默认: 1)
     --timeout=TIMEOUT   超时时间/秒 (默认: 10)
     --http-proxy=HTTP_PROXY
                         http/https代理 (如: --http-proxy 127.0.0.1:8080)
@@ -152,8 +163,13 @@ Options:
     指定扫描的目标类型
 
     -a APPLICATION, --application=APPLICATION
-                        指定目标类型, 多个使用逗号分隔 (如: thinkphp 或者 thinkphp,weblogic)
-                        (默认为全部)
+                        指定框架类型, 支持的框架可以参考最下面的提示信息, 多个使用逗号分隔 (如: thinkphp 或者
+                        thinkphp,weblogic) (默认将启用指纹识别, 并使用相应POC,
+                        如果未识别出框架则使用全部POC)
+    -v VULN, --vuln=VULN
+                        指定漏洞编号, 配合-a/--application对单个漏洞进行扫描, 可以使用--list查看漏洞编号,
+                        没有漏洞编号的漏洞暂不支持, 编号不区分大小, 符号-和_皆可 (如: -a fastjson -v
+                        CNVD-2019-22238 或者 -a Tomcat -v cvE-2017_12615)
 
   Api:
     第三方api
@@ -175,6 +191,7 @@ Options:
     通用工作参数
 
     --no-waf            禁用waf检测
+    --no-poc            禁用安全漏洞扫描
     --batch             yes/no的选项不需要用户输入, 使用默认选项
 
   Lists:
@@ -183,9 +200,9 @@ Options:
     --list              查看所有Payload
 
   支持的目标类型(-a参数, 不区分大小写):
-    AliDruid,airflow,apisix,appweb,cisco,confluence,django,elasticsearch,f
-    5bigip,fastjson,flink,keycloak,nacos,thinkphp,tomcat,spring,solr,strut
-    s2,ueditor,weblogic,yonyou
+    AliDruid,nacos,airflow,apisix,flink,solr,struts2,tomcat,appweb,conflue
+    nce,cisco,django,drupal,elasticsearch,f5bigip,fastjson,jenkins,keycloa
+    k,nodered,showdoc,spring,thinkphp,ueditor,weblogic,webmin,yonyou
 ```
 
 ## language

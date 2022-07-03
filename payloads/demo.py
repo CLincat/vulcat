@@ -64,7 +64,8 @@ class 1():                                              # ! 1: 类名(例如 Thi
                     headers=headers,
                     data=data, 
                     proxies=self.proxies, 
-                    verify=False
+                    verify=False,
+                    allow_redirects=False
                 )
                 logger.logging(vul_info, res.status_code, res)                        # * LOG
             except requests.ConnectTimeout:
@@ -103,7 +104,10 @@ class 1():                                              # ! 1: 类名(例如 Thi
                 }
                 return results
 
-    def addscan(self, url):
+    def addscan(self, url, vuln=None):
+        if vuln:
+            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+
         return [
             thread(target=self.6_scan, url=url)                  # ! 6: 同上, POC的名称
         ]

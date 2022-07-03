@@ -202,6 +202,14 @@ vul_info = {
             'description': 'QuerySet.order_by SQL注入'
         }
     ],
+    'Drupal': [
+        {
+            'vul_id': 'CVE-2018-7600',
+            'type': 'RCE',
+            'method': 'POST',
+            'description': 'Drupal Drupalgeddon 2 远程代码执行'
+        }
+    ],
     'ElasticSearch': [
         {
             'vul_id': 'CVE-2014-3120',
@@ -256,12 +264,44 @@ vul_info = {
             'description': 'Fastjson <= 1.2.47 反序列化'
         }
     ],
+    'Jenkins': [
+        {
+            'vul_id': 'CVE-2018-1000861',
+            'type': 'RCE',
+            'method': 'POST',
+            'description': 'jenkins 远程命令执行'
+        }
+    ],
     'Keycloak': [
         {
             'vul_id': 'CVE-2020-10770',
             'type': 'SSRF',
             'method': 'GET',
             'description': '使用request_uri调用未经验证的URL'
+        }
+    ],
+    # 'Kindeditor': [
+    #     {
+    #         'vul_id': 'CVE-2018-18950',
+    #         'type': 'FileRead',
+    #         'method': 'GET',
+    #         'description': 'Kindeditor 目录遍历'
+    #     }
+    # ],
+    'NodeRED': [
+        {
+            'vul_id': 'CVE-2021-3223',
+            'type': 'FileRead',
+            'method': 'GET',
+            'description': 'Node-RED 任意文件读取'
+        }
+    ],
+    'ShowDoc': [
+        {
+            'vul_id': 'CNVD-2020-26585',
+            'type': 'FileUpload',
+            'method': 'POST',
+            'description': 'ShowDoc 任意文件上传'
         }
     ],
     'Spring': [
@@ -366,6 +406,14 @@ vul_info = {
             'type': 'RCE',
             'method': 'GET',
             'description': 'Weblogic 未授权命令执行'
+        }
+    ],
+    'Webmin': [
+        {
+            'vul_id': 'CVE-2019-15107',
+            'type': 'RCE',
+            'method': 'POST',
+            'description': 'Webmin Pre-Auth 远程代码执行'
         }
     ],
     'Yonyou': [

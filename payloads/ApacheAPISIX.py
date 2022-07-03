@@ -101,7 +101,6 @@ class APISIX():
 
             if ('cve/2020/13945' in check.check_res(verify_res.text, 'cve/2020/13945')):
                 results = {
-                    'Target': url + 'apisix/admin/routes',
                     'Verify': url + 'mouse',
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
                     'Method': vul_info['vul_method'],
@@ -114,7 +113,10 @@ class APISIX():
                 }
                 return results
 
-    def addscan(self, url):
+    def addscan(self, url, vuln=None):
+        if vuln:
+            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+
         return [
             thread(target=self.cve_2020_13945_scan, url=url)
         ]

@@ -19,12 +19,12 @@ def output_info(results, lang):
     results_info_list = set(results_info_list)                                          # * 去重
 
     if results_info_list:                                                                                                           # * 有漏洞   
-        logger.info('green_ex', lang['output']['info']['vul'].format(logger.requests_number))              # ? 日志, 发现漏洞, 发送的请求包数量为xxx个
+        logger.info('red_ex', lang['output']['info']['vul'].format(logger.requests_number))              # ? 日志, 发现漏洞, 发送的请求包数量为xxx个
         for result in results_info_list:
             print(result, end='')
         logger.info('reset', '---', notime=True)                                                                                    # ? 结果, 重置文字颜色, 输出漏洞结果, 不显示时间
     else:                                                                                                                           # * 没有漏洞
-        logger.info('red', lang['output']['info']['notvul'].format(logger.requests_number))                # ? 日志, 目标看起来没有漏洞, 发送的请求包数量为xxx个
+        logger.info('green_ex', lang['output']['info']['notvul'].format(logger.requests_number))                # ? 日志, 目标看起来没有漏洞, 发送的请求包数量为xxx个
     return None
 
 def output_text(results, filename, lang):

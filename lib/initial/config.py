@@ -64,10 +64,10 @@ class Config():
                 args.url_list.append(url)
 
         args.headers = {
-        'User-Agent': args.ua,
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': '*/*',
-        'Connection': 'close'
+            'User-Agent': args.ua,
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Accept': '*/*',
+            'Connection': 'close'
         }
         if args.cookie:
             args.headers['Cookie'] = args.cookie
@@ -77,8 +77,28 @@ class Config():
             'https': args.http_proxy
         }
 
-        app_list = ['alidruid', 'airflow', 'apisix', 'appweb', 'cisco', 'confluence', 'django', 'elasticsearch', 'f5bigip', 'fastjson', 'flink', 'keycloak', 'nacos', 'solr', 'struts2', 'spring', 'thinkphp', 'tomcat', 'ueditor', 'weblogic', 'yonyou']
-        if args.application == 'all':                                   # * -a参数
+        if args.vuln:
+            args.vuln = args.vuln.lower()
+            args.vuln = args.vuln.replace('-', '_')
+
+        app_list = [
+            'alidruid', 'airflow', 'apisix', 'appweb', 
+            'cisco', 'confluence', 
+            'django', 'drupal',
+            'elasticsearch', 
+            'f5bigip', 'fastjson', 'flink', 
+            'jenkins',
+            # 'keycloak', 'kindeditor',
+            'keycloak', 
+            'nacos', 'nodered',
+            'showdoc', 'solr', 'struts2', 'spring', 
+            'thinkphp', 'tomcat', 
+            'ueditor', 
+            'weblogic', 'webmin',
+            'yonyou'
+        ]
+
+        if args.application in ['auto', 'all']:                         # * -a参数
             args.app_list = app_list
         else:
             args.app_list = args.application.split(',')

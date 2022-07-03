@@ -375,7 +375,10 @@ class AtlassianConfluence():
                 }
                 return results
 
-    def addscan(self, url):
+    def addscan(self, url, vuln=None):
+        if vuln:
+            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+
         return [
             thread(target=self.cve_2019_3396_scan, url=url),
             thread(target=self.cve_2021_26084_scan, url=url),

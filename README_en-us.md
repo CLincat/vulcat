@@ -5,10 +5,10 @@
 * If you have any ideas, suggestions, or bugs, you can issue
 
 **Web applications that currently support scanning:**
-> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheAPISIX, ApacheFlink, ApacheSolr, ApacheStruts2, ApacheTomcat, AppWeb, AtlassianConfluence, Cicso, Django, ElasticSearch, F5-BIG-IP, Fastjson, Keycloak, Spring, ThinkPHP, Ueditor, Weblogic, Yonyou
+> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheAPISIX, ApacheFlink, ApacheSolr, ApacheStruts2, ApacheTomcat, AppWeb, AtlassianConfluence, Cicso, Django, Drupal, ElasticSearch, F5-BIG-IP, Fastjson, Jenkins, Keycloak, NodeRED, ShowDoc, Spring, ThinkPHP, Ueditor, Weblogic, Webmin, Yonyou
 
 <details>
-<summary><b>The current web vulnerabilities that support scanning: [Click on]</b></summary>
+<summary><strong>The current web vulnerabilities that support scanning: [Click on]</strong></summary>
 
 ```
 +----------------------+------------------+--------------+----------+------------------------------------------------------------+
@@ -50,6 +50,8 @@
 | Django               | CVE-2020-9402    | SQLinject    | GET      | Django GIS SQLinject                                       |
 | Django               | CVE-2021-35042   | SQLinject    | GET      | Django QuerySet.order_by SQLinject                         |
 +----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Drupal               | CVE-2018-7600    | RCE          | POST     | Drupal Drupalgeddon 2 Remote code execution                |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
 | ElasticSearch        | CVE-2014-3120    | RCE          | POST     | ElasticSearch Remote code execution                        |
 | ElasticSearch        | CVE-2015-1427    | RCE          | POST     | ElasticSearch Groovy Sandbox to bypass && RCE              |
 | ElasticSearch        | CVE-2015-3337    | FileRead     | GET      | ElasticSearch Directory traversal                          |
@@ -61,7 +63,13 @@
 | Fastjson             | CNVD-2017-02833  | unSerialize  | POST     | Fastjson <= 1.2.24 deSerialization                         |
 | Fastjson             | CNVD-2019-22238  | unSerialize  | POST     | Fastjson <=1.2.47 deSerialization                          |
 +----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Jenkins              | CVE-2018-1000861 | RCE          | POST     | jenkins Remote code execution                              |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
 | Keycloak             | CVE-2020-10770   | SSRF         | GET      | request_uri SSRF                                           |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| NodeRED              | CVE-2021-3223    | FileRead     | GET      | Node-RED Directory traversal                               |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| ShowDoc              | CNVD-2020-26585  | FileUpload   | POST     | ShowDoc writes to any file                                 |
 +----------------------+------------------+--------------+----------+------------------------------------------------------------+
 | Spring               | CVE-2020-5410    | FileRead     | GET      | Spring Cloud Directory traversal                           |
 | Spring               | CVE-2021-21234   | FileRead     | GET      | Spring Boot Directory traversal                            |
@@ -82,6 +90,8 @@
 | Oracle Weblogic      | CVE-2019-2725    | unSerialize  | POST     | Weblogic wls9_async deSerialization                        |
 | Oracle Weblogic      | CVE-2020-14750   | unAuth       | GET      | Weblogic Authentication bypass                             |
 | Oracle Weblogic      | CVE-2020-14882   | RCE          | GET      | Weblogic Unauthorized command execution                    |
++----------------------+------------------+--------------+----------+------------------------------------------------------------+
+| Webmin               | CVE-2019-15107   | RCE          | POST     | Webmin Pre-Auth Remote code execution                      |
 +----------------------+------------------+--------------+----------+------------------------------------------------------------+
 | Yonyou               | CNVD-2021-30167  | RCE          | GET      | Yonyou-NC BeanShell Remote code execution                  |
 | Yonyou               | None             | FileRead     | GET      | Yonyou-ERP-NC NCFindWeb Directory traversal                |
@@ -113,6 +123,7 @@ Usage: python3 vulcat.py <options>
 Examples:
 python3 vulcat.py -u https://www.example.com/
 python3 vulcat.py -u https://www.example.com/ -a thinkphp --log 3
+python3 vulcat.py -u https://www.example.com/ -a tomcat -v CVE-2017-12615
 python3 vulcat.py -f url.txt -t 10
 python3 vulcat.py --list
 ```
@@ -136,8 +147,8 @@ Options:
     Optional function options
 
     -t THREAD, --thread=THREAD
-                        The number of threads (default: 3)
-    --delay=DELAY       Delay time/s (default: 0.5)
+                        The number of threads (default: 2)
+    --delay=DELAY       Delay time/s (default: 1)
     --timeout=TIMEOUT   Timeout/s (default: 10)
     --http-proxy=HTTP_PROXY
                         The HTTP/HTTPS proxy (e.g. --http-proxy
@@ -155,8 +166,17 @@ Options:
     Specify the target type for the scan
 
     -a APPLICATION, --application=APPLICATION
-                        Specifies the target type, separated by commas (e.g.
-                        thinkphp / thinkphp,weblogic) (default: all)
+                        Specifies the target type, for supported frameworks,
+                        see the tips at the bottom, separated by commas (e.g.
+                        thinkphp / thinkphp,weblogic) (default: auto)
+    -v VULN, --vuln=VULN
+                        Specify the vulnerability number,With -a/--application
+                        to scan a single vulnerability,You can use --list to
+                        see the vulnerability number,vulnerabilities that do
+                        not have a vulnerability number are not supported.The
+                        number does not discriminate between sizes, and the
+                        symbol - and _ are acceptable (e.g. -a fastjson -v
+                        cnVD-2019-22238 or -a Tomcat -v CVE-2017_12615)
 
   Api:
     The third party Api
@@ -182,6 +202,7 @@ Options:
     General operating parameter
 
     --no-waf            Disable WAF detection
+    --no-poc            Disable scanning for security vulnerabilities
     --batch             The yes/no option does not require user input. The
                         default option is used
 
@@ -191,9 +212,9 @@ Options:
     --list              View all payload
 
   Supported target types(Case insensitive):
-    AliDruid,airflow,apisix,appweb,cisco,confluence,django,elasticsearch,f
-    5bigip,fastjson,flink,keycloak,nacos,thinkphp,tomcat,spring,solr,strut
-    s2,ueditor,weblogic,yonyou
+    AliDruid,nacos,airflow,apisix,flink,solr,struts2,tomcat,appweb,conflue
+    nce,cisco,django,drupal,elasticsearch,f5bigip,fastjson,jenkins,keycloa
+    k,nodered,showdoc,spring,thinkphp,ueditor,weblogic,webmin,yonyou
 ```
 
 ## language

@@ -24,7 +24,7 @@ class 1():                                              # ! 1: 类名(例如 Thi
     ''' 标有数字的地方都需要自己填写 '''
     def __init__(self):
         self.timeout = config.get('timeout')
-        self.headers = config.get('headers').copy()
+        self.headers = config.get('headers')
         self.proxies = config.get('proxies')
 
         self.app_name = '2'                             # ! 2: 漏洞框架/应用程序/CMS等(例如 thinkphp)
@@ -117,7 +117,10 @@ class 1():                                              # ! 1: 类名(例如 Thi
                 }
                 return results
 
-    def addscan(self, url):
+    def addscan(self, url, vuln=None):
+        if vuln:
+            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+
         return [
             thread(target=self.6_scan, url=url)                  # ! 6: 同上, POC的名称
         ]

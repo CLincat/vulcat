@@ -77,12 +77,7 @@ class Cisco():
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Method': vul_info['vul_method'],
-                    'Payload': {
-                        'Url': url,
-                        'Path': path,
-                        'Data': data
-                    }
+                    'Payload': res
                 }
                 return results
 

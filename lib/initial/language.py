@@ -62,13 +62,14 @@ lang = {
         },
         'app_list_help': {
             'title': 'Supported target types(Case insensitive)',
-            'name': 'AliDruid,nacos,airflow,apisix,flink,solr,struts2,tomcat,appweb,confluence,cisco,django,drupal,elasticsearch,f5bigip,fastjson,jenkins,keycloak,nodered,showdoc,spring,thinkphp,ueditor,weblogic,webmin,yonyou'
+            'name': 'AliDruid,nacos,airflow,apisix,flink,solr,struts2,tomcat,appweb,confluence,cisco,discuz,django,drupal,elasticsearch,f5bigip,fastjson,jenkins,keycloak,mongoexpress,nodejs,nodered,showdoc,spring,thinkphp,ueditor,weblogic,webmin,yonyou'
         },
         'core': {
             'start': {
                 'start': '[INFO] Start scanning target ',
                 'unable': '[WARN] Unable to connect to ',
-                'url_error': '[WARN] The destination {} is incorrect and needs to start with http:// or https://'
+                'url_error': '[WARN] The destination {} is incorrect and needs to start with http:// or https://',
+                'no_poc': '[No-POC] Disable Vulnerability scanning'
             },
             'waf_finger': {
                 'waf': '[INFO] The WAF detection for the current URL starts',
@@ -176,13 +177,14 @@ lang = {
         },
         'app_list_help': {
             'title': '支持的目标类型(-a参数, 不区分大小写)',
-            'name': 'AliDruid,nacos,airflow,apisix,flink,solr,struts2,tomcat,appweb,confluence,cisco,django,drupal,elasticsearch,f5bigip,fastjson,jenkins,keycloak,nodered,showdoc,spring,thinkphp,ueditor,weblogic,webmin,yonyou'
+            'name': 'AliDruid,nacos,airflow,apisix,flink,solr,struts2,tomcat,appweb,confluence,cisco,discuz,django,drupal,elasticsearch,f5bigip,fastjson,jenkins,keycloak,mongoexpress,nodejs,nodered,showdoc,spring,thinkphp,ueditor,weblogic,webmin,yonyou'
         },
         'core': {
             'start': {
                 'start': '[INFO] 开始扫描目标 ',
                 'unable': '[WARN] 无法连接到 ',
-                'url_error': '[WARN] 目标{}好像不对哦, 需要以http://或https://开头'
+                'url_error': '[WARN] 目标{}好像不对哦, 需要以http://或https://开头',
+                'no_poc': '[No-POC] 不进行漏洞扫描'
             },
             'waf_finger': {
                 'waf': '[INFO] 对当前url进行WAF检测, 请稍等...',

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-from stringprep import in_table_c3
 from lib.initial.config import config
 from lib.tool.timed import nowtime
 from lib.tool import color
 from thirdparty.tqdm import tqdm
+import http.client
 
 class Logger():
     def __init__(self):
@@ -62,7 +62,7 @@ class Logger():
         info_4 = self.logging_2(vul_info, status_code)
         try:
             info_4 += color.red_ex(' [Request')
-            info_4 += color.black_ex('\n' + res.request.method + ' ' + res.request.path_url + ' ' + 'HTTP/1.1')
+            info_4 += color.black_ex('\n' + res.request.method + ' ' + res.request.path_url + ' ' + http.client.HTTPConnection._http_vsn_str)
             info_4 += color.black_ex('\n' + 'Host' + ': ' + self.get_domain(res.request.url))
 
             for key, value in res.request.headers.items():
@@ -71,6 +71,7 @@ class Logger():
                 info_4 += color.black_ex('\n\n' + res.request.body)
 
             info_4 += color.red_ex('\n]')
+            info_4 += color.reset('')
         except:
             return info_4
         return info_4

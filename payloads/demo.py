@@ -88,6 +88,7 @@ class 1():                                              # ! 1: 类名(例如 Thi
                                     key1: value1
                                     key2: value2
                                     ...
+                        Response类型: 会以一个http数据包的格式进行显示
             '''
             if ('11'):               # ! 11: 判断扫描结果
                 results = {
@@ -97,10 +98,10 @@ class 1():                                              # ! 1: 类名(例如 Thi
                     'Payload': {
                         'Url': url,
                         'Path': path,
-                        'Data': data,
-                        'Cookie': 'xxx',
-                        'Headers': vul_info['headers']
-                    }
+                        'Headers': headers,
+                        'Cookie': 'XXX'
+                    },
+                    'Request': res                  # * 会输出一个http数据包
                 }
                 return results
 

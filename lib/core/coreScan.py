@@ -5,9 +5,11 @@
 
 from lib.initial.config import config
 from lib.tool.logger import logger
-from lib.tool.fingerprint import identify
 from lib.tool import check
 from lib.report import output
+
+from lib.plugins.fingerprint.waf import waf
+from lib.plugins.fingerprint.webapp import webapp
 
 from payloads.AlibabaDruid import alidruid
 from payloads.AlibabaNacos import nacos
@@ -20,6 +22,7 @@ from payloads.ApacheStruts2 import struts2
 from payloads.AppWeb import appweb
 from payloads.AtlassianConfluence import confluence
 from payloads.Cisco import cisco
+from payloads.Discuz import discuz
 from payloads.Django import django
 from payloads.Drupal import drupal
 from payloads.ElasticSearch import elasticsearch
@@ -28,6 +31,8 @@ from payloads.Fastjson import fastjson
 from payloads.Jenkins import jenkins
 from payloads.Keycloak import keycloak
 # from payloads.Kindeditor import kindeditor
+from payloads.MongoExpress import mongoexpress
+from payloads.Nodejs import nodejs
 from payloads.NodeRED import nodered
 from payloads.ShowDoc import showdoc
 from payloads.Spring import spring
@@ -73,7 +78,7 @@ class coreScan():
 
             # * --------------------WAF指纹识别--------------------
             if (not self.no_waf):
-                waf_info = identify.waf_identify(u)                                                     # * WAF指纹识别
+                waf_info = waf.identify(u)                                                     # * WAF指纹识别
                 if waf_info:
                     while True:
                         if (not self.batch):                                                            # * 是否使用默认选项
@@ -102,8 +107,8 @@ class coreScan():
             # * --------------------框架指纹识别--------------------
             if ((self.application == 'auto') and (not self.vuln)):
                 logger.info('yellow_ex', self.lang['core']['web_finger']['web'])
-                identify.stop = self.stop
-                new_app_list = identify.webapp_identify(u)
+                webapp.stop = self.stop
+                new_app_list = webapp.identify(u)
                 if new_app_list:
                     logger.info('yellow_ex', self.lang['core']['web_finger']['web_find'].format(str(new_app_list)))
                     self.app_list = new_app_list
@@ -113,7 +118,7 @@ class coreScan():
             # * --------------------框架指纹识别--------------------
 
             if self.no_poc:
-                logger.info('red', '[No-POC] 不进行漏洞扫描')
+                logger.info('red', self.lang['core']['start']['no_poc'])
                 continue
 
             if check.check_connect(u):

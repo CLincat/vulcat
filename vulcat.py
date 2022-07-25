@@ -19,9 +19,11 @@ try:
         corescan.start()                        # * 开始扫描
     else:
         print('''Please specify parameters, example:
-    python3 f.py -h
-    python3 f.py -u http://www.example.com/
-    python3 f.py -f url.txt
+    python3 vulcat.py -h
+    python3 vulcat.py -u http://www.example.com/
+    python3 vulcat.py -f url.txt
+    python3 vulcat.py --list
+    python3 vulcat.py --version
 ''')
 except KeyboardInterrupt:
     print(color.reset('CTRL + C exit the scan'))

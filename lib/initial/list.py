@@ -8,18 +8,18 @@ def list():
     ''' 显示漏洞列表 '''
     vul_num = 0
     vul_list = ''
-    vul_list += '+' + ('-'*22) + '+' + ('-'*18) + '+' + ('-'*14) + '+' + ('-'*10) + '+' + ('-'*67) + '+\n'
+    vul_list += '+' + ('-'*22) + '+' + ('-'*20) + '+' + ('-'*14) + '+' + ('-'*10) + '+' + ('-'*73) + '+\n'
 
     for vul in vul_info:
         for info in vul_info[vul]:
             vul_num += 1
             vul_list += '| {}|'.format(vul.ljust(21))
-            vul_list += ' {}|'.format(info['vul_id'].ljust(17))
+            vul_list += ' {}|'.format(info['vul_id'].ljust(19))
             vul_list += ' {}|'.format(info['type'].ljust(13))
             vul_list += ' {}|'.format(info['method'].ljust(9))
-            vul_list += ' {}\t|'.format(info['description'].ljust(56))
+            vul_list += ' {}\t|'.format(info['description'].ljust(62))
             vul_list += '\n'
-        vul_list += '+' + ('-'*22) + '+' + ('-'*18) + '+' + ('-'*14) + '+' + ('-'*10) + '+' + ('-'*67) + '+\n'
+        vul_list += '+' + ('-'*22) + '+' + ('-'*20) + '+' + ('-'*14) + '+' + ('-'*10) + '+' + ('-'*73) + '+\n'
 
     print(color.cyan(vul_list + str(vul_num - 1)))
     # print(vul_num)
@@ -170,6 +170,14 @@ vul_info = {
             'description': '思科ASA/FTD XSS跨站脚本攻击'
         }
     ],
+    'Discuz': [
+        {
+            'vul_id': 'wooyun-2010-080723',
+            'type': 'RCE',
+            'method': 'GET',
+            'description': '全局变量防御绕过RCE'
+        }
+    ],
     'Django': [
         {
             'vul_id': 'CVE-2017-12794',
@@ -204,10 +212,28 @@ vul_info = {
     ],
     'Drupal': [
         {
+            'vul_id': 'CVE-2014-3704',
+            'type': 'SQLinject',
+            'method': 'POST',
+            'description': 'Drupal < 7.32 Drupalgeddon SQL 注入'
+        },
+        {
+            'vul_id': 'CVE-2017-6920',
+            'type': 'RCE',
+            'method': 'POST',
+            'description': 'Drupal Core 8 PECL YAML 反序列化代码执行'
+        },
+        {
             'vul_id': 'CVE-2018-7600',
             'type': 'RCE',
             'method': 'POST',
             'description': 'Drupal Drupalgeddon 2 远程代码执行'
+        },
+        {
+            'vul_id': 'CVE-2018-7602',
+            'type': 'RCE',
+            'method': 'POST',
+            'description': 'Drupal 远程代码执行'
         }
     ],
     'ElasticSearch': [
@@ -288,6 +314,28 @@ vul_info = {
     #         'description': 'Kindeditor 目录遍历'
     #     }
     # ],
+    'mongo-express': [
+        {
+            'vul_id': 'CVE-2019-10758',
+            'type': 'RCE',
+            'method': 'POST',
+            'description': '未授权远程代码执行'
+        }
+    ],
+    'Nodejs': [
+        {
+            'vul_id': 'CVE-2017-14849',
+            'type': 'FileRead',
+            'method': 'GET',
+            'description': 'Node.js目录穿越'
+        },
+        {
+            'vul_id': 'CVE-2021-21315',
+            'type': 'RCE',
+            'method': 'GET',
+            'description': 'Node.js命令执行'
+        }
+    ],
     'NodeRED': [
         {
             'vul_id': 'CVE-2021-3223',
@@ -414,6 +462,12 @@ vul_info = {
             'type': 'RCE',
             'method': 'POST',
             'description': 'Webmin Pre-Auth 远程代码执行'
+        },
+        {
+            'vul_id': 'CVE-2019-15642',
+            'type': 'RCE',
+            'method': 'POST',
+            'description': 'Webmin 远程代码执行'
         }
     ],
     'Yonyou': [

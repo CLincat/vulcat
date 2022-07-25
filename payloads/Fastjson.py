@@ -115,12 +115,7 @@ class Fastjson():
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Method': vul_info['vul_method'],
-                    'Payload': {
-                        'Url': url,
-                        'Data': data,
-                        'Headers': vul_info['headers']
-                    }
+                    'Payload': res
                 }
                 return results
 
@@ -177,12 +172,7 @@ class Fastjson():
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Method': vul_info['vul_method'],
-                    'Payload': {
-                        'Url': url,
-                        'Data': data,
-                        'Headers': vul_info['headers']
-                    }
+                    'Payload': res
                 }
                 return results
 

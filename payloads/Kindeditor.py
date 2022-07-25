@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-''' 还没测试POC准确性, 默认不启用
+''' 还没写好
 KindEditor是一套开源的HTML可视化编辑器
     Kindeditor扫描类: 
         Kindeditor 目录遍历

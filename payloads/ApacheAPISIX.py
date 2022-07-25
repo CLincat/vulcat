@@ -103,12 +103,16 @@ class APISIX():
                 results = {
                     'Verify': url + 'mouse',
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Method': vul_info['vul_method'],
-                    'Payload': {
+                    'Payload-1': {
+                        'Method': vul_info['vul_method'],
                         'Url': url,
                         'Path': path,
-                        'Data': data,
-                        'Headers': vul_info['headers']
+                        'Headers': vul_info['headers'],
+                    },
+                    'Request-1': res1,
+                    'Payload-2': {
+                        'Method': 'GET',
+                        'Path': '/mouse'
                     }
                 }
                 return results

@@ -104,12 +104,11 @@ class Nacos():
                     'Payload-See User List': {
                         'Method': 'GET',
                         'Path': path,
-                        'Headers': headers
                     },
+                    'Request': res,
                     'Payload-Add User': {
                         'Method': 'POST',
-                        'Path': 'nacos/v1/auth/users?username=mouse&password=mouse',
-                        'Headers': headers
+                        'Path': 'nacos/v1/auth/users?username=mouse&password=mouse'
                     }
                 }
                 return results

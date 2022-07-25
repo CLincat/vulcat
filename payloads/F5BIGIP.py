@@ -198,13 +198,7 @@ class F5_BIG_IP():
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Method': vul_info['vul_method'],
-                    'Payload': {
-                        'Url': url,
-                        'Path': path,
-                        'Data': data,
-                        'Headers': vul_info['headers']
-                    }
+                    'Payload': res
                 }
                 return results
 

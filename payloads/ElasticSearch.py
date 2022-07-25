@@ -159,12 +159,7 @@ class ElasticSearch():
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Method': vul_info['vul_method'],
-                    'Payload': {
-                        'Url': url,
-                        'Path': path,
-                        'Data': data
-                    }
+                    'Payload': res
                 }
                 return results
 
@@ -215,12 +210,7 @@ class ElasticSearch():
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Method': vul_info['vul_method'],
-                    'Payload': {
-                        'Url': url,
-                        'Path': path,
-                        'Data': data
-                    }
+                    'Payload': res
                 }
                 return results
 
@@ -353,7 +343,8 @@ class ElasticSearch():
                     'Payload': {
                         'Url': url,
                         'Path': path,
-                        'Prompt': 'ASCII decimal encode'
+                        'Decode': 'ASCII decimal encode',
+                        'Decode-Url': 'https://www.qqxiuzi.cn/bianma/ascii.htm'
                     }
                 }
                 return results

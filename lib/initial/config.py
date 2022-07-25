@@ -70,7 +70,7 @@ class Config():
             'Connection': 'close'
         }
         if args.cookie:
-            args.headers['Cookie'] = args.cookie
+            args.headers['Cookie'] = args.cookie.lstrip('Cookie: ')
 
         args.proxies = {
             'http': args.http_proxy,
@@ -84,13 +84,14 @@ class Config():
         app_list = [
             'alidruid', 'airflow', 'apisix', 'appweb', 
             'cisco', 'confluence', 
-            'django', 'drupal',
+            'discuz', 'django', 'drupal',
             'elasticsearch', 
             'f5bigip', 'fastjson', 'flink', 
             'jenkins',
             # 'keycloak', 'kindeditor',
             'keycloak', 
-            'nacos', 'nodered',
+            'mongoexpress', 
+            'nacos', 'nodered', 'nodejs', 
             'showdoc', 'solr', 'struts2', 'spring', 
             'thinkphp', 'tomcat', 
             'ueditor', 

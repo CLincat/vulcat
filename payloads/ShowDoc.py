@@ -102,22 +102,16 @@ class ShowDoc():
             except requests.ConnectionError:
                 logger.logging(vul_info, 'Faild')
                 return None
-            # except:
-            #     logger.logging(vul_info, 'Error')
-            #     return None
+            except:
+                logger.logging(vul_info, 'Error')
+                return None
 
             if ('cnvd/2020/26585' in check.check_res(res2.text, 'cnvd/2020/26585')):
                 results = {
                     'Target': target,
                     'Verify': file_path,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Method': vul_info['vul_method'],
-                    'Payload': {
-                        'Url': url,
-                        'Path': path,
-                        'Headers': headers,
-                        'Data': data
-                    }
+                    'Payload': res
                 }
                 return results
 

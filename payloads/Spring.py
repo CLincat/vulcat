@@ -290,7 +290,11 @@ class Spring():
                 logger.logging(vul_info, 'Error')
                 return None
 
-            if (('/sbin/nologin' in res.text) or ('root:x:0:0:root' in res.text) or ('Microsoft Corp' in res.text) or ('Microsoft TCP/IP for Windows' in res.text)):
+            if (('/sbin/nologin' in res.text) 
+                or ('root:x:0:0:root' in res.text) 
+                or ('Microsoft Corp' in res.text) 
+                or ('Microsoft TCP/IP for Windows' in res.text)
+            ):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],

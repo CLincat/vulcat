@@ -28,12 +28,18 @@ from payloads.Drupal import drupal
 from payloads.ElasticSearch import elasticsearch
 from payloads.F5BIGIP import f5bigip
 from payloads.Fastjson import fastjson
+from payloads.Gitea import gitea
+from payloads.Gitlab import gitlab
+from payloads.Grafana import grafana
+from payloads.ApacheHadoop import hadoop
 from payloads.Jenkins import jenkins
 from payloads.Keycloak import keycloak
 # from payloads.Kindeditor import kindeditor
+from payloads.Landray import landray
 from payloads.MongoExpress import mongoexpress
 from payloads.Nodejs import nodejs
 from payloads.NodeRED import nodered
+from payloads.RubyOnRails import rails
 from payloads.ShowDoc import showdoc
 from payloads.Spring import spring
 from payloads.ThinkPHP import thinkphp

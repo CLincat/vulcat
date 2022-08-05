@@ -294,6 +294,64 @@ class WebappIdentify():
                 ]
             },
             {
+                'name': 'fastjson',
+                'path': '',
+                'data': '{"a":{"@type":"java.lang.Class","val":"com.sun.rowset.JdbcRowSetImpl"},"b":{"@type":"com.sun.rowset.JdbcRowSetImpl","dataSourceName":"abcd","autoCommit":true}}',
+                'fingerprint': [
+                    r'com\.alibaba\.fastjson\.JSONException:',
+                    r'JSON parse error: set property error, autoCommit;'
+                ]
+            },
+            {
+                'name': 'gitea',
+                'path': '',
+                'data': '',
+                'fingerprint': [
+                    r'<title>.* - Gitea: Git with a cup of tea</title>',
+                    r'Copyright (c) .* The Gitea Authors',
+                    r'Gitea 当前版本: .* 页面: <strong>\d*ms</strong> 模板: <strong>\d*ms</strong>',
+                    r'Go 语言</a> 支持的平台都可以运行 Gitea，包括 Windows、Mac、Linux 以及 ARM。挑一个您喜欢的就行！',
+                    r'<p class="large">.*一个廉价的树莓派的配置足以满足 Gitea 的最低系统硬件要求。最大程度上节省您的服务器资源！.*</p>',
+                    r'所有的代码都开源在 <a target="_blank" rel="noopener" href="https://github\.com/go-gitea/gitea/">GitHub</a> 上，赶快加入我们来共同发展这个伟大的项目！还等什么？成为贡献者吧！'
+                ]
+            },
+            {
+                'name': 'gitlab',
+                'path': '',
+                'data': '',
+                'fingerprint': [
+                    r'<title>GitLab</title>', 
+                    r'<meta content="GitLab" property="og:site_name">',
+                    r'<meta content="GitLab Community Edition" property="og:description">',
+                    r'meta content="GitLab Community Edition" property="twitter:description"',
+                    r'meta content="GitLab Community Edition" name="description"',
+                    r'<a href="https://about\.gitlab\.com/">About GitLab</a>'
+                ]
+            },
+            {
+                'name': 'grafana',
+                'path': '',
+                'data': '',
+                'fingerprint': [
+                    r'<link rel="mask-icon" href="public/img/grafana_mask_icon\.svg"',
+                    r'body class="theme-dark app-grafana',
+                    r'public/img/grafana_icon\.svg',
+                    r'Loading Grafana.*2\..*grafana.*3\..*4\..*5\.',
+                    r'window\.__grafana.*'
+                ]
+            },
+            {
+                'name': 'hadoop',
+                'path': '',
+                'data': '',
+                'fingerprint': [
+                    r'<img src="/static/hadoop-st\.png">',
+                    r'<a href="/jmx\?qry=Hadoop:\*">Server metrics</a>',
+                    r"'sType':'natural', 'aTargets': \[0\], 'mRender': parseHadoopID",
+                    r'<pre>org\.apache\.hadoop\.yarn\.webapp\.WebAppException:'
+                ]
+            },
+            {
                 'name': 'jenkins',
                 'path': '',
                 'data': '',
@@ -323,6 +381,15 @@ class WebappIdentify():
             #     ]
             # },
             {
+                'name': 'landray',
+                'path': '',
+                'data': '',
+                'fingerprint': [
+                    r'\["sys/ui/extend.{0,50}\.css"\]',
+                    r"'lui': 'sys/ui/js'"
+                ]
+            },
+            {
                 'name': 'mongoexpress',
                 'path': '',
                 'data': '',
@@ -351,6 +418,21 @@ class WebappIdentify():
                     r'rel="mask-icon" href="red&#x2F;images&#x2F;node-red-icon-black\.svg"',
                     r'rel="mask-icon" href="red/images/node-red-icon-black\.svg"',
                     r'<title>Node-RED</title>'
+                ]
+            },
+            {
+                'name': 'rails',
+                'path': '',
+                'data': '',
+                'fingerprint': [
+                    r'<title>Ruby on Rails</title>',
+                    r'<h1>Yay! You&rsquo;re on Rails!</h1>',
+                    r'<strong>Rails version:</strong>.*<br />',
+                    r'<strong>Ruby version:</strong>.*(.*)',
+                    r'<p><code>Rails\.root: .*</code></p>',
+                    r'<li>For more information about routes, please see the Rails guide<a href="http://guides\.rubyonrails\.org/routing\.html">Rails Routing from the Outside In</a>\.</li>',
+                    r'<title>RailsFileContent</title>',
+                    r'<script src="/assets/.{0,30}\.self-.{64}\.js\?body=1" data-turbolinks-track=".{0,10}"></script>'
                 ]
             },
             {
@@ -458,7 +540,17 @@ class WebappIdentify():
                 'data': '',
                 'fingerprint': [
                     r'<div class="footer">版权所有.*用友网络科技股份有限公司.*',
-                    r'<title>YONYOU NC</title>'
+                    r'<title>YONYOU NC</title>',
+                    r'//判断操作系统.*\.\./Client/Uclient/UClient\.dmg.*UClient客户端下载',
+                    r'<title>用友GRP-U8.*行政事业内控管理软件.*</title>',
+                    r'<div class="foot foot1".*>北京用友政务软件有限公司.*</div>',
+                    r'<script type="text/javascript" src="/yyoa/seeyonoa/common/js/jquery/jquery\.js"></script>',
+                    r'<script type="text/javascript" src="seeyonoa/common/js/popDialog\.jsp"></script>',
+                    r'<li class="A6_name"><img src="seeyonoa/ui/images/login/oem_name\.png" /></li>',
+                    r'<title>.* 《用友U8\+OA基础版》</title>',
+                    r'<title>.* 《用友U8-OA企业版》</title>',
+                    r'<li class="copyright"><span>©用友软件珠海研发基地</span></li>',
+                    r'<title>.*-FE协作办公平台\d\.\d(\.\d)?</title>'
                 ]
             },
             # {

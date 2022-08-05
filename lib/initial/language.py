@@ -62,7 +62,7 @@ lang = {
         },
         'app_list_help': {
             'title': 'Supported target types(Case insensitive)',
-            'name': 'AliDruid,nacos,airflow,apisix,flink,solr,struts2,tomcat,appweb,confluence,cisco,discuz,django,drupal,elasticsearch,f5bigip,fastjson,jenkins,keycloak,mongoexpress,nodejs,nodered,showdoc,spring,thinkphp,ueditor,weblogic,webmin,yonyou'
+            'name': 'AliDruid,nacos,airflow,apisix,flink,hadoop,solr,struts2,tomcat,appweb,confluence,cisco,discuz,django,drupal,elasticsearch,f5bigip,fastjson,gitea,gitlab,grafana,jenkins,keycloak,landray,mongoexpress,nodejs,nodered,rails,showdoc,spring,thinkphp,ueditor,weblogic,webmin,yonyou'
         },
         'core': {
             'start': {
@@ -177,7 +177,7 @@ lang = {
         },
         'app_list_help': {
             'title': '支持的目标类型(-a参数, 不区分大小写)',
-            'name': 'AliDruid,nacos,airflow,apisix,flink,solr,struts2,tomcat,appweb,confluence,cisco,discuz,django,drupal,elasticsearch,f5bigip,fastjson,jenkins,keycloak,mongoexpress,nodejs,nodered,showdoc,spring,thinkphp,ueditor,weblogic,webmin,yonyou'
+            'name': 'AliDruid,nacos,airflow,apisix,flink,hadoop,solr,struts2,tomcat,appweb,confluence,cisco,discuz,django,drupal,elasticsearch,f5bigip,fastjson,gitea,gitlab,grafana,jenkins,keycloak,landray,mongoexpress,nodejs,nodered,rails,showdoc,spring,thinkphp,ueditor,weblogic,webmin,yonyou'
         },
         'core': {
             'start': {

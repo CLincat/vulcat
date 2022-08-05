@@ -19,7 +19,7 @@ python3 vulcat.py -u https://www.example.com/ -a thinkphp --log 3
 python3 vulcat.py -u https://www.example.com/ -a tomcat -v CVE-2017-12615
 python3 vulcat.py -f url.txt -t 10
 python3 vulcat.py --list
-''', version='vulcat.py-1.1.1\n')
+''', version='vulcat.py-1.1.2\n')
     # * 指定目标
     target = parser.add_option_group(lang['target_help']['title'], lang['target_help']['name'])
     target.add_option('-u', '--url', type='string', dest='url', default=None, help=lang['target_help']['url'])
@@ -55,7 +55,6 @@ python3 vulcat.py --list
     general = parser.add_option_group(lang['general_help']['title'], lang['general_help']['name'])
     general.add_option('--no-waf', dest='no_waf', action='store_true', help=lang['general_help']['no_waf'])
     general.add_option('--no-poc', dest='no_poc', action='store_true', help=lang['general_help']['no_poc'])
-    # general.add_option('--no-webapp', dest='no_webapp', action='store_true', help='')
     general.add_option('--batch', dest='batch', action='store_true', help=lang['general_help']['batch'])
 
     # * 查看漏洞列表

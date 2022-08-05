@@ -6,8 +6,8 @@
         XXXXX 未开启强制路由RCE
             CNVD-2018-24942
 file:///etc/passwd
-file:///C:\Windows\System32\drivers\etc\hosts
 file:///C:/Windows/System32/drivers/etc/hosts
+file:///C:\Windows\System32\drivers\etc\hosts
 '''
 
 from lib.api.dns import dns

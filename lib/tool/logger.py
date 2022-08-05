@@ -68,7 +68,10 @@ class Logger():
             for key, value in res.request.headers.items():
                 info_4 += color.black_ex('\n' + key + ': ' + value)
             if res.request.body:
-                info_4 += color.black_ex('\n\n' + res.request.body)
+                if (type(res.request.body) == bytes):
+                    info_4 += color.black_ex('\n\n' + res.request.body.decode())
+                else:
+                    info_4 += color.black_ex('\n\n' + res.request.body)
 
             info_4 += color.red_ex('\n]')
             info_4 += color.reset('')

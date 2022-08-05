@@ -82,7 +82,7 @@ def output_json(results, filename, lang):
                 # * Response对象不能json化, 转为字符串
                 for key in result_info.keys():
                     if type(result_info[key]) == requests.models.Response:
-                        result_info[key] = output_res(result_info[key], iscolor=False)
+                        result_info[key] = output_res(key, result_info[key], iscolor=False)
 
                 results_info_list.append(json.dumps(result_info, indent=4) + '\n')
         results_info_list = set(results_info_list)
@@ -125,7 +125,7 @@ def output_vul_info_color(result):
             result_info += output_dict(key, value)
 
         elif value_type == requests.models.Response:                                    # * Response输出方式
-            result_info += output_res(value)
+            result_info += output_res(key, value)
 
     return result_info
 
@@ -144,7 +144,7 @@ def output_vul_info(result):
             result_info += output_dict(key, value, iscolor=False)
 
         elif value_type == requests.models.Response:
-            result_info += output_res(value, iscolor=False)
+            result_info += output_res(key, value, iscolor=False)
 
     return result_info
 
@@ -205,12 +205,13 @@ def output_dict(key, value, iscolor=True):
     
     return info_dict
 
-def output_res(res, iscolor=True):
+def output_res(key, res, iscolor=True):
         ''' 接收一个requests结果, 返回一个http数据包 '''
         info_res = ''
 
         if iscolor:
             try:
+                info_res += color.yellow_ex(key) + ':'
                 info_res += color.red_ex(' [Request')
                 info_res += color.black_ex('\n' + res.request.method + ' ' + res.request.path_url + ' ' + http.client.HTTPConnection._http_vsn_str)
                 info_res += color.black_ex('\n' + 'Host' + ': ' + logger.get_domain(res.request.url))
@@ -218,14 +219,18 @@ def output_res(res, iscolor=True):
                 for key, value in res.request.headers.items():
                     info_res += color.black_ex('\n' + key + ': ' + value)
                 if res.request.body:
-                    info_res += color.black_ex('\n\n' + res.request.body)
+                    if (type(res.request.body) == bytes):
+                        info_res += color.black_ex('\n\n' + res.request.body.decode())
+                    else:
+                        info_res += color.black_ex('\n\n' + res.request.body)
 
                 info_res += color.red_ex(']')
-                info_res += color.reset('\n')
+                info_res += color.reset('\n    ')
             except:
                 return info_res
         else:
             try:
+                info_res += key + ':'
                 info_res += ' [Request'
                 info_res += '\n' + res.request.method + ' ' + res.request.path_url + ' ' + http.client.HTTPConnection._http_vsn_str
                 info_res += '\n' + 'Host' + ': ' + logger.get_domain(res.request.url)
@@ -233,9 +238,12 @@ def output_res(res, iscolor=True):
                 for key, value in res.request.headers.items():
                     info_res += '\n' + key + ': ' + value
                 if res.request.body:
-                    info_res += '\n\n' + res.request.body
+                    if (type(res.request.body) == bytes):
+                        info_res += '\n\n' + res.request.body.decode()
+                    else:
+                        info_res += '\n\n' + res.request.body
 
-                info_res += ']'
+                info_res += ']\n    '
             except:
                 return info_res
 

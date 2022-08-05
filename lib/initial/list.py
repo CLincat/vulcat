@@ -8,7 +8,7 @@ def list():
     ''' 显示漏洞列表 '''
     vul_num = 0
     vul_list = ''
-    vul_list += '+' + ('-'*22) + '+' + ('-'*20) + '+' + ('-'*14) + '+' + ('-'*10) + '+' + ('-'*73) + '+\n'
+    vul_list += '+' + ('-'*22) + '+' + ('-'*20) + '+' + ('-'*14) + '+' + ('-'*68) + '+\n'
 
     for vul in vul_info:
         for info in vul_info[vul]:
@@ -16,10 +16,9 @@ def list():
             vul_list += '| {}|'.format(vul.ljust(21))
             vul_list += ' {}|'.format(info['vul_id'].ljust(19))
             vul_list += ' {}|'.format(info['type'].ljust(13))
-            vul_list += ' {}|'.format(info['method'].ljust(9))
-            vul_list += ' {}\t|'.format(info['description'].ljust(62))
+            vul_list += ' {}\t|'.format(info['description'].ljust(57))
             vul_list += '\n'
-        vul_list += '+' + ('-'*22) + '+' + ('-'*20) + '+' + ('-'*14) + '+' + ('-'*10) + '+' + ('-'*73) + '+\n'
+        vul_list += '+' + ('-'*22) + '+' + ('-'*20) + '+' + ('-'*14) + '+' + ('-'*68) + '+\n'
 
     print(color.cyan(vul_list + str(vul_num - 1)))
     # print(vul_num)
@@ -30,7 +29,6 @@ vul_info = {
         {
             'vul_id': 'Vul_id',
             'type': 'Type',
-            'method': 'Method',
             'description': 'Description\t'
         }
     ],
@@ -38,7 +36,6 @@ vul_info = {
         {
             'vul_id': 'None',
             'type': 'unAuth',
-            'method': 'GET',
             'description': '阿里巴巴Druid未授权访问'
         }
     ],
@@ -46,7 +43,6 @@ vul_info = {
         {
             'vul_id': 'CVE-2021-29441',
             'type': 'unAuth',
-            'method': 'GET/POST',
             'description': '阿里巴巴Nacos未授权访问'
         }
     ],
@@ -54,7 +50,6 @@ vul_info = {
         {
             'vul_id': 'CVE-2020-17526',
             'type': 'unAuth',
-            'method': 'GET',
             'description': 'Airflow身份验证绕过'
         }
     ],
@@ -62,7 +57,6 @@ vul_info = {
         {
             'vul_id': 'CVE-2020-13945',
             'type': 'unAuth',
-            'method': 'GET',
             'description': 'Apache APISIX默认密钥'
         }
     ],
@@ -70,15 +64,20 @@ vul_info = {
         {
             'vul_id': 'CVE-2020-17519',
             'type': 'FileRead',
-            'method': 'GET',
             'description': 'Flink目录遍历'
+        }
+    ],
+    'Apache Hadoop': [
+        {
+            'vul_id': 'None',
+            'type': 'unAuth',
+            'description': 'Hadoop YARN ResourceManager 未授权访问'
         }
     ],
     'Apache Solr': [
         {
             'vul_id': 'CVE-2021-27905',
             'type': 'SSRF',
-            'method': 'GET/POST',
             'description': 'Solr SSRF/任意文件读取'
         }
     ],
@@ -86,37 +85,31 @@ vul_info = {
         {
             'vul_id': 'S2-001',
             'type': 'RCE',
-            'method': 'POST',
             'description': 'Struts2远程代码执行'
         },
         {
             'vul_id': 'S2-005',
             'type': 'RCE',
-            'method': 'GET',
             'description': 'Struts2远程代码执行'
         },
         {
             'vul_id': 'S2-007',
             'type': 'RCE',
-            'method': 'GET',
             'description': 'Struts2远程代码执行'
         },
         {
             'vul_id': 'S2-008',
             'type': 'RCE',
-            'method': 'GET',
             'description': 'Struts2远程代码执行'
         },
         {
             'vul_id': 'S2-009',
             'type': 'RCE',
-            'method': 'GET',
             'description': 'Struts2远程代码执行'
         },
         {
             'vul_id': 'S2-012',
             'type': 'RCE',
-            'method': 'GET',
             'description': 'Struts2远程代码执行'
         }
     ],
@@ -124,7 +117,6 @@ vul_info = {
         {
             'vul_id': 'CVE-2017-12615',
             'type': 'FileUpload',
-            'method': 'PUT',
             'description': 'PUT方法任意文件写入'
         }
     ],
@@ -132,7 +124,6 @@ vul_info = {
         {
             'vul_id': 'CVE-2018-8715',
             'type': 'unAuth',
-            'method': 'GET',
             'description': 'AppWeb身份认证绕过'
         }
     ],
@@ -140,25 +131,21 @@ vul_info = {
         {
             'vul_id': 'CVE-2015-8399',
             'type': 'FileRead',
-            'method': 'GET',
             'description': 'Confluence任意文件包含'
         },
         {
             'vul_id': 'CVE-2019-3396',
             'type': 'RCE/FileRead',
-            'method': 'POST',
             'description': 'Confluence路径遍历和命令执行'
         },
         {
             'vul_id': 'CVE-2021-26084',
             'type': 'RCE',
-            'method': 'POST',
             'description': 'Confluence Webwork Pre-Auth OGNL表达式命令注入'
         },
         {
             'vul_id': 'CVE-2022-26134',
             'type': 'RCE',
-            'method': 'GET',
             'description': 'Confluence远程代码执行'
         }
     ],
@@ -166,7 +153,6 @@ vul_info = {
         {
             'vul_id': 'CVE-2020-3580',
             'type': 'XSS',
-            'method': 'POST',
             'description': '思科ASA/FTD XSS跨站脚本攻击'
         }
     ],
@@ -174,7 +160,6 @@ vul_info = {
         {
             'vul_id': 'wooyun-2010-080723',
             'type': 'RCE',
-            'method': 'GET',
             'description': '全局变量防御绕过RCE'
         }
     ],
@@ -182,31 +167,26 @@ vul_info = {
         {
             'vul_id': 'CVE-2017-12794',
             'type': 'XSS',
-            'method': 'GET',
             'description': 'debug page XSS跨站脚本攻击'
         },
         {
             'vul_id': 'CVE-2018-14574',
             'type': 'Redirect',
-            'method': 'GET',
             'description': 'CommonMiddleware url重定向'
         },
         {
             'vul_id': 'CVE-2019-14234',
             'type': 'SQLinject',
-            'method': 'GET',
             'description': 'JSONfield SQL注入'
         },
         {
             'vul_id': 'CVE-2020-9402',
             'type': 'SQLinject',
-            'method': 'GET',
             'description': 'GIS SQL注入'
         },
         {
             'vul_id': 'CVE-2021-35042',
             'type': 'SQLinject',
-            'method': 'GET',
             'description': 'QuerySet.order_by SQL注入'
         }
     ],
@@ -214,25 +194,21 @@ vul_info = {
         {
             'vul_id': 'CVE-2014-3704',
             'type': 'SQLinject',
-            'method': 'POST',
             'description': 'Drupal < 7.32 Drupalgeddon SQL 注入'
         },
         {
             'vul_id': 'CVE-2017-6920',
             'type': 'RCE',
-            'method': 'POST',
             'description': 'Drupal Core 8 PECL YAML 反序列化代码执行'
         },
         {
             'vul_id': 'CVE-2018-7600',
             'type': 'RCE',
-            'method': 'POST',
             'description': 'Drupal Drupalgeddon 2 远程代码执行'
         },
         {
             'vul_id': 'CVE-2018-7602',
             'type': 'RCE',
-            'method': 'POST',
             'description': 'Drupal 远程代码执行'
         }
     ],
@@ -240,25 +216,21 @@ vul_info = {
         {
             'vul_id': 'CVE-2014-3120',
             'type': 'RCE',
-            'method': 'POST',
             'description': 'ElasticSearch命令执行'
         },
         {
             'vul_id': 'CVE-2015-1427',
             'type': 'RCE',
-            'method': 'POST',
             'description': 'ElasticSearch Groovy 沙盒绕过&&代码执行'
         },
         {
             'vul_id': 'CVE-2015-3337',
             'type': 'FileRead',
-            'method': 'GET',
             'description': 'ElasticSearch 目录穿越'
         },
         {
             'vul_id': 'CVE-2015-5531',
             'type': 'FileRead',
-            'method': 'PUT/GET',
             'description': 'ElasticSearch 目录穿越'
         },
     ],
@@ -266,13 +238,11 @@ vul_info = {
         {
             'vul_id': 'CVE-2020-5902',
             'type': 'RCE',
-            'method': 'GET',
             'description': 'BIG-IP远程代码执行'
         },
         {
             'vul_id': 'CVE-2022-1388',
             'type': 'unAuth',
-            'method': 'POST',
             'description': 'BIG-IP身份认证绕过'
         }
     ],
@@ -280,21 +250,44 @@ vul_info = {
         {
             'vul_id': 'CNVD-2017-02833',
             'type': 'unSerialize',
-            'method': 'POST',
             'description': 'Fastjson <= 1.2.24 反序列化'
         },
         {
             'vul_id': 'CNVD-2019-22238',
             'type': 'unSerialize',
-            'method': 'POST',
             'description': 'Fastjson <= 1.2.47 反序列化'
         }
+    ],
+    'Gitea': [
+        {
+            'vul_id': 'None',
+            'type': 'unAuth',
+            'description': 'Gitea 1.4.0 未授权访问'
+        },
+    ],
+    'Gitlab': [
+        {
+            'vul_id': 'CVE-2021-22205',
+            'type': 'RCE',
+            'description': 'GitLab Pre-Auth 远程命令执行'
+        },
+        {
+            'vul_id': 'CVE-2021-22214',
+            'type': 'SSRF',
+            'description': 'Gitlab CI Lint API未授权 SSRF'
+        }
+    ],
+    'Grafana': [
+        {
+            'vul_id': 'CVE-2021-43798',
+            'type': 'FileRead',
+            'description': 'Grafana 8.x 插件模块路径遍历'
+        },
     ],
     'Jenkins': [
         {
             'vul_id': 'CVE-2018-1000861',
             'type': 'RCE',
-            'method': 'POST',
             'description': 'jenkins 远程命令执行'
         }
     ],
@@ -302,7 +295,6 @@ vul_info = {
         {
             'vul_id': 'CVE-2020-10770',
             'type': 'SSRF',
-            'method': 'GET',
             'description': '使用request_uri调用未经验证的URL'
         }
     ],
@@ -314,11 +306,17 @@ vul_info = {
     #         'description': 'Kindeditor 目录遍历'
     #     }
     # ],
+    'Landray': [
+        {
+            'vul_id': 'CNVD-2021-28277',
+            'type': 'FileRead/SSRF',
+            'description': '蓝凌OA 任意文件读取/SSRF'
+        }
+    ],
     'mongo-express': [
         {
             'vul_id': 'CVE-2019-10758',
             'type': 'RCE',
-            'method': 'POST',
             'description': '未授权远程代码执行'
         }
     ],
@@ -326,13 +324,11 @@ vul_info = {
         {
             'vul_id': 'CVE-2017-14849',
             'type': 'FileRead',
-            'method': 'GET',
             'description': 'Node.js目录穿越'
         },
         {
             'vul_id': 'CVE-2021-21315',
             'type': 'RCE',
-            'method': 'GET',
             'description': 'Node.js命令执行'
         }
     ],
@@ -340,15 +336,30 @@ vul_info = {
         {
             'vul_id': 'CVE-2021-3223',
             'type': 'FileRead',
-            'method': 'GET',
             'description': 'Node-RED 任意文件读取'
+        }
+    ],
+    'Ruby on Rails': [
+        {
+            'vul_id': 'CVE-2018-3760',
+            'type': 'FileRead',
+            'description': 'Ruby on Rails 路径遍历'
+        },
+        {
+            'vul_id': 'CVE-2019-5418',
+            'type': 'FileRead',
+            'description': 'Ruby on Rails 任意文件读取'
+        },
+        {
+            'vul_id': 'CVE-2020-8163',
+            'type': 'RCE',
+            'description': 'Ruby on Rails 命令执行'
         }
     ],
     'ShowDoc': [
         {
             'vul_id': 'CNVD-2020-26585',
             'type': 'FileUpload',
-            'method': 'POST',
             'description': 'ShowDoc 任意文件上传'
         }
     ],
@@ -356,31 +367,26 @@ vul_info = {
         {
             'vul_id': 'CVE-2020-5410',
             'type': 'FileRead',
-            'method': 'GET',
             'description': 'Spring Cloud目录遍历'
         },
         {
             'vul_id': 'CVE-2021-21234',
             'type': 'FileRead',
-            'method': 'GET',
             'description': 'Spring Boot目录遍历'
         },
         {
             'vul_id': 'CVE-2022-22947',
             'type': 'RCE',
-            'method': 'POST',
             'description': 'Spring Cloud Gateway SpEl远程代码执行'
         },
         {
             'vul_id': 'CVE-2022-22963',
             'type': 'RCE',
-            'method': 'POST',
             'description': 'Spring Cloud Function SpEL远程代码执行'
         },
         {
             'vul_id': 'CVE-2022-22965',
             'type': 'RCE',
-            'method': 'GET/POST',
             'description': 'Spring Framework远程代码执行'
         }
     ],
@@ -388,31 +394,26 @@ vul_info = {
         {
             'vul_id': 'CVE-2018-1002015',
             'type': 'RCE',
-            'method': 'GET',
             'description': 'ThinkPHP5.x 远程代码执行'
         },
         {
             'vul_id': 'CNVD-2018-24942',
             'type': 'RCE',
-            'method': 'GET',
             'description': '未开启强制路由导致RCE'
         },
         {
             'vul_id': 'CNNVD-201901-445',
             'type': 'RCE',
-            'method': 'POST',
             'description': '核心类Request远程代码执行'
         },
         {
             'vul_id': 'None',
             'type': 'RCE',
-            'method': 'GET',
             'description': 'ThinkPHP2.x 远程代码执行'
         },
         {
             'vul_id': 'None',
             'type': 'SQLinject',
-            'method': 'GET',
             'description': 'ThinkPHP5 ids参数SQL注入'
         }
     ],
@@ -420,7 +421,6 @@ vul_info = {
         {
             'vul_id': 'None',
             'type': 'SSRF',
-            'method': 'GET',
             'description': 'Ueditor编辑器SSRF'
         }
     ],
@@ -428,31 +428,26 @@ vul_info = {
         {
             'vul_id': 'CVE-2014-4210',
             'type': 'SSRF',
-            'method': 'GET',
             'description': 'Weblogic 服务端请求伪造'
         },
         {
             'vul_id': 'CVE-2017-10271',
             'type': 'unSerialize',
-            'method': 'POST',
             'description': 'Weblogic XMLDecoder反序列化'
         },
         {
             'vul_id': 'CVE-2019-2725',
             'type': 'unSerialize',
-            'method': 'POST',
             'description': 'Weblogic wls9_async反序列化'
         },
         {
             'vul_id': 'CVE-2020-14750',
             'type': 'unAuth',
-            'method': 'GET',
             'description': 'Weblogic 权限验证绕过'
         },
         {
             'vul_id': 'CVE-2020-14882',
             'type': 'RCE',
-            'method': 'GET',
             'description': 'Weblogic 未授权命令执行'
         }
     ],
@@ -460,28 +455,39 @@ vul_info = {
         {
             'vul_id': 'CVE-2019-15107',
             'type': 'RCE',
-            'method': 'POST',
             'description': 'Webmin Pre-Auth 远程代码执行'
         },
         {
             'vul_id': 'CVE-2019-15642',
             'type': 'RCE',
-            'method': 'POST',
             'description': 'Webmin 远程代码执行'
         }
     ],
     'Yonyou': [
         {
+            'vul_id': 'CNNVD-201610-923',
+            'type': 'SQLinject',
+            'description': '用友GRP-U8 Proxy SQL注入'
+        },
+        {
             'vul_id': 'CNVD-2021-30167',
             'type': 'RCE',
-            'method': 'GET',
             'description': '用友NC BeanShell远程命令执行'
         },
         {
             'vul_id': 'None',
             'type': 'FileRead',
-            'method': 'GET',
             'description': '用友ERP-NC NCFindWeb目录遍历'
+        },
+        {
+            'vul_id': 'None',
+            'type': 'DSinfo',
+            'description': '用友U8 OA getSessionList.jsp 敏感信息泄漏'
+        },
+        {
+            'vul_id': 'None',
+            'type': 'SQLinject',
+            'description': '用友U8 OA test.jsp SQL注入'
         }
     ]
 }

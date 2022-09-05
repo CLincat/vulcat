@@ -1,12 +1,13 @@
 # vulcat
+(每月更新)<br>
 除了代码写得有亿点点烂, BUG有亿点点多, 误报率有亿点点高, 等亿点点小问题以外，还是阔以的......吧
 
 * vulcat可用于扫描web端漏洞(框架、中间件、CMS等), 发现漏洞时会提示目标url和payload, 使用者可以根据提示对漏洞进行手工验证<br/>
-* 使用者还可以自己编写POC, 并添加到vulcat中进行扫描, 本项目也欢迎大家贡献自己的POC(白嫖)
+* 使用者还可以自己编写POC, 并添加到vulcat中进行扫描, 本项目也欢迎大家贡献自己的POC
 * 如果有什么想法、建议或者遇到了BUG, 都可以issues
 
 **目前支持扫描的web应用程序有:**
-> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheAPISIX, ApacheFlink, ApacheHadoop, ApacheSolr, ApacheStruts2, ApacheTomcat, AppWeb, AtlassianConfluence, Cicso, Discuz, Django, Drupal, ElasticSearch, F5-BIG-IP, Fastjson, Gitea, Gitlab, Grafana, Landray-OA, RubyOnRails, Jenkins, Keycloak, mongo-express, Node.js, NodeRED, ShowDoc, Spring, ThinkPHP, Ueditor, Weblogic, Webmin, Yonyou
+> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheAPISIX, ApacheFlink, ApacheHadoop, ApacheHttpd, ApacheSolr, ApacheStruts2, ApacheTomcat, AppWeb, AtlassianConfluence, Cicso, Discuz, Django, Drupal, ElasticSearch, F5-BIG-IP, Fastjson, Gitea, Gitlab, Grafana, Influxdb, RubyOnRails, Jenkins, Jetty, Jupyter, Keycloak, Landray-OA, MiniHttpd, mongo-express, Nexus, Node.js, NodeRED, ShowDoc, Spring, ThinkPHP, Ueditor, Weblogic, Webmin, Yonyou
 
 <details>
 <summary><strong>目前支持扫描的web漏洞有: [点击展开]</strong></summary>
@@ -26,6 +27,10 @@
 | Apache Flink         | CVE-2020-17519     | FileRead     | Flink目录遍历                                                      |
 +----------------------+--------------------+--------------+--------------------------------------------------------------------+
 | Apache Hadoop        | None               | unAuth       | Hadoop YARN ResourceManager 未授权访问                             |
++----------------------+--------------------+--------------+--------------------------------------------------------------------+
+| Apache Httpd         | CVE-2021-40438     | SSRF         | Apache HTTP Server 2.4.48 mod_proxy SSRF                           |
+| Apache Httpd         | CVE-2021-41773     | FileRead/RCE | Apache HTTP Server 2.4.49 路径遍历                                 |
+| Apache Httpd         | CVE-2021-42013     | FileRead/RCE | Apache HTTP Server 2.4.50 路径遍历                                 |
 +----------------------+--------------------+--------------+--------------------------------------------------------------------+
 | Apache Solr          | CVE-2021-27905     | SSRF         | Solr SSRF/任意文件读取                                             |
 +----------------------+--------------------+--------------+--------------------------------------------------------------------+
@@ -78,13 +83,29 @@
 +----------------------+--------------------+--------------+--------------------------------------------------------------------+
 | Grafana              | CVE-2021-43798     | FileRead     | Grafana 8.x 插件模块路径遍历                                       |
 +----------------------+--------------------+--------------+--------------------------------------------------------------------+
+| Influxdb             | None               | unAuth       | influxdb 未授权访问                                                |
++----------------------+--------------------+--------------+--------------------------------------------------------------------+
 | Jenkins              | CVE-2018-1000861   | RCE          | jenkins 远程命令执行                                               |
++----------------------+--------------------+--------------+--------------------------------------------------------------------+
+| Jetty                | CVE-2021-28164     | DSinfo       | jetty 模糊路径信息泄露                                             |
+| Jetty                | CVE-2021-28169     | DSinfo       | jetty Utility Servlets ConcatServlet 双重解码信息泄露              |
+| Jetty                | CVE-2021-34429     | DSinfo       | jetty 模糊路径信息泄露                                             |
++----------------------+--------------------+--------------+--------------------------------------------------------------------+
+| Jupyter              | None               | unAuth       | Jupyter 未授权访问                                                 |
 +----------------------+--------------------+--------------+--------------------------------------------------------------------+
 | Keycloak             | CVE-2020-10770     | SSRF         | 使用request_uri调用未经验证的URL                                   |
 +----------------------+--------------------+--------------+--------------------------------------------------------------------+
 | Landray              | CNVD-2021-28277    | FileRead/SSRF| 蓝凌OA 任意文件读取/SSRF                                           |
 +----------------------+--------------------+--------------+--------------------------------------------------------------------+
+| Mini Httpd           | CVE-2018-18778     | FileRead     | mini_httpd 任意文件读取                                            |
++----------------------+--------------------+--------------+--------------------------------------------------------------------+
 | mongo-express        | CVE-2019-10758     | RCE          | 未授权远程代码执行                                                 |
++----------------------+--------------------+--------------+--------------------------------------------------------------------+
+| Nexus Repository     | CVE-2019-5475      | RCE          | 2.x yum插件 远程命令执行                                           |
+| Nexus Repository     | CVE-2019-7238      | RCE          | 3.x 远程命令执行                                                   |
+| Nexus Repository     | CVE-2019-15588     | RCE          | 2019-5475的绕过                                                    |
+| Nexus Repository     | CVE-2020-10199     | RCE          | 3.x 远程命令执行                                                   |
+| Nexus Repository     | CVE-2020-10204     | RCE          | 3.x 远程命令执行                                                   |
 +----------------------+--------------------+--------------+--------------------------------------------------------------------+
 | Nodejs               | CVE-2017-14849     | FileRead     | Node.js目录穿越                                                    |
 | Nodejs               | CVE-2021-21315     | RCE          | Node.js命令执行                                                    |
@@ -180,13 +201,28 @@ Options:
                         线程数 (默认: 2)
     --delay=DELAY       延迟时间/秒 (默认: 1)
     --timeout=TIMEOUT   超时时间/秒 (默认: 10)
-    --http-proxy=HTTP_PROXY
-                        http/https代理 (如: --http-proxy 127.0.0.1:8080)
     --user-agent=UA     自定义User-Agent
-    --cookie=COOKIE     添加cookie
+    --cookie=COOKIE     添加cookie (如: --cookie "PHPSESSID=123456789")
+    --auth=AUTHORIZATION
+                        添加Authorization (如: --auth "Basic YWRtaW46YWRtaW4=")
+
+  日志:
+    运行时输出的debug信息
+
     --log=LOG           日志等级, 可选1-6 (默认: 1) [日志2级: 框架名称+漏洞编号+状态码] [日志3级:
                         2级内容+请求方法+请求目标+POST数据] [日志4级: 2级内容+请求数据包] [日志5级:
                         4级内容+响应头] [日志6级: 5级内容+响应内容]
+
+  Proxy:
+    代理
+
+    --http-proxy=HTTP_PROXY
+                        http/https代理 (如: --http-proxy 127.0.0.1:8080)
+    --socks4-proxy=SOCKS4_PROXY
+                        socks4代理(如: --socks4-proxy 127.0.0.1:8080)
+    --socks5-proxy=SOCKS5_PROXY
+                        socks5代理(如: --socks5-proxy 127.0.0.1:8080 或
+                        admin:123456@127.0.0.1:8080)
 
   Application:
     指定扫描的目标类型
@@ -229,10 +265,10 @@ Options:
     --list              查看所有Payload
 
   支持的目标类型(-a参数, 不区分大小写):
-    AliDruid,nacos,airflow,apisix,flink,solr,struts2,tomcat,appweb,conflue
-    nce,cisco,discuz,django,drupal,elasticsearch,f5bigip,fastjson,jenkins,
-    keycloak,mongoexpress,nodejs,nodered,showdoc,spring,thinkphp,ueditor,w
-    eblogic,webmin,yonyou
+    AliDruid,nacos,airflow,apisix,flink,hadoop,solr,struts2,tomcat,appweb,
+    confluence,cisco,discuz,django,drupal,elasticsearch,f5bigip,fastjson,g
+    itea,gitlab,grafana,jenkins,keycloak,landray,mongoexpress,nodejs,noder
+    ed,rails,showdoc,spring,thinkphp,ueditor,weblogic,webmin,yonyou
 ```
 
 ## language

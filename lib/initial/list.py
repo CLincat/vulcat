@@ -74,6 +74,23 @@ vul_info = {
             'description': 'Hadoop YARN ResourceManager 未授权访问'
         }
     ],
+    'Apache Httpd': [
+        {
+            'vul_id': 'CVE-2021-40438',
+            'type': 'SSRF',
+            'description': 'Apache HTTP Server 2.4.48 mod_proxy SSRF                   '
+        },
+        {
+            'vul_id': 'CVE-2021-41773',
+            'type': 'FileRead/RCE',
+            'description': 'Apache HTTP Server 2.4.49 路径遍历'
+        },
+        {
+            'vul_id': 'CVE-2021-42013',
+            'type': 'FileRead/RCE',
+            'description': 'Apache HTTP Server 2.4.50 路径遍历'
+        }
+    ],
     'Apache Solr': [
         {
             'vul_id': 'CVE-2021-27905',
@@ -284,11 +301,42 @@ vul_info = {
             'description': 'Grafana 8.x 插件模块路径遍历'
         },
     ],
+    'Influxdb': [
+        {
+            'vul_id': 'None',
+            'type': 'unAuth',
+            'description': 'influxdb 未授权访问'
+        },
+    ],
     'Jenkins': [
         {
             'vul_id': 'CVE-2018-1000861',
             'type': 'RCE',
             'description': 'jenkins 远程命令执行'
+        }
+    ],
+    'Jetty': [
+        {
+            'vul_id': 'CVE-2021-28164',
+            'type': 'DSinfo',
+            'description': 'jetty 模糊路径信息泄露'
+        },
+        {
+            'vul_id': 'CVE-2021-28169',
+            'type': 'DSinfo',
+            'description': 'jetty Utility Servlets ConcatServlet 双重解码信息泄露'
+        },
+        {
+            'vul_id': 'CVE-2021-34429',
+            'type': 'DSinfo',
+            'description': 'jetty 模糊路径信息泄露'
+        }
+    ],
+    'Jupyter': [
+        {
+            'vul_id': 'None',
+            'type': 'unAuth',
+            'description': 'Jupyter 未授权访问'
         }
     ],
     'Keycloak': [
@@ -313,11 +361,45 @@ vul_info = {
             'description': '蓝凌OA 任意文件读取/SSRF'
         }
     ],
+    'Mini Httpd': [
+        {
+            'vul_id': 'CVE-2018-18778',
+            'type': 'FileRead',
+            'description': 'mini_httpd 任意文件读取'
+        }
+    ],
     'mongo-express': [
         {
             'vul_id': 'CVE-2019-10758',
             'type': 'RCE',
             'description': '未授权远程代码执行'
+        }
+    ],
+    'Nexus Repository': [
+        {
+            'vul_id': 'CVE-2019-5475',
+            'type': 'RCE',
+            'description': '2.x yum插件 远程命令执行'
+        },
+        {
+            'vul_id': 'CVE-2019-7238',
+            'type': 'RCE',
+            'description': '3.x 远程命令执行'
+        },
+        {
+            'vul_id': 'CVE-2019-15588',
+            'type': 'RCE',
+            'description': '2019-5475的绕过'
+        },
+        {
+            'vul_id': 'CVE-2020-10199',
+            'type': 'RCE',
+            'description': '3.x 远程命令执行'
+        },
+        {
+            'vul_id': 'CVE-2020-10204',
+            'type': 'RCE',
+            'description': '3.x 远程命令执行'
         }
     ],
     'Nodejs': [

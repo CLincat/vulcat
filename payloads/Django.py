@@ -155,7 +155,7 @@ class Django():
                 logger.logging(vul_info, 'Error')
                 return None
 
-            if ("prompt('12794')" in check.check_res(res2.text, "prompt('12794')")):
+            if ("<ScRiPt>prompt('12794')" in check.check_res(res2.text, "prompt('12794')")):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],

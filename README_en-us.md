@@ -1,11 +1,11 @@
 # vulcat
-
+(Monthly update)<br>
 * Vulcat can be used to scan for vulnerabilities on the Web side. When a vulnerability is discovered, the target URL and Payload are prompted. Users can manually verify the vulnerability according to the prompt<br/>
 * Users can also write their own POC and add it to vulcat for scanning, You are also welcome to contribute your POC to the project
 * If you have any ideas, suggestions, or bugs, you can issue
 
 **Web applications that currently support scanning:**
-> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheAPISIX, ApacheFlink, ApacheHadoop, ApacheSolr, ApacheStruts2, ApacheTomcat, AppWeb, AtlassianConfluence, Cicso, Discuz, Django, Drupal, ElasticSearch, F5-BIG-IP, Fastjson, Gitea, Gitlab, Grafana, Landray-OA, RubyOnRails, Jenkins, Keycloak, mongo-express, Node.js, NodeRED, ShowDoc, Spring, ThinkPHP, Ueditor, Weblogic, Webmin, Yonyou
+> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheAPISIX, ApacheFlink, ApacheHadoop, ApacheHttpd, ApacheSolr, ApacheStruts2, ApacheTomcat, AppWeb, AtlassianConfluence, Cicso, Discuz, Django, Drupal, ElasticSearch, F5-BIG-IP, Fastjson, Gitea, Gitlab, Grafana, Influxdb, RubyOnRails, Jenkins, Jetty, Jupyter, Keycloak, Landray-OA, MiniHttpd, mongo-express, Nexus, Node.js, NodeRED, ShowDoc, Spring, ThinkPHP, Ueditor, Weblogic, Webmin, Yonyou
 
 <details>
 <summary><strong>The current web vulnerabilities that support scanning: [Click on]</strong></summary>
@@ -25,6 +25,10 @@
 | Apache Flink         | CVE-2020-17519     | FileRead     | Flink Directory traversal                                  |
 +----------------------+--------------------+--------------+------------------------------------------------------------+
 | Apache Hadoop        | None               | unAuth       | Hadoop YARN ResourceManager unAuthorized                   |
++----------------------+--------------------+--------------+------------------------------------------------------------+
+| Apache Httpd         | CVE-2021-40438     | SSRF         | Apache HTTP Server 2.4.48 mod_proxy SSRF                   |
+| Apache Httpd         | CVE-2021-41773     | FileRead/RCE | Apache HTTP Server 2.4.49 Directory traversal              |
+| Apache Httpd         | CVE-2021-42013     | FileRead/RCE | Apache HTTP Server 2.4.50 Directory traversal              |
 +----------------------+--------------------+--------------+------------------------------------------------------------+
 | Apache Solr          | CVE-2021-27905     | SSRF         | Solr SSRF/FileRead                                         |
 +----------------------+--------------------+--------------+------------------------------------------------------------+
@@ -77,13 +81,29 @@
 +----------------------+--------------------+--------------+------------------------------------------------------------+
 | Grafana              | CVE-2021-43798     | FileRead     | Grafana 8.x Directory traversal                            |
 +----------------------+--------------------+--------------+------------------------------------------------------------+
+| Influxdb             | None               | unAuth       | influxdb unAuthorized                                      |
++----------------------+--------------------+--------------+------------------------------------------------------------+
 | Jenkins              | CVE-2018-1000861   | RCE          | jenkins Remote code execution                              |
++----------------------+--------------------+--------------+------------------------------------------------------------+
+| Jetty                | CVE-2021-28164     | DSinfo       | jetty Disclosure information                               |
+| Jetty                | CVE-2021-28169     | DSinfo       | jetty Utility Servlets ConcatServlet Disclosure information|
+| Jetty                | CVE-2021-34429     | DSinfo       | jetty Disclosure information                               |
++----------------------+--------------------+--------------+------------------------------------------------------------+
+| Jupyter              | None               | unAuth       | Jupyter unAuthorized                                       |
 +----------------------+--------------------+--------------+------------------------------------------------------------+
 | Keycloak             | CVE-2020-10770     | SSRF         | request_uri SSRF                                           |
 +----------------------+--------------------+--------------+------------------------------------------------------------+
 | Landray              | CNVD-2021-28277    | FileRead/SSRF| Landray-OA FileRead/SSRF                                   |
 +----------------------+--------------------+--------------+------------------------------------------------------------+
+| Mini Httpd           | CVE-2018-18778     | FileRead     | mini_httpd FileRead                                        |
++----------------------+--------------------+--------------+------------------------------------------------------------+
 | mongo-express        | CVE-2019-10758     | RCE          | Remote code execution                                      |
++----------------------+--------------------+--------------+------------------------------------------------------------+
+| Nexus Repository     | CVE-2019-5475      | RCE          | 2.x yum Remote code execution                              |
+| Nexus Repository     | CVE-2019-7238      | RCE          | 3.x Remote code execution                                  |
+| Nexus Repository     | CVE-2019-15588     | RCE          | 2019-5475 Bypass                                           |
+| Nexus Repository     | CVE-2020-10199     | RCE          | 3.x Remote code execution                                  |
+| Nexus Repository     | CVE-2020-10204     | RCE          | 3.x Remote code execution                                  |
 +----------------------+--------------------+--------------+------------------------------------------------------------+
 | Nodejs               | CVE-2017-14849     | FileRead     | Node.js Directory traversal                                |
 | Nodejs               | CVE-2021-21315     | RCE          | Node.js Remote code execution                              |
@@ -179,17 +199,33 @@ Options:
                         The number of threads (default: 2)
     --delay=DELAY       Delay time/s (default: 1)
     --timeout=TIMEOUT   Timeout/s (default: 10)
-    --http-proxy=HTTP_PROXY
-                        The HTTP/HTTPS proxy (e.g. --http-proxy
-                        127.0.0.1:8080)
     --user-agent=UA     Customize the User-Agent
-    --cookie=COOKIE     Add a cookie
+    --cookie=COOKIE     Add a cookie (e.g. --cookie "PHPSESSID=123456789")
+    --auth=AUTHORIZATION
+                        Add a Authorization (e.g. --auth "Basic
+                        YWRtaW46YWRtaW4=")
+
+  Log:
+    Debug information
+
     --log=LOG           The log level, Optional 1-6 (default: 1) [level 2:
                         Framework name + Vulnerability number + status code]
                         [level 3: Level 2 content + request method + request
                         target +POST data] [level 4: Level 2 content + request
                         packet] [Level 5: Level 4 content + response header]
                         [level 6: Level 5 content + response content]
+
+  Proxy:
+    Proxy server
+
+    --http-proxy=HTTP_PROXY
+                        The HTTP/HTTPS proxy (e.g. --http-proxy
+                        127.0.0.1:8080)
+    --socks4-proxy=SOCKS4_PROXY
+                        The socks4 proxy(e.g. --socks4-proxy 127.0.0.1:8080)
+    --socks5-proxy=SOCKS5_PROXY
+                        The socks5 proxy(e.g. --socks5-proxy 127.0.0.1:8080 or
+                        admin:123456@127.0.0.1:8080)
 
   Application:
     Specify the target type for the scan
@@ -241,10 +277,10 @@ Options:
     --list              View all payload
 
   Supported target types(Case insensitive):
-    AliDruid,nacos,airflow,apisix,flink,solr,struts2,tomcat,appweb,conflue
-    nce,cisco,discuz,django,drupal,elasticsearch,f5bigip,fastjson,jenkins,
-    keycloak,mongoexpress,nodejs,nodered,showdoc,spring,thinkphp,ueditor,w
-    eblogic,webmin,yonyou
+    AliDruid,nacos,airflow,apisix,flink,hadoop,solr,struts2,tomcat,appweb,
+    confluence,cisco,discuz,django,drupal,elasticsearch,f5bigip,fastjson,g
+    itea,gitlab,grafana,jenkins,keycloak,landray,mongoexpress,nodejs,noder
+    ed,rails,showdoc,spring,thinkphp,ueditor,weblogic,webmin,yonyou
 ```
 
 ## language

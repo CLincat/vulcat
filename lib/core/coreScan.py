@@ -16,6 +16,8 @@ from payloads.AlibabaNacos import nacos
 from payloads.ApacheAirflow import airflow
 from payloads.ApacheAPISIX import apisix
 from payloads.ApacheFlink import flink
+from payloads.ApacheHadoop import hadoop
+from payloads.ApacheHttpd import httpd
 from payloads.ApacheSolr import solr
 from payloads.ApacheTomcat import tomcat
 from payloads.ApacheStruts2 import struts2
@@ -31,12 +33,16 @@ from payloads.Fastjson import fastjson
 from payloads.Gitea import gitea
 from payloads.Gitlab import gitlab
 from payloads.Grafana import grafana
-from payloads.ApacheHadoop import hadoop
+from payloads.Influxdb import influxdb
 from payloads.Jenkins import jenkins
+from payloads.Jetty import jetty
+from payloads.Jupyter import jupyter
 from payloads.Keycloak import keycloak
 # from payloads.Kindeditor import kindeditor
 from payloads.Landray import landray
+from payloads.MiniHttpd import minihttpd
 from payloads.MongoExpress import mongoexpress
+from payloads.Nexus import nexus
 from payloads.Nodejs import nodejs
 from payloads.NodeRED import nodered
 from payloads.RubyOnRails import rails
@@ -79,49 +85,53 @@ class coreScan():
             if (('http://' not in u[0:10]) and ('https://' not in u[0:10])):
                 logger.info('red_ex', self.lang['core']['start']['url_error'].format(u))
                 continue
-            
+
             logger.info('green_ex', self.lang['core']['start']['start'] + u)                           # ? 提示, 开始扫描当前url
 
-            # * --------------------WAF指纹识别--------------------
-            if (not self.no_waf):
-                waf_info = waf.identify(u)                                                     # * WAF指纹识别
-                if waf_info:
-                    while True:
-                        if (not self.batch):                                                            # * 是否使用默认选项
-                            logger.info('red', '', print_end='')
-                            operation = input(self.lang['core']['waf_finger']['waf_find'].format(waf_info))       # * 接收参数
-                        else:
-                            logger.info('red', self.lang['core']['waf_finger']['waf_find'].format(waf_info), print_end='')
-                            operation = 'no'                                                            # * 默认选项No
-                            logger.info('red', 'no', notime=True)
+            if check.check_connect(u):
+                # * --------------------WAF指纹识别--------------------
+                if (not self.no_waf):
+                    waf_info = waf.identify(u)                                                     # * WAF指纹识别
+                    if waf_info:
+                        while True:
+                            if (not self.batch):                                                            # * 是否使用默认选项
+                                logger.info('red', '', print_end='')
+                                operation = input(self.lang['core']['waf_finger']['waf_find'].format(waf_info))       # * 接收参数
+                            else:
+                                logger.info('red', self.lang['core']['waf_finger']['waf_find'].format(waf_info), print_end='')
+                                operation = 'no'                                                            # * 默认选项No
+                                logger.info('red', 'no', notime=True)
 
-                        operation = operation.lower()                                                   # * 字母转小写
-                        if operation in ['y', 'yes']:                                                   # * 继续扫描
-                            logger.info('yellow_ex', self.lang['core']['stop']['continue'])             # ? 日志, 继续扫描
-                            break
-                        elif operation in ['n', 'no']:
-                            logger.info('yellow_ex', self.lang['core']['stop']['next'])                 # ? 日志, 下一个
-                            u = 'next'
-                            break
-                else:
-                    logger.info('yellow_ex', self.lang['core']['waf_finger']['waf_not_find'])
+                            operation = operation.lower()                                                   # * 字母转小写
+                            if operation in ['y', 'yes']:                                                   # * 继续扫描
+                                logger.info('yellow_ex', self.lang['core']['stop']['continue'])             # ? 日志, 继续扫描
+                                break
+                            elif operation in ['n', 'no']:
+                                logger.info('yellow_ex', self.lang['core']['stop']['next'])                 # ? 日志, 下一个
+                                u = 'next'
+                                break
+                    else:
+                        logger.info('yellow_ex', self.lang['core']['waf_finger']['waf_not_find'])
 
-            if u == 'next':
+                if u == 'next':
+                    continue
+                # * --------------------WAF指纹识别--------------------
+
+                # * --------------------框架指纹识别--------------------
+                if ((self.application == 'auto') and (not self.vuln)):
+                    logger.info('yellow_ex', self.lang['core']['web_finger']['web'])
+                    webapp.stop = self.stop
+                    new_app_list = webapp.identify(u)
+                    if new_app_list:
+                        logger.info('yellow_ex', self.lang['core']['web_finger']['web_find'].format(str(new_app_list)))
+                        self.app_list = new_app_list
+                    else:
+                        logger.info('yellow_ex', self.lang['core']['web_finger']['web_not_find'])
+
+                # * --------------------框架指纹识别--------------------
+            else:
+                logger.info('red', self.lang['core']['start']['unable'] + u)                        # ? 提示, 无法访问当前url
                 continue
-            # * --------------------WAF指纹识别--------------------
-
-            # * --------------------框架指纹识别--------------------
-            if ((self.application == 'auto') and (not self.vuln)):
-                logger.info('yellow_ex', self.lang['core']['web_finger']['web'])
-                webapp.stop = self.stop
-                new_app_list = webapp.identify(u)
-                if new_app_list:
-                    logger.info('yellow_ex', self.lang['core']['web_finger']['web_find'].format(str(new_app_list)))
-                    self.app_list = new_app_list
-                else:
-                    logger.info('yellow_ex', self.lang['core']['web_finger']['web_not_find'])
-
-            # * --------------------框架指纹识别--------------------
 
             if self.no_poc:
                 logger.info('red', self.lang['core']['start']['no_poc'])

@@ -160,6 +160,24 @@ class WebappIdentify():
                 ]
             },
             {
+                'name': 'httpd',
+                'path': '',
+                'data': '',
+                'fingerprint': [
+                    r'The requested URL was not found on this server\.',
+                    r'You don\'t have permission to access this resource\.',
+                    r'The server is temporarily unable to service your request due to maintenance downtime or capacity problems\. Please try again later\.',
+                    r'<title>Apache Tomcat/.*</title>',
+                    r'<span id="nav-home"><a href="http://tomcat\.apache\.org/">Home</a></span>',
+                    r'<p class="copyright">Copyright.*\d{0,4}-\d{0,4} Apache Software Foundation\.  All Rights Reserved</p>',
+                    r'These icons were originally made for Mosaic for X.*If you\'d like to contribute additions to this set.*http://httpd\.apache\.org/docs-project',
+                    r'<title>Apache2 Debian Default Page: It works</title>.*Apache2 Debian Default Page',
+                    r'Apache2 server after installation on Debian systems.*it means that the Apache HTTP server installed',
+                    r'The configuration layout for an Apache2 web server installation on Debian systems is as follows:',
+                    r'Apache2 package with Debian\. However, check.*existing bug reports'
+                ]
+            },
+            {
                 'name': 'solr',
                 'path': '',
                 'data': '',
@@ -188,7 +206,9 @@ class WebappIdentify():
                 'path': '',
                 'data': '',
                 'fingerprint': [
-                    r'<title>Apache Tomcat/.*</title>'
+                    r'<title>Apache Tomcat/.*</title>',
+                    r'<span id="nav-home"><a href="http://tomcat\.apache\.org/">Home</a></span>',
+                    r'<p class="copyright">Copyright.*\d{0,4}-\d{0,4} Apache Software Foundation\.  All Rights Reserved</p>'
                 ]
             },
             {
@@ -364,6 +384,24 @@ class WebappIdentify():
                     r'<h1>Welcome to Jenkins!</h1>'
                 ]
             },
+            {
+                'name': 'jetty',
+                'path': '',
+                'data': '',
+                'fingerprint': [
+                    r'<hr><a href="https://eclipse\.org/jetty">Powered by Jetty:// .{0,30}</a><hr/>'
+                ]
+            },
+            {
+                'name': 'jupyter',
+                'path': '',
+                'data': '',
+                'fingerprint': [
+                    r'Jupyter Notebook requires JavaScript',
+                    r"<img src='/static/base/images/logo\.png\?v=\d{0,32}' alt='Jupyter Notebook'/>",
+                    r'<span id="running_list_info">Currently running Jupyter processes</span>'
+                ]
+            },
             # {
             #     'name': 'keycloak',
             #     'path': '',
@@ -390,6 +428,14 @@ class WebappIdentify():
                 ]
             },
             {
+                'name': 'minihttpd',
+                'path': '',
+                'data': '',
+                'fingerprint': [
+                    r'<address><a href="http://www\.acme\.com/software/mini_httpd/">mini_httpd/.{0,40}</a></address>'
+                ]
+            },
+            {
                 'name': 'mongoexpress',
                 'path': '',
                 'data': '',
@@ -398,6 +444,21 @@ class WebappIdentify():
                     r'<img src=".*/mongo-express-logo\.png"',
                     r'<a class="navbar-brand" href="">Mongo Express</a>',
                     r'<h1 id="pageTitle">Mongo Express</h1>'
+                ]
+            },
+            {
+                'name': 'nexus',
+                'path': '',
+                'data': '',
+                'fingerprint': [
+                    r'<title>Nexus Repository Manager</title>',
+                    r'<title>Sonatype Nexus</title>',
+                    r'<meta name="description" content="Nexus Repository Manager"/>',
+                    r'<script type="text/javascript">progressMessage(\'Loading nexus-.{0,20}\.js\');</script>',
+                    r'<img id="loading-product" src="http.{0,50}/static/rapture/resources/images/loading-product\.png.{0,25}" alt="Nexus Repository Manager"/>',
+                    r'You are using a version of Internet Explorer that is not supported\.<br/>See the <a href="http://links\.sonatype\.com/products/nexus/oss/docs/browsers',
+                    r"Nexus\.Log\.debug('Initializing UI\.\.\.');",
+                    r'<img src="images/header_branding\.png" alt="Sonatype Nexus"/>'
                 ]
             },
             {

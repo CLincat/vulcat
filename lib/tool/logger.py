@@ -48,10 +48,19 @@ class Logger():
         info_3 = self.logging_2(vul_info, status_code)
 
         try:
-            info_3 += color.red_ex(' [' + res.request.method + ' ')
-            info_3 +=color.black_ex(res.request.url) + color.red_ex(']')
-            if vul_info['data']:
-                info_3 += color.red_ex(' [DATA ') + color.black_ex(res.request.body) + color.red_ex(']')
+            # * HackRequests
+            if (str(type(res)) == "<class 'HackRequests.HackRequests.response'>"):
+                info_3 += color.red_ex(' [' + res.method + ' ')
+                info_3 +=color.black_ex(res.url) + color.red_ex(']')
+                if vul_info['data']:
+                    info_3 += color.red_ex(' [DATA ') + color.black_ex(vul_info['data']) + color.red_ex(']')
+                return info_3
+            # * requests
+            else:
+                info_3 += color.red_ex(' [' + res.request.method + ' ')
+                info_3 +=color.black_ex(res.request.url) + color.red_ex(']')
+                if vul_info['data']:
+                    info_3 += color.red_ex(' [DATA ') + color.black_ex(res.request.body) + color.red_ex(']')
         except:
             return info_3
 
@@ -60,21 +69,32 @@ class Logger():
     def logging_4(self, vul_info, status_code, res):
         ''' 日志4级, (框架名称+状态码+漏洞编号)+请求数据包 '''
         info_4 = self.logging_2(vul_info, status_code)
+
         try:
-            info_4 += color.red_ex(' [Request')
-            info_4 += color.black_ex('\n' + res.request.method + ' ' + res.request.path_url + ' ' + http.client.HTTPConnection._http_vsn_str)
-            info_4 += color.black_ex('\n' + 'Host' + ': ' + self.get_domain(res.request.url))
+            # * HackRequests
+            if (str(type(res)) == "<class 'HackRequests.HackRequests.response'>"):
+                info_4 += color.red_ex(' [Request')
+                info_4 += color.black_ex('\n' + res.log.get('request'))
 
-            for key, value in res.request.headers.items():
-                info_4 += color.black_ex('\n' + key + ': ' + value)
-            if res.request.body:
-                if (type(res.request.body) == bytes):
-                    info_4 += color.black_ex('\n\n' + res.request.body.decode())
-                else:
-                    info_4 += color.black_ex('\n\n' + res.request.body)
+                info_4 += color.red_ex('\n]')
+                info_4 += color.reset('')
+                return info_4
+            # * requests
+            else:
+                info_4 += color.red_ex(' [Request')
+                info_4 += color.black_ex('\n' + res.request.method + ' ' + res.request.path_url + ' ' + http.client.HTTPConnection._http_vsn_str)
+                info_4 += color.black_ex('\n' + 'Host' + ': ' + self.get_domain(res.request.url))
 
-            info_4 += color.red_ex('\n]')
-            info_4 += color.reset('')
+                for key, value in res.request.headers.items():
+                    info_4 += color.black_ex('\n' + key + ': ' + value)
+                if res.request.body:
+                    if (type(res.request.body) == bytes):
+                        info_4 += color.black_ex('\n\n' + res.request.body.decode())
+                    else:
+                        info_4 += color.black_ex('\n\n' + res.request.body)
+
+                info_4 += color.red_ex('\n]')
+                info_4 += color.reset('')
         except:
             return info_4
         return info_4
@@ -97,11 +117,20 @@ class Logger():
         ''' 日志6级, (框架名称+状态码+漏洞编号)+请求包+响应头+响应内容 '''
         res.encoding = 'utf-8'
         info_6 = self.logging_5(vul_info, status_code, res)
+        
         try:
-            info_6 = info_6[:-1]
-            info_6 += color.black_ex('\n\n' + res.text)
+            # * HackRequests
+            if (str(type(res)) == "<class 'HackRequests.HackRequests.response'>"):
+                info_6 = info_6[:-1]
+                info_6 += color.black_ex('\n\n' + res.text())
 
-            info_6 += color.red_ex('\n]')
+                info_6 += color.red_ex('\n]')
+            # * requests
+            else:
+                info_6 = info_6[:-1]
+                info_6 += color.black_ex('\n\n' + res.text)
+
+                info_6 += color.red_ex('\n]')
         except:
             return info_6
         return info_6

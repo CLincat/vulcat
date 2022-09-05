@@ -34,8 +34,8 @@ def check_connect(url):
     except requests.ConnectionError:
         return False
     except Exception as e:
-        return False
         # print(e)
+        return False
 
 def check_res(res, md):
     ''' 检查poc误报

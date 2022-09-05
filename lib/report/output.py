@@ -6,6 +6,7 @@ from lib.initial.config import config
 from lib.tool.timed import nowtime_year
 from lib.tool.logger import logger
 from thirdparty import requests
+from thirdparty import HackRequests
 # from lib.plugins.Exp import exp
 import json
 import http.client
@@ -83,6 +84,8 @@ def output_json(results, filename, lang):
                 for key in result_info.keys():
                     if type(result_info[key]) == requests.models.Response:
                         result_info[key] = output_res(key, result_info[key], iscolor=False)
+                    elif type(result_info[key]) == HackRequests.response:
+                        result_info[key] = output_Hackres(key, result_info[key], iscolor=False) 
 
                 results_info_list.append(json.dumps(result_info, indent=4) + '\n')
         results_info_list = set(results_info_list)
@@ -127,6 +130,9 @@ def output_vul_info_color(result):
         elif value_type == requests.models.Response:                                    # * Response输出方式
             result_info += output_res(key, value)
 
+        elif value_type == HackRequests.response:
+            result_info += output_Hackres(key, value)                                   # * HackResponse输出方式
+
     return result_info
 
 def output_vul_info(result):
@@ -145,6 +151,9 @@ def output_vul_info(result):
 
         elif value_type == requests.models.Response:
             result_info += output_res(key, value, iscolor=False)
+
+        elif value_type == HackRequests.response:
+            result_info += output_Hackres(key, value, iscolor=False)
 
     return result_info
 
@@ -242,6 +251,32 @@ def output_res(key, res, iscolor=True):
                         info_res += '\n\n' + res.request.body.decode()
                     else:
                         info_res += '\n\n' + res.request.body
+
+                info_res += ']\n    '
+            except:
+                return info_res
+
+        return info_res
+
+def output_Hackres(key, res, iscolor=True):
+        ''' 接收一个HackRequests结果, 返回一个http数据包 '''
+        info_res = ''
+
+        if iscolor:
+            try:
+                info_res += color.yellow_ex(key) + ':'
+                info_res += color.red_ex(' [Request')
+                info_res += color.black_ex('\n' + res.log.get('request'))
+
+                info_res += color.red_ex(']')
+                info_res += color.reset('\n    ')
+            except:
+                return info_res
+        else:
+            try:
+                info_res += key + ':'
+                info_res += ' [Request'
+                info_res += '\n' + res.log.get('request').replace('\n', '')
 
                 info_res += ']\n    '
             except:

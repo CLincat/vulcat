@@ -9,6 +9,8 @@ from lib.initial.language import language
 from thirdparty.requests import packages
 import re
 import http.client
+import socket
+import socks
 
 global config
 
@@ -69,13 +71,36 @@ class Config():
             'Accept': '*/*',
             'Connection': 'close'
         }
+
         if args.cookie:
             args.headers['Cookie'] = args.cookie.lstrip('Cookie: ')
 
-        args.proxies = {
-            'http': args.http_proxy,
-            'https': args.http_proxy
-        }
+        if args.authorization:
+            args.headers['Authorization'] = args.authorization.lstrip('Authorization: ')
+
+        if args.http_proxy: # * requests代理
+            args.proxies = {
+                'http': 'http://' + args.http_proxy,
+                'https': 'http://' + args.http_proxy
+            }
+            args.proxy = tuple(args.http_proxy.split(':')) # * HackRequests代理
+        else:
+            args.proxies = {}
+            args.proxy = ()
+
+        if args.socks5_proxy: # * socks 5
+            if ('@' in args.socks5_proxy): # * 有无身份验证
+                proxy_5 = args.socks5_proxy.replace('@', ':').split(':')
+                socks.set_default_proxy(socks.SOCKS5, proxy_5[2], int(proxy_5[3]), username=proxy_5[0], password=proxy_5[1])
+            else:
+                proxy_5 = args.socks5_proxy.split(':')
+                socks.set_default_proxy(socks.SOCKS5, proxy_5[0], int(proxy_5[1]))
+            socket.socket = socks.socksocket
+
+        elif args.socks4_proxy: # * socks 4
+            proxy_4 = args.socks4_proxy.split(':')
+            socks.set_default_proxy(socks.SOCKS4, proxy_4[0], int(proxy_4[1]))
+            socket.socket = socks.socksocket
 
         if args.vuln:
             args.vuln = args.vuln.lower()
@@ -87,15 +112,14 @@ class Config():
             'discuz', 'django', 'drupal',
             'elasticsearch', 
             'f5bigip', 'fastjson', 'flink', 
-            # 'gitea', 'gitlab', 'grafana', 
-            'gitea', 'gitlab', 
-            'hadoop', 
-            'jenkins',
-            # 'keycloak', 'kindeditor',
-            'keycloak', 
+            'gitea', 'gitlab', # 'grafana', 
+            'influxdb', 
+            'hadoop', 'httpd', 
+            'jenkins', 'jetty', 'jupyter', 
+            'keycloak', # 'kindeditor',
             'landray', 
-            'mongoexpress', 
-            'nacos', 'nodejs', 'nodered', 
+            'minihttpd', 'mongoexpress', 
+            'nexus', 'nacos', 'nodejs', 'nodered', 
             'rails', 
             'showdoc', 'solr', 'struts2', 'spring', 
             'thinkphp', 'tomcat', 

@@ -26,10 +26,22 @@ lang = {
             'thread': 'The number of threads (default: 2)',
             'delay': 'Delay time/s (default: 1)',
             'timeout': 'Timeout/s (default: 10)',
-            'http_proxy': 'The HTTP/HTTPS proxy (e.g. --http-proxy 127.0.0.1:8080)',
             'user_agent': 'Customize the User-Agent',
-            'cookie': 'Add a cookie',
+            'cookie': 'Add a cookie (e.g. --cookie "PHPSESSID=123456789")',
+            'Authorization': 'Add a Authorization (e.g. --auth "Basic YWRtaW46YWRtaW4=")',
+        },
+        'log_help': {
+            'title': 'Log',
+            'name': 'Debug information',
             'log': 'The log level, Optional 1-6 (default: 1) [level 2: Framework name + Vulnerability number + status code] [level 3: Level 2 content + request method + request target +POST data] [level 4: Level 2 content + request packet] [Level 5: Level 4 content + response header] [level 6: Level 5 content + response content]'
+        },
+        'proxy_help': {
+            'title': 'Proxy',
+            'name': 'Proxy server',
+            'http_proxy': 'The HTTP/HTTPS proxy (e.g. --http-proxy 127.0.0.1:8080)',
+            'socks4_proxy': 'The socks4 proxy(e.g. --socks4-proxy 127.0.0.1:8080)',
+            'socks5_proxy': 'The socks5 proxy(e.g. --socks5-proxy 127.0.0.1:8080 or admin:123456@127.0.0.1:8080)',
+
         },
         'application_help': {
             'title': 'Application',
@@ -141,10 +153,21 @@ lang = {
             'thread': '线程数 (默认: 2)',
             'delay': '延迟时间/秒 (默认: 1)',
             'timeout': '超时时间/秒 (默认: 10)',
-            'http_proxy': 'http/https代理 (如: --http-proxy 127.0.0.1:8080)',
             'user_agent': '自定义User-Agent',
-            'cookie': '添加cookie',
+            'cookie': '添加cookie (如: --cookie "PHPSESSID=123456789")',
+            'Authorization': '添加Authorization (如: --auth "Basic YWRtaW46YWRtaW4=")'
+        },
+        'log_help': {
+            'title': '日志',
+            'name': '运行时输出的debug信息',
             'log': '日志等级, 可选1-6 (默认: 1) [日志2级: 框架名称+漏洞编号+状态码] [日志3级: 2级内容+请求方法+请求目标+POST数据] [日志4级: 2级内容+请求数据包] [日志5级: 4级内容+响应头] [日志6级: 5级内容+响应内容]'
+        },
+        'proxy_help': {
+            'title': 'Proxy',
+            'name': '代理',
+            'http_proxy': 'http/https代理 (如: --http-proxy 127.0.0.1:8080)',
+            'socks4_proxy': 'socks4代理(如: --socks4-proxy 127.0.0.1:8080)',
+            'socks5_proxy': 'socks5代理(如: --socks5-proxy 127.0.0.1:8080 或 admin:123456@127.0.0.1:8080)',
         },
         'application_help': {
             'title': 'Application',

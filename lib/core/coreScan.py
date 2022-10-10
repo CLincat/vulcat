@@ -18,6 +18,7 @@ from payloads.ApacheAPISIX import apisix
 from payloads.ApacheFlink import flink
 from payloads.ApacheHadoop import hadoop
 from payloads.ApacheHttpd import httpd
+from payloads.ApacheSkyWalking import skywalking
 from payloads.ApacheSolr import solr
 from payloads.ApacheTomcat import tomcat
 from payloads.ApacheStruts2 import struts2
@@ -45,6 +46,8 @@ from payloads.MongoExpress import mongoexpress
 from payloads.Nexus import nexus
 from payloads.Nodejs import nodejs
 from payloads.NodeRED import nodered
+from payloads.phpMyadmin import phpmyadmin
+from payloads.phpUint import phpunit
 from payloads.RubyOnRails import rails
 from payloads.ShowDoc import showdoc
 from payloads.Spring import spring
@@ -186,7 +189,7 @@ class coreScan():
         queue_thread = int(self.queue.qsize() / self.thread)+1                                      # * 循环次数
         queue_thread = 1 if queue_thread <=0 else queue_thread                                      # * 最小为1
 
-        for q in tqdm(range(queue_thread), ncols=65):                                               # * 单个url的扫描进度条
+        for q in tqdm(range(queue_thread), ncols=50):                                               # * 单个url的扫描进度条
             try:
                 for i in range(self.thread):                                                        # * 根据线程数, 每次运行相应次数的poc
                     if not self.queue.empty():                                                      # * 如果线程池不为空, 开始扫描

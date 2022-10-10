@@ -36,8 +36,7 @@ class WafIdentify():
                 timeout=self.timeout,
                 headers=self.headers,
                 proxies=self.proxies,
-                verify=False,
-                allow_redirects=False
+                verify=False
             )
             logger.logging(vul_info, res.status_code, res)                        # * LOG
 

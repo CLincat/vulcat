@@ -22,3 +22,15 @@ def random_md5():
     md.update(random_number.encode('utf-8'))
 
     return md.hexdigest()[:8]
+
+def random_int_1():
+    ''' 返回1个随机整数, 范围1234-5678 '''
+    num1 = random.randint(1234, 5678)
+    return num1
+
+def random_int_2():
+    ''' 返回2个随机整数, 范围1234-5678 '''
+    num1 = random.randint(1234, 5678)
+    num2 = random.randint(1234, 5678)
+
+    return num1, num2

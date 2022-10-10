@@ -8,8 +8,8 @@
 '''
 
 def language():
-    return lang['zh_cn']
-    return lang['en_us']
+    return lang['en_us']  # * 默认英文
+    return lang['zh_cn']  # * 上下换个位置就能切换语言
 
 lang = {
     'en_us': {
@@ -74,7 +74,7 @@ lang = {
         },
         'app_list_help': {
             'title': 'Supported target types(Case insensitive)',
-            'name': 'AliDruid,nacos,airflow,apisix,flink,hadoop,solr,struts2,tomcat,appweb,confluence,cisco,discuz,django,drupal,elasticsearch,f5bigip,fastjson,gitea,gitlab,grafana,jenkins,keycloak,landray,mongoexpress,nodejs,nodered,rails,showdoc,spring,thinkphp,ueditor,weblogic,webmin,yonyou'
+            'name': 'AliDruid, airflow, apisix, appweb, cisco, confluence, discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab, grafana, influxdb, hadoop, httpd, jenkins, jetty, jupyter, keycloak, landray, minihttpd, mongoexpress, nexus, nacos, nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, solr, struts2, spring, skywalking, thinkphp, tomcat, ueditor, weblogic, webmin, yonyou'
         },
         'core': {
             'start': {
@@ -200,7 +200,7 @@ lang = {
         },
         'app_list_help': {
             'title': '支持的目标类型(-a参数, 不区分大小写)',
-            'name': 'AliDruid,nacos,airflow,apisix,flink,hadoop,solr,struts2,tomcat,appweb,confluence,cisco,discuz,django,drupal,elasticsearch,f5bigip,fastjson,gitea,gitlab,grafana,jenkins,keycloak,landray,mongoexpress,nodejs,nodered,rails,showdoc,spring,thinkphp,ueditor,weblogic,webmin,yonyou'
+            'name': 'AliDruid, airflow, apisix, appweb, cisco, confluence, discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab, grafana, influxdb, hadoop, httpd, jenkins, jetty, jupyter, keycloak, landray, minihttpd, mongoexpress, nexus, nacos, nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, solr, struts2, spring, skywalking, thinkphp, tomcat, ueditor, weblogic, webmin, yonyou'
         },
         'core': {
             'start': {
@@ -264,5 +264,293 @@ lang = {
                 'notvul': '[-] 未保存结果至'
             }
         }
+    }
+}
+
+# * --list的中文
+lang['zh_cn']['list'] = {
+    'Alibaba Druid': '阿里巴巴Druid未授权访问',
+    'Alibaba Nacos': {'CVE-2021-29441': '阿里巴巴Nacos未授权访问'},
+    'Apache Airflow': {'CVE-2020-17526': 'Airflow身份验证绕过'},
+    'Apache APISIX': {'CVE-2020-13945': 'Apache APISIX默认密钥',},
+    'Apache Flink': {'CVE-2020-17519': 'Flink目录遍历',},
+    'Apache Hadoop': 'Hadoop YARN ResourceManager 未授权访问',
+    'Apache Httpd': {
+        'CVE-2021-40438': 'Apache HTTP Server 2.4.48 mod_proxy SSRF                       ',
+        'CVE-2021-41773': 'Apache HTTP Server 2.4.49 路径遍历',
+        'CVE-2021-42013': 'Apache HTTP Server 2.4.50 路径遍历',
+    },
+    'Apache SkyWalking': {'CVE-2020-9483': 'SkyWalking SQL注入',},
+    'Apache Solr': {
+        'CVE-2017-12629': 'Solr 远程命令执行',
+        'CVE-2019-17558': 'Solr Velocity 注入远程命令执行',
+        'CVE-2021-27905': 'Solr SSRF/任意文件读取',
+    },
+    'Apache Struts2': {
+        'S2-001': 'Struts2远程代码执行',
+        'S2-005': 'Struts2远程代码执行',
+        'S2-007': 'Struts2远程代码执行',
+        'S2-008': 'Struts2远程代码执行',
+        'S2-009': 'Struts2远程代码执行',
+        'S2-012': 'Struts2远程代码执行',
+    },
+    'Apache Tomcat': {'CVE-2017-12615': 'PUT方法任意文件写入',},
+    'AppWeb': {'CVE-2018-8715': 'AppWeb身份认证绕过',},
+    'Atlassian Confluence': {
+        'CVE-2015-8399': 'Confluence任意文件包含',
+        'CVE-2019-3396': 'Confluence路径遍历和命令执行',
+        'CVE-2021-26084': 'Confluence Webwork Pre-Auth OGNL表达式命令注入',
+        'CVE-2022-26134': 'Confluence远程代码执行',
+    },
+    'Cisco': {'CVE-2020-3580': '思科ASA/FTD XSS跨站脚本攻击',},
+    'Discuz': {'wooyun-2010-080723': '全局变量防御绕过RCE',},
+    'Django': {
+        'CVE-2017-12794': 'debug page XSS跨站脚本攻击',
+        'CVE-2018-14574': 'CommonMiddleware url重定向',
+        'CVE-2019-14234': 'JSONfield SQL注入',
+        'CVE-2020-9402': 'GIS SQL注入',
+        'CVE-2021-35042': 'QuerySet.order_by SQL注入',
+    },
+    'Drupal': {
+        'CVE-2014-3704': 'Drupal < 7.32 Drupalgeddon SQL 注入',
+        'CVE-2017-6920': 'Drupal Core 8 PECL YAML 反序列化代码执行',
+        'CVE-2018-7600': 'Drupal Drupalgeddon 2 远程代码执行',
+        'CVE-2018-7602': 'Drupal 远程代码执行',
+    },
+    'ElasticSearch': {
+        'CVE-2014-3120': 'ElasticSearch命令执行',
+        'CVE-2015-1427': 'ElasticSearch Groovy 沙盒绕过&&代码执行',
+        'CVE-2015-3337': 'ElasticSearch 目录穿越',
+        'CVE-2015-5531': 'ElasticSearch 目录穿越',
+    },
+    'F5 BIG-IP': {
+        'CVE-2020-5902': 'BIG-IP远程代码执行',
+        'CVE-2022-1388': 'BIG-IP身份认证绕过',
+    },
+    'Fastjson': {
+        'CNVD-2017-02833': 'Fastjson <= 1.2.24 反序列化',
+        'CNVD-2019-22238': 'Fastjson <= 1.2.47 反序列化',
+    },
+    'Gitea': 'Gitea 1.4.0 未授权访问',
+    'Gitlab': {
+        'CVE-2021-22205': 'GitLab Pre-Auth 远程命令执行',
+        'CVE-2021-22214': 'Gitlab CI Lint API未授权 SSRF',
+    },
+    'Grafana': {'CVE-2021-43798': 'Grafana 8.x 插件模块路径遍历',},
+    'Influxdb': 'influxdb 未授权访问',
+    'Jenkins': {'CVE-2018-1000861': 'jenkins 远程命令执行',},
+    'Jetty': {
+        'CVE-2021-28164': 'jetty 模糊路径信息泄露',
+        'CVE-2021-28169': 'jetty Utility Servlets ConcatServlet 双重解码信息泄露',
+        'CVE-2021-34429': 'jetty 模糊路径信息泄露',
+    },
+    'Jupyter': 'Jupyter 未授权访问',
+    'Keycloak': {'CVE-2020-10770': '使用request_uri调用未经验证的URL',},
+    'Landray': {'CNVD-2021-28277': '蓝凌OA 任意文件读取/SSRF',},
+    'Mini Httpd': {'CVE-2018-18778': 'mini_httpd 任意文件读取',},
+    'mongo-express': {'CVE-2019-10758': '未授权远程代码执行',},
+    'Nexus Repository': {
+        'CVE-2019-5475': '2.x yum插件 远程命令执行',
+        'CVE-2019-7238': '3.x 远程命令执行',
+        'CVE-2019-15588': '2019-5475的绕过',
+        'CVE-2020-10199': '3.x 远程命令执行',
+        'CVE-2020-10204': '3.x 远程命令执行',
+    },
+    'Nodejs': {
+        'CVE-2017-14849': 'Node.js目录穿越',
+        'CVE-2021-21315': 'Node.js命令执行',
+    },
+    'NodeRED': {'CVE-2021-3223': 'Node-RED 任意文件读取',},
+    'phpMyadmin': {
+        'WooYun-2016-199433': 'phpMyadmin Scripts/setup.php 反序列化',
+        'CVE-2018-12613': 'phpMyadmin 4.8.1 远程文件包含',
+    },
+    'PHPUnit': {'CVE-2017-9841': 'PHPUnit 远程代码执行',},
+    'Ruby on Rails': {
+        'CVE-2018-3760': 'Ruby on Rails 路径遍历',
+        'CVE-2019-5418': 'Ruby on Rails 任意文件读取',
+        'CVE-2020-8163': 'Ruby on Rails 命令执行',
+    },
+    'ShowDoc': {'CNVD-2020-26585': 'ShowDoc 任意文件上传',},
+    'Spring': {
+        'CVE-2016-4977': 'Spring Security OAuth2 远程命令执行',
+        'CVE-2017-8046': 'Spring Data Rest 远程命令执行',
+        'CVE-2018-1273': 'Spring Data Commons 远程命令执行',
+        'CVE-2020-5410': 'Spring Cloud目录遍历',
+        'CVE-2021-21234': 'Spring Boot目录遍历',
+        'CVE-2022-22947': 'Spring Cloud Gateway SpEl远程代码执行',
+        'CVE-2022-22963': 'Spring Cloud Function SpEL远程代码执行',
+        'CVE-2022-22965': 'Spring Framework远程代码执行',
+    },
+    'ThinkPHP': {
+        'CVE-2018-1002015': 'ThinkPHP5.x 远程代码执行',
+        'CNVD-2018-24942': '未开启强制路由导致RCE',
+        'CNNVD-201901-445': '核心类Request远程代码执行',
+        '2.x RCE': 'ThinkPHP2.x 远程代码执行',
+        '5 ids sqlinject': 'ThinkPHP5 ids参数SQL注入',
+    },
+    'Ueditor': 'Ueditor编辑器SSRF',
+    'Oracle Weblogic': {
+        'CVE-2014-4210': 'Weblogic 服务端请求伪造',
+        'CVE-2017-10271': 'Weblogic XMLDecoder反序列化',
+        'CVE-2019-2725': 'Weblogic wls9_async反序列化',
+        'CVE-2020-14750': 'Weblogic 权限验证绕过',
+        'CVE-2020-14882': 'Weblogic 未授权命令执行',
+    },
+    'Webmin': {
+        'CVE-2019-15107': 'Webmin Pre-Auth 远程代码执行',
+        'CVE-2019-15642': 'Webmin 远程代码执行',
+    },
+    'Yonyou': {
+        'CNNVD-201610-923': '用友GRP-U8 Proxy SQL注入',
+        'CNVD-2021-30167': '用友NC BeanShell远程命令执行',
+        'NCFindWeb': '用友ERP-NC NCFindWeb目录遍历',
+        'getSessionList.jsp': '用友U8 OA getSessionList.jsp 敏感信息泄漏',
+        'test.jsp': '用友U8 OA test.jsp SQL注入',
+    }
+}
+
+# ! ------------------------------------------------------------
+
+# * --list的英文
+lang['en_us']['list'] = {
+    'Alibaba Druid': 'Alibaba Druid unAuthorized',
+    'Alibaba Nacos': {'CVE-2021-29441': 'Alibaba Nacos unAuthorized'},
+    'Apache Airflow': {'CVE-2020-17526': 'Apache Airflow Authentication bypass'},
+    'Apache APISIX': {'CVE-2020-13945': 'Apache APISIX default access token',},
+    'Apache Flink': {'CVE-2020-17519': 'Apache Flink Directory traversal',},
+    'Apache Hadoop': 'Apache Hadoop YARN ResourceManager unAuthorized',
+    'Apache Httpd': {
+        'CVE-2021-40438': 'Apache HTTP Server 2.4.48 mod_proxy SSRF',
+        'CVE-2021-41773': 'Apache HTTP Server 2.4.49 Directory traversal',
+        'CVE-2021-42013': 'Apache HTTP Server 2.4.50 Directory traversal',
+    },
+    'Apache SkyWalking': {'CVE-2020-9483': 'SkyWalking SQLinject',},
+    'Apache Solr': {
+        'CVE-2017-12629': 'Solr Remote code execution',
+        'CVE-2019-17558': 'Solr Remote Code Execution Via Velocity Custom Template',
+        'CVE-2021-27905': 'Solr SSRF/FileRead',
+    },
+    'Apache Struts2': {
+        'S2-001': 'Apache Struts2 Remote code execution',
+        'S2-005': 'Apache Struts2 Remote code execution',
+        'S2-007': 'Apache Struts2 Remote code execution',
+        'S2-008': 'Apache Struts2 Remote code execution',
+        'S2-009': 'Apache Struts2 Remote code execution',
+        'S2-012': 'Apache Struts2 Remote code execution',
+    },
+    'Apache Tomcat': {'CVE-2017-12615': 'Put method writes to any file',},
+    'AppWeb': {'CVE-2018-8715': 'AppWeb Authentication bypass',},
+    'Atlassian Confluence': {
+        'CVE-2015-8399': 'Confluence any file include',
+        'CVE-2019-3396': 'Confluence Directory traversal && RCE',
+        'CVE-2021-26084': 'Confluence OGNL expression command injection',
+        'CVE-2022-26134': 'Confluence Remote code execution',
+    },
+    'Cisco': {'CVE-2020-3580': 'Cisco ASA/FTD XSS',},
+    'Discuz': {'wooyun-2010-080723': 'Remote code execution',},
+    'Django': {
+        'CVE-2017-12794': 'Django debug page XSS',
+        'CVE-2018-14574': 'Django CommonMiddleware URL Redirect',
+        'CVE-2019-14234': 'Django JSONfield SQLinject',
+        'CVE-2020-9402': 'Django GIS SQLinject',
+        'CVE-2021-35042': 'Django QuerySet.order_by SQLinject',
+    },
+    'Drupal': {
+        'CVE-2014-3704': 'Drupal < 7.32 Drupalgeddon SQLinject',
+        'CVE-2017-6920': 'Drupal Core 8 PECL YAML Remote code execution',
+        'CVE-2018-7600': 'Drupal Drupalgeddon 2 Remote code execution',
+        'CVE-2018-7602': 'Drupal Remote code execution',
+    },
+    'ElasticSearch': {
+        'CVE-2014-3120': 'ElasticSearch Remote code execution',
+        'CVE-2015-1427': 'ElasticSearch Groovy Sandbox to bypass && RCE',
+        'CVE-2015-3337': 'ElasticSearch Directory traversal',
+        'CVE-2015-5531': 'ElasticSearch Directory traversal',
+    },
+    'F5 BIG-IP': {
+        'CVE-2020-5902': 'BIG-IP Remote code execution',
+        'CVE-2022-1388': 'BIG-IP Authentication bypass',
+    },
+    'Fastjson': {
+        'CNVD-2017-02833': 'Fastjson <= 1.2.24 deSerialization',
+        'CNVD-2019-22238': 'Fastjson <= 1.2.47 deSerialization',
+    },
+    'Gitea': 'Gitea 1.4.0 unAuthorized',
+    'Gitlab': {
+        'CVE-2021-22205': 'GitLab Pre-Auth Remote code execution',
+        'CVE-2021-22214': 'Gitlab CI Lint API SSRF',
+    },
+    'Grafana': {'CVE-2021-43798': 'Grafana 8.x Directory traversal',},
+    'Influxdb': 'influxdb unAuthorized',
+    'Jenkins': {'CVE-2018-1000861': 'jenkins Remote code execution',},
+    'Jetty': {
+        'CVE-2021-28164': 'jetty Disclosure information',
+        'CVE-2021-28169': 'jetty Servlets ConcatServlet Disclosure information',
+        'CVE-2021-34429': 'jetty Disclosure information',
+    },
+    'Jupyter': 'Jupyter unAuthorized',
+    'Keycloak': {'CVE-2020-10770': 'request_uri SSRF',},
+    'Landray': {'CNVD-2021-28277': 'Landray-OA FileRead/SSRF',},
+    'Mini Httpd': {'CVE-2018-18778': 'mini_httpd FileRead',},
+    'mongo-express': {'CVE-2019-10758': 'Remote code execution',},
+    'Nexus Repository': {
+        'CVE-2019-5475': '2.x yum Remote code execution',
+        'CVE-2019-7238': '3.x Remote code execution',
+        'CVE-2019-15588': '2019-5475 Bypass',
+        'CVE-2020-10199': '3.x Remote code execution',
+        'CVE-2020-10204': '3.x Remote code execution',
+    },
+    'Nodejs': {
+        'CVE-2017-14849': 'Node.js Directory traversal',
+        'CVE-2021-21315': 'Node.js Remote code execution',
+    },
+    'NodeRED': {'CVE-2021-3223': 'Node-RED Directory traversal',},
+    'phpMyadmin': {
+        'WooYun-2016-199433': 'phpMyadmin Scripts/setup.php Deserialization',
+        'CVE-2018-12613': 'phpMyadmin 4.8.1 Remote File Inclusion',
+    },
+    'PHPUnit': {'CVE-2017-9841': 'PHPUnit Remote code execution',},
+    'Ruby on Rails': {
+        'CVE-2018-3760': 'Ruby on Rails Directory traversal',
+        'CVE-2019-5418': 'Ruby on Rails FileRead',
+        'CVE-2020-8163': 'Ruby on Rails Remote code execution',
+    },
+    'ShowDoc': {'CNVD-2020-26585': 'ShowDoc writes to any file',},
+    'Spring': {
+        'CVE-2016-4977': 'Spring Security OAuth2 Remote Command Execution',
+        'CVE-2017-8046': 'Spring Data Rest Remote Command Execution',
+        'CVE-2018-1273': 'Spring Data Commons Remote Command Execution',
+        'CVE-2020-5410': 'Spring Cloud Directory traversal',
+        'CVE-2021-21234': 'Spring Boot Directory traversal',
+        'CVE-2022-22947': 'Spring Cloud Gateway SpEl Remote code execution',
+        'CVE-2022-22963': 'Spring Cloud Function SpEL Remote code execution',
+        'CVE-2022-22965': 'Spring Framework Remote code execution',
+    },
+    'ThinkPHP': {
+        'CVE-2018-1002015': 'ThinkPHP5.x Remote code execution',
+        'CNVD-2018-24942': 'The forced route is not enabled Remote code execution',
+        'CNNVD-201901-445': 'Core class Request Remote code execution',
+        '2.x RCE': 'ThinkPHP2.x Remote code execution',
+        '5 ids sqlinject': 'ThinkPHP5 ids SQLinject',
+    },
+    'Ueditor': 'Ueditor SSRF',
+    'Oracle Weblogic': {
+        'CVE-2014-4210': 'Weblogic SSRF',
+        'CVE-2017-10271': 'Weblogic XMLDecoder deSerialization',
+        'CVE-2019-2725': 'Weblogic wls9_async deSerialization',
+        'CVE-2020-14750': 'Weblogic Authentication bypass',
+        'CVE-2020-14882': 'Weblogic Unauthorized command execution',
+    },
+    'Webmin': {
+        'CVE-2019-15107': 'Webmin Pre-Auth Remote code execution',
+        'CVE-2019-15642': 'Webmin Remote code execution',
+    },
+    'Yonyou': {
+        'CNNVD-201610-923': 'Yonyou-GRP-U8 Proxy SQLinject',
+        'CNVD-2021-30167': 'Yonyou-NC BeanShell Remote code execution',
+        'NCFindWeb': 'Yonyou-ERP-NC NCFindWeb Directory traversal',
+        'getSessionList.jsp': 'Yonyou-U8-OA getSessionList.jsp Disclosure information',
+        'test.jsp': 'Yonyou-U8-OA test.jsp SQLinject',
     }
 }

@@ -72,10 +72,10 @@ class WebappIdentify():
                                 new_app_list.append(web_fp['name'])                   # * 识别出框架, 则添加相应POC
                                 continue
                 except requests.ConnectTimeout:
-                    # logger.info('red_ex', self.lang['core']['web_finger']['web_timeout'])
+                    logger.info('red_ex', self.lang['core']['web_finger']['web_timeout'])
                     continue
                 except requests.ConnectionError:
-                    # logger.info('red_ex', self.lang['core']['web_finger']['web_conn_error'])
+                    logger.info('red_ex', self.lang['core']['web_finger']['web_conn_error'])
                     continue
                 except KeyboardInterrupt:
                     if self.stop():
@@ -175,6 +175,15 @@ class WebappIdentify():
                     r'Apache2 server after installation on Debian systems.*it means that the Apache HTTP server installed',
                     r'The configuration layout for an Apache2 web server installation on Debian systems is as follows:',
                     r'Apache2 package with Debian\. However, check.*existing bug reports'
+                ]
+            },
+            {
+                'name': 'skywalking',
+                'path': '',
+                'data': '',
+                'fingerprint': [
+                    r"<strong>We're sorry but SkyWalking doesn't work properly without JavaScript enabled\. Please enable it to continue\.</strong>",
+                    r"We're sorry but SkyWalking doesn't work properly without JavaScript enabled\."
                 ]
             },
             {
@@ -389,7 +398,7 @@ class WebappIdentify():
                 'path': '',
                 'data': '',
                 'fingerprint': [
-                    r'<hr><a href="https://eclipse\.org/jetty">Powered by Jetty:// .{0,30}</a><hr/>'
+                    r'<hr><a href="https?://eclipse\.org/jetty">Powered by Jetty:// .{0,30}</a><hr/>'
                 ]
             },
             {
@@ -479,6 +488,22 @@ class WebappIdentify():
                     r'rel="mask-icon" href="red&#x2F;images&#x2F;node-red-icon-black\.svg"',
                     r'rel="mask-icon" href="red/images/node-red-icon-black\.svg"',
                     r'<title>Node-RED</title>'
+                ]
+            },
+            {
+                'name': 'phpmyadmin',
+                'path': '',
+                'data': '',
+                'fingerprint': [
+                    r'<link rel="stylesheet" type="text/css" href="phpmyadmin\.css\.php\?server=1&amp;token=.{32}&amp;nocache=.{0,15}" />',
+                    r'<a href="\./url\.php\?url=http%3A%2F%2Fwiki\.phpmyadmin\.net%2F&amp;token=.{32}" target="_blank">',
+                    r'<a href="\./url\.php\?url=http%3A%2F%2Fwww\.phpMyAdmin\.net%2F&amp;token=.{32}" target="_blank">',
+                    r'<a href="\./url\.php\?url=http%3A%2F%2Fwww\.phpmyadmin\.net%2Fhome_page%2Fimprove\.php&amp;token=.{32}" target="_blank">',
+                    r'<a href="\./url\.php\?url=http%3A%2F%2Fwww\.phpmyadmin\.net%2Fhome_page%2Fsupport\.php&amp;token=.{32}" target="_blank">',
+                    r'<a href="index\.php\?db=&amp;table=&amp;server=1&amp;target=&amp;token=.{32}" title="打开新 phpMyAdmin 窗口" target="_blank">',
+                    r'<img src="themes/dot\.gif" title="打开新 phpMyAdmin 窗口" alt="打开新 phpMyAdmin 窗口" class="icon ic_window-new" />',
+                    r'<a href="\./url\.php\?url=https%3A%2F%2Fwww\.phpmyadmin\.net%2F" target="_blank" rel="noopener noreferrer">',
+                    r'<link rel="stylesheet" type="text/css" href="phpmyadmin\.css\.php\?nocache=.{0,15}&amp;server=1" />'
                 ]
             },
             {

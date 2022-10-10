@@ -2,13 +2,29 @@
 # -*- coding:utf-8 -*-
 
 from lib.tool import color
+from lib.initial.language import language
 import sys
+
+list_lang = language()['list']
+description_t = '\t'            # * 中英文标题的长度不一样, 中文需要添加一个\t才能对齐
+
+# * ---横线长度---
+Target_len_ = '-' * 22
+Vul_id_len_ = '-' * 20
+Type_len_ = '-' * 14
+Description_len_ = '-' * 68
+
+# * 中英文长度的处理
+if ('Alibaba Druid unAuthorized' in list_lang['Alibaba Druid']):
+    Description_len_ = '-' * 60
+    description_t = ''
 
 def list():
     ''' 显示漏洞列表 '''
     vul_num = 0
     vul_list = ''
-    vul_list += '+' + ('-'*22) + '+' + ('-'*20) + '+' + ('-'*14) + '+' + ('-'*68) + '+\n'
+    
+    vul_list += '+' + Target_len_ + '+' + Vul_id_len_ + '+' + Type_len_ + '+' + Description_len_ + '+\n'
 
     for vul in vul_info:
         for info in vul_info[vul]:
@@ -18,9 +34,9 @@ def list():
             vul_list += ' {}|'.format(info['type'].ljust(13))
             vul_list += ' {}\t|'.format(info['description'].ljust(57))
             vul_list += '\n'
-        vul_list += '+' + ('-'*22) + '+' + ('-'*20) + '+' + ('-'*14) + '+' + ('-'*68) + '+\n'
+        vul_list += '+' + Target_len_ + '+' + Vul_id_len_ + '+' + Type_len_ + '+' + Description_len_ + '+\n'
 
-    print(color.cyan(vul_list + str(vul_num - 1)))
+    print(color.cyan(vul_list + str(vul_num - 1) + '/vulcat-1.1.4/2022.10'))
     # print(vul_num)
     sys.exit(0)
 
@@ -29,321 +45,338 @@ vul_info = {
         {
             'vul_id': 'Vul_id',
             'type': 'Type',
-            'description': 'Description\t'
+            'description': 'Description' + description_t
         }
     ],
     'Alibaba Druid': [
         {
             'vul_id': 'None',
             'type': 'unAuth',
-            'description': '阿里巴巴Druid未授权访问'
+            'description': list_lang['Alibaba Druid']
         }
     ],
     'Alibaba Nacos': [
         {
             'vul_id': 'CVE-2021-29441',
             'type': 'unAuth',
-            'description': '阿里巴巴Nacos未授权访问'
+            'description': list_lang['Alibaba Nacos']['CVE-2021-29441']
         }
     ],
     'Apache Airflow': [
         {
             'vul_id': 'CVE-2020-17526',
             'type': 'unAuth',
-            'description': 'Airflow身份验证绕过'
+            'description': list_lang['Apache Airflow']['CVE-2020-17526']
         }
     ],
     'Apache APISIX': [
         {
             'vul_id': 'CVE-2020-13945',
             'type': 'unAuth',
-            'description': 'Apache APISIX默认密钥'
+            'description': list_lang['Apache APISIX']['CVE-2020-13945']
         }
     ],
     'Apache Flink': [
         {
             'vul_id': 'CVE-2020-17519',
             'type': 'FileRead',
-            'description': 'Flink目录遍历'
+            'description': list_lang['Apache Flink']['CVE-2020-17519']
         }
     ],
     'Apache Hadoop': [
         {
             'vul_id': 'None',
             'type': 'unAuth',
-            'description': 'Hadoop YARN ResourceManager 未授权访问'
+            'description': list_lang['Apache Hadoop']
         }
     ],
     'Apache Httpd': [
         {
             'vul_id': 'CVE-2021-40438',
             'type': 'SSRF',
-            'description': 'Apache HTTP Server 2.4.48 mod_proxy SSRF                   '
+            'description': list_lang['Apache Httpd']['CVE-2021-40438']
         },
         {
             'vul_id': 'CVE-2021-41773',
             'type': 'FileRead/RCE',
-            'description': 'Apache HTTP Server 2.4.49 路径遍历'
+            'description': list_lang['Apache Httpd']['CVE-2021-41773']
         },
         {
             'vul_id': 'CVE-2021-42013',
             'type': 'FileRead/RCE',
-            'description': 'Apache HTTP Server 2.4.50 路径遍历'
+            'description': list_lang['Apache Httpd']['CVE-2021-42013']
+        }
+    ],
+    'Apache SkyWalking': [
+        {
+            'vul_id': 'CVE-2020-9483',
+            'type': 'SQLinject',
+            'description': list_lang['Apache SkyWalking']['CVE-2020-9483']
         }
     ],
     'Apache Solr': [
         {
+            'vul_id': 'CVE-2017-12629',
+            'type': 'RCE',
+            'description': list_lang['Apache Solr']['CVE-2017-12629']
+        },
+        {
+            'vul_id': 'CVE-2019-17558',
+            'type': 'RCE',
+            'description': list_lang['Apache Solr']['CVE-2019-17558']
+        },
+        {
             'vul_id': 'CVE-2021-27905',
             'type': 'SSRF',
-            'description': 'Solr SSRF/任意文件读取'
-        }
+            'description': list_lang['Apache Solr']['CVE-2021-27905']
+        },
     ],
     'Apache Struts2': [
         {
             'vul_id': 'S2-001',
             'type': 'RCE',
-            'description': 'Struts2远程代码执行'
+            'description': list_lang['Apache Struts2']['S2-001']
         },
         {
             'vul_id': 'S2-005',
             'type': 'RCE',
-            'description': 'Struts2远程代码执行'
+            'description': list_lang['Apache Struts2']['S2-005']
         },
         {
             'vul_id': 'S2-007',
             'type': 'RCE',
-            'description': 'Struts2远程代码执行'
+            'description': list_lang['Apache Struts2']['S2-007']
         },
         {
             'vul_id': 'S2-008',
             'type': 'RCE',
-            'description': 'Struts2远程代码执行'
+            'description': list_lang['Apache Struts2']['S2-008']
         },
         {
             'vul_id': 'S2-009',
             'type': 'RCE',
-            'description': 'Struts2远程代码执行'
+            'description': list_lang['Apache Struts2']['S2-009']
         },
         {
             'vul_id': 'S2-012',
             'type': 'RCE',
-            'description': 'Struts2远程代码执行'
+            'description': list_lang['Apache Struts2']['S2-012']
         }
     ],
     'Apache Tomcat': [
         {
             'vul_id': 'CVE-2017-12615',
             'type': 'FileUpload',
-            'description': 'PUT方法任意文件写入'
+            'description': list_lang['Apache Tomcat']['CVE-2017-12615']
         }
     ],
     'AppWeb': [
         {
             'vul_id': 'CVE-2018-8715',
             'type': 'unAuth',
-            'description': 'AppWeb身份认证绕过'
+            'description': list_lang['AppWeb']['CVE-2018-8715']
         }
     ],
     'Atlassian Confluence': [
         {
             'vul_id': 'CVE-2015-8399',
             'type': 'FileRead',
-            'description': 'Confluence任意文件包含'
+            'description': list_lang['Atlassian Confluence']['CVE-2015-8399']
         },
         {
             'vul_id': 'CVE-2019-3396',
             'type': 'RCE/FileRead',
-            'description': 'Confluence路径遍历和命令执行'
+            'description': list_lang['Atlassian Confluence']['CVE-2019-3396']
         },
         {
             'vul_id': 'CVE-2021-26084',
             'type': 'RCE',
-            'description': 'Confluence Webwork Pre-Auth OGNL表达式命令注入'
+            'description': list_lang['Atlassian Confluence']['CVE-2021-26084']
         },
         {
             'vul_id': 'CVE-2022-26134',
             'type': 'RCE',
-            'description': 'Confluence远程代码执行'
+            'description': list_lang['Atlassian Confluence']['CVE-2022-26134']
         }
     ],
     'Cisco': [
         {
             'vul_id': 'CVE-2020-3580',
             'type': 'XSS',
-            'description': '思科ASA/FTD XSS跨站脚本攻击'
+            'description': list_lang['Cisco']['CVE-2020-3580']
         }
     ],
     'Discuz': [
         {
             'vul_id': 'wooyun-2010-080723',
             'type': 'RCE',
-            'description': '全局变量防御绕过RCE'
+            'description': list_lang['Discuz']['wooyun-2010-080723']
         }
     ],
     'Django': [
         {
             'vul_id': 'CVE-2017-12794',
             'type': 'XSS',
-            'description': 'debug page XSS跨站脚本攻击'
+            'description': list_lang['Django']['CVE-2017-12794']
         },
         {
             'vul_id': 'CVE-2018-14574',
             'type': 'Redirect',
-            'description': 'CommonMiddleware url重定向'
+            'description': list_lang['Django']['CVE-2018-14574']
         },
         {
             'vul_id': 'CVE-2019-14234',
             'type': 'SQLinject',
-            'description': 'JSONfield SQL注入'
+            'description': list_lang['Django']['CVE-2019-14234']
         },
         {
             'vul_id': 'CVE-2020-9402',
             'type': 'SQLinject',
-            'description': 'GIS SQL注入'
+            'description': list_lang['Django']['CVE-2020-9402']
         },
         {
             'vul_id': 'CVE-2021-35042',
             'type': 'SQLinject',
-            'description': 'QuerySet.order_by SQL注入'
+            'description': list_lang['Django']['CVE-2021-35042']
         }
     ],
     'Drupal': [
         {
             'vul_id': 'CVE-2014-3704',
             'type': 'SQLinject',
-            'description': 'Drupal < 7.32 Drupalgeddon SQL 注入'
+            'description': list_lang['Drupal']['CVE-2014-3704']
         },
         {
             'vul_id': 'CVE-2017-6920',
             'type': 'RCE',
-            'description': 'Drupal Core 8 PECL YAML 反序列化代码执行'
+            'description': list_lang['Drupal']['CVE-2017-6920']
         },
         {
             'vul_id': 'CVE-2018-7600',
             'type': 'RCE',
-            'description': 'Drupal Drupalgeddon 2 远程代码执行'
+            'description': list_lang['Drupal']['CVE-2018-7600']
         },
         {
             'vul_id': 'CVE-2018-7602',
             'type': 'RCE',
-            'description': 'Drupal 远程代码执行'
+            'description': list_lang['Drupal']['CVE-2018-7602']
         }
     ],
     'ElasticSearch': [
         {
             'vul_id': 'CVE-2014-3120',
             'type': 'RCE',
-            'description': 'ElasticSearch命令执行'
+            'description': list_lang['ElasticSearch']['CVE-2014-3120']
         },
         {
             'vul_id': 'CVE-2015-1427',
             'type': 'RCE',
-            'description': 'ElasticSearch Groovy 沙盒绕过&&代码执行'
+            'description': list_lang['ElasticSearch']['CVE-2015-1427']
         },
         {
             'vul_id': 'CVE-2015-3337',
             'type': 'FileRead',
-            'description': 'ElasticSearch 目录穿越'
+            'description': list_lang['ElasticSearch']['CVE-2015-3337']
         },
         {
             'vul_id': 'CVE-2015-5531',
             'type': 'FileRead',
-            'description': 'ElasticSearch 目录穿越'
+            'description': list_lang['ElasticSearch']['CVE-2015-5531']
         },
     ],
     'F5 BIG-IP': [
         {
             'vul_id': 'CVE-2020-5902',
             'type': 'RCE',
-            'description': 'BIG-IP远程代码执行'
+            'description': list_lang['F5 BIG-IP']['CVE-2020-5902']
         },
         {
             'vul_id': 'CVE-2022-1388',
             'type': 'unAuth',
-            'description': 'BIG-IP身份认证绕过'
+            'description': list_lang['F5 BIG-IP']['CVE-2020-5902']
         }
     ],
     'Fastjson': [
         {
             'vul_id': 'CNVD-2017-02833',
             'type': 'unSerialize',
-            'description': 'Fastjson <= 1.2.24 反序列化'
+            'description': list_lang['Fastjson']['CNVD-2017-02833']
         },
         {
             'vul_id': 'CNVD-2019-22238',
             'type': 'unSerialize',
-            'description': 'Fastjson <= 1.2.47 反序列化'
+            'description': list_lang['Fastjson']['CNVD-2019-22238']
         }
     ],
     'Gitea': [
         {
             'vul_id': 'None',
             'type': 'unAuth',
-            'description': 'Gitea 1.4.0 未授权访问'
+            'description': list_lang['Gitea']
         },
     ],
     'Gitlab': [
         {
             'vul_id': 'CVE-2021-22205',
             'type': 'RCE',
-            'description': 'GitLab Pre-Auth 远程命令执行'
+            'description': list_lang['Gitlab']['CVE-2021-22205']
         },
         {
             'vul_id': 'CVE-2021-22214',
             'type': 'SSRF',
-            'description': 'Gitlab CI Lint API未授权 SSRF'
+            'description': list_lang['Gitlab']['CVE-2021-22214']
         }
     ],
     'Grafana': [
         {
             'vul_id': 'CVE-2021-43798',
             'type': 'FileRead',
-            'description': 'Grafana 8.x 插件模块路径遍历'
+            'description': list_lang['Grafana']['CVE-2021-43798']
         },
     ],
     'Influxdb': [
         {
             'vul_id': 'None',
             'type': 'unAuth',
-            'description': 'influxdb 未授权访问'
+            'description': list_lang['Influxdb']
         },
     ],
     'Jenkins': [
         {
             'vul_id': 'CVE-2018-1000861',
             'type': 'RCE',
-            'description': 'jenkins 远程命令执行'
+            'description': list_lang['Jenkins']['CVE-2018-1000861']
         }
     ],
     'Jetty': [
         {
             'vul_id': 'CVE-2021-28164',
             'type': 'DSinfo',
-            'description': 'jetty 模糊路径信息泄露'
+            'description': list_lang['Jetty']['CVE-2021-28164']
         },
         {
             'vul_id': 'CVE-2021-28169',
             'type': 'DSinfo',
-            'description': 'jetty Utility Servlets ConcatServlet 双重解码信息泄露'
+            'description': list_lang['Jetty']['CVE-2021-28169']
         },
         {
             'vul_id': 'CVE-2021-34429',
             'type': 'DSinfo',
-            'description': 'jetty 模糊路径信息泄露'
+            'description': list_lang['Jetty']['CVE-2021-34429']
         }
     ],
     'Jupyter': [
         {
             'vul_id': 'None',
             'type': 'unAuth',
-            'description': 'Jupyter 未授权访问'
+            'description': list_lang['Jupyter']
         }
     ],
     'Keycloak': [
         {
             'vul_id': 'CVE-2020-10770',
             'type': 'SSRF',
-            'description': '使用request_uri调用未经验证的URL'
+            'description': list_lang['Keycloak']['CVE-2020-10770']
         }
     ],
     # 'Kindeditor': [
@@ -351,225 +384,259 @@ vul_info = {
     #         'vul_id': 'CVE-2018-18950',
     #         'type': 'FileRead',
     #         'method': 'GET',
-    #         'description': 'Kindeditor 目录遍历'
+    #         'description': list_lang['']['']
     #     }
     # ],
     'Landray': [
         {
             'vul_id': 'CNVD-2021-28277',
             'type': 'FileRead/SSRF',
-            'description': '蓝凌OA 任意文件读取/SSRF'
+            'description': list_lang['Landray']['CNVD-2021-28277']
         }
     ],
     'Mini Httpd': [
         {
             'vul_id': 'CVE-2018-18778',
             'type': 'FileRead',
-            'description': 'mini_httpd 任意文件读取'
+            'description': list_lang['Mini Httpd']['CVE-2018-18778']
         }
     ],
     'mongo-express': [
         {
             'vul_id': 'CVE-2019-10758',
             'type': 'RCE',
-            'description': '未授权远程代码执行'
+            'description': list_lang['mongo-express']['CVE-2019-10758']
         }
     ],
     'Nexus Repository': [
         {
             'vul_id': 'CVE-2019-5475',
             'type': 'RCE',
-            'description': '2.x yum插件 远程命令执行'
+            'description': list_lang['Nexus Repository']['CVE-2019-5475']
         },
         {
             'vul_id': 'CVE-2019-7238',
             'type': 'RCE',
-            'description': '3.x 远程命令执行'
+            'description': list_lang['Nexus Repository']['CVE-2019-7238']
         },
         {
             'vul_id': 'CVE-2019-15588',
             'type': 'RCE',
-            'description': '2019-5475的绕过'
+            'description': list_lang['Nexus Repository']['CVE-2019-15588']
         },
         {
             'vul_id': 'CVE-2020-10199',
             'type': 'RCE',
-            'description': '3.x 远程命令执行'
+            'description': list_lang['Nexus Repository']['CVE-2020-10199']
         },
         {
             'vul_id': 'CVE-2020-10204',
             'type': 'RCE',
-            'description': '3.x 远程命令执行'
+            'description': list_lang['Nexus Repository']['CVE-2020-10204']
         }
     ],
     'Nodejs': [
         {
             'vul_id': 'CVE-2017-14849',
             'type': 'FileRead',
-            'description': 'Node.js目录穿越'
+            'description': list_lang['Nodejs']['CVE-2017-14849']
         },
         {
             'vul_id': 'CVE-2021-21315',
             'type': 'RCE',
-            'description': 'Node.js命令执行'
+            'description': list_lang['Nodejs']['CVE-2021-21315']
         }
     ],
     'NodeRED': [
         {
             'vul_id': 'CVE-2021-3223',
             'type': 'FileRead',
-            'description': 'Node-RED 任意文件读取'
+            'description': list_lang['NodeRED']['CVE-2021-3223']
+        }
+    ],
+    'phpMyadmin': [
+        {
+            'vul_id': 'WooYun-2016-199433',
+            'type': 'unSerialize',
+            'description': list_lang['phpMyadmin']['WooYun-2016-199433']
+        },
+        {
+            'vul_id': 'CVE-2018-12613',
+            'type': 'FileInclude',
+            'description': list_lang['phpMyadmin']['CVE-2018-12613']
+        },
+    ],
+    'PHPUnit': [
+        {
+            'vul_id': 'CVE-2017-9841',
+            'type': 'RCE',
+            'description': list_lang['PHPUnit']['CVE-2017-9841']
         }
     ],
     'Ruby on Rails': [
         {
             'vul_id': 'CVE-2018-3760',
             'type': 'FileRead',
-            'description': 'Ruby on Rails 路径遍历'
+            'description': list_lang['Ruby on Rails']['CVE-2018-3760']
         },
         {
             'vul_id': 'CVE-2019-5418',
             'type': 'FileRead',
-            'description': 'Ruby on Rails 任意文件读取'
+            'description': list_lang['Ruby on Rails']['CVE-2019-5418']
         },
         {
             'vul_id': 'CVE-2020-8163',
             'type': 'RCE',
-            'description': 'Ruby on Rails 命令执行'
+            'description': list_lang['Ruby on Rails']['CVE-2020-8163']
         }
     ],
     'ShowDoc': [
         {
             'vul_id': 'CNVD-2020-26585',
             'type': 'FileUpload',
-            'description': 'ShowDoc 任意文件上传'
+            'description': list_lang['ShowDoc']['CNVD-2020-26585']
         }
     ],
     'Spring': [
         {
+            'vul_id': 'CVE-2016-4977',
+            'type': 'RCE',
+            'description': list_lang['Spring']['CVE-2016-4977']
+        },
+        {
+            'vul_id': 'CVE-2017-8046',
+            'type': 'RCE',
+            'description': list_lang['Spring']['CVE-2017-8046']
+        },
+        {
+            'vul_id': 'CVE-2018-1273',
+            'type': 'RCE',
+            'description': list_lang['Spring']['CVE-2018-1273']
+        },
+        {
             'vul_id': 'CVE-2020-5410',
             'type': 'FileRead',
-            'description': 'Spring Cloud目录遍历'
+            'description': list_lang['Spring']['CVE-2020-5410']
         },
         {
             'vul_id': 'CVE-2021-21234',
             'type': 'FileRead',
-            'description': 'Spring Boot目录遍历'
+            'description': list_lang['Spring']['CVE-2021-21234']
         },
         {
             'vul_id': 'CVE-2022-22947',
             'type': 'RCE',
-            'description': 'Spring Cloud Gateway SpEl远程代码执行'
+            'description': list_lang['Spring']['CVE-2022-22947']
         },
         {
             'vul_id': 'CVE-2022-22963',
             'type': 'RCE',
-            'description': 'Spring Cloud Function SpEL远程代码执行'
+            'description': list_lang['Spring']['CVE-2022-22963']
         },
         {
             'vul_id': 'CVE-2022-22965',
             'type': 'RCE',
-            'description': 'Spring Framework远程代码执行'
-        }
+            'description': list_lang['Spring']['CVE-2022-22965']
+        },
     ],
     'ThinkPHP': [
         {
             'vul_id': 'CVE-2018-1002015',
             'type': 'RCE',
-            'description': 'ThinkPHP5.x 远程代码执行'
+            'description': list_lang['ThinkPHP']['CVE-2018-1002015']
         },
         {
             'vul_id': 'CNVD-2018-24942',
             'type': 'RCE',
-            'description': '未开启强制路由导致RCE'
+            'description': list_lang['ThinkPHP']['CNVD-2018-24942']
         },
         {
             'vul_id': 'CNNVD-201901-445',
             'type': 'RCE',
-            'description': '核心类Request远程代码执行'
+            'description': list_lang['ThinkPHP']['CNNVD-201901-445']
         },
         {
             'vul_id': 'None',
             'type': 'RCE',
-            'description': 'ThinkPHP2.x 远程代码执行'
+            'description': list_lang['ThinkPHP']['2.x RCE']
         },
         {
             'vul_id': 'None',
             'type': 'SQLinject',
-            'description': 'ThinkPHP5 ids参数SQL注入'
+            'description': list_lang['ThinkPHP']['5 ids sqlinject']
         }
     ],
     'Ueditor': [
         {
             'vul_id': 'None',
             'type': 'SSRF',
-            'description': 'Ueditor编辑器SSRF'
+            'description': list_lang['Ueditor']
         }
     ],
     'Oracle Weblogic': [
         {
             'vul_id': 'CVE-2014-4210',
             'type': 'SSRF',
-            'description': 'Weblogic 服务端请求伪造'
+            'description': list_lang['Oracle Weblogic']['CVE-2014-4210']
         },
         {
             'vul_id': 'CVE-2017-10271',
             'type': 'unSerialize',
-            'description': 'Weblogic XMLDecoder反序列化'
+            'description': list_lang['Oracle Weblogic']['CVE-2017-10271']
         },
         {
             'vul_id': 'CVE-2019-2725',
             'type': 'unSerialize',
-            'description': 'Weblogic wls9_async反序列化'
+            'description': list_lang['Oracle Weblogic']['CVE-2019-2725']
         },
         {
             'vul_id': 'CVE-2020-14750',
             'type': 'unAuth',
-            'description': 'Weblogic 权限验证绕过'
+            'description': list_lang['Oracle Weblogic']['CVE-2020-14750']
         },
         {
             'vul_id': 'CVE-2020-14882',
             'type': 'RCE',
-            'description': 'Weblogic 未授权命令执行'
+            'description': list_lang['Oracle Weblogic']['CVE-2020-14882']
         }
     ],
     'Webmin': [
         {
             'vul_id': 'CVE-2019-15107',
             'type': 'RCE',
-            'description': 'Webmin Pre-Auth 远程代码执行'
+            'description': list_lang['Webmin']['CVE-2019-15107']
         },
         {
             'vul_id': 'CVE-2019-15642',
             'type': 'RCE',
-            'description': 'Webmin 远程代码执行'
+            'description': list_lang['Webmin']['CVE-2019-15642']
         }
     ],
     'Yonyou': [
         {
             'vul_id': 'CNNVD-201610-923',
             'type': 'SQLinject',
-            'description': '用友GRP-U8 Proxy SQL注入'
+            'description': list_lang['Yonyou']['CNNVD-201610-923']
         },
         {
             'vul_id': 'CNVD-2021-30167',
             'type': 'RCE',
-            'description': '用友NC BeanShell远程命令执行'
+            'description': list_lang['Yonyou']['CNVD-2021-30167']
         },
         {
             'vul_id': 'None',
             'type': 'FileRead',
-            'description': '用友ERP-NC NCFindWeb目录遍历'
+            'description': list_lang['Yonyou']['NCFindWeb']
         },
         {
             'vul_id': 'None',
             'type': 'DSinfo',
-            'description': '用友U8 OA getSessionList.jsp 敏感信息泄漏'
+            'description': list_lang['Yonyou']['getSessionList.jsp']
         },
         {
             'vul_id': 'None',
             'type': 'SQLinject',
-            'description': '用友U8 OA test.jsp SQL注入'
+            'description': list_lang['Yonyou']['test.jsp']
         }
     ]
 }

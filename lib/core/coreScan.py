@@ -10,6 +10,7 @@ from lib.report import output
 
 from lib.plugins.fingerprint.waf import waf
 from lib.plugins.fingerprint.webapp import webapp
+from lib.plugins.exploit import exploit
 
 from payloads.AlibabaDruid import alidruid
 from payloads.AlibabaNacos import nacos
@@ -21,7 +22,7 @@ from payloads.ApacheHttpd import httpd
 from payloads.ApacheSkyWalking import skywalking
 from payloads.ApacheSolr import solr
 from payloads.ApacheTomcat import tomcat
-from payloads.ApacheStruts2 import struts2
+# from payloads.ApacheStruts2 import struts2        # 2022/11/04被移除
 from payloads.AppWeb import appweb
 from payloads.AtlassianConfluence import confluence
 from payloads.Cisco import cisco
@@ -39,7 +40,7 @@ from payloads.Jenkins import jenkins
 from payloads.Jetty import jetty
 from payloads.Jupyter import jupyter
 from payloads.Keycloak import keycloak
-# from payloads.Kindeditor import kindeditor
+# from payloads.Kindeditor import kindeditor        # 还未测试poc准确性
 from payloads.Landray import landray
 from payloads.MiniHttpd import minihttpd
 from payloads.MongoExpress import mongoexpress
@@ -51,6 +52,7 @@ from payloads.phpUint import phpunit
 from payloads.RubyOnRails import rails
 from payloads.ShowDoc import showdoc
 from payloads.Spring import spring
+from payloads.Supervisor import supervisor
 from payloads.ThinkPHP import thinkphp
 from payloads.Ueditor import ueditor
 from payloads.Weblogic import weblogic
@@ -74,6 +76,7 @@ class coreScan():
         self.batch = config.get('batch')                                                            # * 是否启用默认选项
         self.no_waf = config.get('no_waf')                                                          # * 是否启用WAF指纹识别
         self.no_poc = config.get('no_poc')                                                          # * 是否启用WAF指纹识别
+        self.exp = config.get('exp')
 
         self.thread_list = []                                                                       # * 已经运行的线程列表
         self.results = []                                                                           # * 结果列表
@@ -88,6 +91,10 @@ class coreScan():
             if (('http://' not in u[0:10]) and ('https://' not in u[0:10])):
                 logger.info('red_ex', self.lang['core']['start']['url_error'].format(u))
                 continue
+
+            if self.exp and (not self.vuln):
+                logger.info('yellow_ex', self.lang['core']['start']['exp'])                            # ? 提示, 使用exp之前 请先使用-a和-v参数指定一个漏洞
+                break
 
             logger.info('green_ex', self.lang['core']['start']['start'] + u)                           # ? 提示, 开始扫描当前url
 
@@ -137,7 +144,7 @@ class coreScan():
                 continue
 
             if self.no_poc:
-                logger.info('red', self.lang['core']['start']['no_poc'])
+                logger.info('red', self.lang['core']['start']['no_poc'])                            # ? 提示, 不进行漏洞扫描
                 continue
 
             if check.check_connect(u):
@@ -232,6 +239,15 @@ class coreScan():
 
                 return False
 
+    def start_exp(self):
+        ''' 启动Exploit模式 '''
+        try:
+            f = open('Exploit.lock')
+            f.close()
+            logger.info('red', self.lang['core']['start_exp']['lock'])                             # ? 日志, 使用exp时 请先删除vulcat/Exploit.lock锁文件
+        except FileNotFoundError:
+            exploit.start(self.results)
+
     def end(self):
         ''' 结束扫描, 等待所有线程运行完毕, 生成漏洞结果并输出/保存'''
         logger.info('cyan_ex', self.lang['core']['end']['wait'])                                    # ? 日志, 等待所有线程运行完毕, 时间长短取决于timeout参数
@@ -242,10 +258,13 @@ class coreScan():
 
         if self.txt_filename:                                                                       # * 是否保存结果为.txt
             output.output_text(self.results, self.txt_filename, self.lang)
-        elif self.json_filename:                                                                    # * 是否保存结果为.json
+        if self.json_filename:                                                                      # * 是否保存结果为.json
             output.output_json(self.results, self.json_filename, self.lang)
-        # elif self.html_filename:
+        # if self.html_filename:
         #     output.output_html(self.results, self.html_filename, self.lang)
+
+        if self.exp and self.vuln:                                                                  # * 是否使用Exp
+            self.start_exp()
 
         logger.info('yellow_ex', self.lang['core']['end']['completed'])                             # ? 日志, 扫描完全结束, 退出运行
         logger.info('reset', '', notime=True, print_end='')                                         # * 重置文字颜色

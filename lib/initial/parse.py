@@ -12,14 +12,14 @@ def parse():
     ''' 参数列表 '''
     lang = language()           # * 帮助语言
 
-    parser = OptionParser('''Usage: python3 vulcat.py <options>
+    parser = OptionParser('\n' + lang['disclaimer'] + '''Usage: python3 vulcat.py <options>
 Examples: 
 python3 vulcat.py -u https://www.example.com/
 python3 vulcat.py -u https://www.example.com/ -a thinkphp --log 3
 python3 vulcat.py -u https://www.example.com/ -a tomcat -v CVE-2017-12615
 python3 vulcat.py -f url.txt -t 10
 python3 vulcat.py --list
-''', version='vulcat.py-1.1.4\n')
+''', version='vulcat.py-1.1.5\n')
     # * 指定目标
     target = parser.add_option_group(lang['target_help']['title'], lang['target_help']['name'])
     target.add_option('-u', '--url', type='string', dest='url', default=None, help=lang['target_help']['url'])
@@ -50,6 +50,7 @@ python3 vulcat.py --list
     application = parser.add_option_group(lang['application_help']['title'], lang['application_help']['name'])
     application.add_option('-a', '--application', type='string', dest='application', default='auto', help=lang['application_help']['application'])
     application.add_option('-v', '--vuln', type='string', dest='vuln', default=None, help=lang['application_help']['vuln'])
+    application.add_option('-x', '--exp', dest='exp', action='store_true', help=lang['application_help']['exp'])
 
     # * 第三方api, 例如dnslog/ceye
     api = parser.add_option_group(lang['api_help']['title'], lang['api_help']['name'])

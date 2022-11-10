@@ -130,7 +130,10 @@ class Airflow():
                 logger.logging(vul_info, 'Error')
                 return None
 
-            if ((verify_res.status_code == 200) and (('Schedule' in verify_res.text) or ('Recent Tasks' in verify_res.text))):
+            if ((verify_res.status_code == 200) 
+                and (('Schedule' in verify_res.text) 
+                     or ('Recent Tasks' in verify_res.text))
+            ):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],

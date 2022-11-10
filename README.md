@@ -8,168 +8,16 @@
 * If you have any ideas, suggestions, or bugs, you can issue
 
 **Web applications that currently support scanning:**
-> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheAPISIX, ApacheFlink, ApacheHadoop, ApacheHttpd, ApacheSkywalking, ApacheSolr, ApacheStruts2, ApacheTomcat, AppWeb, AtlassianConfluence, Cicso, Discuz, Django, Drupal, ElasticSearch, F5-BIG-IP, Fastjson, Gitea, Gitlab, Grafana, Influxdb, RubyOnRails, Jenkins, Jetty, Jupyter, Keycloak, Landray-OA, MiniHttpd, mongo-express, Nexus, Node.js, NodeRED, phpMyAdmin, phpUnit, ShowDoc, Spring, ThinkPHP, Ueditor, Weblogic, Webmin, Yonyou
+> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheAPISIX, ApacheFlink, ApacheHadoop, ApacheHttpd, ApacheSkywalking, ApacheSolr, ApacheTomcat, AppWeb, AtlassianConfluence, Cicso, Discuz, Django, Drupal, ElasticSearch, F5-BIG-IP, Fastjson, Gitea, Gitlab, Grafana, Influxdb, RubyOnRails, Jenkins, Jetty, Jupyter, Keycloak, Landray-OA, MiniHttpd, mongo-express, Nexus, Node.js, NodeRED, phpMyAdmin, phpUnit, ShowDoc, Spring, Supervisor, ThinkPHP, Ueditor, Weblogic, Webmin, Yonyou
 
-## Vulnerabilitys List
-<details>
-<summary><strong>The current web vulnerabilities that support scanning: [Click on]</strong></summary>
+**You can also check out the "Vulnerabilitys List" below to see which vulnerabilities vulcat supports scanning**
 
-```
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Target               | Vul_id             | Type         | Description                                                |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Alibaba Druid        | None               | unAuth       | Alibaba Druid unAuthorized                                 |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Alibaba Nacos        | CVE-2021-29441     | unAuth       | Alibaba Nacos unAuthorized                                 |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Apache Airflow       | CVE-2020-17526     | unAuth       | Apache Airflow Authentication bypass                       |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Apache APISIX        | CVE-2020-13945     | unAuth       | Apache APISIX default access token                         |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Apache Flink         | CVE-2020-17519     | FileRead     | Apache Flink Directory traversal                           |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Apache Hadoop        | None               | unAuth       | Apache Hadoop YARN ResourceManager unAuthorized            |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Apache Httpd         | CVE-2021-40438     | SSRF         | Apache HTTP Server 2.4.48 mod_proxy SSRF                   |
-| Apache Httpd         | CVE-2021-41773     | FileRead/RCE | Apache HTTP Server 2.4.49 Directory traversal              |
-| Apache Httpd         | CVE-2021-42013     | FileRead/RCE | Apache HTTP Server 2.4.50 Directory traversal              |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Apache SkyWalking    | CVE-2020-9483      | SQLinject    | SkyWalking SQLinject                                       |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Apache Solr          | CVE-2017-12629     | RCE          | Solr Remote code execution                                 |
-| Apache Solr          | CVE-2019-17558     | RCE          | Solr Remote Code Execution Via Velocity Custom Template    |
-| Apache Solr          | CVE-2021-27905     | SSRF         | Solr SSRF/FileRead                                         |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Apache Struts2       | S2-001             | RCE          | Apache Struts2 Remote code execution                       |
-| Apache Struts2       | S2-005             | RCE          | Apache Struts2 Remote code execution                       |
-| Apache Struts2       | S2-007             | RCE          | Apache Struts2 Remote code execution                       |
-| Apache Struts2       | S2-008             | RCE          | Apache Struts2 Remote code execution                       |
-| Apache Struts2       | S2-009             | RCE          | Apache Struts2 Remote code execution                       |
-| Apache Struts2       | S2-012             | RCE          | Apache Struts2 Remote code execution                       |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Apache Tomcat        | CVE-2017-12615     | FileUpload   | Put method writes to any file                              |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| AppWeb               | CVE-2018-8715      | unAuth       | AppWeb Authentication bypass                               |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Atlassian Confluence | CVE-2015-8399      | FileRead     | Confluence any file include                                |
-| Atlassian Confluence | CVE-2019-3396      | RCE/FileRead | Confluence Directory traversal && RCE                      |
-| Atlassian Confluence | CVE-2021-26084     | RCE          | Confluence OGNL expression command injection               |
-| Atlassian Confluence | CVE-2022-26134     | RCE          | Confluence Remote code execution                           |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Cisco                | CVE-2020-3580      | XSS          | Cisco ASA/FTD XSS                                          |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Discuz               | wooyun-2010-080723 | RCE          | Remote code execution                                      |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Django               | CVE-2017-12794     | XSS          | Django debug page XSS                                      |
-| Django               | CVE-2018-14574     | Redirect     | Django CommonMiddleware URL Redirect                       |
-| Django               | CVE-2019-14234     | SQLinject    | Django JSONfield SQLinject                                 |
-| Django               | CVE-2020-9402      | SQLinject    | Django GIS SQLinject                                       |
-| Django               | CVE-2021-35042     | SQLinject    | Django QuerySet.order_by SQLinject                         |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Drupal               | CVE-2014-3704      | SQLinject    | Drupal < 7.32 Drupalgeddon SQLinject                       |
-| Drupal               | CVE-2017-6920      | RCE          | Drupal Core 8 PECL YAML Remote code execution              |
-| Drupal               | CVE-2018-7600      | RCE          | Drupal Drupalgeddon 2 Remote code execution                |
-| Drupal               | CVE-2018-7602      | RCE          | Drupal Remote code execution                               |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| ElasticSearch        | CVE-2014-3120      | RCE          | ElasticSearch Remote code execution                        |
-| ElasticSearch        | CVE-2015-1427      | RCE          | ElasticSearch Groovy Sandbox to bypass && RCE              |
-| ElasticSearch        | CVE-2015-3337      | FileRead     | ElasticSearch Directory traversal                          |
-| ElasticSearch        | CVE-2015-5531      | FileRead     | ElasticSearch Directory traversal                          |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| F5 BIG-IP            | CVE-2020-5902      | RCE          | BIG-IP Remote code execution                               |
-| F5 BIG-IP            | CVE-2022-1388      | unAuth       | BIG-IP Remote code execution                               |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Fastjson             | CNVD-2017-02833    | unSerialize  | Fastjson <= 1.2.24 deSerialization                         |
-| Fastjson             | CNVD-2019-22238    | unSerialize  | Fastjson <= 1.2.47 deSerialization                         |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Gitea                | None               | unAuth       | Gitea 1.4.0 unAuthorized                                   |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Gitlab               | CVE-2021-22205     | RCE          | GitLab Pre-Auth Remote code execution                      |
-| Gitlab               | CVE-2021-22214     | SSRF         | Gitlab CI Lint API SSRF                                    |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Grafana              | CVE-2021-43798     | FileRead     | Grafana 8.x Directory traversal                            |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Influxdb             | None               | unAuth       | influxdb unAuthorized                                      |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Jenkins              | CVE-2018-1000861   | RCE          | jenkins Remote code execution                              |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Jetty                | CVE-2021-28164     | DSinfo       | jetty Disclosure information                               |
-| Jetty                | CVE-2021-28169     | DSinfo       | jetty Servlets ConcatServlet Disclosure information        |
-| Jetty                | CVE-2021-34429     | DSinfo       | jetty Disclosure information                               |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Jupyter              | None               | unAuth       | Jupyter unAuthorized                                       |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Keycloak             | CVE-2020-10770     | SSRF         | request_uri SSRF                                           |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Landray              | CNVD-2021-28277    | FileRead/SSRF| Landray-OA FileRead/SSRF                                   |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Mini Httpd           | CVE-2018-18778     | FileRead     | mini_httpd FileRead                                        |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| mongo-express        | CVE-2019-10758     | RCE          | Remote code execution                                      |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Nexus Repository     | CVE-2019-5475      | RCE          | 2.x yum Remote code execution                              |
-| Nexus Repository     | CVE-2019-7238      | RCE          | 3.x Remote code execution                                  |
-| Nexus Repository     | CVE-2019-15588     | RCE          | 2019-5475 Bypass                                           |
-| Nexus Repository     | CVE-2020-10199     | RCE          | 3.x Remote code execution                                  |
-| Nexus Repository     | CVE-2020-10204     | RCE          | 3.x Remote code execution                                  |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Nodejs               | CVE-2017-14849     | FileRead     | Node.js Directory traversal                                |
-| Nodejs               | CVE-2021-21315     | RCE          | Node.js Remote code execution                              |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| NodeRED              | CVE-2021-3223      | FileRead     | Node-RED Directory traversal                               |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| phpMyadmin           | WooYun-2016-199433 | unSerialize  | phpMyadmin Scripts/setup.php Deserialization               |
-| phpMyadmin           | CVE-2018-12613     | FileInclude  | phpMyadmin 4.8.1 Remote File Inclusion                     |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| PHPUnit              | CVE-2017-9841      | RCE          | PHPUnit Remote code execution                              |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Ruby on Rails        | CVE-2018-3760      | FileRead     | Ruby on Rails Directory traversal                          |
-| Ruby on Rails        | CVE-2019-5418      | FileRead     | Ruby on Rails FileRead                                     |
-| Ruby on Rails        | CVE-2020-8163      | RCE          | Ruby on Rails Remote code execution                        |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| ShowDoc              | CNVD-2020-26585    | FileUpload   | ShowDoc writes to any file                                 |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Spring               | CVE-2016-4977      | RCE          | Spring Security OAuth2 Remote Command Execution            |
-| Spring               | CVE-2017-8046      | RCE          | Spring Data Rest Remote Command Execution                  |
-| Spring               | CVE-2018-1273      | RCE          | Spring Data Commons Remote Command Execution               |
-| Spring               | CVE-2020-5410      | FileRead     | Spring Cloud Directory traversal                           |
-| Spring               | CVE-2021-21234     | FileRead     | Spring Boot Directory traversal                            |
-| Spring               | CVE-2022-22947     | RCE          | Spring Cloud Gateway SpEl Remote code execution            |
-| Spring               | CVE-2022-22963     | RCE          | Spring Cloud Function SpEL Remote code execution           |
-| Spring               | CVE-2022-22965     | RCE          | Spring Framework Remote code execution                     |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| ThinkPHP             | CVE-2018-1002015   | RCE          | ThinkPHP5.x Remote code execution                          |
-| ThinkPHP             | CNVD-2018-24942    | RCE          | The forced route is not enabled Remote code execution      |
-| ThinkPHP             | CNNVD-201901-445   | RCE          | Core class Request Remote code execution                   |
-| ThinkPHP             | None               | RCE          | ThinkPHP2.x Remote code execution                          |
-| ThinkPHP             | None               | SQLinject    | ThinkPHP5 ids SQLinject                                    |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Ueditor              | None               | SSRF         | Ueditor SSRF                                               |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Oracle Weblogic      | CVE-2014-4210      | SSRF         | Weblogic SSRF                                              |
-| Oracle Weblogic      | CVE-2017-10271     | unSerialize  | Weblogic XMLDecoder deSerialization                        |
-| Oracle Weblogic      | CVE-2019-2725      | unSerialize  | Weblogic wls9_async deSerialization                        |
-| Oracle Weblogic      | CVE-2020-14750     | unAuth       | Weblogic Authentication bypass                             |
-| Oracle Weblogic      | CVE-2020-14882     | RCE          | Weblogic Unauthorized command execution                    |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Webmin               | CVE-2019-15107     | RCE          | Webmin Pre-Auth Remote code execution                      |
-| Webmin               | CVE-2019-15642     | RCE          | Webmin Remote code execution                               |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-| Yonyou               | CNNVD-201610-923   | SQLinject    | Yonyou-GRP-U8 Proxy SQLinject                              |
-| Yonyou               | CNVD-2021-30167    | RCE          | Yonyou-NC BeanShell Remote code execution                  |
-| Yonyou               | None               | FileRead     | Yonyou-ERP-NC NCFindWeb Directory traversal                |
-| Yonyou               | None               | DSinfo       | Yonyou-U8-OA getSessionList.jsp Disclosure information     |
-| Yonyou               | None               | SQLinject    | Yonyou-U8-OA test.jsp SQLinject                            |
-+----------------------+--------------------+--------------+------------------------------------------------------------+
-```
-</details>
+## Code of Conduct and Disclaimer
+* **Before using this tool, ensure that your actions comply with local laws and regulations and that you have obtained relevant authorization.**
 
-## Code of conduct
-Before using this tool, ensure that your actions comply with local laws and regulations and that you have obtained relevant authorization.
+* **This tool is only for enterprises and individuals with legal authorization and is intended to enhance cyberspace security.**
 
-This tool is only for enterprises and individuals with legal authorization and is intended to enhance cyberspace security.
-
-If you commit any illegal acts or cause any serious consequences during the use of the tool, you shall bear the corresponding liabilities by yourself, and we will not assume any legal and joint liability.
+* **If you commit any illegal acts or cause any serious consequences during the use of the tool, you shall bear the corresponding liabilities by yourself, and we will not assume any legal and joint liability.**
 
 ## Installation & Usage
 The tool is developed based on python3. Python3.8 or later is recommended
@@ -184,6 +32,10 @@ pip3 install -r requirements.txt
 python3 vulcat.py -h
 ```
 ```
+Usage:
+By using this tool, you agree to the "Code of Conduct and Disclaimer" in "vulcat/README.md; If you do not agree, do not use this tool."
+
+
 Usage: python3 vulcat.py <options>
 Examples:
 python3 vulcat.py -u https://www.example.com/
@@ -258,6 +110,11 @@ Options:
                         number does not discriminate between sizes, and the
                         symbol - and _ are acceptable (e.g. -a fastjson -v
                         cnVD-2019-22238 or -a Tomcat -v CVE-2017_12615)
+    -x, --exp           Use with the -a and -v parameters, After the Poc scan,
+                        if the vulnerability exists, enter the Exp interaction
+                        mode of the vulnerability; You can use --list to see
+                        Exp support vulnerabilities. (e.g. -a httpd -v
+                        CVE-2021-42013 -x)
 
   Api:
     The third party Api
@@ -297,7 +154,7 @@ Options:
     drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab,
     grafana, influxdb, hadoop, httpd, jenkins, jetty, jupyter, keycloak,
     landray, minihttpd, mongoexpress, nexus, nacos, nodejs, nodered,
-    phpmyadmin, phpunit, rails, showdoc, solr, struts2, spring,
+    phpmyadmin, phpunit, rails, showdoc, solr, spring, supervisor,
     skywalking, thinkphp, tomcat, ueditor, weblogic, webmin, yonyou
 ```
 
@@ -332,7 +189,160 @@ args.ceye_token = ''
 
 2. Then follow the tips in demo.py to fill in your own code and introduce POC into vulcat
 
+## Vulnerabilitys List
+<details>
+<summary><strong>The current web vulnerabilities that support scanning: [Click on]</strong></summary>
+
+```
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Target               | Vuln id            | Vuln Type    | Exp | Description                                                  |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Alibaba Druid        | None               | unAuth       |  -  | Alibaba Druid unAuthorized                                   |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Alibaba Nacos        | CVE-2021-29441     | unAuth       |  -  | Alibaba Nacos unAuthorized                                   |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Apache Airflow       | CVE-2020-17526     | unAuth       |  -  | Apache Airflow Authentication bypass                         |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Apache APISIX        | CVE-2020-13945     | unAuth       |  -  | Apache APISIX default access token                           |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Apache Flink         | CVE-2020-17519     | FileRead     |  Y  | Apache Flink Directory traversal                             |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Apache Hadoop        | None               | unAuth       |  -  | Apache Hadoop YARN ResourceManager unAuthorized              |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Apache Httpd         | CVE-2021-40438     | SSRF         |  -  | Apache HTTP Server 2.4.48 mod_proxy SSRF                     |
+| Apache Httpd         | CVE-2021-41773     | FileRead/RCE |  Y  | Apache HTTP Server 2.4.49 Directory traversal                |
+| Apache Httpd         | CVE-2021-42013     | FileRead/RCE |  Y  | Apache HTTP Server 2.4.50 Directory traversal                |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Apache SkyWalking    | CVE-2020-9483      | SQLinject    |  -  | SkyWalking SQLinject                                         |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Apache Solr          | CVE-2017-12629     | RCE          |  -  | Solr Remote code execution                                   |
+| Apache Solr          | CVE-2019-17558     | RCE          |  Y  | Solr RCE Via Velocity Custom Template                        |
+| Apache Solr          | CVE-2021-27905     | SSRF/FileRead|  Y  | Solr SSRF/FileRead                                           |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Apache Tomcat        | CVE-2017-12615     | FileUpload   |  -  | Put method writes to any file                                |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| AppWeb               | CVE-2018-8715      | unAuth       |  -  | AppWeb Authentication bypass                                 |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Atlassian Confluence | CVE-2015-8399      | FileRead     |  Y  | Confluence any file include                                  |
+| Atlassian Confluence | CVE-2019-3396      | RCE/FileRead |  Y  | Confluence Directory traversal && RCE                        |
+| Atlassian Confluence | CVE-2021-26084     | RCE          |  Y  | Confluence OGNL expression command injection                 |
+| Atlassian Confluence | CVE-2022-26134     | RCE          |  Y  | Confluence Remote code execution                             |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Cisco                | CVE-2020-3580      | XSS          |  -  | Cisco ASA/FTD XSS                                            |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Discuz               | wooyun-2010-080723 | RCE          |  Y  | Remote code execution                                        |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Django               | CVE-2017-12794     | XSS          |  -  | Django debug page XSS                                        |
+| Django               | CVE-2018-14574     | Redirect     |  -  | Django CommonMiddleware URL Redirect                         |
+| Django               | CVE-2019-14234     | SQLinject    |  -  | Django JSONfield SQLinject                                   |
+| Django               | CVE-2020-9402      | SQLinject    |  -  | Django GIS SQLinject                                         |
+| Django               | CVE-2021-35042     | SQLinject    |  -  | Django QuerySet.order_by SQLinject                           |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Drupal               | CVE-2014-3704      | SQLinject    |  -  | Drupal < 7.32 Drupalgeddon SQLinject                         |
+| Drupal               | CVE-2017-6920      | RCE          |  -  | Drupal Core 8 PECL YAML Remote code execution                |
+| Drupal               | CVE-2018-7600      | RCE          |  Y  | Drupal Drupalgeddon 2 Remote code execution                  |
+| Drupal               | CVE-2018-7602      | RCE          |  -  | Drupal Remote code execution                                 |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| ElasticSearch        | CVE-2014-3120      | RCE          |  Y  | ElasticSearch Remote code execution                          |
+| ElasticSearch        | CVE-2015-1427      | RCE          |  Y  | ElasticSearch Groovy Sandbox to bypass && RCE                |
+| ElasticSearch        | CVE-2015-3337      | FileRead     |  Y  | ElasticSearch Directory traversal                            |
+| ElasticSearch        | CVE-2015-5531      | FileRead     |  Y  | ElasticSearch Directory traversal                            |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| F5 BIG-IP            | CVE-2020-5902      | RCE          |  -  | BIG-IP Remote code execution                                 |
+| F5 BIG-IP            | CVE-2022-1388      | unAuth       |  Y  | BIG-IP Remote code execution                                 |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Fastjson             | CNVD-2017-02833    | unSerialize  |  -  | Fastjson <= 1.2.24 deSerialization                           |
+| Fastjson             | CNVD-2019-22238    | unSerialize  |  -  | Fastjson <= 1.2.47 deSerialization                           |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Gitea                | None               | unAuth       |  -  | Gitea 1.4.0 unAuthorized                                     |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Gitlab               | CVE-2021-22205     | RCE          |  -  | GitLab Pre-Auth Remote code execution                        |
+| Gitlab               | CVE-2021-22214     | SSRF         |  -  | Gitlab CI Lint API SSRF                                      |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Grafana              | CVE-2021-43798     | FileRead     |  Y  | Grafana 8.x Directory traversal                              |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Influxdb             | None               | unAuth       |  -  | influxdb unAuthorized                                        |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Jenkins              | CVE-2018-1000861   | RCE          |  -  | jenkins Remote code execution                                |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Jetty                | CVE-2021-28164     | DSinfo       |  -  | jetty Disclosure information                                 |
+| Jetty                | CVE-2021-28169     | DSinfo       |  -  | jetty Servlets ConcatServlet Disclosure information          |
+| Jetty                | CVE-2021-34429     | DSinfo       |  -  | jetty Disclosure information                                 |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Jupyter              | None               | unAuth       |  -  | Jupyter unAuthorized                                         |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Keycloak             | CVE-2020-10770     | SSRF         |  -  | request_uri SSRF                                             |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Landray              | CNVD-2021-28277    | FileRead/SSRF|  Y  | Landray-OA FileRead/SSRF                                     |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Mini Httpd           | CVE-2018-18778     | FileRead     |  -  | mini_httpd FileRead                                          |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| mongo-express        | CVE-2019-10758     | RCE          |  -  | Remote code execution                                        |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Nexus Repository     | CVE-2019-5475      | RCE          |  Y  | 2.x yum Remote code execution                                |
+| Nexus Repository     | CVE-2019-7238      | RCE          |  -  | 3.x Remote code execution                                    |
+| Nexus Repository     | CVE-2019-15588     | RCE          |  Y  | 2019-5475 Bypass                                             |
+| Nexus Repository     | CVE-2020-10199     | RCE          |  -  | 3.x Remote code execution                                    |
+| Nexus Repository     | CVE-2020-10204     | RCE          |  -  | 3.x Remote code execution                                    |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Nodejs               | CVE-2017-14849     | FileRead     |  Y  | Node.js Directory traversal                                  |
+| Nodejs               | CVE-2021-21315     | RCE          |  -  | Node.js Remote code execution                                |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| NodeRED              | CVE-2021-3223      | FileRead     |  Y  | Node-RED Directory traversal                                 |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| phpMyadmin           | WooYun-2016-199433 | unSerialize  |  -  | phpMyadmin Scripts/setup.php Deserialization                 |
+| phpMyadmin           | CVE-2018-12613     | FileInclude  |  Y  | phpMyadmin 4.8.1 Remote File Inclusion                       |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| PHPUnit              | CVE-2017-9841      | RCE          |  Y  | PHPUnit Remote code execution                                |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Ruby on Rails        | CVE-2018-3760      | FileRead     |  Y  | Ruby on Rails Directory traversal                            |
+| Ruby on Rails        | CVE-2019-5418      | FileRead     |  Y  | Ruby on Rails FileRead                                       |
+| Ruby on Rails        | CVE-2020-8163      | RCE          |  -  | Ruby on Rails Remote code execution                          |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| ShowDoc              | CNVD-2020-26585    | FileUpload   |  -  | ShowDoc writes to any file                                   |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Spring               | CVE-2016-4977      | RCE          |  -  | Spring Security OAuth2 Remote Command Execution              |
+| Spring               | CVE-2017-8046      | RCE          |  -  | Spring Data Rest Remote Command Execution                    |
+| Spring               | CVE-2018-1273      | RCE          |  -  | Spring Data Commons Remote Command Execution                 |
+| Spring               | CVE-2020-5410      | FileRead     |  Y  | Spring Cloud Directory traversal                             |
+| Spring               | CVE-2021-21234     | FileRead     |  Y  | Spring Boot Directory traversal                              |
+| Spring               | CVE-2022-22947     | RCE          |  -  | Spring Cloud Gateway SpEl Remote code execution              |
+| Spring               | CVE-2022-22963     | RCE          |  -  | Spring Cloud Function SpEL Remote code execution             |
+| Spring               | CVE-2022-22965     | RCE          |  -  | Spring Framework Remote code execution                       |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Supervisor           | CVE-2017-11610     | RCE          |  -  | Supervisor Remote Command Execution                          |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| ThinkPHP             | CVE-2018-1002015   | RCE          |  Y  | ThinkPHP5.x Remote code execution                            |
+| ThinkPHP             | CNVD-2018-24942    | RCE          |  Y  | The forced route is not enabled RCE                          |
+| ThinkPHP             | CNNVD-201901-445   | RCE          |  Y  | Core class Request Remote code execution                     |
+| ThinkPHP             | None               | RCE          |  -  | ThinkPHP2.x Remote code execution                            |
+| ThinkPHP             | None               | SQLinject    |  -  | ThinkPHP5 ids SQLinject                                      |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Ueditor              | None               | SSRF         |  -  | Ueditor SSRF                                                 |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Oracle Weblogic      | CVE-2014-4210      | SSRF         |  -  | Weblogic SSRF                                                |
+| Oracle Weblogic      | CVE-2017-10271     | unSerialize  |  -  | Weblogic XMLDecoder deSerialization                          |
+| Oracle Weblogic      | CVE-2019-2725      | unSerialize  |  -  | Weblogic wls9_async deSerialization                          |
+| Oracle Weblogic      | CVE-2020-14750     | unAuth       |  -  | Weblogic Authentication bypass                               |
+| Oracle Weblogic      | CVE-2020-14882     | RCE          |  -  | Weblogic Unauthorized command execution                      |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Webmin               | CVE-2019-15107     | RCE          |  Y  | Webmin Pre-Auth Remote code execution                        |
+| Webmin               | CVE-2019-15642     | RCE          |  Y  | Webmin Remote code execution                                 |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Yonyou               | CNNVD-201610-923   | SQLinject    |  -  | Yonyou-GRP-U8 Proxy SQLinject                                |
+| Yonyou               | CNVD-2021-30167    | RCE          |  Y  | Yonyou-NC BeanShell Remote code execution                    |
+| Yonyou               | None               | FileRead     |  -  | Yonyou-ERP-NC NCFindWeb Directory traversal                  |
+| Yonyou               | None               | DSinfo       |  -  | Yonyou-U8-OA getSessionList.jsp Disclosure info              |
+| Yonyou               | None               | SQLinject    |  -  | Yonyou-U8-OA test.jsp SQLinject                              |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+vulcat-1.1.5/2022.11
+94/Poc
+34/Exp
+```
+</details>
+
 ## Thanks
 * [vulmap](https://github.com/zhzyker/vulmap)
 * [sqlmap](https://github.com/sqlmapproject/sqlmap)
 * [dirsearch](https://github.com/maurosoria/dirsearch)
+* [HackRequests](https://github.com/boy-hack/hack-requests)

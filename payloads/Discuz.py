@@ -107,7 +107,7 @@ class Discuz():                                                     # todo 1: ç±
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Payload': res
+                    'Request': res
                 }
                 return results
 

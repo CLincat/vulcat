@@ -12,8 +12,15 @@ class Logger():
         self.requests_number = 0                                    # * http请求计数
 
     def info(self, text_color, text, notime=False, print_end='\n'):
+        ''' 输出日志信息
+                :param text_color: 文本颜色
+                :param text: 文本
+                :param notime: 不显示时间[xx:xx:xx]
+                :param print_end: 结尾字符
+        '''
+        
         text = text.replace('\\', '\\\\')                           # * 防止eval时字符被转义
-        command = 'color.{}("{}")'.format(text_color, text)         # * 颜色 + 文字
+        command = 'color.{}("""{}""")'.format(text_color, text)     # * 颜色 + 文字
         now_time = '' if notime else nowtime()                      # * 是否显示时间
 
         tqdm.write(now_time + eval(command), end=print_end)
@@ -32,14 +39,19 @@ class Logger():
         pass
 
     def logging_1(self, *args):
-        ''' 功能尚未完成, 还在写 '''
+        ''' 默认为1, 正常输出信息 '''
         pass
 
     def logging_2(self, vul_info, status_code, *args):
         ''' 日志2级, 框架名称+状态码+漏洞编号'''
-        info_2 = color.red_ex('[LOG-{}-{}]'.format(str(self.requests_number), vul_info['app_name']))
-        info_2 += color.red_ex(' [') + color.magenta_ex(str(status_code)) + color.red_ex(']')
-        info_2 += color.red_ex(' [') + color.black_ex(vul_info['vul_id']) + color.red_ex(']')
+        info_2 = ''
+        
+        try:
+            info_2 = color.red_ex('[LOG-{}-{}]'.format(str(self.requests_number), vul_info['app_name']))
+            info_2 += color.red_ex(' [') + color.magenta_ex(str(status_code)) + color.red_ex(']')
+            info_2 += color.red_ex(' [') + color.black_ex(vul_info['vul_id']) + color.red_ex(']')
+        except:
+            return info_2
 
         return info_2
 
@@ -49,9 +61,9 @@ class Logger():
 
         try:
             # * HackRequests
-            if (str(type(res)) == "<class 'HackRequests.HackRequests.response'>"):
+            if ('HackRequests.response' in str(type(res))):
                 info_3 += color.red_ex(' [' + res.method + ' ')
-                info_3 +=color.black_ex(res.url) + color.red_ex(']')
+                info_3 += color.black_ex(res.url.replace('\r', '')) + color.red_ex(']')
                 if vul_info['data']:
                     info_3 += color.red_ex(' [DATA ') + color.black_ex(vul_info['data']) + color.red_ex(']')
                 return info_3
@@ -72,7 +84,7 @@ class Logger():
 
         try:
             # * HackRequests
-            if (str(type(res)) == "<class 'HackRequests.HackRequests.response'>"):
+            if ('HackRequests.response' in str(type(res))):
                 info_4 += color.red_ex(' [Request')
                 info_4 += color.black_ex('\n' + res.log.get('request'))
 
@@ -115,18 +127,18 @@ class Logger():
 
     def logging_6(self, vul_info, status_code, res):
         ''' 日志6级, (框架名称+状态码+漏洞编号)+请求包+响应头+响应内容 '''
-        res.encoding = 'utf-8'
         info_6 = self.logging_5(vul_info, status_code, res)
         
         try:
             # * HackRequests
-            if (str(type(res)) == "<class 'HackRequests.HackRequests.response'>"):
+            if ('HackRequests.response' in str(type(res))):
                 info_6 = info_6[:-1]
                 info_6 += color.black_ex('\n\n' + res.text())
 
                 info_6 += color.red_ex('\n]')
             # * requests
             else:
+                res.encoding = 'utf-8'
                 info_6 = info_6[:-1]
                 info_6 += color.black_ex('\n\n' + res.text)
 

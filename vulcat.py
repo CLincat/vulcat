@@ -28,5 +28,5 @@ try:
 except KeyboardInterrupt:
     print(color.reset('CTRL + C exit the scan'))
     os._exit(0)
-except Exception as e:
-    print(e)
+# except Exception as e:
+#     print(e)

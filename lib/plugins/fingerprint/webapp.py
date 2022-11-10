@@ -550,6 +550,16 @@ class WebappIdentify():
                 ]
             },
             {
+                'name': 'supervisor',
+                'path': '',
+                'data': '',
+                'fingerprint': [
+                    r'<link href="stylesheets/supervisor\.css" rel="stylesheet" type="text/css"',
+                    r'<img alt="Supervisor status" src="images/supervisor\.gif"',
+                    r'<a href="https?://supervisord\.org">Supervisor</a> <span>\d\.\d\.\d</span>'
+                ]
+            },
+            {
                 'name': 'thinkphp',
                 'path': '',
                 'data': '',

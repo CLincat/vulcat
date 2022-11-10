@@ -31,6 +31,7 @@ from lib.tool import check
 from thirdparty import requests
 from thirdparty import HackRequests
 from time import sleep
+import re
 
 class ApacheHttpd():
     def __init__(self):
@@ -173,7 +174,7 @@ class ApacheHttpd():
         '''
         vul_info = {}
         vul_info['app_name'] = self.app_name
-        vul_info['vul_type'] = 'FileRead/RCE'
+        vul_info['vul_type'] = 'RCE/FileRead'
         vul_info['vul_id'] = 'CVE-2021-41773'
         # vul_info['vul_method'] = 'GET/POST'
         vul_info['headers'] = {}
@@ -225,10 +226,9 @@ class ApacheHttpd():
                 return None
 
             if ((self.md in check.check_res(res.text, self.md))
-                or ('/sbin/nologin' in res.text) 
-                or ('root:x:0:0:root' in res.text) 
-                or ('Microsoft Corp' in res.text) 
-                or ('Microsoft TCP/IP for Windows' in res.text)
+                or re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', res.text, re.I|re.M|re.S)
+                or (('Microsoft Corp' in res.text) 
+                    and ('Microsoft TCP/IP for Windows' in res.text))
             ):
                 results = {
                     'Target': target,
@@ -241,7 +241,7 @@ class ApacheHttpd():
         ''' CVE-2021-42013是CVE-2021-41773的绕过, 使用.%%32%65/ '''
         vul_info = {}
         vul_info['app_name'] = self.app_name
-        vul_info['vul_type'] = 'FileRead/RCE'
+        vul_info['vul_type'] = 'RCE/FileRead'
         vul_info['vul_id'] = 'CVE-2021-42013'
         # vul_info['vul_method'] = 'GET/POST'
         vul_info['headers'] = {}
@@ -289,10 +289,9 @@ class ApacheHttpd():
                 return None
 
             if ((self.md in check.check_res(res.text(), self.md))
-                or ('/sbin/nologin' in res.text()) 
-                or ('root:x:0:0:root' in res.text()) 
-                or ('Microsoft Corp' in res.text()) 
-                or ('Microsoft TCP/IP for Windows' in res.text())
+                or re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', res.text(), re.I|re.M|re.S)
+                or (('Microsoft Corp' in res.text()) 
+                    and ('Microsoft TCP/IP for Windows' in res.text()))
             ):
                 results = {
                     'Target': target,

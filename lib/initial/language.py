@@ -47,7 +47,8 @@ lang = {
             'title': 'Application',
             'name': 'Specify the target type for the scan',
             'application': 'Specifies the target type, for supported frameworks, see the tips at the bottom, separated by commas (e.g. thinkphp / thinkphp,weblogic) (default: auto)',
-            'vuln': 'Specify the vulnerability number,With -a/--application to scan a single vulnerability,You can use --list to see the vulnerability number,vulnerabilities that do not have a vulnerability number are not supported.The number does not discriminate between sizes, and the symbol - and _ are acceptable (e.g. -a fastjson -v cnVD-2019-22238 or -a Tomcat -v CVE-2017_12615)'
+            'vuln': 'Specify the vulnerability number,With -a/--application to scan a single vulnerability,You can use --list to see the vulnerability number,vulnerabilities that do not have a vulnerability number are not supported.The number does not discriminate between sizes, and the symbol - and _ are acceptable (e.g. -a fastjson -v cnVD-2019-22238 or -a Tomcat -v CVE-2017_12615)',
+            'exp': 'Use with the -a and -v parameters, After the Poc scan, if the vulnerability exists, enter the Exp interaction mode of the vulnerability; You can use --list to see Exp support vulnerabilities. (e.g. -a httpd -v CVE-2021-42013 -x)'
         },
         'api_help': {
             'title': 'Api',
@@ -74,14 +75,15 @@ lang = {
         },
         'app_list_help': {
             'title': 'Supported target types(Case insensitive)',
-            'name': 'AliDruid, airflow, apisix, appweb, cisco, confluence, discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab, grafana, influxdb, hadoop, httpd, jenkins, jetty, jupyter, keycloak, landray, minihttpd, mongoexpress, nexus, nacos, nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, solr, struts2, spring, skywalking, thinkphp, tomcat, ueditor, weblogic, webmin, yonyou'
+            'name': 'AliDruid, airflow, apisix, appweb, cisco, confluence, discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab, grafana, influxdb, hadoop, httpd, jenkins, jetty, jupyter, keycloak, landray, minihttpd, mongoexpress, nexus, nacos, nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, solr, spring, supervisor, skywalking, thinkphp, tomcat, ueditor, weblogic, webmin, yonyou'
         },
         'core': {
             'start': {
                 'start': '[INFO] Start scanning target ',
                 'unable': '[WARN] Unable to connect to ',
                 'url_error': '[WARN] The destination {} is incorrect and needs to start with http:// or https://',
-                'no_poc': '[No-POC] Disable Vulnerability scanning'
+                'no_poc': '[No-POC] Disable Vulnerability scanning',
+                'exp': 'When using -x/--exp, specify a vulnerability with -a and -v first(e.g. -a httpd -v cve-2021-41773 -x)'
             },
             'waf_finger': {
                 'waf': '[INFO] The WAF detection for the current URL starts',
@@ -114,6 +116,9 @@ lang = {
             'end': {
                 'wait': '[INFO] Wait for all threads to finish. Please wait...',
                 'completed': '[INFO] Scan is completed'
+            },
+            'start_exp': {
+                'lock': 'If you want to use -x/--exp, Please read the "vulcat/Exploit.lock" statement first, Delete the file with consent to the declaration, After the deletion, run -x/--exp again'
             }
         },
         'output': {
@@ -173,7 +178,8 @@ lang = {
             'title': 'Application',
             'name': '指定扫描的目标类型',
             'application': '指定框架类型, 支持的框架可以参考最下面的提示信息, 多个使用逗号分隔 (如: thinkphp 或者 thinkphp,weblogic) (默认将启用指纹识别, 并使用相应POC, 如果未识别出框架则使用全部POC)',
-            'vuln': '指定漏洞编号, 配合-a/--application对单个漏洞进行扫描, 可以使用--list查看漏洞编号, 没有漏洞编号的漏洞暂不支持, 编号不区分大小, 符号-和_皆可 (如: -a fastjson -v CNVD-2019-22238 或者 -a Tomcat -v cvE-2017_12615)'
+            'vuln': '指定漏洞编号, 配合-a/--application对单个漏洞进行扫描, 可以使用--list查看漏洞编号, 没有漏洞编号的漏洞暂不支持, 编号不区分大小, 符号-和_皆可 (如: -a fastjson -v CNVD-2019-22238 或者 -a Tomcat -v cvE-2017_12615)',
+            'exp': '配合-a和-v参数进行使用, Poc扫描过后, 如果该漏洞存在, 则进入该漏洞的Exp交互模式; 可以使用--list查看支持Exp的漏洞(如: -a httpd -v CVE-2021-42013 -x)'
         },
         'api_help': {
             'title': 'Api',
@@ -200,14 +206,15 @@ lang = {
         },
         'app_list_help': {
             'title': '支持的目标类型(-a参数, 不区分大小写)',
-            'name': 'AliDruid, airflow, apisix, appweb, cisco, confluence, discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab, grafana, influxdb, hadoop, httpd, jenkins, jetty, jupyter, keycloak, landray, minihttpd, mongoexpress, nexus, nacos, nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, solr, struts2, spring, skywalking, thinkphp, tomcat, ueditor, weblogic, webmin, yonyou'
+            'name': 'AliDruid, airflow, apisix, appweb, cisco, confluence, discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab, grafana, influxdb, hadoop, httpd, jenkins, jetty, jupyter, keycloak, landray, minihttpd, mongoexpress, nexus, nacos, nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, solr, spring, supervisor, skywalking, thinkphp, tomcat, ueditor, weblogic, webmin, yonyou'
         },
         'core': {
             'start': {
                 'start': '[INFO] 开始扫描目标 ',
                 'unable': '[WARN] 无法连接到 ',
                 'url_error': '[WARN] 目标{}好像不对哦, 需要以http://或https://开头',
-                'no_poc': '[No-POC] 不进行漏洞扫描'
+                'no_poc': '[No-POC] 不进行漏洞扫描',
+                'exp': '使用-x/--exp时请先使用-a和-v指定一个漏洞, 例如-a httpd -v cve-2021-41773 -x'
             },
             'waf_finger': {
                 'waf': '[INFO] 对当前url进行WAF检测, 请稍等...',
@@ -240,6 +247,9 @@ lang = {
             'end': {
                 'wait': '[INFO] 等待所有线程结束, 请稍等...',
                 'completed': '[INFO] 扫描完成'
+            },
+            'start_exp': {
+                'lock': '如果要使用-x/--exp, 请先阅读"vulcat/Exploit.lock"文件中的声明, 在同意声明的情况下删除该文件, 删除之后再次运行-x/--exp'
             }
         },
         'output': {
@@ -267,6 +277,9 @@ lang = {
     }
 }
 
+lang['en_us']['disclaimer'] = '''By using this tool, you agree to the "Code of Conduct and Disclaimer" in "vulcat/README.md; If you do not agree, do not use this tool."\n\n\n'''
+lang['zh_cn']['disclaimer'] = '''使用本工具, 代表您同意"vulcat/README.zh-cn.md"中的"行为规范和免责声明"; 如果您不同意, 请勿使用本工具\n\n\n'''
+
 # * --list的中文
 lang['zh_cn']['list'] = {
     'Alibaba Druid': '阿里巴巴Druid未授权访问',
@@ -276,7 +289,7 @@ lang['zh_cn']['list'] = {
     'Apache Flink': {'CVE-2020-17519': 'Flink目录遍历',},
     'Apache Hadoop': 'Hadoop YARN ResourceManager 未授权访问',
     'Apache Httpd': {
-        'CVE-2021-40438': 'Apache HTTP Server 2.4.48 mod_proxy SSRF                       ',
+        'CVE-2021-40438': 'Apache HTTP Server 2.4.48 mod_proxy SSRF                   ',
         'CVE-2021-41773': 'Apache HTTP Server 2.4.49 路径遍历',
         'CVE-2021-42013': 'Apache HTTP Server 2.4.50 路径遍历',
     },
@@ -285,14 +298,6 @@ lang['zh_cn']['list'] = {
         'CVE-2017-12629': 'Solr 远程命令执行',
         'CVE-2019-17558': 'Solr Velocity 注入远程命令执行',
         'CVE-2021-27905': 'Solr SSRF/任意文件读取',
-    },
-    'Apache Struts2': {
-        'S2-001': 'Struts2远程代码执行',
-        'S2-005': 'Struts2远程代码执行',
-        'S2-007': 'Struts2远程代码执行',
-        'S2-008': 'Struts2远程代码执行',
-        'S2-009': 'Struts2远程代码执行',
-        'S2-012': 'Struts2远程代码执行',
     },
     'Apache Tomcat': {'CVE-2017-12615': 'PUT方法任意文件写入',},
     'AppWeb': {'CVE-2018-8715': 'AppWeb身份认证绕过',},
@@ -382,6 +387,9 @@ lang['zh_cn']['list'] = {
         'CVE-2022-22963': 'Spring Cloud Function SpEL远程代码执行',
         'CVE-2022-22965': 'Spring Framework远程代码执行',
     },
+    'Supervisor': {
+        'CVE-2017-11610': 'Supervisor 远程命令执行'
+    },
     'ThinkPHP': {
         'CVE-2018-1002015': 'ThinkPHP5.x 远程代码执行',
         'CNVD-2018-24942': '未开启强制路由导致RCE',
@@ -428,16 +436,8 @@ lang['en_us']['list'] = {
     'Apache SkyWalking': {'CVE-2020-9483': 'SkyWalking SQLinject',},
     'Apache Solr': {
         'CVE-2017-12629': 'Solr Remote code execution',
-        'CVE-2019-17558': 'Solr Remote Code Execution Via Velocity Custom Template',
+        'CVE-2019-17558': 'Solr RCE Via Velocity Custom Template',
         'CVE-2021-27905': 'Solr SSRF/FileRead',
-    },
-    'Apache Struts2': {
-        'S2-001': 'Apache Struts2 Remote code execution',
-        'S2-005': 'Apache Struts2 Remote code execution',
-        'S2-007': 'Apache Struts2 Remote code execution',
-        'S2-008': 'Apache Struts2 Remote code execution',
-        'S2-009': 'Apache Struts2 Remote code execution',
-        'S2-012': 'Apache Struts2 Remote code execution',
     },
     'Apache Tomcat': {'CVE-2017-12615': 'Put method writes to any file',},
     'AppWeb': {'CVE-2018-8715': 'AppWeb Authentication bypass',},
@@ -527,9 +527,12 @@ lang['en_us']['list'] = {
         'CVE-2022-22963': 'Spring Cloud Function SpEL Remote code execution',
         'CVE-2022-22965': 'Spring Framework Remote code execution',
     },
+    'Supervisor': {
+        'CVE-2017-11610': 'Supervisor Remote Command Execution'
+    },
     'ThinkPHP': {
         'CVE-2018-1002015': 'ThinkPHP5.x Remote code execution',
-        'CNVD-2018-24942': 'The forced route is not enabled Remote code execution',
+        'CNVD-2018-24942': 'The forced route is not enabled RCE',
         'CNNVD-201901-445': 'Core class Request Remote code execution',
         '2.x RCE': 'ThinkPHP2.x Remote code execution',
         '5 ids sqlinject': 'ThinkPHP5 ids SQLinject',
@@ -550,7 +553,40 @@ lang['en_us']['list'] = {
         'CNNVD-201610-923': 'Yonyou-GRP-U8 Proxy SQLinject',
         'CNVD-2021-30167': 'Yonyou-NC BeanShell Remote code execution',
         'NCFindWeb': 'Yonyou-ERP-NC NCFindWeb Directory traversal',
-        'getSessionList.jsp': 'Yonyou-U8-OA getSessionList.jsp Disclosure information',
+        'getSessionList.jsp': 'Yonyou-U8-OA getSessionList.jsp Disclosure info',
         'test.jsp': 'Yonyou-U8-OA test.jsp SQLinject',
     }
 }
+
+# ! -x/--exp中文------------------------------------------------------------
+
+lang['zh_cn']['exploit'] = {
+    'identify': '[+] 识别为"{}"漏洞, 进入Exp交互模式:',
+    'not_exp': '[-] 没有识别到漏洞类型, 或该漏洞类型不支持Exp',
+    'not_request': '[-] POC结果没有返回Request(HTTP请求数据包), 无法使用Exp',
+    'input_command': '根据漏洞类型 输入相应的内容(例如"whoami"或"/etc/passwd"): ',
+    'not_command': '请输入命令 (可以输入“exit”退出)',
+    'faild_command': '[Faild] 使用该命令时发生错误',
+    'not_search_command': '[INFO] 替换新payload失败, 没有在旧的HTTP数据包中检测到旧的payload',
+    'exit': '[INFO] 退出Exploit模式',
+    'exp_faild': '[Exploit] 请求失败',
+    'not_response': '没有检测到响应包中的回显内容',
+    're_error': 'vcsearch语法错误: 错误的正则表达式',
+}
+
+# ! -x/--exp英文------------------------------------------------------------
+lang['en_us']['exploit'] = {
+    'identify': '[+] Identified as "{}" vulnerability, Enter the Exp interactive mode:',
+    'not_exp': '[-] The vulnerability type is not identified, or Exp is not supported by the vulnerability type',
+    'not_request': '[-] The poc result did not return the Request(HTTP Request), Unable to use Exp',
+    'input_command': 'Enter the value according to the vulnerability type(e.g. "whoami"or"/etc/passwd"): ',
+    'not_command': 'Please enter the command(You can enter "exit" to exit)',
+    'faild_command': '[Faild] An error occurred while using the command',
+    'not_search_command': '[INFO] Description Failed to replace the new payload, No old payload was detected in the old HTTP packet',
+    'exit': '[INFO] Exit the Exploit.',
+    'exp_faild': '[Exploit] Request failed',
+    'not_response': 'Echoes in response packets are not detected',
+    're_error': 'vcsearch syntax error: Incorrect regular expression',
+}
+
+

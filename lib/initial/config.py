@@ -8,7 +8,6 @@
 from lib.initial.language import language
 from thirdparty.requests import packages
 import re
-import http.client
 import socket
 import socks
 
@@ -21,7 +20,7 @@ class Config():
 
         args.ceye_domain = ''                                           # * http://ceye.io/ 平台的域名
         args.ceye_token = ''                                            # * http://ceye.io/ 平台的token
-
+        
         args.lang = language()                                          # * 语言
 
         args.url_list = []                                              # * url列表
@@ -105,6 +104,7 @@ class Config():
         if args.vuln:
             args.vuln = args.vuln.lower()
             args.vuln = args.vuln.replace('-', '_')
+            args.vuln = args.vuln.replace('.', '_')
 
         app_list = [
             'alidruid', 'airflow', 'apisix', 'appweb', 
@@ -122,7 +122,7 @@ class Config():
             'nexus', 'nacos', 'nodejs', 'nodered', 
             'phpmyadmin', 'phpunit',
             'rails', 
-            'showdoc', 'solr', 'struts2', 'spring', 'skywalking',
+            'showdoc', 'solr', 'spring', 'skywalking', 'supervisor',
             'thinkphp', 'tomcat', 
             'ueditor', 
             'weblogic', 'webmin',

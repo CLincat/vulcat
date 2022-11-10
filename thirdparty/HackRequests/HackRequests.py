@@ -201,7 +201,9 @@ class hackRequests(object):
                 v = ""
             headers[k] = v
             index += 1
-        headers["Connection"] = "close"
+        if not headers["Connection"]:
+            headers["Connection"] = "close"
+            
         if len(raws) < index + 1:
             body = ''
         else:
@@ -237,7 +239,11 @@ class hackRequests(object):
         except KeyboardInterrupt:
             raise HackError("user exit")
         finally:
-            conn.close()
+            try:
+                rep.read_copy = rep.read()                  # * 2022-11-06 Clincat, copy rep.read()
+                conn.close()
+            except:
+                pass
         log["response"] = "HTTP/%.1f %d %s" % (
             rep.version * 0.1, rep.status,
             rep.reason) + '\r\n' + str(rep.msg)
@@ -316,7 +322,11 @@ class hackRequests(object):
         except KeyboardInterrupt:
             raise HackError("user exit")
         finally:
-            conn.close()
+            try:
+                rep.read_copy = rep.read()                  # * 2022-11-06 Clincat, copy rep.read()
+                conn.close()
+            except:
+                pass
 
         if post:
             log["request"] += "\r\n\r\n" + post
@@ -381,7 +391,8 @@ class response(object):
             return self._content
         encode = self.rep.msg.get('content-encoding', None)
         try:
-            body = self.rep.read()
+            # body = self.rep.read()
+            body = self.rep.read_copy           # * 2022-11-06 Clincat, use read_copy
         except socket.timeout:
             body = b''
         if encode == 'gzip':

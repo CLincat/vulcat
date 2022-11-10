@@ -162,7 +162,7 @@ class Solr():
         ''' 当Solr不启用身份验证时, 攻击者可以直接制造请求以启用特定配置, 最终导致SSRF或任意文件读取 '''
         vul_info = {}
         vul_info['app_name'] = self.app_name
-        vul_info['vul_type'] = 'SSRF'
+        vul_info['vul_type'] = 'SSRF/FileRead'
         vul_info['vul_id'] = 'CVE-2021-27905'
         vul_info['vul_method'] = 'GET/POST'
         vul_info['headers'] = {
@@ -206,11 +206,14 @@ class Solr():
                 logger.logging(vul_info, 'Error')
                 return None
 
-            if (('/sbin/nologin' in res.text) or ('root:x:0:0:root' in res.text) or ('Microsoft Corp' in res.text) or ('Microsoft TCP/IP for Windows' in res.text)):
+            if (re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', res.text, re.I|re.M|re.S)
+                or (('Microsoft Corp' in res.text) 
+                    and ('Microsoft TCP/IP for Windows' in res.text))
+            ):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Payload': res
+                    'Request': res
                 }
                 return results
 

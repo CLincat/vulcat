@@ -20,6 +20,7 @@ from lib.tool.thread import thread
 from lib.tool import check
 from thirdparty import requests
 from time import sleep
+import re
 
 class NodeRED():
     def __init__(self):
@@ -94,10 +95,9 @@ class NodeRED():
                 logger.logging(vul_info, 'Error')
                 return None
 
-            if (('/sbin/nologin' in res.text) 
-                or ('root:x:0:0:root' in res.text) 
-                or ('Microsoft Corp' in res.text) 
-                or ('Microsoft TCP/IP for Windows' in res.text)
+            if (re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', res.text, re.I|re.M|re.S)
+                or (('Microsoft Corp' in res.text) 
+                    and ('Microsoft TCP/IP for Windows' in res.text))
                 or ('To password protect the Node-RED editor and admin API' in res.text)
             ):
                 results = {
@@ -107,7 +107,8 @@ class NodeRED():
                     'Payload': {
                         'Url': url,
                         'Path': path
-                    }
+                    },
+                    'Request': res
                 }
                 return results
 

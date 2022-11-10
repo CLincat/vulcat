@@ -34,6 +34,7 @@ from lib.tool import check
 from lib.tool import head
 from thirdparty import requests
 from time import sleep
+import re
 
 class ElasticSearch():
     def __init__(self):
@@ -159,7 +160,7 @@ class ElasticSearch():
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Payload': res
+                    'Request': res
                 }
                 return results
 
@@ -210,7 +211,7 @@ class ElasticSearch():
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Payload': res
+                    'Request': res
                 }
                 return results
 
@@ -256,8 +257,10 @@ class ElasticSearch():
                 logger.logging(vul_info, 'Error')
                 return None
 
-            if (('/sbin/nologin' in res.text)
-                or ('root:x:0:0:root' in res.text)):
+            if (re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', res.text, re.I|re.M|re.S)
+                # or (('Microsoft Corp' in res.text) 
+                #     and ('Microsoft TCP/IP for Windows' in res.text))
+            ):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
@@ -345,7 +348,8 @@ class ElasticSearch():
                         'Path': path,
                         'Decode': 'ASCII decimal encode',
                         'Decode-Url': 'https://www.qqxiuzi.cn/bianma/ascii.htm'
-                    }
+                    },
+                    'Request': res
                 }
                 return results
 

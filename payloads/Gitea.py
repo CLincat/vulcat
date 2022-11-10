@@ -22,6 +22,7 @@ from lib.tool import check
 from lib.tool import head
 from thirdparty import requests
 from time import sleep
+import re
 
 class Gitea():
     def __init__(self):
@@ -123,10 +124,9 @@ class Gitea():
                         )
                         logger.logging(vul_info, res2.status_code, res2)                        # * LOG
 
-                        if (('/sbin/nologin' in res2.text) 
-                            or ('root:x:0:0:root' in res2.text) 
-                            or ('Microsoft Corp' in res2.text) 
-                            or ('Microsoft TCP/IP for Windows' in res2.text)
+                        if (re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', res2.text, re.I|re.M|re.S)
+                            or (('Microsoft Corp' in res2.text) 
+                                and ('Microsoft TCP/IP for Windows' in res2.text))
                         ):
                             results = {
                                 'Target': target,

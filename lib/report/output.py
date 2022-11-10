@@ -7,19 +7,14 @@ from lib.tool.timed import nowtime_year
 from lib.tool.logger import logger
 from thirdparty import requests
 from thirdparty import HackRequests
-# from lib.plugins.Exp import exp
 import json
 import http.client
 
 def output_info(results, lang):
-    # cmd = config.get('command')
-    
     logger.info('cyan_ex', lang['output']['info']['wait'])                              # ? 日志, 正在处理扫描结果
     results_info_list = []
 
     for result in results:
-        # if (result and cmd):
-            # exp(result)
         if result:
             results_info = ''
             results_info += output_vul_info_color(result)
@@ -135,8 +130,11 @@ def output_vul_info_color(result):
 
     return result_info
 
-def output_vul_info(result):
-    ''' 漏洞信息, 无颜色, 用于保存结果至文件中 '''
+def output_vul_info(result, old_str='\n'):
+    ''' 漏洞信息, 无颜色, 用于保存结果至文件中
+            :param result: vulcat的单个poc扫描结果
+            :param old_str: 适配Exploit模式, 其它情况下不用理会
+    '''
     result_info = '\n'
     for key, value in result.items():
         value_type = type(value)
@@ -153,7 +151,7 @@ def output_vul_info(result):
             result_info += output_res(key, value, iscolor=False)
 
         elif value_type == HackRequests.response:
-            result_info += output_Hackres(key, value, iscolor=False)
+            result_info += output_Hackres(key, value, iscolor=False, old_str=old_str)
 
     return result_info
 
@@ -258,8 +256,14 @@ def output_res(key, res, iscolor=True):
 
         return info_res
 
-def output_Hackres(key, res, iscolor=True):
-        ''' 接收一个HackRequests结果, 返回一个http数据包 '''
+def output_Hackres(key, res, iscolor=True, old_str='\n'):
+        ''' 接收一个HackRequests结果, 返回一个http数据包
+                :param key: 字典key值
+                :param res: HackRequests.Response
+                :param iscolor: 颜色
+                :param rep: 用来适配Exploit模式, exp不能使用带换行的
+                :return: 带颜色/无颜色的http请求数据包
+        '''
         info_res = ''
 
         if iscolor:
@@ -276,7 +280,7 @@ def output_Hackres(key, res, iscolor=True):
             try:
                 info_res += key + ':'
                 info_res += ' [Request'
-                info_res += '\n' + res.log.get('request').replace('\n', '')
+                info_res += '\n' + res.log.get('request').replace(old_str, '')
 
                 info_res += ']\n    '
             except:

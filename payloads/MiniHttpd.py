@@ -21,6 +21,7 @@ from lib.tool.thread import thread
 from lib.tool import check
 from thirdparty import requests
 from time import sleep
+import re
 
 class MiniHttpd():
     def __init__(self):
@@ -28,7 +29,7 @@ class MiniHttpd():
         self.headers = config.get('headers')
         self.proxies = config.get('proxies')
 
-        self.app_name = 'mini_httpd'
+        self.app_name = 'MiniHttpd'
         self.md = md5(self.app_name)
         self.cmd = 'echo ' + self.md
 
@@ -80,9 +81,7 @@ class MiniHttpd():
                 logger.logging(vul_info, 'Error')
                 return None
 
-            if (('/sbin/nologin' in res.text) 
-                or ('root:x:0:0:root' in res.text) 
-            ):
+            if (re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', res.text, re.I|re.M|re.S)):
                 results = {
                     'Target': target,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],

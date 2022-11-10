@@ -209,7 +209,8 @@ class Weblogic():
                         'Url': url,
                         'Path': path,
                         'Headers': vul_info['headers']
-                    }
+                    },
+                    'Request': res
                 }
                 return results
 

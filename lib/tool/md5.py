@@ -2,8 +2,7 @@
 # -*- coding:utf-8 -*-
 
 '''
-    获取md5值, 取前6位
-    获取随机的md5值, 取前8位
+    md5
 '''
 
 import hashlib
@@ -23,14 +22,43 @@ def random_md5():
 
     return md.hexdigest()[:8]
 
-def random_int_1():
-    ''' 返回1个随机整数, 范围1234-5678 '''
-    num1 = random.randint(1234, 5678)
+def random_int_1(len = 4):
+    ''' 返回1个随机整数, 默认范围1234-5678
+            @param len
+                随机数长度, 默认为4, 最小为1, 最大为6
+            范围
+                1-9
+                10-99
+                100-999
+                1234-5678
+                12345-56789
+                123456-567890
+    '''
+
+    num_list_1 = [0, 1, 10, 100, 1234, 12345, 123456]
+    num_list_2 = [0, 9, 99, 999, 5678, 56789, 567890]
+    
+    num1 = random.randint(num_list_1[len], num_list_2[len])
+
     return num1
 
-def random_int_2():
-    ''' 返回2个随机整数, 范围1234-5678 '''
-    num1 = random.randint(1234, 5678)
-    num2 = random.randint(1234, 5678)
+def random_int_2(len = 4):
+    ''' 返回2个随机整数, 默认范围1234-5678
+            @param len
+                随机数长度, 默认为4, 最小为1, 最大为6
+            范围
+                1-9
+                10-99
+                100-999
+                1234-5678
+                12345-56789
+                123456-567890
+    '''
+
+    num_list_1 = [0, 1, 10, 100, 1234, 12345, 123456]
+    num_list_2 = [0, 9, 99, 999, 5678, 56789, 567890]
+
+    num1 = random.randint(num_list_1[len], num_list_2[len])
+    num2 = random.randint(num_list_1[len], num_list_2[len])
 
     return num1, num2

@@ -1,7 +1,7 @@
 # vulcat
 
-[![python](https://img.shields.io/badge/Python-3.8+-blue?logo=python)](https://shields.io/)
-[![version](https://img.shields.io/badge/Version-1.1.5-blue)](https://shields.io/)
+[![python](https://img.shields.io/badge/Python-3-blue?logo=python)](https://shields.io/)
+[![version](https://img.shields.io/badge/Version-1.1.6-blue)](https://shields.io/)
 [![license](https://img.shields.io/badge/LICENSE-GPL-yellow)](https://shields.io/)
 [![stars](https://img.shields.io/github/stars/CLincat/vulcat?color=red)](https://shields.io/)
 [![forks](https://img.shields.io/github/forks/CLincat/vulcat?color=red)](https://shields.io/)

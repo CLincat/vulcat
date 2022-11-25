@@ -126,7 +126,8 @@ class Config():
             'thinkphp', 'tomcat', 
             'ueditor', 
             'weblogic', 'webmin',
-            'yonyou'
+            'yonyou',
+            'zabbix'
         ]
 
         if args.application in ['auto', 'all']:                         # * -a参数

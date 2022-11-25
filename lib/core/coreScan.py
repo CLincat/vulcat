@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-# ! 12: from payloads.文件名 import 对象名称
+# ! 12: from payloads.文件名.main import 对象名称
 
 from lib.initial.config import config
 from lib.tool.logger import logger
@@ -12,52 +12,54 @@ from lib.plugins.fingerprint.waf import waf
 from lib.plugins.fingerprint.webapp import webapp
 from lib.plugins.exploit import exploit
 
-from payloads.AlibabaDruid import alidruid
-from payloads.AlibabaNacos import nacos
-from payloads.ApacheAirflow import airflow
-from payloads.ApacheAPISIX import apisix
-from payloads.ApacheFlink import flink
-from payloads.ApacheHadoop import hadoop
-from payloads.ApacheHttpd import httpd
-from payloads.ApacheSkyWalking import skywalking
-from payloads.ApacheSolr import solr
-from payloads.ApacheTomcat import tomcat
+from payloads.AlibabaDruid.main import alidruid
+from payloads.AlibabaNacos.main import nacos
+from payloads.ApacheAirflow.main import airflow
+from payloads.ApacheAPISIX.main import apisix
+from payloads.ApacheFlink.main import flink
+from payloads.ApacheHadoop.main import hadoop
+from payloads.ApacheHttpd.main import httpd
+from payloads.ApacheSkyWalking.main import skywalking
+from payloads.ApacheSolr.main import solr
+from payloads.ApacheTomcat.main import tomcat
 # from payloads.ApacheStruts2 import struts2        # 2022/11/04被移除
-from payloads.AppWeb import appweb
-from payloads.AtlassianConfluence import confluence
-from payloads.Cisco import cisco
-from payloads.Discuz import discuz
-from payloads.Django import django
-from payloads.Drupal import drupal
-from payloads.ElasticSearch import elasticsearch
-from payloads.F5BIGIP import f5bigip
-from payloads.Fastjson import fastjson
-from payloads.Gitea import gitea
-from payloads.Gitlab import gitlab
-from payloads.Grafana import grafana
-from payloads.Influxdb import influxdb
-from payloads.Jenkins import jenkins
-from payloads.Jetty import jetty
-from payloads.Jupyter import jupyter
-from payloads.Keycloak import keycloak
-# from payloads.Kindeditor import kindeditor        # 还未测试poc准确性
-from payloads.Landray import landray
-from payloads.MiniHttpd import minihttpd
-from payloads.MongoExpress import mongoexpress
-from payloads.Nexus import nexus
-from payloads.Nodejs import nodejs
-from payloads.NodeRED import nodered
-from payloads.phpMyadmin import phpmyadmin
-from payloads.phpUint import phpunit
-from payloads.RubyOnRails import rails
-from payloads.ShowDoc import showdoc
-from payloads.Spring import spring
-from payloads.Supervisor import supervisor
-from payloads.ThinkPHP import thinkphp
-from payloads.Ueditor import ueditor
-from payloads.Weblogic import weblogic
-from payloads.Webmin import webmin
-from payloads.Yonyou import yonyou
+from payloads.AppWeb.main import appweb
+from payloads.AtlassianConfluence.main import confluence
+from payloads.Cisco.main import cisco
+from payloads.Discuz.main import discuz
+from payloads.Django.main import django
+from payloads.Drupal.main import drupal
+from payloads.ElasticSearch.main import elasticsearch
+from payloads.F5BIGIP.main import f5bigip
+from payloads.Fastjson.main import fastjson
+from payloads.Gitea.main import gitea
+from payloads.Gitlab.main import gitlab
+from payloads.Grafana.main import grafana
+from payloads.Influxdb.main import influxdb
+from payloads.Jenkins.main import jenkins
+from payloads.Jetty.main import jetty
+from payloads.Jupyter.main import jupyter
+from payloads.Keycloak.main import keycloak
+# from payloads.Kindeditor.main import kindeditor        # 还未测试poc准确性
+from payloads.Landray.main import landray
+from payloads.MiniHttpd.main import minihttpd
+from payloads.MongoExpress.main import mongoexpress
+from payloads.Nexus.main import nexus
+from payloads.Nodejs.main import nodejs
+from payloads.NodeRED.main import nodered
+from payloads.phpMyadmin.main import phpmyadmin
+from payloads.phpUint.main import phpunit
+from payloads.RubyOnRails.main import rails
+from payloads.ShowDoc.main import showdoc
+from payloads.Spring.main import spring
+from payloads.Supervisor.main import supervisor
+from payloads.ThinkPHP.main import thinkphp
+from payloads.Ueditor.main import ueditor
+from payloads.uWSGIPHP.main import uwsgiphp
+from payloads.Weblogic.main import weblogic
+from payloads.Webmin.main import webmin
+from payloads.Yonyou.main import yonyou
+from payloads.Zabbix.main import zabbix
 
 from thirdparty.tqdm import tqdm
 from queue import Queue

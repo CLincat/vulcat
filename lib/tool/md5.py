@@ -8,12 +8,12 @@
 import hashlib
 import random
 
-def md5(app_name):
-    ''' 生成md5值, 并返回前6位 '''
+def md5(app_name, num=6):
+    ''' 生成md5值, 默认返回前6位, 最大32 '''
     md = hashlib.md5()
     md.update(app_name.encode('utf-8'))
     
-    return md.hexdigest()[:6]
+    return md.hexdigest()[:num]
 
 def random_md5():
     random_number = str(random.randint(0, 99999999))

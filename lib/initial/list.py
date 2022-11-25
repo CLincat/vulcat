@@ -41,7 +41,7 @@ def list():
             vul_list += '\n'
         vul_list += '+' + Target_len_ + '+' + Vul_id_len_ + '+' + Type_len_ + '+' + Exp_len_ + '+' + Description_len_ + '+\n'
 
-    print(color.cyan(vul_list + 'vulcat-1.1.5/2022.11'))    # * 2022-11-09_20:52
+    print(color.cyan(vul_list + 'vulcat-1.1.6/2022.11.25'))    # * 2022-11-25_10:04
     print(color.cyan(str(vul_num - 1) + '/Poc'))            # * 有一个是标题, 所以要-1
     print(color.cyan(str(exp_num) + '/Exp'))
     # print(vul_num)
@@ -715,7 +715,15 @@ vul_info = {
             'exp': '-',
             'description': list_lang['Yonyou']['test.jsp']
         }
-    ]
+    ],
+    'Zabbix': [
+        {
+            'vul_id': 'CVE-2016-10134',
+            'type': 'SQLinject',
+            'exp': '-',
+            'description': list_lang['Zabbix']['CVE-2016-10134']
+        }
+    ],
 }
 
 # vul_list = '''

@@ -75,7 +75,7 @@ lang = {
         },
         'app_list_help': {
             'title': 'Supported target types(Case insensitive)',
-            'name': 'AliDruid, airflow, apisix, appweb, cisco, confluence, discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab, grafana, influxdb, hadoop, httpd, jenkins, jetty, jupyter, keycloak, landray, minihttpd, mongoexpress, nexus, nacos, nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, solr, spring, supervisor, skywalking, thinkphp, tomcat, ueditor, weblogic, webmin, yonyou'
+            'name': 'AliDruid, airflow, apisix, appweb, cisco, confluence, discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab, grafana, influxdb, hadoop, httpd, jenkins, jetty, jupyter, keycloak, landray, minihttpd, mongoexpress, nexus, nacos, nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, solr, spring, supervisor, skywalking, thinkphp, tomcat, ueditor, weblogic, webmin, yonyou, zabbix'
         },
         'core': {
             'start': {
@@ -206,7 +206,7 @@ lang = {
         },
         'app_list_help': {
             'title': '支持的目标类型(-a参数, 不区分大小写)',
-            'name': 'AliDruid, airflow, apisix, appweb, cisco, confluence, discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab, grafana, influxdb, hadoop, httpd, jenkins, jetty, jupyter, keycloak, landray, minihttpd, mongoexpress, nexus, nacos, nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, solr, spring, supervisor, skywalking, thinkphp, tomcat, ueditor, weblogic, webmin, yonyou'
+            'name': 'AliDruid, airflow, apisix, appweb, cisco, confluence, discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab, grafana, influxdb, hadoop, httpd, jenkins, jetty, jupyter, keycloak, landray, minihttpd, mongoexpress, nexus, nacos, nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, solr, spring, supervisor, skywalking, thinkphp, tomcat, ueditor, weblogic, webmin, yonyou, zabbix'
         },
         'core': {
             'start': {
@@ -415,6 +415,9 @@ lang['zh_cn']['list'] = {
         'NCFindWeb': '用友ERP-NC NCFindWeb目录遍历',
         'getSessionList.jsp': '用友U8 OA getSessionList.jsp 敏感信息泄漏',
         'test.jsp': '用友U8 OA test.jsp SQL注入',
+    },
+    'Zabbix': {
+        'CVE-2016-10134': 'latest.php或jsrpc.php存在sql注入'
     }
 }
 
@@ -555,6 +558,9 @@ lang['en_us']['list'] = {
         'NCFindWeb': 'Yonyou-ERP-NC NCFindWeb Directory traversal',
         'getSessionList.jsp': 'Yonyou-U8-OA getSessionList.jsp Disclosure info',
         'test.jsp': 'Yonyou-U8-OA test.jsp SQLinject',
+    },
+    'Zabbix': {
+        'CVE-2016-10134': 'latest.php or jsrpc.php SQLinject'
     }
 }
 

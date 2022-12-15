@@ -1,7 +1,7 @@
 # vulcat
 
 [![python](https://img.shields.io/badge/Python-3-blue?logo=python)](https://shields.io/)
-[![version](https://img.shields.io/badge/Version-1.1.6-blue)](https://shields.io/)
+[![version](https://img.shields.io/badge/Version-1.1.7-blue)](https://shields.io/)
 [![license](https://img.shields.io/badge/LICENSE-GPL-yellow)](https://shields.io/)
 [![stars](https://img.shields.io/github/stars/CLincat/vulcat?color=red)](https://shields.io/)
 [![forks](https://img.shields.io/github/forks/CLincat/vulcat?color=red)](https://shields.io/)
@@ -16,7 +16,7 @@
 * 如果有什么想法、建议或者遇到了BUG, 都可以issues
 
 **目前支持扫描的web应用程序有:**
-> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheAPISIX, ApacheFlink, ApacheHadoop, ApacheHttpd, ApacheSkywalking, ApacheSolr, ApacheTomcat, AppWeb, AtlassianConfluence, Cicso, Discuz, Django, Drupal, ElasticSearch, F5-BIG-IP, Fastjson, Gitea, Gitlab, Grafana, Influxdb, RubyOnRails, Jenkins, Jetty, Jupyter, Keycloak, Landray-OA, MiniHttpd, mongo-express, Nexus, Node.js, NodeRED, phpMyAdmin, phpUnit, ShowDoc, Spring, Supervisor, ThinkPHP, Ueditor, Weblogic, Webmin, Yonyou, Zabbix
+> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheAPISIX, ApacheDruid, ApacheFlink, ApacheHadoop, ApacheHttpd, ApacheSkywalking, ApacheSolr, ApacheTomcat, AppWeb, AtlassianConfluence, Cicso, Discuz, Django, Drupal, ElasticSearch, F5-BIG-IP, Fastjson, Gitea, Gitlab, Grafana, Influxdb, RubyOnRails, Jenkins, Jetty, Jupyter, Keycloak, Landray-OA, MiniHttpd, mongo-express, Nexus, Node.js, NodeRED, phpMyAdmin, phpUnit, ShowDoc, Spring, Supervisor, ThinkPHP, Ueditor, Weblogic, Webmin, Yonyou, Zabbix
 
 **你还可以查看下方的"漏洞列表", 查看vulcat支持扫描的漏洞**
 
@@ -141,7 +141,7 @@ Options:
     --list              查看所有Payload
 
   支持的目标类型(-a参数, 不区分大小写):
-    AliDruid, airflow, apisix, appweb, cisco, confluence, discuz, django,
+    AliDruid, airflow, apisix, apachedruid, appweb, cisco, confluence, discuz, django,
     drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab,
     grafana, influxdb, hadoop, httpd, jenkins, jetty, jupyter, keycloak,
     landray, minihttpd, mongoexpress, nexus, nacos, nodejs, nodered,
@@ -187,7 +187,7 @@ args.ceye_token = ''
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Target               | Vuln id            | Vuln Type    | Exp | Description                                                          |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
-| Alibaba Druid        | None               | unAuth       |  -  | 阿里巴巴Druid未授权访问                                              |
+| Alibaba Druid        | (None)             | unAuth       |  -  | 阿里巴巴Druid未授权访问                                              |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Alibaba Nacos        | CVE-2021-29441     | unAuth       |  -  | 阿里巴巴Nacos未授权访问                                              |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
@@ -195,9 +195,12 @@ args.ceye_token = ''
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Apache APISIX        | CVE-2020-13945     | unAuth       |  -  | Apache APISIX默认密钥                                                |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
+| Apache Druid         | CVE-2021-25646     | RCE          |  Y  | Apache Druid 远程代码执行                                            |
+| Apache Druid         | CVE-2021-36749     | FileRead     |  Y  | Apache Druid 任意文件读取                                            |
++----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Apache Flink         | CVE-2020-17519     | FileRead     |  Y  | Flink目录遍历                                                        |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
-| Apache Hadoop        | None               | unAuth       |  -  | Hadoop YARN ResourceManager 未授权访问                               |
+| Apache Hadoop        | (None)             | unAuth       |  -  | Hadoop YARN ResourceManager 未授权访问                               |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Apache Httpd         | CVE-2021-40438     | SSRF         |  -  | Apache HTTP Server 2.4.48 mod_proxy SSRF                             |
 | Apache Httpd         | CVE-2021-41773     | FileRead/RCE |  Y  | Apache HTTP Server 2.4.49 路径遍历                                   |
@@ -211,10 +214,12 @@ args.ceye_token = ''
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Apache Tomcat        | CVE-2017-12615     | FileUpload   |  -  | PUT方法任意文件写入                                                  |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
+| Apache Unomi         | CVE-2020-13942     | RCE          |  Y  | Apache Unomi远程表达式代码执行                                       |
++----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | AppWeb               | CVE-2018-8715      | unAuth       |  -  | AppWeb身份认证绕过                                                   |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Atlassian Confluence | CVE-2015-8399      | FileRead     |  Y  | Confluence任意文件包含                                               |
-| Atlassian Confluence | CVE-2019-3396      | RCE/FileRead |  Y  | Confluence路径遍历和命令执行                                         |
+| Atlassian Confluence | CVE-2019-3396      | FileRead     |  Y  | Confluence路径遍历和命令执行                                         |
 | Atlassian Confluence | CVE-2021-26084     | RCE          |  Y  | Confluence Webwork Pre-Auth OGNL表达式命令注入                       |
 | Atlassian Confluence | CVE-2022-26134     | RCE          |  Y  | Confluence远程代码执行                                               |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
@@ -239,19 +244,19 @@ args.ceye_token = ''
 | ElasticSearch        | CVE-2015-5531      | FileRead     |  Y  | ElasticSearch 目录穿越                                               |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | F5 BIG-IP            | CVE-2020-5902      | RCE          |  -  | BIG-IP远程代码执行                                                   |
-| F5 BIG-IP            | CVE-2022-1388      | unAuth       |  Y  | BIG-IP远程代码执行                                                   |
+| F5 BIG-IP            | CVE-2022-1388      | unAuth/RCE   |  Y  | BIG-IP远程代码执行                                                   |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Fastjson             | CNVD-2017-02833    | unSerialize  |  -  | Fastjson <= 1.2.24 反序列化                                          |
 | Fastjson             | CNVD-2019-22238    | unSerialize  |  -  | Fastjson <= 1.2.47 反序列化                                          |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
-| Gitea                | None               | unAuth       |  -  | Gitea 1.4.0 未授权访问                                               |
+| Gitea                | (None)             | unAuth       |  -  | Gitea 1.4.0 未授权访问                                               |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Gitlab               | CVE-2021-22205     | RCE          |  -  | GitLab Pre-Auth 远程命令执行                                         |
 | Gitlab               | CVE-2021-22214     | SSRF         |  -  | Gitlab CI Lint API未授权 SSRF                                        |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Grafana              | CVE-2021-43798     | FileRead     |  Y  | Grafana 8.x 插件模块路径遍历                                         |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
-| Influxdb             | None               | unAuth       |  -  | influxdb 未授权访问                                                  |
+| Influxdb             | (None)             | unAuth       |  -  | influxdb 未授权访问                                                  |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Jenkins              | CVE-2018-1000861   | RCE          |  -  | jenkins 远程命令执行                                                 |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
@@ -259,7 +264,7 @@ args.ceye_token = ''
 | Jetty                | CVE-2021-28169     | DSinfo       |  -  | jetty Utility Servlets ConcatServlet 双重解码信息泄露                |
 | Jetty                | CVE-2021-34429     | DSinfo       |  -  | jetty 模糊路径信息泄露                                               |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
-| Jupyter              | None               | unAuth       |  -  | Jupyter 未授权访问                                                   |
+| Jupyter              | (None)             | unAuth       |  -  | Jupyter 未授权访问                                                   |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Keycloak             | CVE-2020-10770     | SSRF         |  -  | 使用request_uri调用未经验证的URL                                     |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
@@ -305,10 +310,11 @@ args.ceye_token = ''
 | ThinkPHP             | CVE-2018-1002015   | RCE          |  Y  | ThinkPHP5.x 远程代码执行                                             |
 | ThinkPHP             | CNVD-2018-24942    | RCE          |  Y  | 未开启强制路由导致RCE                                                |
 | ThinkPHP             | CNNVD-201901-445   | RCE          |  Y  | 核心类Request远程代码执行                                            |
-| ThinkPHP             | None               | RCE          |  -  | ThinkPHP2.x 远程代码执行                                             |
-| ThinkPHP             | None               | SQLinject    |  -  | ThinkPHP5 ids参数SQL注入                                             |
+| ThinkPHP             | CNVD-2022-86535    | RCE          |  -  | ThinkPHP 多语言模块命令执行                                          |
+| ThinkPHP             | (None)             | RCE          |  -  | ThinkPHP2.x 远程代码执行                                             |
+| ThinkPHP             | (None)             | SQLinject    |  -  | ThinkPHP5 ids参数SQL注入                                             |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
-| Ueditor              | None               | SSRF         |  -  | Ueditor编辑器SSRF                                                    |
+| Ueditor              | (None)             | SSRF         |  -  | Ueditor编辑器SSRF                                                    |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Oracle Weblogic      | CVE-2014-4210      | SSRF         |  -  | Weblogic 服务端请求伪造                                              |
 | Oracle Weblogic      | CVE-2017-10271     | unSerialize  |  -  | Weblogic XMLDecoder反序列化                                          |
@@ -321,15 +327,15 @@ args.ceye_token = ''
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Yonyou               | CNNVD-201610-923   | SQLinject    |  -  | 用友GRP-U8 Proxy SQL注入                                             |
 | Yonyou               | CNVD-2021-30167    | RCE          |  Y  | 用友NC BeanShell远程命令执行                                         |
-| Yonyou               | None               | FileRead     |  -  | 用友ERP-NC NCFindWeb目录遍历                                         |
-| Yonyou               | None               | DSinfo       |  -  | 用友U8 OA getSessionList.jsp 敏感信息泄漏                            |
-| Yonyou               | None               | SQLinject    |  -  | 用友U8 OA test.jsp SQL注入                                           |
+| Yonyou               | (None)             | FileRead     |  -  | 用友ERP-NC NCFindWeb目录遍历                                         |
+| Yonyou               | (None)             | DSinfo       |  -  | 用友U8 OA getSessionList.jsp 敏感信息泄漏                            |
+| Yonyou               | (None)             | SQLinject    |  -  | 用友U8 OA test.jsp SQL注入                                           |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Zabbix               | CVE-2016-10134     | SQLinject    |  -  | latest.php或jsrpc.php存在sql注入                                     |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
-vulcat-1.1.6/2022.11.25
-95/Poc
-34/Exp
+vulcat-1.1.7/2022.12.15
+99/Poc
+37/Exp
 ```
 </details>
 

@@ -1,7 +1,7 @@
 # vulcat
 
 [![python](https://img.shields.io/badge/Python-3-blue?logo=python)](https://shields.io/)
-[![version](https://img.shields.io/badge/Version-1.1.6-blue)](https://shields.io/)
+[![version](https://img.shields.io/badge/Version-1.1.7-blue)](https://shields.io/)
 [![license](https://img.shields.io/badge/LICENSE-GPL-yellow)](https://shields.io/)
 [![stars](https://img.shields.io/github/stars/CLincat/vulcat?color=red)](https://shields.io/)
 [![forks](https://img.shields.io/github/forks/CLincat/vulcat?color=red)](https://shields.io/)
@@ -14,7 +14,7 @@
 * If you have any ideas, suggestions, or bugs, you can issue
 
 **Web applications that currently support scanning:**
-> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheAPISIX, ApacheFlink, ApacheHadoop, ApacheHttpd, ApacheSkywalking, ApacheSolr, ApacheTomcat, AppWeb, AtlassianConfluence, Cicso, Discuz, Django, Drupal, ElasticSearch, F5-BIG-IP, Fastjson, Gitea, Gitlab, Grafana, Influxdb, RubyOnRails, Jenkins, Jetty, Jupyter, Keycloak, Landray-OA, MiniHttpd, mongo-express, Nexus, Node.js, NodeRED, phpMyAdmin, phpUnit, ShowDoc, Spring, Supervisor, ThinkPHP, Ueditor, Weblogic, Webmin, Yonyou, Zabbix
+> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheAPISIX, ApacheDruid, ApacheFlink, ApacheHadoop, ApacheHttpd, ApacheSkywalking, ApacheSolr, ApacheTomcat, AppWeb, AtlassianConfluence, Cicso, Discuz, Django, Drupal, ElasticSearch, F5-BIG-IP, Fastjson, Gitea, Gitlab, Grafana, Influxdb, RubyOnRails, Jenkins, Jetty, Jupyter, Keycloak, Landray-OA, MiniHttpd, mongo-express, Nexus, Node.js, NodeRED, phpMyAdmin, phpUnit, ShowDoc, Spring, Supervisor, ThinkPHP, Ueditor, Weblogic, Webmin, Yonyou, Zabbix
 
 **You can also check out the "Vulnerabilitys List" below to see which vulnerabilities vulcat supports scanning**
 
@@ -156,7 +156,7 @@ Options:
     --list              View all payload
 
   Supported target types(Case insensitive):
-    AliDruid, airflow, apisix, appweb, cisco, confluence, discuz, django,
+    AliDruid, airflow, apisix, apachedruid, appweb, cisco, confluence, discuz, django,
     drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab,
     grafana, influxdb, hadoop, httpd, jenkins, jetty, jupyter, keycloak,
     landray, minihttpd, mongoexpress, nexus, nacos, nodejs, nodered,
@@ -203,7 +203,7 @@ args.ceye_token = ''
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Target               | Vuln id            | Vuln Type    | Exp | Description                                                  |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
-| Alibaba Druid        | None               | unAuth       |  -  | Alibaba Druid unAuthorized                                   |
+| Alibaba Druid        | (None)             | unAuth       |  -  | Alibaba Druid unAuthorized                                   |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Alibaba Nacos        | CVE-2021-29441     | unAuth       |  -  | Alibaba Nacos unAuthorized                                   |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
@@ -211,9 +211,12 @@ args.ceye_token = ''
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Apache APISIX        | CVE-2020-13945     | unAuth       |  -  | Apache APISIX default access token                           |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Apache Druid         | CVE-2021-25646     | RCE          |  Y  | Apache Druid Remote Code Execution                           |
+| Apache Druid         | CVE-2021-36749     | FileRead     |  Y  | Apache Druid arbitrary file reading                          |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Apache Flink         | CVE-2020-17519     | FileRead     |  Y  | Apache Flink Directory traversal                             |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
-| Apache Hadoop        | None               | unAuth       |  -  | Apache Hadoop YARN ResourceManager unAuthorized              |
+| Apache Hadoop        | (None)             | unAuth       |  -  | Apache Hadoop YARN ResourceManager unAuthorized              |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Apache Httpd         | CVE-2021-40438     | SSRF         |  -  | Apache HTTP Server 2.4.48 mod_proxy SSRF                     |
 | Apache Httpd         | CVE-2021-41773     | FileRead/RCE |  Y  | Apache HTTP Server 2.4.49 Directory traversal                |
@@ -227,10 +230,12 @@ args.ceye_token = ''
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Apache Tomcat        | CVE-2017-12615     | FileUpload   |  -  | Put method writes to any file                                |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Apache Unomi         | CVE-2020-13942     | RCE          |  Y  | Apache Unomi Remote Express Language Code Execution          |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | AppWeb               | CVE-2018-8715      | unAuth       |  -  | AppWeb Authentication bypass                                 |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Atlassian Confluence | CVE-2015-8399      | FileRead     |  Y  | Confluence any file include                                  |
-| Atlassian Confluence | CVE-2019-3396      | RCE/FileRead |  Y  | Confluence Directory traversal && RCE                        |
+| Atlassian Confluence | CVE-2019-3396      | FileRead     |  Y  | Confluence Directory traversal && RCE                        |
 | Atlassian Confluence | CVE-2021-26084     | RCE          |  Y  | Confluence OGNL expression command injection                 |
 | Atlassian Confluence | CVE-2022-26134     | RCE          |  Y  | Confluence Remote code execution                             |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
@@ -255,19 +260,19 @@ args.ceye_token = ''
 | ElasticSearch        | CVE-2015-5531      | FileRead     |  Y  | ElasticSearch Directory traversal                            |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | F5 BIG-IP            | CVE-2020-5902      | RCE          |  -  | BIG-IP Remote code execution                                 |
-| F5 BIG-IP            | CVE-2022-1388      | unAuth       |  Y  | BIG-IP Remote code execution                                 |
+| F5 BIG-IP            | CVE-2022-1388      | unAuth/RCE   |  Y  | BIG-IP Remote code execution                                 |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Fastjson             | CNVD-2017-02833    | unSerialize  |  -  | Fastjson <= 1.2.24 deSerialization                           |
 | Fastjson             | CNVD-2019-22238    | unSerialize  |  -  | Fastjson <= 1.2.47 deSerialization                           |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
-| Gitea                | None               | unAuth       |  -  | Gitea 1.4.0 unAuthorized                                     |
+| Gitea                | (None)             | unAuth       |  -  | Gitea 1.4.0 unAuthorized                                     |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Gitlab               | CVE-2021-22205     | RCE          |  -  | GitLab Pre-Auth Remote code execution                        |
 | Gitlab               | CVE-2021-22214     | SSRF         |  -  | Gitlab CI Lint API SSRF                                      |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Grafana              | CVE-2021-43798     | FileRead     |  Y  | Grafana 8.x Directory traversal                              |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
-| Influxdb             | None               | unAuth       |  -  | influxdb unAuthorized                                        |
+| Influxdb             | (None)             | unAuth       |  -  | influxdb unAuthorized                                        |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Jenkins              | CVE-2018-1000861   | RCE          |  -  | jenkins Remote code execution                                |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
@@ -275,7 +280,7 @@ args.ceye_token = ''
 | Jetty                | CVE-2021-28169     | DSinfo       |  -  | jetty Servlets ConcatServlet Disclosure information          |
 | Jetty                | CVE-2021-34429     | DSinfo       |  -  | jetty Disclosure information                                 |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
-| Jupyter              | None               | unAuth       |  -  | Jupyter unAuthorized                                         |
+| Jupyter              | (None)             | unAuth       |  -  | Jupyter unAuthorized                                         |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Keycloak             | CVE-2020-10770     | SSRF         |  -  | request_uri SSRF                                             |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
@@ -321,10 +326,11 @@ args.ceye_token = ''
 | ThinkPHP             | CVE-2018-1002015   | RCE          |  Y  | ThinkPHP5.x Remote code execution                            |
 | ThinkPHP             | CNVD-2018-24942    | RCE          |  Y  | The forced route is not enabled RCE                          |
 | ThinkPHP             | CNNVD-201901-445   | RCE          |  Y  | Core class Request Remote code execution                     |
-| ThinkPHP             | None               | RCE          |  -  | ThinkPHP2.x Remote code execution                            |
-| ThinkPHP             | None               | SQLinject    |  -  | ThinkPHP5 ids SQLinject                                      |
+| ThinkPHP             | CNVD-2022-86535    | RCE          |  -  | ThinkPHP "think-lang" Remote code execution                  |
+| ThinkPHP             | (None)             | RCE          |  -  | ThinkPHP2.x Remote code execution                            |
+| ThinkPHP             | (None)             | SQLinject    |  -  | ThinkPHP5 ids SQLinject                                      |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
-| Ueditor              | None               | SSRF         |  -  | Ueditor SSRF                                                 |
+| Ueditor              | (None)             | SSRF         |  -  | Ueditor SSRF                                                 |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Oracle Weblogic      | CVE-2014-4210      | SSRF         |  -  | Weblogic SSRF                                                |
 | Oracle Weblogic      | CVE-2017-10271     | unSerialize  |  -  | Weblogic XMLDecoder deSerialization                          |
@@ -337,15 +343,15 @@ args.ceye_token = ''
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Yonyou               | CNNVD-201610-923   | SQLinject    |  -  | Yonyou-GRP-U8 Proxy SQLinject                                |
 | Yonyou               | CNVD-2021-30167    | RCE          |  Y  | Yonyou-NC BeanShell Remote code execution                    |
-| Yonyou               | None               | FileRead     |  -  | Yonyou-ERP-NC NCFindWeb Directory traversal                  |
-| Yonyou               | None               | DSinfo       |  -  | Yonyou-U8-OA getSessionList.jsp Disclosure info              |
-| Yonyou               | None               | SQLinject    |  -  | Yonyou-U8-OA test.jsp SQLinject                              |
+| Yonyou               | (None)             | FileRead     |  -  | Yonyou-ERP-NC NCFindWeb Directory traversal                  |
+| Yonyou               | (None)             | DSinfo       |  -  | Yonyou-U8-OA getSessionList.jsp Disclosure info              |
+| Yonyou               | (None)             | SQLinject    |  -  | Yonyou-U8-OA test.jsp SQLinject                              |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Zabbix               | CVE-2016-10134     | SQLinject    |  -  | latest.php or jsrpc.php SQLinject                            |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
-vulcat-1.1.6/2022.11.25
-95/Poc
-34/Exp
+vulcat-1.1.7/2022.12.15
+99/Poc
+37/Exp
 ```
 </details>
 

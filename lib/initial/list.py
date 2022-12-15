@@ -31,7 +31,7 @@ def list():
     for vul in vul_info:
         for info in vul_info[vul]:
             vul_num += 1
-            if info['exp'] == 'Y':
+            if info['exp'] in ['Y', 'M']:
                 exp_num += 1
             vul_list += '| {}|'.format(vul.ljust(21))
             vul_list += ' {}|'.format(info['vul_id'].ljust(19))
@@ -41,7 +41,7 @@ def list():
             vul_list += '\n'
         vul_list += '+' + Target_len_ + '+' + Vul_id_len_ + '+' + Type_len_ + '+' + Exp_len_ + '+' + Description_len_ + '+\n'
 
-    print(color.cyan(vul_list + 'vulcat-1.1.6/2022.11.25'))    # * 2022-11-25_10:04
+    print(color.cyan(vul_list + 'vulcat-1.1.7/2022.12.15'))    # * 2022-12-15_14:52
     print(color.cyan(str(vul_num - 1) + '/Poc'))            # * 有一个是标题, 所以要-1
     print(color.cyan(str(exp_num) + '/Exp'))
     # print(vul_num)
@@ -58,7 +58,7 @@ vul_info = {
     ],
     'Alibaba Druid': [
         {
-            'vul_id': 'None',
+            'vul_id': '(None)',
             'type': 'unAuth',
             'exp': '-',
             'description': list_lang['Alibaba Druid']
@@ -88,6 +88,20 @@ vul_info = {
             'description': list_lang['Apache APISIX']['CVE-2020-13945']
         }
     ],
+    'Apache Druid': [
+        {
+            'vul_id': 'CVE-2021-25646',
+            'type': 'RCE',
+            'exp': 'Y',
+            'description': list_lang['Apache Druid']['CVE-2021-25646']
+        },
+        {
+            'vul_id': 'CVE-2021-36749',
+            'type': 'FileRead',
+            'exp': 'Y',
+            'description': list_lang['Apache Druid']['CVE-2021-36749']
+        },
+    ],
     'Apache Flink': [
         {
             'vul_id': 'CVE-2020-17519',
@@ -98,7 +112,7 @@ vul_info = {
     ],
     'Apache Hadoop': [
         {
-            'vul_id': 'None',
+            'vul_id': '(None)',
             'type': 'unAuth',
             'exp': '-',
             'description': list_lang['Apache Hadoop']
@@ -158,6 +172,14 @@ vul_info = {
             'type': 'FileUpload',
             'exp': '-',
             'description': list_lang['Apache Tomcat']['CVE-2017-12615']
+        }
+    ],
+    'Apache Unomi': [
+        {
+            'vul_id': 'CVE-2020-13942',
+            'type': 'RCE',
+            'exp': 'Y',
+            'description': list_lang['Apache Unomi']['CVE-2020-13942']
         }
     ],
     'AppWeb': [
@@ -324,7 +346,7 @@ vul_info = {
     ],
     'Gitea': [
         {
-            'vul_id': 'None',
+            'vul_id': '(None)',
             'type': 'unAuth',
             'exp': '-',
             'description': list_lang['Gitea']
@@ -354,7 +376,7 @@ vul_info = {
     ],
     'Influxdb': [
         {
-            'vul_id': 'None',
+            'vul_id': '(None)',
             'type': 'unAuth',
             'exp': '-',
             'description': list_lang['Influxdb']
@@ -390,7 +412,7 @@ vul_info = {
     ],
     'Jupyter': [
         {
-            'vul_id': 'None',
+            'vul_id': '(None)',
             'type': 'unAuth',
             'exp': '-',
             'description': list_lang['Jupyter']
@@ -617,14 +639,20 @@ vul_info = {
             'exp': 'Y',
             'description': list_lang['ThinkPHP']['CNNVD-201901-445']
         },
+                {
+            'vul_id': 'CNVD-2022-86535',
+            'type': 'RCE',
+            'exp': '-',
+            'description': list_lang['ThinkPHP']['CNVD-2022-86535']
+        },
         {
-            'vul_id': 'None',
+            'vul_id': '(None)',
             'type': 'RCE',
             'exp': '-',
             'description': list_lang['ThinkPHP']['2.x RCE']
         },
         {
-            'vul_id': 'None',
+            'vul_id': '(None)',
             'type': 'SQLinject',
             'exp': '-',
             'description': list_lang['ThinkPHP']['5 ids sqlinject']
@@ -632,7 +660,7 @@ vul_info = {
     ],
     'Ueditor': [
         {
-            'vul_id': 'None',
+            'vul_id': '(None)',
             'type': 'SSRF',
             'exp': '-',
             'description': list_lang['Ueditor']
@@ -698,19 +726,19 @@ vul_info = {
             'description': list_lang['Yonyou']['CNVD-2021-30167']
         },
         {
-            'vul_id': 'None',
+            'vul_id': '(None)',
             'type': 'FileRead',
             'exp': '-',
             'description': list_lang['Yonyou']['NCFindWeb']
         },
         {
-            'vul_id': 'None',
+            'vul_id': '(None)',
             'type': 'DSinfo',
             'exp': '-',
             'description': list_lang['Yonyou']['getSessionList.jsp']
         },
         {
-            'vul_id': 'None',
+            'vul_id': '(None)',
             'type': 'SQLinject',
             'exp': '-',
             'description': list_lang['Yonyou']['test.jsp']

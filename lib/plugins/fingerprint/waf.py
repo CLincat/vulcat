@@ -100,6 +100,15 @@ class WafIdentify():
                     ]
                 },
                 {
+                    'name': '百度云盾(BaiDu WAF)',
+                    'status_code': 403,
+                    'fingerprint': [
+                        '如果您是网站管理员，点击查看<a href="https://su.baidu.com/" target="_blank">如何修复',
+                        '<a href="http://anquan.baidu.com/bbs/forum.php?mod=viewthread&tid=371363&page=1&extra=" target="_blank">帮助支持</a>',
+                        '<h1>403<small>当前访问可能造成安全威胁，您的访问被阻断。 攻击类型:【应用程序漏洞攻击】</small></h1>',
+                    ]
+                },
+                {
                     'name': '网宿云盾',
                     'status_code': None,
                     'fingerprint': [

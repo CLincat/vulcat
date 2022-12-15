@@ -16,12 +16,14 @@ from payloads.AlibabaDruid.main import alidruid
 from payloads.AlibabaNacos.main import nacos
 from payloads.ApacheAirflow.main import airflow
 from payloads.ApacheAPISIX.main import apisix
+from payloads.ApacheDruid.main import apachedruid
 from payloads.ApacheFlink.main import flink
 from payloads.ApacheHadoop.main import hadoop
 from payloads.ApacheHttpd.main import httpd
 from payloads.ApacheSkyWalking.main import skywalking
 from payloads.ApacheSolr.main import solr
 from payloads.ApacheTomcat.main import tomcat
+from payloads.ApacheUnomi.main import apacheunomi
 # from payloads.ApacheStruts2 import struts2        # 2022/11/04被移除
 from payloads.AppWeb.main import appweb
 from payloads.AtlassianConfluence.main import confluence

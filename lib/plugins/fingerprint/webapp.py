@@ -152,6 +152,15 @@ class WebappIdentify():
                 ]
             },
             {
+                'name': 'apachedruid',
+                'path': '',
+                'data': '',
+                'fingerprint': [
+                    r'www\.apache\.org/licenses/LICENSE.*<title>Apache Druid</title>',
+                    r'<meta name="description" content="Apache Druid web console">',
+                ]
+            },
+            {
                 'name': 'flink',
                 'path': '',
                 'data': '',
@@ -226,6 +235,25 @@ class WebappIdentify():
                 'data': '',
                 'fingerprint': [
                     r'<h3>Apache Tomcat/.*</h3>'
+                ]
+            },
+            {
+                'name': 'apacheunomi',
+                'path': '',
+                'data': '',
+                'fingerprint': [
+                    r'<img src="images/unomi-86x20\.png" alt="Logo Apache Unomi"/>',
+                    r'<h1 class="display-5">Welcome to Apache Unomi !</h1>',
+                    r'Try Apache Unomi\'s <a href="/tracker/">integrated tracker</a>',
+                    r'<p class="lead">Apache Unomi is a Java Open Source customer data platform, a Java server.*visitor privacy rules (such as GDPR)</p>',
+                    r'<li>Checkout some cool <a href="http://unomi\.apache\.org/resources\.html" target="_blank">videos & tutorials</a>',
+                    r'<li>Read <a href="http://unomi\.apache\.org/manual/latest/index\.html" target="_blank">Apache Unomi\'s manual</a>',
+                    r'<li>Try out some <a href="http://unomi\.apache\.org/manual/latest/index\.html#_integration_samples"',
+                    r'<li>Join <a href="http://unomi\.apache\.org/community\.html" target="_blank">Apache Unomi\'s mailing lists</a></li>',
+                    r'<a class="github-button" href="https://github\.com/apache/incubator-unomi" data-icon="octicon-star"',
+                    r'data-show-count="true" aria-label="Star apache/incubator-unomi on GitHub">Star</a>',
+                    r'<li>Fork the <a href="https://github\.com/apache/incubator-unomi" target="_blank">code</a> and submit pull',
+                    r'<title>Apache Unomi Welcome Page</title>',
                 ]
             },
             {
@@ -398,7 +426,8 @@ class WebappIdentify():
                 'path': '',
                 'data': '',
                 'fingerprint': [
-                    r'<hr><a href="https?://eclipse\.org/jetty">Powered by Jetty:// .{0,30}</a><hr/>'
+                    r'<hr><a href="https?://eclipse\.org/jetty">Powered by Jetty:// .{0,30}</a><hr/>',
+                    r'<i><small>Powered by Jetty://.{0,30}</small></i>'
                 ]
             },
             {
@@ -567,7 +596,8 @@ class WebappIdentify():
                     r'十年磨一剑-为API开发设计的高性能框架',
                     r'十年磨一剑 - 为API开发设计的高性能框架',
                     r':\)',
-                    r'ThinkPHP.*V.*'
+                    r'ThinkPHP.*V.*',
+                    r'\d{0,3}载初心不改 - 你值得信赖的PHP框架'
                 ]
             },
             {
@@ -578,7 +608,20 @@ class WebappIdentify():
                     r'十年磨一剑-为API开发设计的高性能框架',
                     r'十年磨一剑 - 为API开发设计的高性能框架',
                     r':\)',
-                    r'ThinkPHP.*V.*'
+                    r'ThinkPHP.*V.*',
+                    r'\d{0,3}载初心不改 - 你值得信赖的PHP框架'
+                ]
+            },
+                        {
+                'name': 'thinkphp',
+                'path': 'public/',     # * 访问public路径时会提示相应信息
+                'data': '',
+                'fingerprint': [
+                    r'十年磨一剑-为API开发设计的高性能框架',
+                    r'十年磨一剑 - 为API开发设计的高性能框架',
+                    r':\)',
+                    r'ThinkPHP.*V.*',
+                    r'\d{0,3}载初心不改 - 你值得信赖的PHP框架'
                 ]
             },
             {
@@ -647,6 +690,17 @@ class WebappIdentify():
                     r'<title>.* 《用友U8-OA企业版》</title>',
                     r'<li class="copyright"><span>©用友软件珠海研发基地</span></li>',
                     r'<title>.*-FE协作办公平台\d\.\d(\.\d)?</title>'
+                ]
+            },
+            {
+                'name': 'zabbix',
+                'path': '',
+                'data': '',
+                'fingerprint': [
+                    r'<meta name="Author" content="Zabbix SIA" />',
+                    r'<a target="_blank" class="grey link-alt" href="https?://www\.zabbix\.com.{0,30}Help',
+                    r'class="grey link-alt" href="https?://www\.zabbix\.com/support\.php">Support',
+                    r'href="https?://www\.zabbix\.com/">Zabbix SIA</a>'
                 ]
             },
             # {

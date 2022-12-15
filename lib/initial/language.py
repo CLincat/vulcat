@@ -75,7 +75,7 @@ lang = {
         },
         'app_list_help': {
             'title': 'Supported target types(Case insensitive)',
-            'name': 'AliDruid, airflow, apisix, appweb, cisco, confluence, discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab, grafana, influxdb, hadoop, httpd, jenkins, jetty, jupyter, keycloak, landray, minihttpd, mongoexpress, nexus, nacos, nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, solr, spring, supervisor, skywalking, thinkphp, tomcat, ueditor, weblogic, webmin, yonyou, zabbix'
+            'name': 'AliDruid, airflow, apisix, apachedruid, appweb, cisco, confluence, discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab, grafana, influxdb, hadoop, httpd, jenkins, jetty, jupyter, keycloak, landray, minihttpd, mongoexpress, nexus, nacos, nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, solr, spring, supervisor, skywalking, thinkphp, tomcat, ueditor, weblogic, webmin, yonyou, zabbix'
         },
         'core': {
             'start': {
@@ -206,7 +206,7 @@ lang = {
         },
         'app_list_help': {
             'title': '支持的目标类型(-a参数, 不区分大小写)',
-            'name': 'AliDruid, airflow, apisix, appweb, cisco, confluence, discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab, grafana, influxdb, hadoop, httpd, jenkins, jetty, jupyter, keycloak, landray, minihttpd, mongoexpress, nexus, nacos, nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, solr, spring, supervisor, skywalking, thinkphp, tomcat, ueditor, weblogic, webmin, yonyou, zabbix'
+            'name': 'AliDruid, airflow, apisix, apachedruid, appweb, cisco, confluence, discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab, grafana, influxdb, hadoop, httpd, jenkins, jetty, jupyter, keycloak, landray, minihttpd, mongoexpress, nexus, nacos, nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, solr, spring, supervisor, skywalking, thinkphp, tomcat, ueditor, weblogic, webmin, yonyou, zabbix'
         },
         'core': {
             'start': {
@@ -286,6 +286,10 @@ lang['zh_cn']['list'] = {
     'Alibaba Nacos': {'CVE-2021-29441': '阿里巴巴Nacos未授权访问'},
     'Apache Airflow': {'CVE-2020-17526': 'Airflow身份验证绕过'},
     'Apache APISIX': {'CVE-2020-13945': 'Apache APISIX默认密钥',},
+    'Apache Druid': {
+        'CVE-2021-25646': 'Apache Druid 远程代码执行',
+        'CVE-2021-36749': 'Apache Druid 任意文件读取',
+    },
     'Apache Flink': {'CVE-2020-17519': 'Flink目录遍历',},
     'Apache Hadoop': 'Hadoop YARN ResourceManager 未授权访问',
     'Apache Httpd': {
@@ -300,6 +304,7 @@ lang['zh_cn']['list'] = {
         'CVE-2021-27905': 'Solr SSRF/任意文件读取',
     },
     'Apache Tomcat': {'CVE-2017-12615': 'PUT方法任意文件写入',},
+    'Apache Unomi': {'CVE-2020-13942': 'Apache Unomi远程表达式代码执行'},
     'AppWeb': {'CVE-2018-8715': 'AppWeb身份认证绕过',},
     'Atlassian Confluence': {
         'CVE-2015-8399': 'Confluence任意文件包含',
@@ -396,6 +401,7 @@ lang['zh_cn']['list'] = {
         'CNNVD-201901-445': '核心类Request远程代码执行',
         '2.x RCE': 'ThinkPHP2.x 远程代码执行',
         '5 ids sqlinject': 'ThinkPHP5 ids参数SQL注入',
+        'CNVD-2022-86535': 'ThinkPHP 多语言模块命令执行',
     },
     'Ueditor': 'Ueditor编辑器SSRF',
     'Oracle Weblogic': {
@@ -429,6 +435,10 @@ lang['en_us']['list'] = {
     'Alibaba Nacos': {'CVE-2021-29441': 'Alibaba Nacos unAuthorized'},
     'Apache Airflow': {'CVE-2020-17526': 'Apache Airflow Authentication bypass'},
     'Apache APISIX': {'CVE-2020-13945': 'Apache APISIX default access token',},
+    'Apache Druid': {
+        'CVE-2021-25646': 'Apache Druid Remote Code Execution',
+        'CVE-2021-36749': 'Apache Druid arbitrary file reading',
+    },
     'Apache Flink': {'CVE-2020-17519': 'Apache Flink Directory traversal',},
     'Apache Hadoop': 'Apache Hadoop YARN ResourceManager unAuthorized',
     'Apache Httpd': {
@@ -443,6 +453,7 @@ lang['en_us']['list'] = {
         'CVE-2021-27905': 'Solr SSRF/FileRead',
     },
     'Apache Tomcat': {'CVE-2017-12615': 'Put method writes to any file',},
+    'Apache Unomi': {'CVE-2020-13942': 'Apache Unomi Remote Express Language Code Execution'},
     'AppWeb': {'CVE-2018-8715': 'AppWeb Authentication bypass',},
     'Atlassian Confluence': {
         'CVE-2015-8399': 'Confluence any file include',
@@ -539,6 +550,7 @@ lang['en_us']['list'] = {
         'CNNVD-201901-445': 'Core class Request Remote code execution',
         '2.x RCE': 'ThinkPHP2.x Remote code execution',
         '5 ids sqlinject': 'ThinkPHP5 ids SQLinject',
+        'CNVD-2022-86535': 'ThinkPHP "think-lang" Remote code execution',
     },
     'Ueditor': 'Ueditor SSRF',
     'Oracle Weblogic': {

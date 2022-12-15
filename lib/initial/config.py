@@ -107,7 +107,7 @@ class Config():
             args.vuln = args.vuln.replace('.', '_')
 
         app_list = [
-            'alidruid', 'airflow', 'apisix', 'appweb', 
+            'alidruid', 'airflow', 'apisix', 'apachedruid', 'apacheunomi', 'appweb', 
             'cisco', 'confluence', 
             'discuz', 'django', 'drupal',
             'elasticsearch', 

@@ -6,10 +6,12 @@
 '''
 
 from lib.initial.language import language
+from lib.initial.load import load_yaml
 from thirdparty.requests import packages
 import re
 import socket
 import socks
+import yaml
 
 global config
 
@@ -18,9 +20,11 @@ class Config():
     def __init__(self, args):
         packages.urllib3.disable_warnings()                             # * requests忽略ssl证书警告
 
-        args.ceye_domain = ''                                           # * http://ceye.io/ 平台的域名
-        args.ceye_token = ''                                            # * http://ceye.io/ 平台的token
-        
+        config_yaml = load_yaml()                                       # * 读取并解析config.yaml
+
+        args.ceye_domain = config_yaml.get('ceye-domain')               # * http://ceye.io/ 平台的域名
+        args.ceye_token = config_yaml.get('ceye-token')                 # * http://ceye.io/ 平台的token
+
         args.lang = language()                                          # * 语言
 
         args.url_list = []                                              # * url列表
@@ -64,12 +68,10 @@ class Config():
             else:
                 args.url_list.append(url)
 
-        args.headers = {
-            'User-Agent': args.ua,
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Accept': '*/*',
-            'Connection': 'close'
-        }
+        args.headers = config_yaml.get('headers')
+
+        if args.ua:
+            args.headers['User-Agent'] = args.ua.lstrip('User-Agent: ')
 
         if args.cookie:
             args.headers['Cookie'] = args.cookie.lstrip('Cookie: ')
@@ -106,29 +108,7 @@ class Config():
             args.vuln = args.vuln.replace('-', '_')
             args.vuln = args.vuln.replace('.', '_')
 
-        app_list = [
-            'alidruid', 'airflow', 'apisix', 'apachedruid', 'apacheunomi', 'appweb', 
-            'cisco', 'confluence', 
-            'discuz', 'django', 'drupal',
-            'elasticsearch', 
-            'f5bigip', 'fastjson', 'flink', 
-            'gitea', 'gitlab', # 'grafana', 
-            'influxdb', 
-            'hadoop', 'httpd', 
-            'jenkins', 'jetty', 'jupyter', 
-            'keycloak', # 'kindeditor',
-            'landray', 
-            'minihttpd', 'mongoexpress', 
-            'nexus', 'nacos', 'nodejs', 'nodered', 
-            'phpmyadmin', 'phpunit',
-            'rails', 
-            'showdoc', 'solr', 'spring', 'skywalking', 'supervisor',
-            'thinkphp', 'tomcat', 
-            'ueditor', 
-            'weblogic', 'webmin',
-            'yonyou',
-            'zabbix'
-        ]
+        app_list = config_yaml.get('applist')
 
         if args.application in ['auto', 'all']:                         # * -a参数
             args.app_list = app_list

@@ -1,7 +1,7 @@
 # vulcat
 
 [![python](https://img.shields.io/badge/Python-3-blue?logo=python)](https://shields.io/)
-[![version](https://img.shields.io/badge/Version-1.1.7-blue)](https://shields.io/)
+[![version](https://img.shields.io/badge/Version-1.1.8-blue)](https://shields.io/)
 [![license](https://img.shields.io/badge/LICENSE-GPL-yellow)](https://shields.io/)
 [![stars](https://img.shields.io/github/stars/CLincat/vulcat?color=red)](https://shields.io/)
 [![forks](https://img.shields.io/github/forks/CLincat/vulcat?color=red)](https://shields.io/)
@@ -50,7 +50,7 @@ Examples:
 python3 vulcat.py -u https://www.example.com/
 python3 vulcat.py -u https://www.example.com/ -a thinkphp --log 3
 python3 vulcat.py -u https://www.example.com/ -a tomcat -v CVE-2017-12615
-python3 vulcat.py -f url.txt -t 10
+python3 vulcat.py -f url.txt -t 10 -o html
 python3 vulcat.py --list
 ```
 
@@ -109,8 +109,9 @@ Options:
                         指定漏洞编号, 配合-a/--application对单个漏洞进行扫描, 可以使用--list查看漏洞编号,
                         没有漏洞编号的漏洞暂不支持, 编号不区分大小, 符号-和_皆可 (如: -a fastjson -v
                         CNVD-2019-22238 或者 -a Tomcat -v cvE-2017_12615)
-    -x, --exp           配合-a和-v参数进行使用, Poc扫描过后, 如果该漏洞存在, 则进入该漏洞的Exp交互模式; 可以使用
-                        --list查看支持Exp的漏洞(如: -a httpd -v CVE-2021-42013 -x)
+    --shell             配合-a和-v参数进行使用, Poc扫描过后, 如果该漏洞存在, 则进入该漏洞的Shell交互模式;
+                        可以使用--list查看支持Shell的漏洞(如: -a httpd -v CVE-2021-42013
+                        -x)
 
   Api:
     第三方api
@@ -122,11 +123,8 @@ Options:
   Save:
     保存扫描结果
 
-    --output-text=TXT_FILENAME
-                        以txt格式保存扫描结果, 无漏洞时不会生成文件(如: --output-text result.txt)
-    --output-json=JSON_FILENAME
-                        以json格式保存扫描结果, 无漏洞时不会生成文件(如: --output-text
-                        result.json)
+    -o OUTPUT, --output=OUTPUT
+                        以txt/json/html格式保存扫描结果, 无漏洞时不会生成文件 (如: -o html)
 
   General:
     通用工作参数
@@ -141,33 +139,34 @@ Options:
     --list              查看所有Payload
 
   支持的目标类型(-a参数, 不区分大小写):
-    AliDruid, airflow, apisix, apachedruid, appweb, cisco, confluence, discuz, django,
-    drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab,
-    grafana, influxdb, hadoop, httpd, jenkins, jetty, jupyter, keycloak,
-    landray, minihttpd, mongoexpress, nexus, nacos, nodejs, nodered,
-    phpmyadmin, phpunit, rails, showdoc, solr, spring, supervisor,
-    skywalking, thinkphp, tomcat, ueditor, weblogic, webmin, yonyou, zabbix
+    AliDruid, airflow, apisix, apachedruid, appweb, cisco, confluence,
+    discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink,
+    gitea, gitlab, grafana, influxdb, hadoop, httpd, jenkins, jetty,
+    jupyter, keycloak, landray, minihttpd, mongoexpress, nexus, nacos,
+    nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, solr, spring,
+    supervisor, skywalking, thinkphp, tomcat, ueditor, weblogic, webmin,
+    yonyou, zabbix
 ```
 
 ## 语言
-可以修改-h/--help的语言, 目前只有中文和英文(麻麻再也不用担心我看不懂啦!)
+可以修改vulcat的语言, 目前只有中文和英文(麻麻再也不用担心我看不懂英文啦!)
 
-* 打开vulcat/lib/initial/language.py, 打开后会看到以下代码↓
-* en_us为英文, zh_cn为中文, 将return调换上下顺序, 然后保存文件就实现了-h语言的切换
+* 打开vulcat/config.yaml, 打开后会看到以下代码↓
+* 对language的值进行修改, 然后保存文件就实现了vulcat语言的切换
 ```
-def language():
-    return lang['zh_cn']
-    return lang['en_us']
+# 语言, 默认为英文en-us, 中文为zh-cn
+language: en-us
 ```
 
 ## 自定义Dnslog平台
 可以定义自己的http://ceye.io
 
-* 打开vulcat/lib/initial/config.py
-* 找到以下代码, 填写自己的域名和token, 保存文件即可
+* 打开vulcat/config.yaml
+* 找到以下代码, 将Null替换为自己的域名和token, 保存文件即可
 ```
-args.ceye_domain = ''
-args.ceye_token = ''
+# ceye.io的域名和token
+ceye-domain: Null
+ceye-token: Null
 ```
 
 ## 自定义 POC
@@ -185,7 +184,7 @@ args.ceye_token = ''
 
 ```
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
-| Target               | Vuln id            | Vuln Type    | Exp | Description                                                          |
+| Target               | Vuln id            | Vuln Type    | Sh  | Description                                                          |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Alibaba Druid        | (None)             | unAuth       |  -  | 阿里巴巴Druid未授权访问                                              |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
@@ -333,9 +332,9 @@ args.ceye_token = ''
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Zabbix               | CVE-2016-10134     | SQLinject    |  -  | latest.php或jsrpc.php存在sql注入                                     |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
-vulcat-1.1.7/2022.12.15
+vulcat-1.1.8/2023.01.20
 99/Poc
-37/Exp
+37/Shell
 ```
 </details>
 
@@ -344,6 +343,9 @@ vulcat-1.1.7/2022.12.15
 * [sqlmap](https://github.com/sqlmapproject/sqlmap)
 * [dirsearch](https://github.com/maurosoria/dirsearch)
 * [HackRequests](https://github.com/boy-hack/hack-requests)
+* [vulhub](https://github.com/vulhub/vulhub)
+* [vulfocus](https://github.com/fofapro/vulfocus)
+* [ttkbootstrap](https://github.com/israel-dryer/ttkbootstrap/)
 
 ## 参考链接
 

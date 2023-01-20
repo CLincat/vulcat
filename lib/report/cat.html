@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+
+		html {
+			position: relative;
+		}
+
+		ul, ol, li {
+			list-style: none;
+			height: 40px;
+		}
+
+		a {
+			text-decoration: none;
+			color: rgb(0, 102, 255);
+		}
+
+		a:hover {
+			color: rgba(0, 102, 255, 0.8);
+		}
+
+		li {
+			float: left;
+			text-align: center;
+			line-height: 40px;
+		}
+
+		html {
+			width: 100%;
+			height: auto;
+		}
+
+		body {
+			height: 100%;
+		}
+		
+		header {
+			width: 100%;
+			height: 71px;
+			background-color: #00bc8c;
+		}
+		
+		header .top {
+			position: relative;
+			float: right;
+			width: 87%;
+		}
+
+		header .top ul {
+			position: absolute;
+			top: 20px;
+			right: 100px;
+			width: 60px;
+			text-align: center;
+			height: 35px;
+			line-height: 35px;
+			background-color: red;
+		}
+
+		header .top ul:hover li {
+			display: block;
+		}
+
+		header .top ul li:hover {
+			cursor: pointer;
+		}
+
+		header .top ul li {
+			display: none;
+			width: 100px;
+			border-bottom: 1px solid black;
+			background-color: rgb(0, 255, 170);
+		}
+
+		header .logo {
+			float: left;
+			width: 13%;
+			height: 100%;
+			Letter-spacing: 1px;
+			font-size: 10px;
+		}
+
+		header .logo a {
+			color: white;
+		}
+		
+		.right .nav .icon {
+			margin-left: 35px;
+			margin-top: 12px;
+			height: 0;
+			overflow: hidden;
+		}
+
+		.right .main {
+			border: 1px solid rgb(155, 157, 161);
+		}
+
+		.right .main .icon {
+			margin-left: 20px;
+			width: 15px;
+			height: 15px;
+			border: 1px solid black;
+			margin-top: 12px;
+			line-height: 15px;
+		}
+
+		.right .main .icon:hover {
+			cursor: pointer;
+		}
+
+		.right {
+			float: left;
+			width: 80%;
+			height: 100%;
+		}
+		
+		.right nav {
+			width: 100%;
+			height: 40px;
+		}
+
+		.right nav ul {
+			background-color: rgba(229, 231, 235, 0.5);
+		}
+
+		.left ul:hover,
+		.left ul li:hover,
+		.right .main ul:hover,
+		.right nav ul li:hover {
+			background-color: rgba(0, 225, 255, 0.5);
+		}
+
+		.right nav ul li:not(:first-child) {
+			cursor: pointer;
+		}
+		
+		.right .main ul {
+			clear: both;
+			border: 1px solid rgba(229, 231, 235, 0.6);
+		}
+
+		.right .main ul li {
+			height: auto;
+		}
+
+		.right .main .requests {
+			width: 99%;
+			height: 600px;
+			overflow-y: scroll;
+			margin: 0px 0px 20px 5px;
+			display: none;
+		}
+
+		.right .main .requests table {
+			width: 100%;
+		}
+
+		.right .main .requests table tbody tr td {
+			text-align: left;
+			height: auto;
+			border: 1px solid rgb(193, 197, 197);
+			padding-left: 5px;
+		}
+		
+		.right .main .requests table tbody tr:nth-child(odd):not(:first-child) {
+			background-color: rgba(255, 250, 232, 0.3);
+		}
+
+		.right .main .requests table tbody tr:nth-child(even) {
+			background-color: rgba(229, 231, 235, 0.5);
+		}
+
+		.right .main .requests table tbody tr td span {
+			margin-left: 20px;
+			color: blue;
+		}
+
+		.right .main .requests table tbody tr td span:hover {
+			cursor: pointer;
+			color: skyblue;
+		}
+
+		.right .main table tbody tr td code {
+			white-space: pre-line;
+		}
+
+		#copy_success {
+			background-color: rgb(253, 255, 254);
+			box-shadow: 0 0 5px 0 black;
+			text-align: center;
+			line-height: 40px;
+			position: absolute;
+			z-index: 10;
+			width: 100px;
+			height: 40px;
+			left: 50%;
+			top: 50%;
+			margin-left: -100px;
+			margin-top: -40px;
+			color: rgb(56, 226, 56);
+			
+		}
+
+		footer {
+			position: absolute;
+			bottom: -100px;
+			width: 100%;
+			height: 30px;
+			font-size: 14px;
+			line-height: 30px;
+			text-align: center;
+			padding-bottom: 30px;
+		}
+
+		.left {
+			float: left;
+			width: 20%;
+			height: 550px;
+			overflow-y: scroll;
+			scrollbar-color: #00bc8c;
+		}
+		
+		.left>ul {
+			position: relative;
+			text-align: center;
+			line-height: 40px;
+			width: 100%;
+			border-bottom: 1px solid rgb(155, 157, 161);
+			clear: both;
+		}
+
+		.left>ul:not(:first-child) {
+			border-top: 1px solid rgb(155, 157, 161);
+		}
+
+		.left>ul>input {
+			position: absolute;
+			left: 10px;
+			top: 15px;
+			width: 15px;
+			height: 15px;
+		}
+
+		.left>ul>input:hover {
+			cursor: pointer;
+		}
+
+		.left>ul .arrow {
+			display: inline-block;
+			width: 0;
+			height: 0;
+			border: 8px solid;
+			border-color: transparent transparent black transparent;
+		}
+
+		.left>ul i {
+			position: absolute;
+			width: 35px;
+		}
+		
+		.left>ul i:hover {
+			cursor: pointer;
+		}
+
+		.left>ul>strong {
+			display: inline-block;
+			width: 75%;
+			border-right: 1px solid red;
+		}
+
+		.left>ul li {
+			position: relative;
+			display: none;
+			width: 100%;
+		}
+
+		.left>ul li input {
+			position: absolute;
+			left: 30px;
+			top: 15px;
+			width: 15px;
+			height: 15px;
+		}
+
+		.left>ul li input:hover {
+			cursor: pointer;
+		}
+
+		.left>ul li span {
+			display: inline-block;
+			margin-left: 40px;
+			height: 100%;
+			width: 86%;
+		}
+
+	</style>
+</head>
+<body>
+	<!-- 头部 -->
+	<header>
+		<div class="logo">
+
+		</div>
+		<div class="top">
+
+		</div>
+	</header>
+	
+	<!-- 侧边栏 -->
+	<div class="left">
+		
+	</div>
+	
+	<!-- 内容展示区 -->
+	<div class="right">
+		<nav class="nav">
+			
+		</nav>
+		
+		<main class="main">
+			
+		</main>
+	</div>
+	
+	<!-- 底部 -->
+	<footer>
+		<a href="https://github.com/CLincat/vulcat" target="_blank">https://github.com/CLincat/vulcat</a>
+	</footer>
+	
+	<script src="cat.js"></script>
+</body>
+</html>

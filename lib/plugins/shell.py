@@ -13,13 +13,11 @@ from urllib import parse as urllib_parse
 import re
 import socket
 
-class Exploit():
+class Shell():
     def __init__(self):
-        self.lang = config.get('lang')['exploit']
-        self.exp = config.get('exp')
+        self.lang = config.get('lang')['shell']
         self.timeout = config.get('timeout')
-        self.headers = config.get('headers')
-        self.proxies = config.get('proxies')
+        # self.proxies = config.get('proxies')
         self.proxy = config.get('proxy')
         
         self.rce_old_payload_re_list = [                 # * RCE漏洞的旧command正则, 搜索并替换为用户自定义的新command
@@ -50,21 +48,21 @@ class Exploit():
         ]
         
     def start(self, results):
-        ''' 启动exp
+        ''' 启动shell
                 # * 1. 判断有无Request
                     search_requests()
-                        Request -> self.exp_raw() -> HackRequests.httpraw()
+                        Request -> self.shell_raw() -> HackRequests.httpraw()
                 
                 # * 2. 更新漏洞的Payload
                     search_command()
                         接收用户输入的command
-                            exit -> 退出Exploit模式
+                            exit -> 退出Shell模式
                             其它命令 -> 查找旧command
-                                查找失败 -> 退出Exploit模式
+                                查找失败 -> 退出Shell模式
                                 替换为新command -> 返回新的Request/Target
                 
-                # * 3. 使用新Payload请求, 判断Exp请求是否成功
-                    exp_request()
+                # * 3. 使用新Payload请求, 判断Shell请求是否成功
+                    shell_request()
                         HackRequests.httpraw() / requests.get()
                             请求失败 -> 返回第2步
                             请求成功 -> 返回请求结果res
@@ -76,25 +74,25 @@ class Exploit():
             :param results(list): vulcat返回的多个poc扫描结果
         '''
         
-        # ! 遍历poc结果, 判断单个poc结果的漏洞类型, 分发给相应的漏洞Exp
+        # ! 遍历poc结果, 判断单个poc结果的漏洞类型, 分发给相应的漏洞Shell
         for result in results:
             if result and (re.search(r'rce', str(result['Type']), re.I)):
-                self.exploit(result, self.rce_old_payload_re_list)
+                self.shell(result, self.rce_old_payload_re_list)
             elif result and (re.search(r'file-?read', str(result['Type']), re.I)):
-                self.exploit(result, self.fileread_old_payload_re_list)
+                self.shell(result, self.fileread_old_payload_re_list)
             elif result and (re.search(r'file-?include', str(result['Type']), re.I)):
-                self.exploit(result, self.fileread_old_payload_re_list)
+                self.shell(result, self.fileread_old_payload_re_list)
                 # self.fileinclude(result, self.fileinclude_old_payload_re_list)
             # elif result and ('sqlinject' in str(result['Type']).lower()):
             #     self.rce(result)
             # elif result and ('ssrf' in str(result['Type']).lower()):
             #     self.rce(result)
             else:
-                logger.info('yellow_ex', self.lang['not_exp'])
+                logger.info('yellow_ex', self.lang['not_shell'])
                 
 
-    def exploit(self, result, re_list):
-        ''' 漏洞通用Exploit
+    def shell(self, result, re_list):
+        ''' 漏洞通用Shell
             :param result(dict): vulcat的单个poc扫描结果
         '''
         logger.info('red_ex', self.lang['identify'].format(result['Type'][1]))
@@ -103,9 +101,9 @@ class Exploit():
 
         if http_raw:
             # * HackRequests.httpraw()
-            self.exp_raw(result, http_raw, re_list)
+            self.shell_raw(result, http_raw, re_list)
         else:
-            logger.info('yellow_ex', self.lang['not_request'])      # ? 日志, 没有Request, 无法使用Exp
+            logger.info('yellow_ex', self.lang['not_request'])      # ? 日志, 没有Request, 无法使用Shell
     
     def search_requests(self, result):
         ''' 搜索一个result里面是否有返回Request
@@ -136,22 +134,22 @@ class Exploit():
                 :param old_payload(str): 要搜索的Request/Target
                 :return:
                     新Request/Target
-                    是否退出exp模式
+                    是否退出shell模式
                     vcsearch字符串
         '''
         new_command = ''
         
-        # todo 输入自定义的命令, exit则退出Exploit模式
+        # todo 输入自定义的命令, exit则退出Shell模式
         while not new_command:
             try:
-                logger.info('red', '[Exploit] ', print_end='')
+                logger.info('red', '[Shell] ', print_end='')
                 logger.info('reset', self.lang['input_command'], notime=True, print_end='')     # ? 日志, 请输入command
                 new_command = input()
                 
-                '''vulcat exp响应包内容搜索 (类似linux中的grep)
+                '''vulcat shell响应包内容搜索 (类似linux中的grep)
                         可以搜索响应数据包中的内容, 正则表达式形式
                 '''
-                # todo 判断自定义命令中 是否有vulcat Exploit Response Search
+                # todo 判断自定义命令中 是否有vulcat Shell Response Search
                 vcsearch_re = r'\s*\|\s*vcsearch .*'
                 vc_str = re.search(vcsearch_re, new_command, re.I|re.M)
                 if vc_str:
@@ -237,7 +235,7 @@ class Exploit():
         except re.error:
             print(self.lang['re_error'])                                        # ? 日志, 正则表达式输入有误
 
-    def exp_request(self, result, http_raw, is_ssl=False):
+    def shell_request(self, result, http_raw, is_ssl=False):
         ''' 通用请求
                 :param result(dict): vulcat的单个poc扫描结果
                 :param http_raw(str): poc返回的http请求包
@@ -247,15 +245,15 @@ class Exploit():
                 :return: requests.Request
         '''
         vul_info = {}
-        vul_info['app_name'] = result['Type'][0] + '(Exploit)'
-        vul_info['vul_type'] = 'Exploit-' + result['Type'][1]
+        vul_info['app_name'] = result['Type'][0] + '(Shell)'
+        vul_info['vul_type'] = 'Shell-' + result['Type'][1]
         vul_info['vul_id'] = result['Type'][2]
 
         if 'https' in result['Target']:
             is_ssl = True
         
         try:
-            hack = HackRequests.hackRequests()
+            hack = HackRequests.hackRequests(timeout=self.timeout)
 
             res = hack.httpraw(
                 http_raw,
@@ -264,7 +262,7 @@ class Exploit():
                 location=False
             )
 
-            res.method = 'Exploit'
+            res.method = 'Shell'
             logger.logging(vul_info, res.status_code, res)                        # * LOG
             
             return res
@@ -278,16 +276,16 @@ class Exploit():
             logger.logging(vul_info, 'Error')
             return None
     
-    def exp_raw(self, result, http_raw, re_list):
-        ''' 使用http数据包(Request)进行exp
+    def shell_raw(self, result, http_raw, re_list):
+        ''' 使用http数据包(Request)进行shell
             while
-                if is_exit 是否退出Exploit模式
+                if is_exit 是否退出Shell模式
                 if new_http_raw 是否成功更新了payload
                     是 -> 发起请求
                     否 -> 更新payload失败
                 if res 是否请求成功
                     是 -> 查找/显示Response内容
-                    否 -> exp请求失败
+                    否 -> shell请求失败
                     
             :param result: vulcat返回的单个poc扫描结果
             :param http_raw: HTTP请求数据包
@@ -296,17 +294,17 @@ class Exploit():
             new_http_raw, is_exit, vc_str = self.search_command(re_list, http_raw)
 
             if is_exit:
-                logger.info('cyan_ex', self.lang['exit'])                       # ? 日志, 退出Exp模式
+                logger.info('cyan_ex', self.lang['exit'])                       # ? 日志, 退出Shell模式
                 break
             
             if new_http_raw:
-                res = self.exp_request(result, new_http_raw)
+                res = self.shell_request(result, new_http_raw)
                 
                 if res:
                     self.search_response(vc_str, str(res.header) + res.text())
                 else:
-                    logger.info('red', self.lang['exp_faild'])                  # ? 日志, exp请求失败
+                    logger.info('red', self.lang['shell_faild'])                  # ? 日志, shell请求失败
             else:
                 logger.info('red_ex', self.lang['faild_command'])               # ? 日志, 更新payload失败
 
-exploit = Exploit()
+shell = Shell()

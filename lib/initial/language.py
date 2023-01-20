@@ -6,10 +6,13 @@
         vulcat的英文
         vulcat的中文
 '''
+from lib.initial.load import load_yaml
 
 def language():
-    return lang['en_us']  # * 默认英文
-    return lang['zh_cn']  # * 上下换个位置就能切换语言
+    config_yaml = load_yaml()
+    
+    config_yaml['language'] = config_yaml['language'].replace('-', '_')
+    return lang[config_yaml.get('language', 'en_us')]  # * 用get查找语言, 如果没有找到则使用英文
 
 lang = {
     'en_us': {
@@ -48,7 +51,7 @@ lang = {
             'name': 'Specify the target type for the scan',
             'application': 'Specifies the target type, for supported frameworks, see the tips at the bottom, separated by commas (e.g. thinkphp / thinkphp,weblogic) (default: auto)',
             'vuln': 'Specify the vulnerability number,With -a/--application to scan a single vulnerability,You can use --list to see the vulnerability number,vulnerabilities that do not have a vulnerability number are not supported.The number does not discriminate between sizes, and the symbol - and _ are acceptable (e.g. -a fastjson -v cnVD-2019-22238 or -a Tomcat -v CVE-2017_12615)',
-            'exp': 'Use with the -a and -v parameters, After the Poc scan, if the vulnerability exists, enter the Exp interaction mode of the vulnerability; You can use --list to see Exp support vulnerabilities. (e.g. -a httpd -v CVE-2021-42013 -x)'
+            'shell': 'Use with the -a and -v parameters, After the Poc scan, if the vulnerability exists, enter the Shell interaction mode of the vulnerability; You can use --list to see Shell support vulnerabilities. (e.g. -a httpd -v CVE-2021-42013 -x)'
         },
         'api_help': {
             'title': 'Api',
@@ -58,8 +61,7 @@ lang = {
         'save_help': {
             'title': 'Save',
             'name': 'Save scan results',
-            'output_text': 'Save the scan results in TXT format, no vulnerability will not generate files(e.g. --output-text result.txt)',
-            'output_json': 'Save the scan results in JSON format, no vulnerability will not generate files(e.g. --output-text result.json)'
+            'output': 'Save the scan results in txt/json/html format, no vulnerability will not generate files (e.g. -o html)',
         },
         'general_help': {
             'title': 'General',
@@ -83,7 +85,7 @@ lang = {
                 'unable': '[WARN] Unable to connect to ',
                 'url_error': '[WARN] The destination {} is incorrect and needs to start with http:// or https://',
                 'no_poc': '[No-POC] Disable Vulnerability scanning',
-                'exp': 'When using -x/--exp, specify a vulnerability with -a and -v first(e.g. -a httpd -v cve-2021-41773 -x)'
+                'shell': 'When using --shell, specify a vulnerability with -a and -v first(e.g. -a httpd -v cve-2021-41773 -x)'
             },
             'waf_finger': {
                 'waf': '[INFO] The WAF detection for the current URL starts',
@@ -117,9 +119,6 @@ lang = {
                 'wait': '[INFO] Wait for all threads to finish. Please wait...',
                 'completed': '[INFO] Scan is completed'
             },
-            'start_exp': {
-                'lock': 'If you want to use -x/--exp, Please read the "vulcat/Exploit.lock" statement first, Delete the file with consent to the declaration, After the deletion, run -x/--exp again'
-            }
         },
         'output': {
             'info': {
@@ -130,17 +129,17 @@ lang = {
             'text': {
                 'success': '[INFO] The results have been saved to ',
                 'faild': '[ERROR] Failed to save txt',
-                'notvul': '[-] The result is not saved to '
+                'notvul': '[OUTPUT] The result is not saved, because no vuln were found'
             },
             'json': {
                 'success': '[INFO] The results have been saved to ',
                 'faild': '[ERROR] Failed to save json',
-                'notvul': '[-] The result is not saved to '
+                'notvul': '[OUTPUT] The result is not saved, because no vuln were found'
             },
             'html': {
                 'success': '[INFO] The results have been saved to ',
                 'faild': '[ERROR] Failed to save html',
-                'notvul': '[-] The result is not saved to '
+                'notvul': '[OUTPUT] The result is not saved, because no vuln were found'
             }
         }
     },
@@ -179,7 +178,7 @@ lang = {
             'name': '指定扫描的目标类型',
             'application': '指定框架类型, 支持的框架可以参考最下面的提示信息, 多个使用逗号分隔 (如: thinkphp 或者 thinkphp,weblogic) (默认将启用指纹识别, 并使用相应POC, 如果未识别出框架则使用全部POC)',
             'vuln': '指定漏洞编号, 配合-a/--application对单个漏洞进行扫描, 可以使用--list查看漏洞编号, 没有漏洞编号的漏洞暂不支持, 编号不区分大小, 符号-和_皆可 (如: -a fastjson -v CNVD-2019-22238 或者 -a Tomcat -v cvE-2017_12615)',
-            'exp': '配合-a和-v参数进行使用, Poc扫描过后, 如果该漏洞存在, 则进入该漏洞的Exp交互模式; 可以使用--list查看支持Exp的漏洞(如: -a httpd -v CVE-2021-42013 -x)'
+            'shell': '配合-a和-v参数进行使用, Poc扫描过后, 如果该漏洞存在, 则进入该漏洞的Shell交互模式; 可以使用--list查看支持Shell的漏洞(如: -a httpd -v CVE-2021-42013 -x)'
         },
         'api_help': {
             'title': 'Api',
@@ -189,8 +188,7 @@ lang = {
         'save_help': {
             'title': 'Save',
             'name': '保存扫描结果',
-            'output_text': '以txt格式保存扫描结果, 无漏洞时不会生成文件(如: --output-text result.txt)',
-            'output_json': '以json格式保存扫描结果, 无漏洞时不会生成文件(如: --output-text result.json)'
+            'output': '以txt/json/html格式保存扫描结果, 无漏洞时不会生成文件 (如: -o html)'
         },
         'general_help': {
             'title': 'General',
@@ -214,7 +212,7 @@ lang = {
                 'unable': '[WARN] 无法连接到 ',
                 'url_error': '[WARN] 目标{}好像不对哦, 需要以http://或https://开头',
                 'no_poc': '[No-POC] 不进行漏洞扫描',
-                'exp': '使用-x/--exp时请先使用-a和-v指定一个漏洞, 例如-a httpd -v cve-2021-41773 -x'
+                'shell': '使用--shell时请先使用-a和-v指定一个漏洞, 例如-a httpd -v cve-2021-41773 --shell'
             },
             'waf_finger': {
                 'waf': '[INFO] 对当前url进行WAF检测, 请稍等...',
@@ -248,9 +246,6 @@ lang = {
                 'wait': '[INFO] 等待所有线程结束, 请稍等...',
                 'completed': '[INFO] 扫描完成'
             },
-            'start_exp': {
-                'lock': '如果要使用-x/--exp, 请先阅读"vulcat/Exploit.lock"文件中的声明, 在同意声明的情况下删除该文件, 删除之后再次运行-x/--exp'
-            }
         },
         'output': {
             'info': {
@@ -261,17 +256,17 @@ lang = {
             'text': {
                 'success': '[INFO] 结果已经被保存到文件 ',
                 'faild': '[ERROR] 保存txt文件失败',
-                'notvul': '[-] 未保存结果至'
+                'notvul': '[OUTPUT] 未保存结果, 因为没有发现漏洞'
             },
             'json': {
                 'success': '[INFO] 结果已经被保存到文件 ',
                 'faild': '[ERROR] 保存json文件失败',
-                'notvul': '[-] 未保存结果至'
+                'notvul': '[OUTPUT] 未保存结果, 因为没有发现漏洞'
             },
             'html': {
                 'success': '[INFO] 结果已经被保存到文件 ',
                 'faild': '[ERROR] 保存html文件失败',
-                'notvul': '[-] 未保存结果至'
+                'notvul': '[OUTPUT] 未保存结果, 因为没有发现漏洞'
             }
         }
     }
@@ -576,33 +571,33 @@ lang['en_us']['list'] = {
     }
 }
 
-# ! -x/--exp中文------------------------------------------------------------
+# ! --shell中文------------------------------------------------------------
 
-lang['zh_cn']['exploit'] = {
-    'identify': '[+] 识别为"{}"漏洞, 进入Exp交互模式:',
-    'not_exp': '[-] 没有识别到漏洞类型, 或该漏洞类型不支持Exp',
-    'not_request': '[-] POC结果没有返回Request(HTTP请求数据包), 无法使用Exp',
+lang['zh_cn']['shell'] = {
+    'identify': '[+] 识别为"{}"漏洞, 进入Shell交互模式:',
+    'not_shell': '[-] 没有识别到漏洞类型, 或该漏洞类型不支持Shell',
+    'not_request': '[-] POC结果没有返回Request(HTTP请求数据包), 无法使用Shell',
     'input_command': '根据漏洞类型 输入相应的内容(例如"whoami"或"/etc/passwd"): ',
     'not_command': '请输入命令 (可以输入“exit”退出)',
     'faild_command': '[Faild] 使用该命令时发生错误',
     'not_search_command': '[INFO] 替换新payload失败, 没有在旧的HTTP数据包中检测到旧的payload',
-    'exit': '[INFO] 退出Exploit模式',
-    'exp_faild': '[Exploit] 请求失败',
+    'exit': '[INFO] 退出Shell模式',
+    'shell_faild': '[Shell] 请求失败',
     'not_response': '没有检测到响应包中的回显内容',
     're_error': 'vcsearch语法错误: 错误的正则表达式',
 }
 
-# ! -x/--exp英文------------------------------------------------------------
-lang['en_us']['exploit'] = {
-    'identify': '[+] Identified as "{}" vulnerability, Enter the Exp interactive mode:',
-    'not_exp': '[-] The vulnerability type is not identified, or Exp is not supported by the vulnerability type',
-    'not_request': '[-] The poc result did not return the Request(HTTP Request), Unable to use Exp',
+# ! --shell英文------------------------------------------------------------
+lang['en_us']['shell'] = {
+    'identify': '[+] Identified as "{}" vulnerability, Enter the Shell interactive mode:',
+    'not_shell': '[-] The vulnerability type is not identified, or Shell is not supported by the vulnerability type',
+    'not_request': '[-] The poc result did not return the Request(HTTP Request), Unable to use Shell',
     'input_command': 'Enter the value according to the vulnerability type(e.g. "whoami"or"/etc/passwd"): ',
     'not_command': 'Please enter the command(You can enter "exit" to exit)',
     'faild_command': '[Faild] An error occurred while using the command',
     'not_search_command': '[INFO] Description Failed to replace the new payload, No old payload was detected in the old HTTP packet',
-    'exit': '[INFO] Exit the Exploit.',
-    'exp_faild': '[Exploit] Request failed',
+    'exit': '[INFO] Exit the Shell.',
+    'shell_faild': '[Shell] Request failed',
     'not_response': 'Echoes in response packets are not detected',
     're_error': 'vcsearch syntax error: Incorrect regular expression',
 }

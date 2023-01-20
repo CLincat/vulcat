@@ -10,7 +10,7 @@ from lib.report import output
 
 from lib.plugins.fingerprint.waf import waf
 from lib.plugins.fingerprint.webapp import webapp
-from lib.plugins.exploit import exploit
+from lib.plugins.shell import shell
 
 from payloads.AlibabaDruid.main import alidruid
 from payloads.AlibabaNacos.main import nacos
@@ -80,14 +80,13 @@ class coreScan():
         self.batch = config.get('batch')                                                            # * 是否启用默认选项
         self.no_waf = config.get('no_waf')                                                          # * 是否启用WAF指纹识别
         self.no_poc = config.get('no_poc')                                                          # * 是否启用WAF指纹识别
-        self.exp = config.get('exp')
+        self.shell = config.get('shell')
 
         self.thread_list = []                                                                       # * 已经运行的线程列表
         self.results = []                                                                           # * 结果列表
         self.queue = Queue()                                                                        # * 创建线程池
-        self.txt_filename = config.get('txt_filename')
-        self.json_filename = config.get('json_filename')
-        # self.html_filename = config.get('html_filename')
+        
+        self.output_file = config.get('output')                                                     # * 是否导出文件
 
     def start(self):
         ''' 开始扫描, 添加poc并启动 '''
@@ -96,8 +95,8 @@ class coreScan():
                 logger.info('red_ex', self.lang['core']['start']['url_error'].format(u))
                 continue
 
-            if self.exp and (not self.vuln):
-                logger.info('yellow_ex', self.lang['core']['start']['exp'])                            # ? 提示, 使用exp之前 请先使用-a和-v参数指定一个漏洞
+            if self.shell and (not self.vuln):
+                logger.info('yellow_ex', self.lang['core']['start']['shell'])                          # ? 提示, 使用shell之前 请先使用-a和-v参数指定一个漏洞
                 break
 
             logger.info('green_ex', self.lang['core']['start']['start'] + u)                           # ? 提示, 开始扫描当前url
@@ -227,30 +226,29 @@ class coreScan():
             wq(save and exit)   等待已经运行的poc, 保存并输出已有的漏洞结果, 有--output参数的话则同步保存至文件
         '''
         while True:
-            logger.info('reset', '', print_end='')                  # ? 提示信息
-            operation = input('\r[CTRL+C] - q(uit)/c(ontinue)/n(ext)/wq(save and exit): '.ljust(70))# * 接收参数
-            operation = operation.lower()                                                           # * 字母转小写
+            try:
+                logger.info('reset', '', print_end='')                  # ? 提示信息
+                operation = input('\r[CTRL+C] - q(uit)/c(ontinue)/n(ext)/wq(save and exit): '.ljust(70))# * 接收参数
+                operation = operation.lower()                                                           # * 字母转小写
 
-            if operation in ['q', 'quit']:                                                          # * 退出扫描
-                _exit(0)
-            elif operation in ['c', 'continue']:                                                    # * 继续扫描
-                logger.info('yellow_ex', self.lang['core']['stop']['continue'])                     # ? 日志, 继续扫描
-                return True
-            elif operation in ['wq', 'save and exit']:                                              # * 保存结果并退出
-                self.end()
-            elif operation in ['n', 'next']:
-                logger.info('yellow_ex', self.lang['core']['stop']['next'])                         # ? 日志, 扫描下一个目标
+                if operation in ['q', 'quit']:                                                          # * 退出扫描
+                    _exit(0)
+                elif operation in ['c', 'continue']:                                                    # * 继续扫描
+                    logger.info('yellow_ex', self.lang['core']['stop']['continue'])                     # ? 日志, 继续扫描
+                    return True
+                elif operation in ['wq', 'save and exit']:                                              # * 保存结果并退出
+                    self.end()
+                elif operation in ['n', 'next']:
+                    logger.info('yellow_ex', self.lang['core']['stop']['next'])                         # ? 日志, 扫描下一个目标
 
-                return False
+                    return False
+            except:
+                continue
 
-    def start_exp(self):
-        ''' 启动Exploit模式 '''
-        try:
-            f = open('Exploit.lock')
-            f.close()
-            logger.info('red', self.lang['core']['start_exp']['lock'])                             # ? 日志, 使用exp时 请先删除vulcat/Exploit.lock锁文件
-        except FileNotFoundError:
-            exploit.start(self.results)
+    def start_shell(self):
+        ''' 启动Shell模式 '''
+
+        shell.start(self.results)
 
     def end(self):
         ''' 结束扫描, 等待所有线程运行完毕, 生成漏洞结果并输出/保存'''
@@ -260,15 +258,16 @@ class coreScan():
             self.results.append(t.get_result())                                                     # * 添加扫描结果
         output.output_info(self.results, self.lang)                                                 # * output处理扫描结果, 在命令行输出结果信息
 
-        if self.txt_filename:                                                                       # * 是否保存结果为.txt
-            output.output_text(self.results, self.txt_filename, self.lang)
-        if self.json_filename:                                                                      # * 是否保存结果为.json
-            output.output_json(self.results, self.json_filename, self.lang)
-        # if self.html_filename:
-        #     output.output_html(self.results, self.html_filename, self.lang)
+        # * 保存扫描结果, .html / .json / .txt
+        if (self.output_file == 'html'):
+            output.output_html(self.results, self.lang)
+        elif (self.output_file == 'json'):
+            output.output_json(self.results, self.lang)
+        elif (self.output_file == 'txt'):
+            output.output_text(self.results, self.lang)
 
-        if self.exp and self.vuln:                                                                  # * 是否使用Exp
-            self.start_exp()
+        if self.shell and self.vuln:                                                                # * 是否使用Shell
+            self.start_shell()
 
         logger.info('yellow_ex', self.lang['core']['end']['completed'])                             # ? 日志, 扫描完全结束, 退出运行
         logger.info('reset', '', notime=True, print_end='')                                         # * 重置文字颜色

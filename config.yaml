@@ -1,0 +1,41 @@
+# 语言, 默认为英文en-us, 中文为zh-cn
+language: en-us
+
+# ceye.io的域名和token
+ceye-domain: Null
+ceye-token: Null
+
+# 请求Header
+  # 运行时指定--user-agent参数, 会覆盖config.yaml的User-Agent
+headers:
+  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:96.0) Gecko/20100101 Firefox/96.0
+  Content-Type: application/x-www-form-urlencoded
+  # 符号 * 要用引号引起来
+  Accept: "*/*"
+  Connection: close
+
+# 当指定-a参数为all时, 或框架指纹识别失败时, 将会使用以下框架的POC进行扫描, 可以控制开关
+applist: [
+  'airflow', 'alidruid', 'apachedruid', 'apacheunomi', 'apisix', 'appweb', 
+  'cisco', 'confluence', 
+  'discuz', 'django', 'drupal', 
+  'elasticsearch', 
+  'f5bigip', 'fastjson', 'flink', 
+  'gitea', 'gitlab', 
+  # 'grafana', # 由于该框架的POC请求过多, 会影响扫描速度, 所以默认不会启用 (当指纹识别到Grafana框架, 或-a指定时才会进行扫描)
+  'hadoop', 'httpd', 
+  'influxdb', 
+  'jenkins', 'jetty', 'jupyter', 
+  'keycloak', 
+  'landray', 
+  'minihttpd', 'mongoexpress', 
+  'nacos', 'nexus', 'nodejs', 'nodered', 
+  'phpmyadmin', 'phpunit', 
+  'rails', 
+  'showdoc', 'skywalking', 'solr', 'spring', 'supervisor', 
+  'thinkphp', 'tomcat', 
+  'ueditor', 
+  'weblogic', 'webmin', 
+  'yonyou', 
+  'zabbix'
+]

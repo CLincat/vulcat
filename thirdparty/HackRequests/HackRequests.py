@@ -108,11 +108,11 @@ class hackRequests(object):
     可以通过http或者httpraw来访问网络
     '''
 
-    def __init__(self, conpool=None):
+    def __init__(self, conpool=None, timeout=17):
         self.lock = threading.Lock()
 
         if conpool is None:
-            self.httpcon = httpcon(timeout=17)
+            self.httpcon = httpcon(timeout=timeout)
         else:
             self.httpcon = conpool
 

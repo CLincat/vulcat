@@ -114,49 +114,59 @@ class Solr():
         headers = self.headers.copy()
         headers.update(vul_info['headers'])
 
-        res1 = requests.get(
-            target_core, 
-            timeout=self.timeout, 
-            headers=self.headers, 
-            proxies=self.proxies, 
-            verify=False
-        )
-        logger.logging(vul_info, res1.status_code, res1)                 # * LOG
-
-        db_name = re.search(r'"name":".+"', res1.text, re.M|re.I)        # * 如果存在solr的数据库名称
-        if db_name:
-            db_name = db_name.group()
-            db_name = db_name.replace('"name":', '')
-            self.db_name = db_name.strip('"')                            # * 只保留双引号内的数据库名称
-
-        if self.db_name:
-            # todo 开启RemoteStreaming
-            res2 = requests.post(
-                target_config.format(self.db_name), 
+        try:
+            res1 = requests.get(
+                target_core, 
                 timeout=self.timeout, 
-                headers=headers,
-                data=config_data, 
+                headers=self.headers, 
                 proxies=self.proxies, 
-                verify=False,
-                allow_redirects=False
+                verify=False
             )
-            logger.logging(vul_info, res2.status_code, res2)
-            if (res2.status_code == 200):
-                self.RemoteStreaming = True
+            logger.logging(vul_info, res1.status_code, res1)                 # * LOG
 
-            # todo 开启params.resource.loader.enabled
-            res3 = requests.post(
-                target_config.format(self.db_name), 
-                timeout=self.timeout, 
-                headers=headers,
-                data=params_data, 
-                proxies=self.proxies, 
-                verify=False,
-                allow_redirects=False
-            )
-            logger.logging(vul_info, res3.status_code, res3)
-            if (res3.status_code == 200):
-                self.params = True
+            db_name = re.search(r'"name":".+"', res1.text, re.M|re.I)        # * 如果存在solr的数据库名称
+            if db_name:
+                db_name = db_name.group()
+                db_name = db_name.replace('"name":', '')
+                self.db_name = db_name.strip('"')                            # * 只保留双引号内的数据库名称
+
+            if self.db_name:
+                # todo 开启RemoteStreaming
+                res2 = requests.post(
+                    target_config.format(self.db_name), 
+                    timeout=self.timeout, 
+                    headers=headers,
+                    data=config_data, 
+                    proxies=self.proxies, 
+                    verify=False,
+                    allow_redirects=False
+                )
+                logger.logging(vul_info, res2.status_code, res2)
+                if (res2.status_code == 200):
+                    self.RemoteStreaming = True
+
+                # todo 开启params.resource.loader.enabled
+                res3 = requests.post(
+                    target_config.format(self.db_name), 
+                    timeout=self.timeout, 
+                    headers=headers,
+                    data=params_data, 
+                    proxies=self.proxies, 
+                    verify=False,
+                    allow_redirects=False
+                )
+                logger.logging(vul_info, res3.status_code, res3)
+                if (res3.status_code == 200):
+                    self.params = True
+        except requests.ConnectTimeout:
+            logger.logging(vul_info, 'Timeout')
+            return None
+        except requests.ConnectionError:
+            logger.logging(vul_info, 'Faild')
+            return None
+        except:
+            logger.logging(vul_info, 'Error')
+            return None
 
     def addscan(self, url, vuln=None):
         if vuln:

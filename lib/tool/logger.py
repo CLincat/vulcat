@@ -147,7 +147,12 @@ class Logger():
             return info_6
         return info_6
 
-    def get_domain(self, url):
+    def get_domain(self, url, protocol=False):
+        ''' 提取一个URL中的域名部分
+            param url: 要提取域名的url
+            param protocol: 提取的部分是否包含协议, 默认去掉协议
+        '''
+        
         try:
             start_index = url.find('//')
             if start_index:
@@ -155,7 +160,12 @@ class Logger():
             else:
                 return 'None'
             end_index = url.find('/', start_index)
-            domain = url[start_index:end_index]
+            
+            if protocol:
+                domain = url[0:end_index]
+            else:
+                domain = url[start_index:end_index]
+            
             return domain
         except:
             return 'Error'

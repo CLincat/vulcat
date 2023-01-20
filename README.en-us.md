@@ -1,7 +1,7 @@
 # vulcat
 
 [![python](https://img.shields.io/badge/Python-3-blue?logo=python)](https://shields.io/)
-[![version](https://img.shields.io/badge/Version-1.1.7-blue)](https://shields.io/)
+[![version](https://img.shields.io/badge/Version-1.1.8-blue)](https://shields.io/)
 [![license](https://img.shields.io/badge/LICENSE-GPL-yellow)](https://shields.io/)
 [![stars](https://img.shields.io/github/stars/CLincat/vulcat?color=red)](https://shields.io/)
 [![forks](https://img.shields.io/github/forks/CLincat/vulcat?color=red)](https://shields.io/)
@@ -47,7 +47,7 @@ Examples:
 python3 vulcat.py -u https://www.example.com/
 python3 vulcat.py -u https://www.example.com/ -a thinkphp --log 3
 python3 vulcat.py -u https://www.example.com/ -a tomcat -v CVE-2017-12615
-python3 vulcat.py -f url.txt -t 10
+python3 vulcat.py -f url.txt -t 10 -o html
 python3 vulcat.py --list
 ```
 
@@ -116,11 +116,11 @@ Options:
                         number does not discriminate between sizes, and the
                         symbol - and _ are acceptable (e.g. -a fastjson -v
                         cnVD-2019-22238 or -a Tomcat -v CVE-2017_12615)
-    -x, --exp           Use with the -a and -v parameters, After the Poc scan,
-                        if the vulnerability exists, enter the Exp interaction
-                        mode of the vulnerability; You can use --list to see
-                        Exp support vulnerabilities. (e.g. -a httpd -v
-                        CVE-2021-42013 -x)
+    --shell             Use with the -a and -v parameters, After the Poc scan,
+                        if the vulnerability exists, enter the Shell
+                        interaction mode of the vulnerability; You can use
+                        --list to see Shell support vulnerabilities. (e.g. -a
+                        httpd -v CVE-2021-42013 -x)
 
   Api:
     The third party Api
@@ -134,13 +134,9 @@ Options:
   Save:
     Save scan results
 
-    --output-text=TXT_FILENAME
-                        Save the scan results in TXT format, no vulnerability
-                        will not generate files(e.g. --output-text result.txt)
-    --output-json=JSON_FILENAME
-                        Save the scan results in JSON format, no vulnerability
-                        will not generate files(e.g. --output-text
-                        result.json)
+    -o OUTPUT, --output=OUTPUT
+                        Save the scan results in txt/json/html format, no
+                        vulnerability will not generate files (e.g. -o html)
 
   General:
     General operating parameter
@@ -156,34 +152,34 @@ Options:
     --list              View all payload
 
   Supported target types(Case insensitive):
-    AliDruid, airflow, apisix, apachedruid, appweb, cisco, confluence, discuz, django,
-    drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab,
-    grafana, influxdb, hadoop, httpd, jenkins, jetty, jupyter, keycloak,
-    landray, minihttpd, mongoexpress, nexus, nacos, nodejs, nodered,
-    phpmyadmin, phpunit, rails, showdoc, solr, spring, supervisor,
-    skywalking, thinkphp, tomcat, ueditor, weblogic, webmin, yonyou, zabbix
+    AliDruid, airflow, apisix, apachedruid, appweb, cisco, confluence,
+    discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink,
+    gitea, gitlab, grafana, influxdb, hadoop, httpd, jenkins, jetty,
+    jupyter, keycloak, landray, minihttpd, mongoexpress, nexus, nacos,
+    nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, solr, spring,
+    supervisor, skywalking, thinkphp, tomcat, ueditor, weblogic, webmin,
+    yonyou, zabbix
 ```
 
 ## language
-You can change the language of -h/--help, currently only Chinese and English
+You can change the language of vulcat, currently only Chinese and English
 
-* Open the vulcat/lib/initial/language.py
-* Switching the "return" order and then saving the file implements the -h/--help language switch
+* Open the vulcat/config.yaml
+* Modify the value of "language" and save the file to switch the Vulcat language
 
 ```
-def language():
-    return lang['zh_cn']
-    return lang['en_us']
+# Language, default is English en-us, Chinese is zh-cn
+language: en-us
 ```
 
 ## Dnslog
 You can customize http://ceye.io
 
-* Open the vulcat/lib/initial/config.py
-* Find the code below, fill in your domain name and token, and save the file
+* Open the vulcat/config.yaml
+* Find the following code, replace Null with your own domain name and token, and save the file
 ```
-args.ceye_domain = ''
-args.ceye_token = ''
+ceye-domain: Null
+ceye-token: Null
 ```
 
 ## Custom POC
@@ -201,7 +197,7 @@ args.ceye_token = ''
 
 ```
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
-| Target               | Vuln id            | Vuln Type    | Exp | Description                                                  |
+| Target               | Vuln id            | Vuln Type    | Sh  | Description                                                  |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Alibaba Druid        | (None)             | unAuth       |  -  | Alibaba Druid unAuthorized                                   |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
@@ -349,9 +345,9 @@ args.ceye_token = ''
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Zabbix               | CVE-2016-10134     | SQLinject    |  -  | latest.php or jsrpc.php SQLinject                            |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
-vulcat-1.1.7/2022.12.15
+vulcat-1.1.8/2023.01.20
 99/Poc
-37/Exp
+37/Shell
 ```
 </details>
 
@@ -360,6 +356,9 @@ vulcat-1.1.7/2022.12.15
 * [sqlmap](https://github.com/sqlmapproject/sqlmap)
 * [dirsearch](https://github.com/maurosoria/dirsearch)
 * [HackRequests](https://github.com/boy-hack/hack-requests)
+* [vulhub](https://github.com/vulhub/vulhub)
+* [vulfocus](https://github.com/fofapro/vulfocus)
+* [ttkbootstrap](https://github.com/israel-dryer/ttkbootstrap/)
 
 ## Star History
 [![Star History Chart](https://api.star-history.com/svg?repos=CLincat/vulcat&type=Timeline)](https://star-history.com/#Ashutosh00710/github-readme-activity-graph&Timeline)

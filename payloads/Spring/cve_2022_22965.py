@@ -69,13 +69,13 @@ def cve_2022_22965_scan(self, clients):
             if res2 is None:
                 continue
 
-        if ((res2.status_code == 200) and (randomStr in res2.text)):
-            results = {
-                'Target': res1.request.url,
-                'Verify': res2.request.url,
-                'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                'Request-1': res1,
-                'Request-2': res2,
-            }
-            return results
+            if ((res2.status_code == 200) and (randomStr in res2.text)):
+                results = {
+                    'Target': res1.request.url,
+                    'Verify': res2.request.url,
+                    'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
+                    'Request-1': res1,
+                    'Request-2': res2,
+                }
+                return results
     return None

@@ -31,6 +31,8 @@ def apache_hadoop_unauthorized_scan(self, clients):
             path,
             vul_info=vul_info
         )
+        if res is None:
+            continue
 
         if ((
                 'parseHadoopID' in res.text

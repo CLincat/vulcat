@@ -251,10 +251,12 @@ class hackRequests(object):
             _url = "{scheme}://{host}{path}".format(scheme=scheme, host=host, path=path)
         else:
             _url = "{scheme}://{host}{path}".format(scheme=scheme, host=host + ":" + port, path=path)
+        
+        rep.method = method                                         # * 2023-02-02 Clincat, rep.method
         return response(rep, _url, log, )
 
     def http(self, url, **kwargs):
-        method = kwargs.get("method", "GET")
+        method = kwargs.get("method", "GET").upper()                # * 2023-02-02 Clincat, .upper()
         post = kwargs.get("post", None) or kwargs.get("data", None)
         location = kwargs.get('location', True)
         locationcount = kwargs.get("locationcount", 0)
@@ -344,6 +346,7 @@ class hackRequests(object):
         if not redirect:
             redirect = url
         log["url"] = redirect
+        rep.method = method                         # * 2023-02-02 Clincat, rep.method
         return response(rep, redirect, log, cookie)
 
 
@@ -354,6 +357,7 @@ class response(object):
         self.status_code = self.rep.status  # response code
         self.url = redirect
         self._content = b''
+        self.method = self.rep.method                       # * 2023-02-02 Clincat, response.method
 
         _header_dict = dict()
         self.cookie = ""
@@ -385,6 +389,8 @@ class response(object):
             self.charset = charset.split("charset=")[1]
         except:
             self.charset = "utf-8"
+        
+        self.text = self.get_text()             # * 2023-01-27 Clincat, use get_text() --> text
 
     def content(self):
         if self._content:
@@ -406,7 +412,7 @@ class response(object):
         self._content = body
         return body
 
-    def text(self):
+    def get_text(self):             # * 2023-01-27 Clincat, change text() --> get_text()
         '''
 
         :return: text

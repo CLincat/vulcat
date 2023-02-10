@@ -8,13 +8,11 @@
 
 from lib.initial.config import config
 from lib.tool.logger import logger
-from lib.tool import check
-from thirdparty import requests
 from time import sleep
 import re
 
 class WafIdentify():
-    def identify(self, url):
+    def identify(self, client):
         '''
             waf识别
         '''
@@ -23,48 +21,78 @@ class WafIdentify():
                 'app_name': 'Waf',
                 'vul_id': 'identify'
             }
+
+            errors = {
+                'Timeout': {
+                    'text_color': 'red_ex',
+                    'text': self.lang['core']['waf_finger']['Timeout']
+                },
+                'Faild': {
+                    'text_color': 'red_ex',
+                    'text': self.lang['core']['waf_finger']['Faild']
+                },
+                'Error': {
+                    'text_color': 'red_ex',
+                    'text': self.lang['core']['waf_finger']['Error']
+                }
+            }
+
+            waf_info = None
             path_1 = '?id=1 and 1=1 -- qwe'
             path_2 = '?id=1\'"><iMg SrC=1 oNeRrOr=alert(1)>//'
 
-            url_1 = url + path_1
-            url_2 = url + path_2
+            logger.info('yellow_ex', self.lang['core']['waf_finger']['start'])
 
-            logger.info('yellow_ex', self.lang['core']['waf_finger']['waf'])
-
-            res = requests.get(
-                url_2,
-                timeout=self.timeout,
-                headers=self.headers,
-                proxies=self.proxies,
-                verify=False
+            res = client.request(
+                'get',
+                path_2,
+                vul_info=vul_info,
+                errors=errors
             )
-            logger.logging(vul_info, res.status_code, res)                        # * LOG
 
-            res.encoding = 'utf-8'
-            for waf_fp in self.waf_finger:
-                for finger in waf_fp['fingerprint']:
-                    # if ((res.status_code == waf_fp['status_code']) and (finger in res.text)):
-                    if (finger in res.text):
-                        return waf_fp['name']
+            if res is not None:
+                res.encoding = 'utf-8'
+                for waf_fp in self.waf_finger:
+                    if (waf_info):
+                        # * 如果已经识别出WAF, 则停止
+                        break
+                    
+                    for finger in waf_fp['fingerprint']:
+                        # if ((res.status_code == waf_fp['status_code']) and (finger in res.text)):
+                        if (finger in res.text):
+                            waf_info = waf_fp['name']
+                            break
 
-            return None
-        except requests.ConnectTimeout:
-            logger.info('red_ex', self.lang['core']['waf_finger']['waf_timeout'])
-            return None
-        except requests.ConnectionError:
-            logger.info('red_ex', self.lang['core']['waf_finger']['waf_conn_error'])
-            return None
+                if waf_info:
+                    while True:
+                        if (not self.batch):                                                            # * 是否使用默认选项
+                            logger.info('red', '', print_end='')
+                            operation = input(self.lang['core']['waf_finger']['Find'].format(waf_info))       # * 接收参数
+                        else:
+                            logger.info('red', self.lang['core']['waf_finger']['Find'].format(waf_info), print_end='')
+                            operation = 'no'                                                            # * 默认选项No
+                            logger.info('red', 'no', notime=True)
+
+                        operation = operation.lower()                                                   # * 字母转小写
+                        if operation in ['y', 'yes']:                                                   # * 继续扫描
+                            logger.info('yellow_ex', self.lang['core']['stop']['continue'])             # ? 日志, 继续扫描
+                            waf_info = 'yes'                                                            # ? 不听劝, 继续扫描
+                            break
+                        elif operation in ['n', 'no']:
+                            logger.info('yellow_ex', self.lang['core']['stop']['next'])                 # ? 日志, 下一个
+                            waf_info = 'no'                                                             # ? 有WAF, 不扫了不扫了, 换下一个URL
+                            break
+                else:
+                    logger.info('yellow_ex', self.lang['core']['waf_finger']['NotFind'])
+
+            return waf_info
         except:
-            logger.info('red_ex', self.lang['core']['waf_finger']['waf_error'])
-            return None
-
+            return waf_info
 
     def __init__(self):
         self.delay = config.get('delay')
         self.lang = config.get('lang')
-        self.timeout = config.get('timeout')
-        self.headers = config.get('headers')
-        self.proxies = config.get('proxies')
+        self.batch = config.get('batch')
 
         # * waf指纹库
         self.waf_finger = [
@@ -81,7 +109,11 @@ class WafIdentify():
                     'status_code': 403,
                     'fingerprint': [
                         '腾讯T-Sec Web应用防火墙(WAF)',
-                        # '很抱歉，您提交的请求可能对网站造成威胁，请求已被管理员设置的策略阻断'
+                        '<h1 class="err">很抱歉，您提交的请求存在异常，请向网站管理员确认并获取正确的访问方式</h1>',
+                        # '<link rel="stylesheet" href="https://imgcache.qq.com/qcloud/security/static/404style.css">',
+                        # '<h1 class="err">很抱歉，您提交的请求存在异常，请向网站管理员确认并获取正确的访问方式</h1>',
+                        # '<p class="text1">本页面为<span class="text-color">腾讯T-Sec Web应用防火墙(WAF)</span>默认提示页面，如有疑问请联系网站管理员</p>',
+                        # '<title>Client Bad Request</title>',
                     ]
                 },
                 {

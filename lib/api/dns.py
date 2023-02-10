@@ -52,14 +52,14 @@ class DNS():
             elif ('dnslog' in self.dns_platform):
                 return self.get_dnslog_result(md, sessid)
             else:
-                return 'NotRes'
+                return False                # * 没有结果
         except requests.ConnectTimeout:
-            return 'dnslog_timeout'
+            return False                    # * 连接 DNSLOG平台 超时
         except requests.ConnectionError:
-            return 'dnslog_error'
+            return False                    # * 无法连接到 DNSLOG平台
         except Exception as e:
             # print(e)
-            return 'dnslog_error'
+            return False                    # * 连接 DNSLOG平台时发生致命错误
 
     # * 不同的dns平台
     def get_dnslog_domain(self, sessid):
@@ -88,9 +88,9 @@ class DNS():
             verify=False
         )
         if (md in res.text):
-            return md
+            return True             # * 无回显漏洞验证-成功
         else:
-            return 'NotVul'
+            return False            # * 无回显漏洞验证-失败
 
     def get_ceye_result(self, md):
         res = requests.get(
@@ -99,8 +99,8 @@ class DNS():
             verify=False
         )
         if (md in res.text):
-            return md
+            return True             # * 无回显漏洞验证-成功
         else:
-            return 'NotVul'
+            return False            # * 无回显漏洞验证-失败
 
 dns = DNS()

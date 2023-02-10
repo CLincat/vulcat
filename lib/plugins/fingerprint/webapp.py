@@ -8,13 +8,11 @@
 
 from lib.initial.config import config
 from lib.tool.logger import logger
-from lib.tool import check
-from thirdparty import requests
 from time import sleep
 import re
 
 class WebappIdentify():
-    def identify(self, url):
+    def identify(self, client):
         '''
             web应用程序/框架识别
         '''
@@ -24,76 +22,87 @@ class WebappIdentify():
                 'vul_id': 'identify'
             }
 
+            errors = {
+                'Timeout': {
+                    'text_color': 'red_ex',
+                    'text': self.lang['core']['web_finger']['Timeout']
+                },
+                'Faild': {
+                    'text_color': 'red_ex',
+                    'text': self.lang['core']['web_finger']['Faild']
+                },
+                'Error': {
+                    'text_color': 'red_ex',
+                    'text': self.lang['core']['web_finger']['Error']
+                }
+            }
+
             new_app_list = []
 
-            res = requests.get(
-                url,
-                timeout=self.timeout,
-                headers=self.headers,
-                proxies=self.proxies,
-                verify=False
+            logger.info('yellow_ex', self.lang['core']['web_finger']['start'])
+
+            res = client.request(
+                'get',
+                '',
+                vul_info=vul_info,
+                errors=errors
             )
-            logger.logging(vul_info, res.status_code, res)                        # * LOG
-            res.encoding = 'utf-8'
 
-            for web_fp in self.webapp_fingerprint:
-                try:
-                    if ((not web_fp['path']) and (not web_fp['data'])):               # * 如果没有特殊路径
-                        # * 响应内容 识别
-                        for finger in web_fp['fingerprint']:
-                            if (re.search(finger, res.text, re.I|re.M|re.U|re.S)):
-                                new_app_list.append(web_fp['name'])                   # * 识别出框架, 则添加相应POC
-                                continue
-                    else:
-                        sleep(self.delay)
+            if res is not None:
+                res.encoding = 'utf-8'
 
-                        if (web_fp['data']):
-                            res2 = requests.post(                                     # * 如果有特殊DATA, 则POST请求
-                            url,
-                            timeout=self.timeout,
-                            headers=self.headers,
-                            data=web_fp['data'],
-                            proxies=self.proxies,
-                            verify=False
-                        )
+                for web_fp in self.webapp_fingerprint:
+                    try:
+                        if ((not web_fp['path']) and (not web_fp['data'])):               # * 如果没有特殊路径
+                            # * 响应内容 识别
+                            for finger in web_fp['fingerprint']:
+                                if (re.search(finger, res.text, re.I|re.M|re.U|re.S)):
+                                    new_app_list.append(web_fp['name'])                   # * 识别出框架, 则添加相应POC
+                                    continue
                         else:
-                            res2 = requests.get(                                      # * 如果有特殊路径, 则GET请求
-                                url + web_fp['path'],
-                                timeout=self.timeout,
-                                headers=self.headers,
-                                proxies=self.proxies,
-                                verify=False
-                            )
-                        logger.logging(vul_info, res2.status_code, res2)              # * LOG
-                        res2.encoding = 'utf-8'
+                            sleep(self.delay)
 
-                        for finger in web_fp['fingerprint']:
-                            if (re.search(finger, res2.text, re.I|re.M|re.U|re.S)):
-                                new_app_list.append(web_fp['name'])                   # * 识别出框架, 则添加相应POC
-                                continue
-                except requests.ConnectTimeout:
-                    logger.info('red_ex', self.lang['core']['web_finger']['web_timeout'])
-                    continue
-                except requests.ConnectionError:
-                    logger.info('red_ex', self.lang['core']['web_finger']['web_conn_error'])
-                    continue
-                except KeyboardInterrupt:
-                    if self.stop():
-                        continue
-                    else:
-                        self.queue.queue.clear()                                                        # * 清空当前url的扫描队列
-                        break                                                                           # * 停止当前url的扫描, 并扫描下一个url
-            return set(new_app_list)                                              # * 去重
-        except Exception as e:
-            logger.info('red_ex', self.lang['core']['web_finger']['web_error'])
+                            if (web_fp['data']):
+                                res2 = client.request(                                    # * 如果有特殊DATA, 则POST请求
+                                    'post',
+                                    '',
+                                    data=web_fp['data'],
+                                    vul_info=vul_info,
+                                )
+                            else:
+                                res2 = client.request(                                    # * 如果有特殊路径, 则GET请求
+                                    'get',
+                                    web_fp['path'],
+                                    vul_info=vul_info,
+                                )
+
+                            if res2 is not None:
+                                res2.encoding = 'utf-8'
+                                for finger in web_fp['fingerprint']:
+                                    if (re.search(finger, res2.text, re.I|re.M|re.U|re.S)):
+                                        new_app_list.append(web_fp['name'])                   # * 识别出框架, 则添加相应POC
+                                        continue
+                    except KeyboardInterrupt:
+                        if self.stop():
+                            continue
+                        else:
+                            self.queue.queue.clear()                                                        # * 清空当前url的扫描队列
+                            break                                                                           # * 停止当前url的扫描, 并扫描下一个url
+                        
+            if new_app_list:
+                dedup_app_list = set(new_app_list)          # * 去重
+                
+                logger.info('yellow_ex', self.lang['core']['web_finger']['Find'].format(str(dedup_app_list)))
+                return dedup_app_list
+
+            logger.info('yellow_ex', self.lang['core']['web_finger']['NotFind'])
             return None
-
+        except:
+            return None
+        
     def __init__(self):
         self.delay = config.get('delay')
         self.lang = config.get('lang')
-        self.timeout = config.get('timeout')
-        self.headers = config.get('headers')
-        self.proxies = config.get('proxies')
 
         # * webapp指纹库
         self.webapp_fingerprint = [

@@ -10,13 +10,13 @@
 from threading import Thread
 
 class thread(Thread):
-    def __init__(self, target, url):
+    def __init__(self, target, clients):
         super(thread, self).__init__()
         self.target = target
-        self.url = url
+        self.clients = clients
 
     def run(self):
-        self.result = self.target(self.url)
+        self.result = self.target(self.clients)
 
     def get_result(self):                   # * 返回子线程扫描结果
         try:

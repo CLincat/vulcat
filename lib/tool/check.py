@@ -11,38 +11,61 @@
 '''
 
 from lib.initial.config import config
-from thirdparty import requests
 import re
 
-def check_connect(url):
-    timeout = config.get('timeout')
-    headers = config.get('headers')
-    proxies = config.get('proxies')
-    try:
-        requests.get(
-            url, 
-            timeout=timeout, 
-            headers=headers, 
-            proxies=proxies, 
-            verify=False,
-            allow_redirects=False
-        )
-
-        return True
-    except requests.ConnectTimeout:
-        return False
-    except requests.ConnectionError:
-        return False
-    except Exception as e:
-        # print(e)
+def check_connect(client):
+    info = {
+        'app_name': 'Check',
+        'vul_id': 'check-connection'
+    }
+    
+    res = client.request(
+        'get',
+        '',
+        allow_redirects=False,
+        vul_info=info
+    )
+    if res is None:
         return False
 
-def check_res(res, md):
+    return True
+
+def check_res(resText, md, command='echo'):
     ''' 检查RCE-poc误报
     来自: https://github.com/zhzyker/vulmap/blob/main/core/verify.py
     '''
-    res_info = "echo.{0,20}" + md
-    if(re.search(res_info, res) != None):
-        return "not_vul"
+    res_info = command + ".{1,20}" + md
+    
+    if(re.search(res_info, resText) != None):
+        return False            # * 回显异常, 误报
     else:
-        return res
+        if (md in resText):
+            return True         # * 正确回显, 存在漏洞
+        else:
+            return False        # * 错误回显, 不存在漏洞
+
+def check_res_fileread(resText, resHeaders=None):
+    ''' 检查回显, 判断是否存在 FileRead(任意文件读取) 漏洞
+        :param resText: 响应文本Response.text
+        :param resHeaders(可选参数): 响应头, 有时候回显可能在 响应Headers 里 而不在 响应Body 里
+        
+        * /etc/passwd
+            r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root'
+        * C:/Windows/System32/drivers/etc/hosts
+            'Microsoft Corp' and 'Microsoft TCP/IP for Windows'
+    '''
+
+    if (
+        re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', resText, re.I|re.M|re.S)
+        or (('Microsoft Corp' in resText) 
+            and ('Microsoft TCP/IP for Windows' in resText))
+    ):
+        return True         # * 文件回显在 响应Body里, 存在FileRead漏洞
+    elif (
+        re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', str(resHeaders), re.I|re.M|re.S)
+        or (('Microsoft Corp' in str(resHeaders)) 
+            and ('Microsoft TCP/IP for Windows' in str(resHeaders)))
+    ):
+        return True         # * 文件回显在 响应Headers里, 存在FileRead漏洞
+    
+    return False            # * 没有找到文件回显, 不存在FileRead漏洞

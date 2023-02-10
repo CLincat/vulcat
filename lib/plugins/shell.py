@@ -19,6 +19,7 @@ class Shell():
         self.timeout = config.get('timeout')
         # self.proxies = config.get('proxies')
         self.proxy = config.get('proxy')
+        self.vulnType = str(config.get('vulnType')).lower()
         
         self.rce_old_payload_re_list = [                 # * RCE漏洞的旧command正则, 搜索并替换为用户自定义的新command
             r'echo(\s|%20|\${IFS})?'\
@@ -27,9 +28,23 @@ class Shell():
                 '(/|%2f|%2F)?'\
                     'etc/(/|%2f|%2F)?passwd',
             r'phpinfo\(?\)?',
-            r'print(\(|%28)\d{3,6}\*\d{3,6}(\)|%29)',
-            r'curl (http://)?.{5,30}\.\w{2}',
-            r'ping (-c 4 )?.{5,30}\.\w{2}',
+            r'print_?r?(\(|%28)\d{3,6}\*\d{3,6}(\)|%29)',
+            r'print_?r?(\(|%28)([0-9a-z]){6,8}(\)|%29)',
+            r'curl(\s|%20){1}'\
+                '(http://)?'\
+                '([0-9a-z]){6,10}\.'\
+                '(([0-9a-z]){6,10}\.)?'\
+                '(dnslog\.cn|ceye\.io){1}',
+            r'ping(\s|%20){1}'\
+                '(-c 4 |-c%204%20)?'\
+                '([0-9a-z]){6,10}\.'\
+                '(([0-9a-z]){6,10}\.)?'\
+                '(dnslog\.cn|ceye\.io){1}',
+            r'(dns|ldap|rmi){1}://'\
+                '([0-9a-z]){6,10}\.'\
+                '(([0-9a-z]){6,10}\.)?'\
+                '(dnslog\.cn|ceye\.io){1}/'\
+                '([0-9a-z]){4,10}',
         ]
 
         self.fileread_old_payload_re_list = [
@@ -45,6 +60,14 @@ class Shell():
                 'System32(\\|%5c|%5C)?'\
                 'drivers(\\|%5c|%5C)?'\
                     'etc(\\|%5c|%5C)?hosts',
+        ]
+        
+        self.ssrf_old_payload_re_list = [
+            # r'(http|https|dns|ldap|rmi){1}://'\
+            r'(http|https){1}://'\
+                '([0-9a-z]){6,10}\.'\
+                '(([0-9a-z]){6,10}\.)?'\
+                '(dnslog\.cn|ceye\.io){1}',
         ]
         
     def start(self, results):
@@ -76,12 +99,23 @@ class Shell():
         
         # ! 遍历poc结果, 判断单个poc结果的漏洞类型, 分发给相应的漏洞Shell
         for result in results:
-            if result and (re.search(r'rce', str(result['Type']), re.I)):
+            if result and ('rce' in self.vulnType):
+                self.shell(result, self.rce_old_payload_re_list)
+            elif result and ('fileread' in self.vulnType):
+                self.shell(result, self.fileread_old_payload_re_list)
+            elif result and ('fileinclude' in self.vulnType):
+                self.shell(result, self.fileread_old_payload_re_list)
+            elif result and ('ssrf' in self.vulnType):
+                self.shell(result, self.ssrf_old_payload_re_list)
+            
+            elif result and (re.search(r'rce', str(result['Type']), re.I)):
                 self.shell(result, self.rce_old_payload_re_list)
             elif result and (re.search(r'file-?read', str(result['Type']), re.I)):
                 self.shell(result, self.fileread_old_payload_re_list)
             elif result and (re.search(r'file-?include', str(result['Type']), re.I)):
                 self.shell(result, self.fileread_old_payload_re_list)
+            elif result and (re.search(r'ssrf', str(result['Type']), re.I)):
+                self.shell(result, self.ssrf_old_payload_re_list)
                 # self.fileinclude(result, self.fileinclude_old_payload_re_list)
             # elif result and ('sqlinject' in str(result['Type']).lower()):
             #     self.rce(result)
@@ -95,7 +129,11 @@ class Shell():
         ''' 漏洞通用Shell
             :param result(dict): vulcat的单个poc扫描结果
         '''
-        logger.info('red_ex', self.lang['identify'].format(result['Type'][1]))
+        if self.vulnType != 'none':
+            logger.info('red_ex', self.lang['identify'].format(self.vulnType))
+        else:
+            logger.info('red_ex', self.lang['identify'].format(result['Type'][1]))
+            
         
         http_raw = self.search_requests(result)                     # * 判断result是否带有Request请求包
 
@@ -254,7 +292,6 @@ class Shell():
         
         try:
             hack = HackRequests.hackRequests(timeout=self.timeout)
-
             res = hack.httpraw(
                 http_raw,
                 ssl=is_ssl,
@@ -262,7 +299,7 @@ class Shell():
                 location=False
             )
 
-            res.method = 'Shell'
+            # res.method = 'Shell'
             logger.logging(vul_info, res.status_code, res)                        # * LOG
             
             return res
@@ -301,7 +338,7 @@ class Shell():
                 res = self.shell_request(result, new_http_raw)
                 
                 if res:
-                    self.search_response(vc_str, str(res.header) + res.text())
+                    self.search_response(vc_str, str(res.header) + res.text)
                 else:
                     logger.info('red', self.lang['shell_faild'])                  # ? 日志, shell请求失败
             else:

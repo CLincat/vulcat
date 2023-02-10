@@ -11,7 +11,6 @@ from thirdparty.requests import packages
 import re
 import socket
 import socks
-import yaml
 
 global config
 

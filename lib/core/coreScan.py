@@ -6,6 +6,7 @@
 from lib.initial.config import config
 from lib.tool.logger import logger
 from lib.tool import check
+from lib.tool import timed
 from lib.report import output
 
 from lib.plugins.fingerprint.waf import waf
@@ -68,13 +69,15 @@ from queue import Queue
 from time import sleep
 from os import _exit
 
+from lib.core import client
+
 class coreScan():
     def __init__(self):
         self.lang = config.get('lang')                                                              # * 语言
         self.thread = config.get('thread')                                                          # * 线程数
         self.delay = config.get('delay')                                                            # * 延时
         self.url_list = config.get('url_list')                                                      # * url列表
-        self.app_list = config.get('app_list')                                                      # * 框架列表
+        self.default_apps = config.get('app_list')                                                      # * 框架列表
         self.application = config.get('application')
         self.vuln = config.get('vuln')                                                              # * 是否扫描单个漏洞
         self.batch = config.get('batch')                                                            # * 是否启用默认选项
@@ -86,10 +89,17 @@ class coreScan():
         self.results = []                                                                           # * 结果列表
         self.queue = Queue()                                                                        # * 创建线程池
         
+        self.timeout = config.get('timeout')
+        self.headers = config.get('headers')
+        self.proxies = config.get('proxies')
+        self.proxy = config.get('proxy')
+        
         self.output_file = config.get('output')                                                     # * 是否导出文件
 
     def start(self):
         ''' 开始扫描, 添加poc并启动 '''
+        self.StartTime = timed.getTime()                                                                # * 记录开始时间/s
+
         for u in self.url_list:                                                                         # * 遍历urls
             if (('http://' not in u[0:10]) and ('https://' not in u[0:10])):
                 logger.info('red_ex', self.lang['core']['start']['url_error'].format(u))
@@ -101,87 +111,87 @@ class coreScan():
 
             logger.info('green_ex', self.lang['core']['start']['start'] + u)                           # ? 提示, 开始扫描当前url
 
-            if check.check_connect(u):
-                # * --------------------WAF指纹识别--------------------
-                if (not self.no_waf):
-                    waf_info = waf.identify(u)                                                     # * WAF指纹识别
-                    if waf_info:
-                        while True:
-                            if (not self.batch):                                                            # * 是否使用默认选项
-                                logger.info('red', '', print_end='')
-                                operation = input(self.lang['core']['waf_finger']['waf_find'].format(waf_info))       # * 接收参数
-                            else:
-                                logger.info('red', self.lang['core']['waf_finger']['waf_find'].format(waf_info), print_end='')
-                                operation = 'no'                                                            # * 默认选项No
-                                logger.info('red', 'no', notime=True)
+            # todo --------------------创建请求中转客户端--------------------
+            self.client = client.RequestsClient(
+                base_url=u,
+                timeout=self.timeout,
+                headers=self.headers,
+                proxies=self.proxies
+            )
+            
+            self.hackClient = client.HackRequestsClient(
+                base_url=u,
+                timeout=self.timeout,
+                headers=self.headers,
+                proxy=self.proxy
+            )
+            
+            self.clients = {
+                'reqClient': self.client,                                                           # * requests
+                'hackClient': self.hackClient                                                       # * HackRequests.hackRequests
+            }
 
-                            operation = operation.lower()                                                   # * 字母转小写
-                            if operation in ['y', 'yes']:                                                   # * 继续扫描
-                                logger.info('yellow_ex', self.lang['core']['stop']['continue'])             # ? 日志, 继续扫描
-                                break
-                            elif operation in ['n', 'no']:
-                                logger.info('yellow_ex', self.lang['core']['stop']['next'])                 # ? 日志, 下一个
-                                u = 'next'
-                                break
-                    else:
-                        logger.info('yellow_ex', self.lang['core']['waf_finger']['waf_not_find'])
-
-                if u == 'next':
-                    continue
+            if check.check_connect(self.client):
                 # * --------------------WAF指纹识别--------------------
+                if (not self.no_waf):                                                               # todo 如果没有使用--no-waf选项
+                    waf_info = waf.identify(self.client)                                            # * 传递客户端client进行WAF检测
+
+                    if waf_info == 'no':                                                            # * 这个URL有WAF, 不扫了, 换下一个
+                        continue
 
                 # * --------------------框架指纹识别--------------------
+                self.apps = []                  # * 要扫描的框架列表
+                self.identify_apps = []         # * 成功识别出的框架列表
+                
                 if ((self.application == 'auto') and (not self.vuln)):
-                    logger.info('yellow_ex', self.lang['core']['web_finger']['web'])
-                    webapp.stop = self.stop
-                    new_app_list = webapp.identify(u)
-                    if new_app_list:
-                        logger.info('yellow_ex', self.lang['core']['web_finger']['web_find'].format(str(new_app_list)))
-                        self.app_list = new_app_list
-                    else:
-                        logger.info('yellow_ex', self.lang['core']['web_finger']['web_not_find'])
-
-                # * --------------------框架指纹识别--------------------
+                    webapp.stop = self.stop                                                         # * 添加暂停机制
+                    
+                    self.identify_apps = webapp.identify(self.client)                               # * 传递客户端client进行框架指纹识别
             else:
                 logger.info('red', self.lang['core']['start']['unable'] + u)                        # ? 提示, 无法访问当前url
                 continue
 
-            if self.no_poc:
+            if self.no_poc:                                                                         # todo 是否使用了--no-poc参数
                 logger.info('red', self.lang['core']['start']['no_poc'])                            # ? 提示, 不进行漏洞扫描
                 continue
 
-            if check.check_connect(u):
-                self.addPOC(u)                                                                      # * 为url添加poc 并加入线程池
+            if check.check_connect(self.client):
+                self.addPOC()                                                                       # * 为url添加poc 并加入线程池
                 self.scanning()                                                                     # * 开始扫描该url
             else:
                 logger.info('red', self.lang['core']['start']['unable'] + u)                        # ? 提示, 无法访问当前url
                 continue
         self.end()                                                                                  # * 扫描结束, 处理所有poc扫描结果
 
-    def addPOC(self, url):                                                                          # * 为相应url添加poc
-        ''' 为某个url添加相应poc '''
-        # * -v/--vuln 参数, 扫描单个漏洞
+    def addPOC(self):                                                                               # * 为相应url添加poc
+        ''' 为某个url添加相应poc
+                如果指纹识别列表有内容, 则扫描识别出的框架
+                否则使用默认的框架列表
+        '''
         try:
+            # * 生成扫描的框架列表
+            if self.identify_apps:
+                for app in self.identify_apps:
+                    self.apps.append(eval(app.lower()))                                             # todo eval将 框架字符串 转为 import导入的框架对象
+            else:
+                for app in self.default_apps:
+                    self.apps.append(eval(app.lower()))
+        
+            # * -v/--vuln 参数, 扫描单个漏洞
             if self.vuln:
-                if len(self.app_list) == 1:
-                    app = self.app_list[0].lower()
-                    poc = eval('{}.addscan("{}", "{}")'.format(app, url, self.vuln))
-                    self.queue.put(poc)
+                if len(self.apps) == 1:
+                    app = self.apps[0]                                                              # * 获取第一个框架
+                    poc = app.addscan(self.clients, self.vuln)                                      # * 获取POC线程
+                    self.queue.put(poc)                                                             # * 加入线程
                     return
                 else:
-                    logger.info('red_ex', self.lang['core']['addpoc']['vuln_error_1'])
+                    logger.info('red_ex', self.lang['core']['addpoc']['vuln_error_1'])              # ? 日志, 使用-v/--vuln参数时出现错误
                     logger.info('reset', '', notime=True, print_end='')                             # * 重置文字颜色
                     _exit(0)
-        except:
-            logger.info('red_ex', self.lang['core']['addpoc']['vuln_error_2'])                      # ? 出错, 添加poc时出现错误
-            logger.info('reset', '', notime=True, print_end='')                                     # * 重置文字颜色
-            _exit(0)
 
-        # * 扫描多个漏洞
-        try:
-            for app in self.app_list:                                                               # * 根据框架列表app_list, 获取相应poc
-                app = app.lower()                                                                   # * 转小写
-                pocs = eval('{}.addscan("{}")'.format(app, url))
+            # * 扫描多个漏洞
+            for app in self.apps:                                                                   # * 根据框架列表self.apps, 获取相应poc
+                pocs = app.addscan(self.clients)
                 for poc in pocs:                                                                    # * 将每个poc加入线程池
                     self.queue.put(poc)
         except NameError:
@@ -189,16 +199,16 @@ class coreScan():
             logger.info('reset', '', notime=True, print_end='')                                     # * 重置文字颜色
             _exit(0)
         except:
-            logger.info('red_ex', self.lang['core']['addpoc']['error'])                             # ? 出错, 添加poc时出现错误
+            logger.info('red_ex', self.lang['core']['addpoc']['Error-1'])                           # ? 出错, 添加poc时出现错误
             logger.info('reset', '', notime=True, print_end='')                                     # * 重置文字颜色
             _exit(0)
-
 
     def scanning(self):
         ''' 正在扫描, 根据线程数启动poc '''
         queue_thread = int(self.queue.qsize() / self.thread)+1                                      # * 循环次数
         queue_thread = 1 if queue_thread <=0 else queue_thread                                      # * 最小为1
-
+        
+        logger.info('yellow_ex', '', notime=True, print_end='')                                         # * 重置文字颜色
         for q in tqdm(range(queue_thread), ncols=50):                                               # * 单个url的扫描进度条
             try:
                 for i in range(self.thread):                                                        # * 根据线程数, 每次运行相应次数的poc
@@ -208,7 +218,7 @@ class coreScan():
                         self.thread_list.append(t)                                                  # * 往线程列表添加一个已经运行的poc
                     else:                                                                       
                         break                                                                       # * 如果线程池为空, 结束扫描
-                sleep(self.delay)                                                                   # * 扫描时间间隔
+                sleep(self.delay)                                                              # * 扫描时间间隔
             except KeyboardInterrupt:
                 if self.stop():
                     continue
@@ -269,7 +279,10 @@ class coreScan():
         if self.shell and self.vuln:                                                                # * 是否使用Shell
             self.start_shell()
 
-        logger.info('yellow_ex', self.lang['core']['end']['completed'])                             # ? 日志, 扫描完全结束, 退出运行
+        self.endTime = timed.getTime()                                                              # * 结束时间
+        intervalTime = self.endTime - self.StartTime                                                # * 计算扫描耗时/s
+
+        logger.info('yellow_ex', self.lang['core']['end']['completed'].format(intervalTime))        # ? 日志, 扫描完全结束, 退出运行
         logger.info('reset', '', notime=True, print_end='')                                         # * 重置文字颜色
         print('\r'.ljust(70), end='\r')                                                             # * 解决wq的BUG
         _exit(0)

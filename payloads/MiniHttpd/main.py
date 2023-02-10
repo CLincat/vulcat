@@ -13,34 +13,20 @@ file:///C:/Windows/System32/drivers/etc/hosts
 file:///C:\Windows\System32\drivers\etc\hosts
 '''
 
-from lib.initial.config import config
-from lib.tool.md5 import md5, random_md5
+# from lib.initial.config import config
 from lib.tool.thread import thread
 from payloads.MiniHttpd.cve_2018_18778 import cve_2018_18778_scan
 
 class MiniHttpd():
     def __init__(self):
-        self.timeout = config.get('timeout')
-        self.headers = config.get('headers')
-        self.proxies = config.get('proxies')
-
         self.app_name = 'MiniHttpd'
-        self.md = md5(self.app_name)
-        self.cmd = 'echo ' + self.md
 
-        self.cve_2018_18778_payloads = [
-            {
-                'path': 'etc/passwd',
-                'data': ''
-            }
-        ]
-
-    def addscan(self, url, vuln=None):
+    def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2018_18778_scan, url=url)
+            thread(target=self.cve_2018_18778_scan, clients=clients)
         ]
 
 MiniHttpd.cve_2018_18778_scan = cve_2018_18778_scan

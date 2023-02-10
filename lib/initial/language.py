@@ -51,7 +51,8 @@ lang = {
             'name': 'Specify the target type for the scan',
             'application': 'Specifies the target type, for supported frameworks, see the tips at the bottom, separated by commas (e.g. thinkphp / thinkphp,weblogic) (default: auto)',
             'vuln': 'Specify the vulnerability number,With -a/--application to scan a single vulnerability,You can use --list to see the vulnerability number,vulnerabilities that do not have a vulnerability number are not supported.The number does not discriminate between sizes, and the symbol - and _ are acceptable (e.g. -a fastjson -v cnVD-2019-22238 or -a Tomcat -v CVE-2017_12615)',
-            'shell': 'Use with the -a and -v parameters, After the Poc scan, if the vulnerability exists, enter the Shell interaction mode of the vulnerability; You can use --list to see Shell support vulnerabilities. (e.g. -a httpd -v CVE-2021-42013 -x)'
+            'shell': 'Use with the -a and -v parameters, After the Poc scan, if the vulnerability exists, enter the Shell interaction mode of the vulnerability; You can use --list to see Shell support vulnerabilities. (e.g. -a httpd -v CVE-2021-42013 -x)',
+            'type': 'Use with --shell parameter to specify the type of vulnerability and carry out corresponding Shell operations (e.g. --shell --type RCE)',
         },
         'api_help': {
             'title': 'Api',
@@ -88,28 +89,27 @@ lang = {
                 'shell': 'When using --shell, specify a vulnerability with -a and -v first(e.g. -a httpd -v cve-2021-41773 -x)'
             },
             'waf_finger': {
-                'waf': '[INFO] The WAF detection for the current URL starts',
-                'waf_find': '[INFO] {} is detected, Whether to continue scanning the current URL? - y(es)/N(o): ',
-                'waf_not_find': '[INFO] Not found the WAF',
-                'waf_timeout': '[-] WAF recognizes timeout and the target is not responding',
-                'waf_conn_error': '[-] WAF recognition error, unable to connect to destination URL',
-                'waf_error': '[-] WAF identification error, unknown error'
+                'start': '[INFO] The WAF detection for the current URL starts',
+                'Find': '[INFO] {} is detected, Whether to continue scanning the current URL? - y(es)/N(o): ',
+                'NotFind': '[INFO] Not found the WAF',
+                'Timeout': '[-] WAF recognizes timeout and the target is not responding',
+                'Faild': '[-] WAF recognition error, unable to connect to destination URL',
+                'Error': '[-] WAF identification error, unknown error'
 
             },
             'web_finger': {
-                'web': '[INFO] Fingerprint identification the current URL, please wait...',
-                'web_find': '[INFO] Identify the framework{}',
-                'web_not_find': '[INFO] No identification framework, all vulnerabilities will be scanned',
-                'web_timeout': '[-] The framework recognizes a timeout and the target is not responding',
-                'web_conn_error': '[-] Framework identification error, unable to connect to target URL',
-                'web_error': '[-] Framework identification error, unknown error'
+                'start': '[INFO] Fingerprint identification the current URL, please wait...',
+                'Find': '[INFO] Identify the framework{}',
+                'NotFind': '[INFO] No identification framework, all vulnerabilities will be scanned',
+                'Timeout': '[-] The framework recognizes a timeout and the target is not responding',
+                'Faild': '[-] Framework identification error, unable to connect to target URL',
+                'Error': '[-] Framework identification error, unknown error'
 
             },
             'addpoc': {
                 'notfound': '[ERROR] The application not found: ',
-                'error': '[ERROR] The addPOC is error',
+                'Error-1': '[ERROR] The addPOC is error, The specified framework name or vulnerability number is incorrect',
                 'vuln_error_1': '[ERROR] When using -v/--vuln, specify a frame name with -a/--application (e.g. -a tomcat -v CVE-2017-12615)',
-                'vuln_error_2': '[ERROR] The specified framework or vulnerability number is incorrect'
             },
             'stop': {
                 'continue': '[INFO] Continue to scan',
@@ -117,7 +117,7 @@ lang = {
             },
             'end': {
                 'wait': '[INFO] Wait for all threads to finish. Please wait...',
-                'completed': '[INFO] Scan is completed'
+                'completed': '[INFO] Scan is completed, Take {} seconds'
             },
         },
         'output': {
@@ -178,7 +178,8 @@ lang = {
             'name': '指定扫描的目标类型',
             'application': '指定框架类型, 支持的框架可以参考最下面的提示信息, 多个使用逗号分隔 (如: thinkphp 或者 thinkphp,weblogic) (默认将启用指纹识别, 并使用相应POC, 如果未识别出框架则使用全部POC)',
             'vuln': '指定漏洞编号, 配合-a/--application对单个漏洞进行扫描, 可以使用--list查看漏洞编号, 没有漏洞编号的漏洞暂不支持, 编号不区分大小, 符号-和_皆可 (如: -a fastjson -v CNVD-2019-22238 或者 -a Tomcat -v cvE-2017_12615)',
-            'shell': '配合-a和-v参数进行使用, Poc扫描过后, 如果该漏洞存在, 则进入该漏洞的Shell交互模式; 可以使用--list查看支持Shell的漏洞(如: -a httpd -v CVE-2021-42013 -x)'
+            'shell': '配合-a和-v参数进行使用, Poc扫描过后, 如果该漏洞存在, 则进入该漏洞的Shell交互模式; 可以使用--list查看支持Shell的漏洞(如: -a httpd -v CVE-2021-42013 -x)',
+            'type': '配合--shell参数进行使用, 指定漏洞类型, 进行相应的Shell操作 (如: --shell --type RCE)',
         },
         'api_help': {
             'title': 'Api',
@@ -215,28 +216,27 @@ lang = {
                 'shell': '使用--shell时请先使用-a和-v指定一个漏洞, 例如-a httpd -v cve-2021-41773 --shell'
             },
             'waf_finger': {
-                'waf': '[INFO] 对当前url进行WAF检测, 请稍等...',
-                'waf_find': '[INFO] 目标疑似存在{} 是否继续扫描当前url? - y(es)/N(o): ',
-                'waf_not_find': '[INFO] 未发现WAF',
-                'waf_timeout': '[-] WAF识别超时, 目标没有响应',
-                'waf_conn_error': '[-] WAF识别出错, 无法连接至目标url',
-                'waf_error': '[-] WAF识别出错, 未知错误'
+                'start': '[INFO] 对当前url进行WAF检测, 请稍等...',
+                'Find': '[INFO] 目标疑似存在{} 是否继续扫描当前url? - y(es)/N(o): ',
+                'NotFind': '[INFO] 未发现WAF',
+                'Timeout': '[-] WAF识别超时, 目标没有响应',
+                'Faild': '[-] WAF识别出错, 无法连接至目标url',
+                'Error': '[-] WAF识别出错, 未知错误'
 
             },
             'web_finger': {
-                'web': '[INFO] 对当前url进行框架识别, 请稍等...',
-                'web_find': '[INFO] 识别框架{}',
-                'web_not_find': '[INFO] 未能识别框架, 将扫描全部漏洞',
-                'web_timeout': '[-] 框架识别超时, 目标没有响应',
-                'web_conn_error': '[-] 框架识别出错, 无法连接至目标url',
-                'web_error': '[-] 框架识别出错, 未知错误'
+                'start': '[INFO] 对当前url进行框架识别, 请稍等...',
+                'Find': '[INFO] 识别框架{}',
+                'NotFind': '[INFO] 未能识别框架, 将扫描全部漏洞',
+                'Timeout': '[-] 框架识别超时, 目标没有响应',
+                'Faild': '[-] 框架识别出错, 无法连接至目标url',
+                'Error': '[-] 框架识别出错, 未知错误'
 
             },
             'addpoc': {
                 'notfound': '[ERROR] 未找到应用程序: ',
-                'error': '[ERROR] 添加POC时出现错误',
+                'Error-1': '[ERROR] 添加POC时出现错误, 框架名称或漏洞编号有误',
                 'vuln_error_1': '[ERROR] 使用-v/--vuln参数时, 请使用-a/--application指定1个框架名 (例如: -a tomcat -v CVE-2017-12615)',
-                'vuln_error_2': '[ERROR] 指定的框架或漏洞编号有误'
             },
             'stop': {
                 'continue': '[INFO] 继续扫描',
@@ -244,7 +244,7 @@ lang = {
             },
             'end': {
                 'wait': '[INFO] 等待所有线程结束, 请稍等...',
-                'completed': '[INFO] 扫描完成'
+                'completed': '[INFO] 扫描完成, 耗时{}秒'
             },
         },
         'output': {
@@ -273,7 +273,7 @@ lang = {
 }
 
 lang['en_us']['disclaimer'] = '''By using this tool, you agree to the "Code of Conduct and Disclaimer" in "vulcat/README.md; If you do not agree, do not use this tool."\n\n\n'''
-lang['zh_cn']['disclaimer'] = '''使用本工具, 代表您同意"vulcat/README.zh-cn.md"中的"行为规范和免责声明"; 如果您不同意, 请勿使用本工具\n\n\n'''
+lang['zh_cn']['disclaimer'] = '''使用本工具, 代表您同意"vulcat/README.md"中的"行为规范和免责声明"; 如果您不同意, 请勿使用本工具\n\n\n'''
 
 # * --list的中文
 lang['zh_cn']['list'] = {
@@ -399,6 +399,7 @@ lang['zh_cn']['list'] = {
         'CNVD-2022-86535': 'ThinkPHP 多语言模块命令执行',
     },
     'Ueditor': 'Ueditor编辑器SSRF',
+    'uWSGI-PHP': 'uWSGI-PHP目录穿越',
     'Oracle Weblogic': {
         'CVE-2014-4210': 'Weblogic 服务端请求伪造',
         'CVE-2017-10271': 'Weblogic XMLDecoder反序列化',
@@ -548,6 +549,7 @@ lang['en_us']['list'] = {
         'CNVD-2022-86535': 'ThinkPHP "think-lang" Remote code execution',
     },
     'Ueditor': 'Ueditor SSRF',
+    'uWSGI-PHP': 'uWSGI-PHP Directory traversal',
     'Oracle Weblogic': {
         'CVE-2014-4210': 'Weblogic SSRF',
         'CVE-2017-10271': 'Weblogic XMLDecoder deSerialization',

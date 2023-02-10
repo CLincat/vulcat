@@ -22,3 +22,7 @@ def custom_time(timeFormat: str):
     ''' 自定义时间格式并返回 '''
     customTime = t.strftime(timeFormat, t.localtime())
     return customTime
+
+def getTime():
+    ''' 返回当前的时间戳, int类型 '''
+    return int(t.time())

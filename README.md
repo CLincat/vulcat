@@ -11,14 +11,14 @@
 (每月更新)<br>
 除了代码写得有亿点点烂, BUG有亿点点多, 有亿点点不好用, 等亿点点小问题以外，还是阔以的......吧
 
-* vulcat可用于扫描web端漏洞(框架、中间件、CMS等), 发现漏洞时会提示目标url和payload, 使用者可以根据提示对漏洞进行手工验证<br/>
-* 使用者还可以自己编写POC, 并添加到vulcat中进行扫描, 本项目也欢迎大家贡献自己的POC
+* vulcat是一个用于扫描web端漏洞的工具，支持WAF检测、指纹识别、POC扫描、自定义POC等功能
+* 当vulcat发现问题时会输出漏洞信息、漏洞利用的Request数据包等，使用者可以根据提示对漏洞进行手工验证、深入利用等
+* 支持.txt .json .html报告的导出
 * 如果有什么想法、建议或者遇到了BUG, 都可以issues
 
-**目前支持扫描的web应用程序有:**
-> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheAPISIX, ApacheDruid, ApacheFlink, ApacheHadoop, ApacheHttpd, ApacheSkywalking, ApacheSolr, ApacheTomcat, AppWeb, AtlassianConfluence, Cicso, Discuz, Django, Drupal, ElasticSearch, F5-BIG-IP, Fastjson, Gitea, Gitlab, Grafana, Influxdb, RubyOnRails, Jenkins, Jetty, Jupyter, Keycloak, Landray-OA, MiniHttpd, mongo-express, Nexus, Node.js, NodeRED, phpMyAdmin, phpUnit, ShowDoc, Spring, Supervisor, ThinkPHP, Ueditor, Weblogic, Webmin, Yonyou, Zabbix
+## 官方文档
 
-**你还可以查看下方的"漏洞列表", 查看vulcat支持扫描的漏洞**
+[官方文档](https://clincat.github.io/vulcat-docs/)
 
 ## 行为规范和免责声明
 * **在使用本工具前, 请确保您的行为符合当地法律法规, 并且已经取得了相关授权。**
@@ -26,7 +26,6 @@
 * **本工具仅面向拥有合法授权的企业和个人等, 意在加强网络空间安全。**
 
 * **如果您在使用本工具的过程中存在任何非法行为, 或造成了任何严重后果, 您需自行承担相应责任, 我们将不承担任何法律及连带责任。**
-
 
 ## 安装 && 使用
 工具基于python3开发, 推荐使用python3.8及以上版本
@@ -47,142 +46,17 @@ Usage:
 
 Usage: python3 vulcat.py <options>
 Examples:
-python3 vulcat.py -u https://www.example.com/
-python3 vulcat.py -u https://www.example.com/ -a thinkphp --log 3
-python3 vulcat.py -u https://www.example.com/ -a tomcat -v CVE-2017-12615
-python3 vulcat.py -f url.txt -t 10 -o html
+python3 vulcat.py -h
 python3 vulcat.py --list
+python3 vulcat.py -u https://www.example.com/ -o html
+python3 vulcat.py -u https://www.example.com/ -a httpd --log 3
+python3 vulcat.py -u https://www.example.com/ -a thinkphp -v cnvd-2018-24942
+python3 vulcat.py -f url.txt -t 10
 ```
-
-## 选项
-```
-Options:
-  --version             show program's version number and exit
-  -h, --help            show this help message and exit
-
-  Target:
-    指定扫描目标
-
-    -u URL, --url=URL   单个url (如: -u http://www.baidu.com/)
-    -f FILE, --file=FILE
-                        含有多个url的文件, 一行一个 (如: -f url.txt)
-    -r, --recursive     递归扫描url的每层目录
-
-  Optional:
-    可选功能选项
-
-    -t THREAD, --thread=THREAD
-                        线程数 (默认: 2)
-    --delay=DELAY       延迟时间/秒 (默认: 1)
-    --timeout=TIMEOUT   超时时间/秒 (默认: 10)
-    --user-agent=UA     自定义User-Agent
-    --cookie=COOKIE     添加cookie (如: --cookie "PHPSESSID=123456789")
-    --auth=AUTHORIZATION
-                        添加Authorization (如: --auth "Basic YWRtaW46YWRtaW4=")
-
-  日志:
-    运行时输出的debug信息
-
-    --log=LOG           日志等级, 可选1-6 (默认: 1) [日志2级: 框架名称+漏洞编号+状态码] [日志3级:
-                        2级内容+请求方法+请求目标+POST数据] [日志4级: 2级内容+请求数据包] [日志5级:
-                        4级内容+响应头] [日志6级: 5级内容+响应内容]
-
-  Proxy:
-    代理
-
-    --http-proxy=HTTP_PROXY
-                        http/https代理 (如: --http-proxy 127.0.0.1:8080)
-    --socks4-proxy=SOCKS4_PROXY
-                        socks4代理(如: --socks4-proxy 127.0.0.1:8080)
-    --socks5-proxy=SOCKS5_PROXY
-                        socks5代理(如: --socks5-proxy 127.0.0.1:8080 或
-                        admin:123456@127.0.0.1:8080)
-
-  Application:
-    指定扫描的目标类型
-
-    -a APPLICATION, --application=APPLICATION
-                        指定框架类型, 支持的框架可以参考最下面的提示信息, 多个使用逗号分隔 (如: thinkphp 或者
-                        thinkphp,weblogic) (默认将启用指纹识别, 并使用相应POC,
-                        如果未识别出框架则使用全部POC)
-    -v VULN, --vuln=VULN
-                        指定漏洞编号, 配合-a/--application对单个漏洞进行扫描, 可以使用--list查看漏洞编号,
-                        没有漏洞编号的漏洞暂不支持, 编号不区分大小, 符号-和_皆可 (如: -a fastjson -v
-                        CNVD-2019-22238 或者 -a Tomcat -v cvE-2017_12615)
-    --shell             配合-a和-v参数进行使用, Poc扫描过后, 如果该漏洞存在, 则进入该漏洞的Shell交互模式;
-                        可以使用--list查看支持Shell的漏洞(如: -a httpd -v CVE-2021-42013
-                        -x)
-    --type=VULNTYPE     配合--shell参数进行使用, 指定漏洞类型, 进行相应的Shell操作 (如: --shell
-                        --type RCE)
-
-  Api:
-    第三方api
-
-    --dns=DNS           dns平台, 辅助无回显漏洞的验证, 支持dnslog.cn和ceye.io(可选参数:
-                        dnslog/ceye 如: --dns ceye) (默认自动选择, 优先ceye,
-                        ceye不可用时自动改为dnslog)
-
-  Save:
-    保存扫描结果
-
-    -o OUTPUT, --output=OUTPUT
-                        以txt/json/html格式保存扫描结果, 无漏洞时不会生成文件 (如: -o html)
-
-  General:
-    通用工作参数
-
-    --no-waf            禁用waf检测
-    --no-poc            禁用安全漏洞扫描
-    --batch             yes/no的选项不需要用户输入, 使用默认选项
-
-  Lists:
-    漏洞列表
-
-    --list              查看所有Payload
-
-  支持的目标类型(-a参数, 不区分大小写):
-    AliDruid, airflow, apisix, apachedruid, appweb, cisco, confluence,
-    discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink,
-    gitea, gitlab, grafana, influxdb, hadoop, httpd, jenkins, jetty,
-    jupyter, keycloak, landray, minihttpd, mongoexpress, nexus, nacos,
-    nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, solr, spring,
-    supervisor, skywalking, thinkphp, tomcat, ueditor, weblogic, webmin,
-    yonyou, zabbix
-```
-
-## 语言
-可以修改vulcat的语言, 目前只有中文和英文(麻麻再也不用担心我看不懂英文啦!)
-
-* 打开vulcat/config.yaml, 打开后会看到以下代码↓
-* 对language的值进行修改, 然后保存文件就实现了vulcat语言的切换
-```
-# 语言, 默认为英文en-us, 中文为zh-cn
-language: en-us
-```
-
-## 自定义Dnslog平台
-可以定义自己的http://ceye.io
-
-* 打开vulcat/config.yaml
-* 找到以下代码, 将Null替换为自己的域名和token, 保存文件即可
-```
-# ceye.io的域名和token
-ceye-domain: Null
-ceye-token: Null
-```
-
-## 自定义 POC
-* 如何编写自己的漏洞POC, 并添加到vulcat中
-* 找到vulcat/payloads/demo/demo.py, demo.py是vulcat中的POC模板(半成品), 需要用户填写剩余的代码
-
-* **修改步骤:**
-1. 先将demo.py复制一份并保存, 防止模板丢失, 然后修改文件名为POC的名字(如test.py), 文件名可以自定义
-
-2. 然后根据demo.py中的提示, 填写自己的代码, 并在vulcat中引入POC
 
 ## 漏洞列表
 <details>
-<summary><strong>目前支持扫描的web漏洞有: [点击展开]</strong></summary>
+<summary><strong>目前支持检测的漏洞: [点击展开]</strong></summary>
 
 ```
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
@@ -350,10 +224,6 @@ vulcat-1.1.9/2023.02.10
 * [vulhub](https://github.com/vulhub/vulhub)
 * [vulfocus](https://github.com/fofapro/vulfocus)
 * [ttkbootstrap](https://github.com/israel-dryer/ttkbootstrap/)
-
-## 参考链接
-
-[https://bbs.zkaq.cn/t/6757.html](https://bbs.zkaq.cn/t/6757.html)
 
 ## Star History
 [![Star History Chart](https://api.star-history.com/svg?repos=CLincat/vulcat&type=Timeline)](https://star-history.com/#Ashutosh00710/github-readme-activity-graph&Timeline)

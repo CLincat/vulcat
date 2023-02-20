@@ -8,7 +8,6 @@
 
 from lib.initial.config import config
 from lib.tool.logger import logger
-from time import sleep
 import re
 
 class WebappIdentify():
@@ -60,8 +59,6 @@ class WebappIdentify():
                                     new_app_list.append(web_fp['name'])                   # * 识别出框架, 则添加相应POC
                                     continue
                         else:
-                            sleep(self.delay)
-
                             if (web_fp['data']):
                                 res2 = client.request(                                    # * 如果有特殊DATA, 则POST请求
                                     'post',

@@ -8,15 +8,12 @@
 
 **[中文版本(Chinese version)](/README.md)**
 
+* **document：https://clincat.github.io/vulcat-docs/**
+
 (Monthly update)<br>
 * Vulcat can be used to scan for vulnerabilities on the Web side. When a vulnerability is discovered, the target URL and Payload are prompted. Users can manually verify the vulnerability according to the prompt<br/>
 * Users can also write their own POC and add it to vulcat for scanning, You are also welcome to contribute your POC to the project
 * If you have any ideas, suggestions, or bugs, you can issue
-
-**Web applications that currently support scanning:**
-> AlibabaDruid, AlibabaNacos, ApacheAirflow, ApacheAPISIX, ApacheDruid, ApacheFlink, ApacheHadoop, ApacheHttpd, ApacheSkywalking, ApacheSolr, ApacheTomcat, AppWeb, AtlassianConfluence, Cicso, Discuz, Django, Drupal, ElasticSearch, F5-BIG-IP, Fastjson, Gitea, Gitlab, Grafana, Influxdb, RubyOnRails, Jenkins, Jetty, Jupyter, Keycloak, Landray-OA, MiniHttpd, mongo-express, Nexus, Node.js, NodeRED, phpMyAdmin, phpUnit, ShowDoc, Spring, Supervisor, ThinkPHP, Ueditor, Weblogic, Webmin, Yonyou, Zabbix
-
-**You can also check out the "Vulnerabilitys List" below to see which vulnerabilities vulcat supports scanning**
 
 ## Code of Conduct and Disclaimer
 * **Before using this tool, ensure that your actions comply with local laws and regulations and that you have obtained relevant authorization.**
@@ -44,11 +41,12 @@ By using this tool, you agree to the "Code of Conduct and Disclaimer" in "vulcat
 
 Usage: python3 vulcat.py <options>
 Examples:
-python3 vulcat.py -u https://www.example.com/
-python3 vulcat.py -u https://www.example.com/ -a thinkphp --log 3
-python3 vulcat.py -u https://www.example.com/ -a tomcat -v CVE-2017-12615
-python3 vulcat.py -f url.txt -t 10 -o html
+python3 vulcat.py -h
 python3 vulcat.py --list
+python3 vulcat.py -u https://www.example.com/ -o html
+python3 vulcat.py -u https://www.example.com/ -a httpd --log 3
+python3 vulcat.py -u https://www.example.com/ -a thinkphp -v cnvd-2018-24942
+python3 vulcat.py -f url.txt -t 10
 ```
 
 ## Options
@@ -364,6 +362,10 @@ vulcat-1.1.9/2023.02.10
 * [vulhub](https://github.com/vulhub/vulhub)
 * [vulfocus](https://github.com/fofapro/vulfocus)
 * [ttkbootstrap](https://github.com/israel-dryer/ttkbootstrap/)
+
+## Document
+
+[document](https://clincat.github.io/vulcat-docs/)
 
 ## Star History
 [![Star History Chart](https://api.star-history.com/svg?repos=CLincat/vulcat&type=Timeline)](https://star-history.com/#Ashutosh00710/github-readme-activity-graph&Timeline)

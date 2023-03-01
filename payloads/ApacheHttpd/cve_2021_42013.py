@@ -40,12 +40,12 @@ cve_2021_42013_payloads = [
     }
 ]
 
-def cve_2021_42013_scan(self, clients):
+def cve_2021_42013_scan(clients):
     ''' CVE-2021-42013是CVE-2021-41773的绕过, 使用.%%32%65/ '''
     hackClient = clients.get('hackClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ApacheHttpd',
         'vul_type': 'RCE/FileRead',
         'vul_id': 'CVE-2021-42013',
     }

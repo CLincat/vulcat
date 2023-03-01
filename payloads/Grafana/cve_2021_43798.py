@@ -34,14 +34,14 @@ cve_2021_43798_plugins = [
 # def quit(signum, frame):
 #     raise KeyboardInterrupt
 
-def cve_2021_43798_scan(self, clients):
+def cve_2021_43798_scan(clients):
     ''' 2021年12月, 一位Twitter用户披露了一个0day漏洞, 
         未经身份验证的攻击者可以利用该漏洞通过 Grafana 8.x 的插件url来遍历web路径并下载任意文件
     '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Grafana',
         'vul_type': 'File-Read',
         'vul_id': 'CVE-2021-43798',
     }

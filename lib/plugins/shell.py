@@ -32,18 +32,15 @@ class Shell():
             r'print_?r?(\(|%28)([0-9a-z]){6,8}(\)|%29)',
             r'curl(\s|%20){1}'\
                 '(http://)?'\
-                '([0-9a-z]){6,10}\.'\
-                '(([0-9a-z]){6,10}\.)?'\
-                '(dnslog\.cn|ceye\.io){1}',
+                '(([0-9a-z]){4,10}\.)+'\
+                '(dnslog\.cn|ceye\.io|dnslog\.pw){1}',
             r'ping(\s|%20){1}'\
                 '(-c 4 |-c%204%20)?'\
-                '([0-9a-z]){6,10}\.'\
-                '(([0-9a-z]){6,10}\.)?'\
-                '(dnslog\.cn|ceye\.io){1}',
+                '(([0-9a-z]){4,10}\.)+'\
+                '(dnslog\.cn|ceye\.io|dnslog\.pw){1}',
             r'(dns|ldap|rmi){1}://'\
-                '([0-9a-z]){6,10}\.'\
-                '(([0-9a-z]){6,10}\.)?'\
-                '(dnslog\.cn|ceye\.io){1}/'\
+                '(([0-9a-z]){4,10}\.)+'\
+                '(dnslog(\.|;)cn|ceye(\.|;)io|dnslog(\.|;)pw){1}/'\
                 '([0-9a-z]){4,10}',
         ]
 
@@ -65,9 +62,9 @@ class Shell():
         self.ssrf_old_payload_re_list = [
             # r'(http|https|dns|ldap|rmi){1}://'\
             r'(http|https){1}://'\
-                '([0-9a-z]){6,10}\.'\
-                '(([0-9a-z]){6,10}\.)?'\
-                '(dnslog\.cn|ceye\.io){1}',
+                # '([0-9a-z]){6,10}\.'\
+                '(([0-9a-z]){4,10}\.)+'\
+                '(dnslog\.cn|ceye\.io|dnslog\.pw){1}',
         ]
         
     def start(self, results):
@@ -256,18 +253,24 @@ class Shell():
         try:
             # * 是否使用vcsearch搜索Response.text的内容
             if not vc_str:
-                print('====================Response====================')
+                response_info = '====================Response===================='
+                
+                logger.info('yellow_ex', response_info, notime=True)
+                logger.info('reset', '', notime=True)
                 print(res_response)
-                print('====================Response====================')
+                logger.info('yellow_ex', response_info, notime=True)
             else:
                 r = re.compile(vc_str, re.I|re.M|re.S)          # * 根据用户输入的正则, 新建一个正则对象r
                 vc_text_list = r.findall(res_response)          # * 使用正则对象r, 匹配Response.text中的内容
                 
                 if vc_text_list:
-                    print('====================Response-vcsearch====================')
+                    vcsearch_info = '====================Response-vcsearch===================='
+                    
+                    logger.info('yellow_ex', vcsearch_info, notime=True)
+                    logger.info('reset', '', notime=True)
                     for vc_text in vc_text_list:
                         print(vc_text, end='\n\n')
-                    print('====================Response-vcsearch====================')
+                    logger.info('yellow_ex', vcsearch_info, notime=True)
                 else:
                     print(self.lang['not_response'])                            # ? 日志, 没有匹配到响应内容
         except re.error:

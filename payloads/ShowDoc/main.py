@@ -23,12 +23,10 @@ class ShowDoc():
 
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cnvd_2020_26585_scan, clients=clients)
+            thread(target=cnvd_2020_26585_scan, clients=clients)
         ]
-
-ShowDoc.cnvd_2020_26585_scan = cnvd_2020_26585_scan
 
 showdoc = ShowDoc()

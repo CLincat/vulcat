@@ -17,18 +17,15 @@ from lib.tool.thread import thread
 from payloads.Discuz.wooyun_2010_080723 import wooyun_2010_080723_scan
 
 class Discuz():
-    ''' 标有数字的地方都需要自己填写 '''
     def __init__(self):
         self.app_name = 'Discuz'
 
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.wooyun_2010_080723_scan, clients=clients)
+            thread(target=wooyun_2010_080723_scan, clients=clients)
         ]
-
-Discuz.wooyun_2010_080723_scan = wooyun_2010_080723_scan
 
 discuz = Discuz()

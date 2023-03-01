@@ -9,14 +9,14 @@ cve_2021_40438_payloads = [
     },
 ]
 
-def cve_2021_40438_scan(self, clients):
+def cve_2021_40438_scan(clients):
     ''' httpd的mod_proxy存在服务器端请求伪造(SSRF)
         该漏洞允许未经身份验证的远程攻击者使 httpd 服务器将请求转发到任意服务器
     '''
     hackClient = clients.get('hackClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ApacheHttpd',
         'vul_type': 'SSRF',
         'vul_id': 'CVE-2021-40438',
     }

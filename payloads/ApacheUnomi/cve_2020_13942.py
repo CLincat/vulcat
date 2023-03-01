@@ -46,7 +46,7 @@ cve_2020_13942_payloads = [
     },
 ]
 
-def cve_2020_13942_scan(self, clients):
+def cve_2020_13942_scan(clients):
     ''' 在Apache Unomi 1.5.1级以前版本中, 
         存在一处表达式注入漏洞, 远程攻击者通过MVEL和OGNL表达式即可在目标服务器上执行任意命令
     '''
@@ -54,7 +54,7 @@ def cve_2020_13942_scan(self, clients):
     sessid = '69e506227812d37756fdf19a444de2b5'
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ApacheUnomi',
         'vul_type': 'RCE',
         'vul_id': 'CVE-2020-13942',
     }

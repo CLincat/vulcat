@@ -45,7 +45,7 @@ cnvd_2022_86535_payloads = [
     },
 ]
 
-def cnvd_2022_86535_scan(self, clients):
+def cnvd_2022_86535_scan(clients):
     ''' 如果 Thinkphp 程序开启了多语言功能, 
             攻击者可以通过 get、header、cookie 等位置传入参数, 实现目录穿越+文件包含, 
             通过pearcmd文件包含这个trick即可实现RCE
@@ -56,7 +56,7 @@ def cnvd_2022_86535_scan(self, clients):
     hackClient = clients.get('hackClient')
 
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ThinkPHP',
         'vul_type': 'RCE',
         'vul_id': 'CNVD-2022-86535',
     }

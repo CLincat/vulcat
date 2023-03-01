@@ -22,12 +22,12 @@ cnvd_2020_26585_payloads = [
     }
 ]
 
-def cnvd_2020_26585_scan(self, clients):
+def cnvd_2020_26585_scan(clients):
     ''' api_page存在任意文件上传 '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ShowDoc',
         'vul_type': 'FileUpload',
         'vul_id': 'CNVD-2020-26585',
     }
@@ -58,7 +58,6 @@ def cnvd_2020_26585_scan(self, clients):
                 file_path,
                 allow_redirects=False,
                 vul_info=vul_info,
-                headers=self.headers,
             )
             if res2 is None:
                 continue

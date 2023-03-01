@@ -1,7 +1,7 @@
 # vulcat
 
 [![python](https://img.shields.io/badge/Python-3-blue?logo=python)](https://shields.io/)
-[![version](https://img.shields.io/badge/Version-1.1.9-blue)](https://shields.io/)
+[![version](https://img.shields.io/badge/Version-1.2.0-blue)](https://shields.io/)
 [![license](https://img.shields.io/badge/LICENSE-GPL-yellow)](https://shields.io/)
 [![stars](https://img.shields.io/github/stars/CLincat/vulcat?color=red)](https://shields.io/)
 [![forks](https://img.shields.io/github/forks/CLincat/vulcat?color=red)](https://shields.io/)
@@ -46,7 +46,7 @@ python3 vulcat.py --list
 python3 vulcat.py -u https://www.example.com/ -o html
 python3 vulcat.py -u https://www.example.com/ -a httpd --log 3
 python3 vulcat.py -u https://www.example.com/ -a thinkphp -v cnvd-2018-24942
-python3 vulcat.py -f url.txt -t 10
+python3 vulcat.py -f url.txt --delay 0.5
 ```
 
 ## Options
@@ -127,10 +127,8 @@ Options:
     The third party Api
 
     --dns=DNS           DNS platform, auxiliary verification without echo
-                        vulnerability. dnslog.cn/ceye.io (optional parameter:
-                        dnslog/ceye e.g. --dns ceye) (automatically selected
-                        by default, ceye is preferred, and dnglog is
-                        automatically changed when ceye is unavailable)
+                        vulnerability. ceye/dnslog-pw/dnslog-cn (e.g. --dns
+                        ceye) (Default: auto)
 
   Save:
     Save scan results
@@ -153,13 +151,13 @@ Options:
     --list              View all payload
 
   Supported target types(Case insensitive):
-    AliDruid, airflow, apisix, apachedruid, appweb, cisco, confluence,
-    discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink,
-    gitea, gitlab, grafana, influxdb, hadoop, httpd, jenkins, jetty,
-    jupyter, keycloak, landray, minihttpd, mongoexpress, nexus, nacos,
-    nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, solr, spring,
-    supervisor, skywalking, thinkphp, tomcat, ueditor, weblogic, webmin,
-    yonyou, zabbix
+    airflow, AliDruid, apachedruid, apacheunomi, apisix, appweb, cisco,
+    confluence, discuz, django, drupal, elasticsearch, f5bigip, fastjson,
+    flink, gitea, gitlab, grafana, gocd, hadoop, httpd, influxdb, jenkins,
+    jetty, jupyter, joomla, jboss, keycloak, landray, minihttpd,
+    mongoexpress, nacos, nexus, nodejs, nodered, phpmyadmin, phpunit,
+    rails, showdoc, skywalking, solr, spring, supervisor, thinkphp,
+    tomcat, ueditor, uwsgiphp, weblogic, webmin, yonyou, zabbix
 ```
 
 ## language
@@ -261,21 +259,31 @@ ceye-token: Null
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Fastjson             | CNVD-2017-02833    | unSerialize  |  Y  | Fastjson <= 1.2.24 deSerialization                           |
 | Fastjson             | CNVD-2019-22238    | unSerialize  |  Y  | Fastjson <= 1.2.47 deSerialization                           |
+| Fastjson             | rce-1-2-62         | unSerialize  |  Y  | Fastjson <= 1.2.62 deSerialization                           |
+| Fastjson             | rce-1-2-66         | unSerialize  |  Y  | Fastjson <= 1.2.66 deSerialization                           |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Gitea                | (None)             | unAuth       |  -  | Gitea 1.4.0 unAuthorized                                     |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Gitlab               | CVE-2021-22205     | RCE          |  -  | GitLab Pre-Auth Remote code execution                        |
 | Gitlab               | CVE-2021-22214     | SSRF         |  Y  | Gitlab CI Lint API SSRF                                      |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| GoCD                 | CVE-2021-43287     | FileRead     |  Y  | GoCD Business Continuity FileRead                            |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Grafana              | CVE-2021-43798     | FileRead     |  Y  | Grafana 8.x Directory traversal                              |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Influxdb             | (None)             | unAuth       |  -  | influxdb unAuthorized                                        |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| JBoss                | (None)             | unAuth       |  -  | JBoss unAuthorized                                           |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Jenkins              | CVE-2018-1000861   | RCE          |  Y  | jenkins Remote code execution                                |
+| Jenkins              | (None)             | unAuth       |  Y  | Jenkins unAuthorized                                         |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Jetty                | CVE-2021-28164     | DSinfo       |  -  | jetty Disclosure information                                 |
 | Jetty                | CVE-2021-28169     | DSinfo       |  -  | jetty Servlets ConcatServlet Disclosure information          |
 | Jetty                | CVE-2021-34429     | DSinfo       |  -  | jetty Disclosure information                                 |
++----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
+| Joomla               | CVE-2017-8917      | SQLinject    |  -  | Joomla3.7 Core com_fields SQLinject                          |
+| Joomla               | CVE-2023-23752     | unAuth       |  -  | Joomla unAuthorized                                          |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Jupyter              | (None)             | unAuth       |  -  | Jupyter unAuthorized                                         |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
@@ -324,8 +332,8 @@ ceye-token: Null
 | ThinkPHP             | CNVD-2018-24942    | RCE          |  Y  | The forced route is not enabled RCE                          |
 | ThinkPHP             | CNNVD-201901-445   | RCE          |  Y  | Core class Request Remote code execution                     |
 | ThinkPHP             | CNVD-2022-86535    | RCE          |  -  | ThinkPHP "think-lang" Remote code execution                  |
-| ThinkPHP             | (None)             | RCE          |  -  | ThinkPHP2.x Remote code execution                            |
-| ThinkPHP             | (None)             | SQLinject    |  -  | ThinkPHP5 ids SQLinject                                      |
+| ThinkPHP             | rce-2-x            | RCE          |  -  | ThinkPHP2.x Remote code execution                            |
+| ThinkPHP             | ids-sqlinject-5    | SQLinject    |  -  | ThinkPHP5 ids SQLinject                                      |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Ueditor              | (None)             | SSRF         |  -  | Ueditor SSRF                                                 |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
@@ -336,21 +344,22 @@ ceye-token: Null
 | Oracle Weblogic      | CVE-2019-2725      | unSerialize  |  -  | Weblogic wls9_async deSerialization                          |
 | Oracle Weblogic      | CVE-2020-14750     | unAuth       |  -  | Weblogic Authentication bypass                               |
 | Oracle Weblogic      | CVE-2020-14882     | RCE          |  Y  | Weblogic Unauthorized command execution                      |
+| Oracle Weblogic      | CVE-2021-2109      | RCE          |  -  | Weblogic LDAP Remote code execution                          |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Webmin               | CVE-2019-15107     | RCE          |  Y  | Webmin Pre-Auth Remote code execution                        |
 | Webmin               | CVE-2019-15642     | RCE          |  Y  | Webmin Remote code execution                                 |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Yonyou               | CNNVD-201610-923   | SQLinject    |  -  | Yonyou-GRP-U8 Proxy SQLinject                                |
 | Yonyou               | CNVD-2021-30167    | RCE          |  Y  | Yonyou-NC BeanShell Remote code execution                    |
-| Yonyou               | (None)             | FileRead     |  -  | Yonyou-ERP-NC NCFindWeb Directory traversal                  |
-| Yonyou               | (None)             | DSinfo       |  -  | Yonyou-U8-OA getSessionList.jsp Disclosure info              |
-| Yonyou               | (None)             | SQLinject    |  -  | Yonyou-U8-OA test.jsp SQLinject                              |
+| Yonyou               | nc-fileread        | FileRead     |  -  | Yonyou-ERP-NC NCFindWeb Directory traversal                  |
+| Yonyou               | u8-oa-getsession   | DSinfo       |  -  | Yonyou-U8-OA getSessionList.jsp Disclosure info              |
+| Yonyou               | u8-oa-test-sql     | SQLinject    |  -  | Yonyou-U8-OA test.jsp SQLinject                              |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
 | Zabbix               | CVE-2016-10134     | SQLinject    |  -  | latest.php or jsrpc.php SQLinject                            |
 +----------------------+--------------------+--------------+-----+--------------------------------------------------------------+
-vulcat-1.1.9/2023.02.10
-100/Poc
-50/Shell
+vulcat-1.2.0/2023.03.01
+108/Poc
+54/Shell
 ```
 </details>
 

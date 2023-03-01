@@ -1,14 +1,15 @@
 # vulcat
 
 [![python](https://img.shields.io/badge/Python-3-blue?logo=python)](https://shields.io/)
-[![version](https://img.shields.io/badge/Version-1.1.9-blue)](https://shields.io/)
+[![version](https://img.shields.io/badge/Version-1.2.0-blue)](https://shields.io/)
 [![license](https://img.shields.io/badge/LICENSE-GPL-yellow)](https://shields.io/)
 [![stars](https://img.shields.io/github/stars/CLincat/vulcat?color=red)](https://shields.io/)
 [![forks](https://img.shields.io/github/forks/CLincat/vulcat?color=red)](https://shields.io/)
 
 **[English version(英文版本)](/README.en-us.md)**
 
-(每月更新)<br>
+[官方文档](https://clincat.github.io/vulcat-docs/)
+(本工具随缘更新)<br>
 除了代码写得有亿点点烂, BUG有亿点点多, 有亿点点不好用, 等亿点点小问题以外，还是阔以的......吧
 
 * vulcat是一个用于扫描web端漏洞的工具，支持WAF检测、指纹识别、POC扫描、自定义POC等功能
@@ -51,7 +52,7 @@ python3 vulcat.py --list
 python3 vulcat.py -u https://www.example.com/ -o html
 python3 vulcat.py -u https://www.example.com/ -a httpd --log 3
 python3 vulcat.py -u https://www.example.com/ -a thinkphp -v cnvd-2018-24942
-python3 vulcat.py -f url.txt -t 10
+python3 vulcat.py -f url.txt --delay 0.5
 ```
 
 ## 漏洞列表
@@ -123,21 +124,31 @@ python3 vulcat.py -f url.txt -t 10
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Fastjson             | CNVD-2017-02833    | unSerialize  |  Y  | Fastjson <= 1.2.24 反序列化                                          |
 | Fastjson             | CNVD-2019-22238    | unSerialize  |  Y  | Fastjson <= 1.2.47 反序列化                                          |
+| Fastjson             | rce-1-2-62         | unSerialize  |  Y  | Fastjson <= 1.2.62 反序列化                                          |
+| Fastjson             | rce-1-2-66         | unSerialize  |  Y  | Fastjson <= 1.2.66 反序列化                                          |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Gitea                | (None)             | unAuth       |  -  | Gitea 1.4.0 未授权访问                                               |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Gitlab               | CVE-2021-22205     | RCE          |  -  | GitLab Pre-Auth 远程命令执行                                         |
 | Gitlab               | CVE-2021-22214     | SSRF         |  Y  | Gitlab CI Lint API未授权 SSRF                                        |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
+| GoCD                 | CVE-2021-43287     | FileRead     |  Y  | GoCD Business Continuity 任意文件读取                                |
++----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Grafana              | CVE-2021-43798     | FileRead     |  Y  | Grafana 8.x 插件模块路径遍历                                         |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Influxdb             | (None)             | unAuth       |  -  | influxdb 未授权访问                                                  |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
+| JBoss                | (None)             | unAuth       |  -  | JBoss 未授权访问                                                     |
++----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Jenkins              | CVE-2018-1000861   | RCE          |  Y  | jenkins 远程命令执行                                                 |
+| Jenkins              | (None)             | unAuth       |  Y  | Jenkins 未授权访问                                                   |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Jetty                | CVE-2021-28164     | DSinfo       |  -  | jetty 模糊路径信息泄露                                               |
 | Jetty                | CVE-2021-28169     | DSinfo       |  -  | jetty Utility Servlets ConcatServlet 双重解码信息泄露                |
 | Jetty                | CVE-2021-34429     | DSinfo       |  -  | jetty 模糊路径信息泄露                                               |
++----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
+| Joomla               | CVE-2017-8917      | SQLinject    |  -  | Joomla3.7 Core com_fields组件SQL注入                                 |
+| Joomla               | CVE-2023-23752     | unAuth       |  -  | Joomla 未授权访问                                                    |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Jupyter              | (None)             | unAuth       |  -  | Jupyter 未授权访问                                                   |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
@@ -186,8 +197,8 @@ python3 vulcat.py -f url.txt -t 10
 | ThinkPHP             | CNVD-2018-24942    | RCE          |  Y  | 未开启强制路由导致RCE                                                |
 | ThinkPHP             | CNNVD-201901-445   | RCE          |  Y  | 核心类Request远程代码执行                                            |
 | ThinkPHP             | CNVD-2022-86535    | RCE          |  -  | ThinkPHP 多语言模块命令执行                                          |
-| ThinkPHP             | (None)             | RCE          |  -  | ThinkPHP2.x 远程代码执行                                             |
-| ThinkPHP             | (None)             | SQLinject    |  -  | ThinkPHP5 ids参数SQL注入                                             |
+| ThinkPHP             | rce-2-x            | RCE          |  -  | ThinkPHP2.x 远程代码执行                                             |
+| ThinkPHP             | ids-sqlinject-5    | SQLinject    |  -  | ThinkPHP5 ids参数SQL注入                                             |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Ueditor              | (None)             | SSRF         |  -  | Ueditor编辑器SSRF                                                    |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
@@ -198,21 +209,22 @@ python3 vulcat.py -f url.txt -t 10
 | Oracle Weblogic      | CVE-2019-2725      | unSerialize  |  -  | Weblogic wls9_async反序列化                                          |
 | Oracle Weblogic      | CVE-2020-14750     | unAuth       |  -  | Weblogic 权限验证绕过                                                |
 | Oracle Weblogic      | CVE-2020-14882     | RCE          |  Y  | Weblogic 未授权命令执行                                              |
+| Oracle Weblogic      | CVE-2021-2109      | RCE          |  -  | Weblogic LDAP 远程代码执行                                           |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Webmin               | CVE-2019-15107     | RCE          |  Y  | Webmin Pre-Auth 远程代码执行                                         |
 | Webmin               | CVE-2019-15642     | RCE          |  Y  | Webmin 远程代码执行                                                  |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Yonyou               | CNNVD-201610-923   | SQLinject    |  -  | 用友GRP-U8 Proxy SQL注入                                             |
 | Yonyou               | CNVD-2021-30167    | RCE          |  Y  | 用友NC BeanShell远程命令执行                                         |
-| Yonyou               | (None)             | FileRead     |  -  | 用友ERP-NC NCFindWeb目录遍历                                         |
-| Yonyou               | (None)             | DSinfo       |  -  | 用友U8 OA getSessionList.jsp 敏感信息泄漏                            |
-| Yonyou               | (None)             | SQLinject    |  -  | 用友U8 OA test.jsp SQL注入                                           |
+| Yonyou               | nc-fileread        | FileRead     |  -  | 用友ERP-NC NCFindWeb目录遍历                                         |
+| Yonyou               | u8-oa-getsession   | DSinfo       |  -  | 用友U8 OA getSessionList.jsp 敏感信息泄漏                            |
+| Yonyou               | u8-oa-test-sql     | SQLinject    |  -  | 用友U8 OA test.jsp SQL注入                                           |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
 | Zabbix               | CVE-2016-10134     | SQLinject    |  -  | latest.php或jsrpc.php存在sql注入                                     |
 +----------------------+--------------------+--------------+-----+----------------------------------------------------------------------+
-vulcat-1.1.9/2023.02.10
-100/Poc
-50/Shell
+vulcat-1.2.0/2023.03.01
+108/Poc
+54/Shell
 ```
 </details>
 

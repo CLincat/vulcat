@@ -23,14 +23,14 @@ cve_2018_3760_payloads = [
     },
 ]
 
-def cve_2018_3760_scan(self, clients):
+def cve_2018_3760_scan(clients):
     ''' 在开发环境中使用 Sprockets 作为静态文件服务器
         Sprockets 3.7.1及更低版本存在二次解码导致的路径遍历漏洞, 攻击者可以使用%252e%252e/访问根目录并读取或执行目标服务器上的任何文件
     '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Ruby on Rails',
         'vul_type': 'File-Read',
         'vul_id': 'CVE-2018-3760',
     }

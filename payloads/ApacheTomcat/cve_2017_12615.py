@@ -28,14 +28,14 @@ cve_2017_12615_payloads = [
     }
 ]
 
-def cve_2017_12615_scan(self, clients):
+def cve_2017_12615_scan(clients):
     ''' Tomcat PUT方法任意文件写入漏洞
             PUT方法可用, 上传未做过滤, 可以写入任意文件
     '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ApacheTomcat',
         'vul_type': 'File-Upload',
         'vul_id': 'CVE-2017-12615',
     }

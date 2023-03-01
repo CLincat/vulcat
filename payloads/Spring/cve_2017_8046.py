@@ -20,13 +20,13 @@ cve_2017_8046_payloads = [
     },
 ]
 
-def cve_2017_8046_scan(self, clients):
+def cve_2017_8046_scan(clients):
     ''' 构造ASCII码的JSON数据包, 向spring-data-rest服务器提交恶意PATCH请求, 可以执行任意代码 '''
     client = clients.get('reqClient')
     sessid = '8d2aba535b132733b453254c40e50f95'
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Spring',
         'vul_type': 'RCE',
         'vul_id': 'CVE-2017-8046',
     }

@@ -39,20 +39,14 @@ class Yonyou():
 
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cnnvd_201610_923_scan, clients=clients),
-            thread(target=self.cnvd_2021_30167_scan, clients=clients),
-            thread(target=self.yonyou_nc_fileRead_scan, clients=clients),
-            thread(target=self.yonyou_u8_oa_getsession_scan, clients=clients),
-            thread(target=self.yonyou_u8_oa_test_sqlinject_scan, clients=clients),
+            thread(target=cnnvd_201610_923_scan, clients=clients),
+            thread(target=cnvd_2021_30167_scan, clients=clients),
+            thread(target=nc_fileRead_scan, clients=clients),
+            thread(target=u8_oa_getsession_scan, clients=clients),
+            thread(target=u8_oa_test_sqlinject_scan, clients=clients),
         ]
-
-Yonyou.cnnvd_201610_923_scan = cnnvd_201610_923_scan
-Yonyou.cnvd_2021_30167_scan = cnvd_2021_30167_scan
-Yonyou.yonyou_nc_fileRead_scan = nc_fileRead_scan
-Yonyou.yonyou_u8_oa_getsession_scan = u8_oa_getsession_scan
-Yonyou.yonyou_u8_oa_test_sqlinject_scan = u8_oa_test_sqlinject_scan
 
 yonyou = Yonyou()

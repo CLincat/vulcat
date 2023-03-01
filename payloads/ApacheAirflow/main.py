@@ -22,12 +22,10 @@ class Airflow():
 
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2020_17526_scan, clients=clients)
+            thread(target=cve_2020_17526_scan, clients=clients)
         ]
-
-Airflow.cve_2020_17526_scan = cve_2020_17526_scan
 
 airflow = Airflow()

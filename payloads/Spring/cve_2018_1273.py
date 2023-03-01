@@ -20,7 +20,7 @@ cve_2018_1273_payloads = [
     }
 ]
 
-def cve_2018_1273_scan(self, clients):
+def cve_2018_1273_scan(clients):
     ''' Spring Data是一个用于简化数据库访问, 并支持云服务的开源框架;
         Spring Data Commons是Spring Data下所有子项目共享的基础框架;
         Spring Data Commons 在2.0.5及以前版本中, 存在一处SpEL表达式注入漏洞, 
@@ -30,7 +30,7 @@ def cve_2018_1273_scan(self, clients):
     sessid = 'f638f51cbd7085fc19b791bb689ad7d7'
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Spring',
         'vul_type': 'RCE',
         'vul_id': 'CVE-2018-1273',
     }

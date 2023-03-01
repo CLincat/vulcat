@@ -19,12 +19,10 @@ class Tomcat():
 
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2017_12615_scan, clients=clients),
+            thread(target=cve_2017_12615_scan, clients=clients),
         ]
-
-Tomcat.cve_2017_12615_scan = cve_2017_12615_scan
 
 tomcat = Tomcat()

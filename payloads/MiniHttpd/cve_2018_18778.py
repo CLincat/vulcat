@@ -7,12 +7,12 @@ cve_2018_18778_payloads = [
     {'path': 'etc/passwd'}
 ]
 
-def cve_2018_18778_scan(self, clients):
+def cve_2018_18778_scan(clients):
     ''' 在mini_httpd开启虚拟主机模式的情况下, 用户请求http://HOST/FILE将会访问到当前目录下的HOST/FILE文件 '''
     hackClient = clients.get('hackClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'MiniHttpd',
         'vul_type': 'FileRead',
         'vul_id': 'CVE-2018-18778',
     }

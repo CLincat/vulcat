@@ -36,12 +36,12 @@ cve_2020_9483_payloads = [
 #     },
 ]
 
-def cve_2020_9483_scan(self, clients):
+def cve_2020_9483_scan(clients):
     ''' 在Apache Skywalking 8.3.0版本及以前的GraphQL接口中, 存在一处H2 Database SQL注入漏洞 '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ApacheSkyWalking',
         'vul_type': 'SQLinject',
         'vul_id': 'CVE-2020-9483',
     }

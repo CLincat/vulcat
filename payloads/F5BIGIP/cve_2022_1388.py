@@ -18,14 +18,14 @@ cve_2022_1388_payloads = [
     }
 ]
 
-def cve_2022_1388_scan(self, clients):
+def cve_2022_1388_scan(clients):
     ''' 未经身份验证的攻击者可以通过管理端口或自身IP地址
             对BIG-IP系统进行网络访问, 执行任意系统命令、创建或删除文件或禁用服务
     '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'F5-BIG-IP',
         # 'vul_type': 'unAuthorized',
         'vul_type': 'unAuth/RCE',
         'vul_id': 'CVE-2022-1388',

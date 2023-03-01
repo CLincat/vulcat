@@ -56,26 +56,17 @@ class Spring():
 
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2016_4977_scan, clients=clients),
-            thread(target=self.cve_2017_8046_scan, clients=clients),
-            thread(target=self.cve_2018_1273_scan, clients=clients),
-            thread(target=self.cve_2020_5410_scan, clients=clients),
-            thread(target=self.cve_2021_21234_scan, clients=clients),
-            thread(target=self.cve_2022_22947_scan, clients=clients),
-            thread(target=self.cve_2022_22963_scan, clients=clients),
-            thread(target=self.cve_2022_22965_scan, clients=clients),
+            thread(target=cve_2016_4977_scan, clients=clients),
+            thread(target=cve_2017_8046_scan, clients=clients),
+            thread(target=cve_2018_1273_scan, clients=clients),
+            thread(target=cve_2020_5410_scan, clients=clients),
+            thread(target=cve_2021_21234_scan, clients=clients),
+            thread(target=cve_2022_22947_scan, clients=clients),
+            thread(target=cve_2022_22963_scan, clients=clients),
+            thread(target=cve_2022_22965_scan, clients=clients),
         ]
-
-Spring.cve_2016_4977_scan = cve_2016_4977_scan
-Spring.cve_2017_8046_scan = cve_2017_8046_scan
-Spring.cve_2018_1273_scan = cve_2018_1273_scan
-Spring.cve_2020_5410_scan = cve_2020_5410_scan
-Spring.cve_2021_21234_scan = cve_2021_21234_scan
-Spring.cve_2022_22947_scan = cve_2022_22947_scan
-Spring.cve_2022_22963_scan = cve_2022_22963_scan
-Spring.cve_2022_22965_scan = cve_2022_22965_scan
 
 spring = Spring()

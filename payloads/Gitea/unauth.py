@@ -16,12 +16,12 @@ unauth_payloads = [
     },
 ]
 
-def unauth_scan(self, clients):
+def unauth_scan(clients):
     ''' 其1.4.0版本中有一处逻辑错误, 导致未授权用户可以穿越目录, 读写任意文件, 最终导致执行任意命令 '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Gitea',
         'vul_type': 'unAuthorized',
         'vul_id': 'Gitea-unAuthorized',
     }

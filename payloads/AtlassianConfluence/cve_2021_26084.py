@@ -17,14 +17,14 @@ cve_2021_26084_payloads = [
     }
 ]
 
-def cve_2021_26084_scan(self, clients):
+def cve_2021_26084_scan(clients):
     ''' Confluence存在一个OGNL注入漏洞, 
         允许未经身份验证的攻击者在Confluence服务器或数据中心实例上执行任意代码
     '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'AtlassianConfluence',
         'vul_type': 'RCE',
         'vul_id': 'CVE-2021-26084',
     }

@@ -8,7 +8,7 @@ cve_2016_4977_payloads = [
     {'path': 'authorize?response_type={RCECOMMAND}&client_id=acme&scope=openid&redirect_uri=http://test'},
 ]
 
-def cve_2016_4977_scan(self, clients):
+def cve_2016_4977_scan(clients):
     ''' Spring Security OAuth是为Spring框架提供安全认证支持的一个模块;
         在其使用whitelabel views来处理错误时, 由于使用了Springs Expression Language (SpEL), 
             攻击者在被授权的情况下可以通过构造恶意参数来远程执行命令
@@ -16,7 +16,7 @@ def cve_2016_4977_scan(self, clients):
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Spring',
         'vul_type': 'RCE',
         'vul_id': 'CVE-2016-4977',
     }

@@ -7,14 +7,14 @@ jupyter_unauthorized_payloads = [
     {'path': ''},
 ]
 
-def unauth_scan(self, clients):
+def unauth_scan(clients):
     ''' 如果管理员没有为Jupyter Notebook配置密码, 将导致未授权访问, 
         游客可在其中创建一个console并执行任意Python代码和命令
     '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Jupyter',
         'vul_type': 'unAuthorized',
         'vul_id': 'jupyter-unauthorized',
     }

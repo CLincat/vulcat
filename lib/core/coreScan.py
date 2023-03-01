@@ -21,6 +21,7 @@ from payloads.ApacheDruid.main import apachedruid
 from payloads.ApacheFlink.main import flink
 from payloads.ApacheHadoop.main import hadoop
 from payloads.ApacheHttpd.main import httpd
+# from payloads.ApacheKafka.main import kafka       # 2023/02/22 未测试准确性
 from payloads.ApacheSkyWalking.main import skywalking
 from payloads.ApacheSolr.main import solr
 from payloads.ApacheTomcat.main import tomcat
@@ -37,10 +38,13 @@ from payloads.F5BIGIP.main import f5bigip
 from payloads.Fastjson.main import fastjson
 from payloads.Gitea.main import gitea
 from payloads.Gitlab.main import gitlab
+from payloads.GoCD.main import gocd
 from payloads.Grafana.main import grafana
 from payloads.Influxdb.main import influxdb
+from payloads.JBoss.main import jboss
 from payloads.Jenkins.main import jenkins
 from payloads.Jetty.main import jetty
+from payloads.Joomla.main import joomla
 from payloads.Jupyter.main import jupyter
 from payloads.Keycloak.main import keycloak
 # from payloads.Kindeditor.main import kindeditor        # 还未测试poc准确性

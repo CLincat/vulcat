@@ -18,12 +18,10 @@ class APISIX():
 
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2020_13945_scan, clients=clients)
+            thread(target=cve_2020_13945_scan, clients=clients)
         ]
-
-APISIX.cve_2020_13945_scan = cve_2020_13945_scan
 
 apisix = APISIX()

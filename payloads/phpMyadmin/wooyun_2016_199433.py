@@ -30,12 +30,12 @@ wooyun_2016_199433_payloads = [
     },
 ]
 
-def wooyun_2016_199433_scan(self, clients):
+def wooyun_2016_199433_scan(clients):
     ''' 受影响的版本: 2.x  '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'phpMyadmin',
         'vul_type': 'unSerialization',
         'vul_id': 'WooYun-2016-199433',
     }

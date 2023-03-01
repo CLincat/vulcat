@@ -16,7 +16,7 @@ cve_2017_9841_payloads = [
     {'path': 'eval-stdin.php'},
 ]
 
-def cve_2017_9841_scan(self, clients):
+def cve_2017_9841_scan(clients):
     ''' phpunit是php中的单元测试工具
     其4.8.19 ~ 4.8.27和5.0.10 ~ 5.6.2版本的vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php文件有如下代码
         eval('?>'.file_get_contents('php://input'));
@@ -25,7 +25,7 @@ def cve_2017_9841_scan(self, clients):
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'phpUnit',
         'vul_type': 'RCE',
         'vul_id': 'CVE-2017-9841',
     }

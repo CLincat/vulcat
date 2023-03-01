@@ -22,14 +22,14 @@ cve_2019_15642_payloads = [
     },
 ]
 
-def cve_2019_15642_scan(self, clients):
+def cve_2019_15642_scan(clients):
     ''' Webmin 1.920及之前版本中的rpc.cgi文件存在安全漏洞, 攻击者可借助特制的对象名称利用该漏洞执行代码
             需要身份验证(Cookie、Authorization等)
     '''
     client = clients.get('reqClient')
 
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Webmin',
         'vul_type': 'RCE',
         'vul_id': 'CVE-2019-15642',
     }

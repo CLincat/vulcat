@@ -11,14 +11,14 @@ cve_2019_15107_payloads = [
     },
 ]
 
-def cve_2019_15107_scan(self, clients):
+def cve_2019_15107_scan(clients):
     ''' 该漏洞存在于密码重置页面(password_change.cgi), 允许未经身份验证的用户通过简单的POST请求执行任意命令
         当用户开启Webmin密码重置功能后, 攻击者可以通过发送POST请求在目标系统中执行任意命令, 且无需身份验证。
     '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Webmin',
         'vul_type': 'RCE',
         'vul_id': 'CVE-2019-15107',
     }

@@ -66,14 +66,14 @@ cnvd_2021_30167_payloads = [
     {'path': 'service/~yer/bsh.servlet.BshServlet'},
 ]
 
-def cnvd_2021_30167_scan(self, clients):
+def cnvd_2021_30167_scan(clients):
     ''' 用友NC BeanShell远程命令执行漏洞
             给了一个命令执行的页面, 在框框内输入命令, 然后点击按钮就可以运行任意代码
     '''
     client = clients.get('reqClient')
 
     vul_info = {
-        'app_name': self.app_name + 'NC',
+        'app_name': 'Yonyou-NC',
         'vul_type': 'RCE',
         'vul_id': 'CNVD-2021-30167',
     }

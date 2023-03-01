@@ -22,12 +22,10 @@ class Grafana():
 
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2021_43798_scan, clients=clients)
+            thread(target=cve_2021_43798_scan, clients=clients)
         ]
-
-Grafana.cve_2021_43798_scan = cve_2021_43798_scan
 
 grafana = Grafana()

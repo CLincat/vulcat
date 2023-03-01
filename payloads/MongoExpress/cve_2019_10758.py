@@ -40,13 +40,13 @@ cve_2019_10758_payloads = [
     }
 ]
 
-def cve_2019_10758_scan(self, clients):
+def cve_2019_10758_scan(clients):
     ''' 如果可以成功登录, 或者目标服务器没有修改默认的账号密码(admin:pass), 则可以执行任意node.js代码 '''
     client = clients.get('reqClient')
     sessid = '3d2f0881262d8bd19e65a6ce89229c5e'
 
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'mongo-express',
         'vul_type': 'RCE',
         'vul_id': 'CVE-2019-10758',
     }

@@ -27,7 +27,7 @@ cve_2017_10271_payloads = [
     },
 ]
 
-def cve_2017_10271_scan(self, clients):
+def cve_2017_10271_scan(clients):
     ''' Weblogic 'wls-wsat' XMLDecoder 反序列化漏洞
             < 10.3.6
             Weblogic的WLS Security组件对外提供webservice服务, 其中使用了XMLDecoder来解析用户传入的XML数据, 在解析的过程中出现反序列化漏洞, 导致可执行任意命令
@@ -35,7 +35,7 @@ def cve_2017_10271_scan(self, clients):
     client = clients.get('reqClient')
 
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Weblogic',
         'vul_type': 'unSerialization',
         'vul_id': 'CVE-2017-10271',
     }

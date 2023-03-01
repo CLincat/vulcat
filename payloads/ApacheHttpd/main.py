@@ -34,16 +34,12 @@ class ApacheHttpd():
 
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2021_40438_scan, clients=clients),
-            thread(target=self.cve_2021_41773_scan, clients=clients),
-            thread(target=self.cve_2021_42013_scan, clients=clients)
+            thread(target=cve_2021_40438_scan, clients=clients),
+            thread(target=cve_2021_41773_scan, clients=clients),
+            thread(target=cve_2021_42013_scan, clients=clients)
         ]
-
-ApacheHttpd.cve_2021_40438_scan = cve_2021_40438_scan
-ApacheHttpd.cve_2021_41773_scan = cve_2021_41773_scan
-ApacheHttpd.cve_2021_42013_scan = cve_2021_42013_scan
 
 httpd = ApacheHttpd()

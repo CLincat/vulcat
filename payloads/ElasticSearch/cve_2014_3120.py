@@ -18,14 +18,14 @@ cve_2014_3120_payloads = [
     }
 ]
 
-def cve_2014_3120_scan(self, clients):
+def cve_2014_3120_scan(clients):
     ''' 老版本ElasticSearch支持传入动态脚本(MVEL)来执行一些复杂的操作,
         而MVEL可执行Java代码, 而且没有沙盒, 所以我们可以直接执行任意代码
     '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ElasticSearch',
         'vul_type': 'RCE',
         'vul_id': 'CVE-2014-3120',
     }

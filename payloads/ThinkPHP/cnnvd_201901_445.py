@@ -11,12 +11,12 @@ cnnvd_201901_445_payloads = [
     }
 ]
 
-def cnnvd_201901_445_scan(self, clients):
+def cnnvd_201901_445_scan(clients):
     ''' ThinkPHP5 核心类Request远程代码执行'''
     client = clients.get('reqClient')
 
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ThinkPHP',
         'vul_type': 'RCE',
         'vul_id': 'CNNVD-201901-445',
     }

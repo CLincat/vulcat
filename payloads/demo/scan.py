@@ -14,13 +14,13 @@ import re
     },
 ]
 
-def 6_scan(self, clients):                      # ! 6: POC的名称(例如 cnvd_2018_24942_scan)
+def 6_scan(clients):                            # ! 6: POC的名称(例如 cnvd_2018_24942_scan)
     '''  '''
     client = clients.get('reqClient')           # todo 使用的中转, reqClient是requests的中转
     # hackClient = clients.get('hackClient')      # todo 使用的中转, hackClient是HackRequests的中转
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': '',
         'vul_type': '7',                        # ! 7: 漏洞类型(例如 RCE)
         'vul_id': '8',                          # ! 8: 漏洞编号(例如 CNVD-2018-24942)
     }
@@ -39,6 +39,8 @@ def 6_scan(self, clients):                      # ! 6: POC的名称(例如 cnvd_
             allow_redirects=False,
             vul_info=vul_info
         )
+        if res is None:
+            continue
 
         # todo 判断
         '''!!!

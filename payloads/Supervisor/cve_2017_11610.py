@@ -33,14 +33,14 @@ cve_2017_11610_payloads = [
     },
 ]
 
-def cve_2017_11610_scan(self, clients):
+def cve_2017_11610_scan(clients):
     ''' Supervisord曝出了一个需认证的远程命令执行漏洞(CVE-2017-11610)
         通过POST请求向Supervisord管理界面提交恶意数据, 可以获取服务器操作权限, 带来严重的安全风险
     '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Supervisor',
         'vul_type': 'RCE',
         'vul_id': 'CVE-2017-11610',
     }

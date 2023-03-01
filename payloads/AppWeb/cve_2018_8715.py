@@ -9,7 +9,7 @@ cve_2018_8715_payloads = [                 # * 是不是很神奇, payload居然
     {'path': '/'},
 ]
 
-def cve_2018_8715_scan(self, clients):
+def cve_2018_8715_scan(clients):
     ''' 其7.0.3之前的版本中, 有digest和form两种认证方式, 
             如果用户传入的密码为null(也就是没有传递密码参数)
             appweb将因为一个逻辑错误导致直接认证成功, 并返回session
@@ -17,7 +17,7 @@ def cve_2018_8715_scan(self, clients):
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'AppWeb',
         'vul_type': 'unAuthorized',
         'vul_id': 'CVE-2018-8715',
     }

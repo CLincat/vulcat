@@ -36,7 +36,7 @@ cve_2020_13945_payloads = [
     }
 ]
 
-def cve_2020_13945_scan(self, clients):
+def cve_2020_13945_scan(clients):
     ''' 在用户未指定管理员Token或使用了默认配置文件的情况下
             Apache APISIX将使用默认的管理员Token: edd1c9f034335f136f87ad84b625c8f1
             攻击者利用这个Token可以访问到管理员接口, 进而通过script参数来插入任意LUA脚本并执行
@@ -44,7 +44,7 @@ def cve_2020_13945_scan(self, clients):
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ApacheAPISIX',
         'vul_type': 'unAuthorized',
         'vul_id': 'CVE-2020-13945',
     }

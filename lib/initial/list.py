@@ -41,7 +41,7 @@ def list():
             vul_list += '\n'
         vul_list += '+' + Target_len_ + '+' + Vul_id_len_ + '+' + Type_len_ + '+' + Shell_len_ + '+' + Description_len_ + '+\n'
 
-    print(color.cyan(vul_list + 'vulcat-1.1.9/2023.02.10'))    # * 2023-02-10 21:40:00
+    print(color.cyan(vul_list + 'vulcat-1.2.0/2023.03.01'))    # * 2023-03-01 09:00:00
     print(color.cyan(str(vul_num - 1) + '/Poc'))               # * 有一个是标题, 所以要-1
     print(color.cyan(str(shell_num) + '/Shell'))
     # print(vul_num)
@@ -342,6 +342,18 @@ vul_info = {
             'type': 'unSerialize',
             'shell': 'Y',
             'description': list_lang['Fastjson']['CNVD-2019-22238']
+        },
+        {
+            'vul_id': 'rce-1-2-62',
+            'type': 'unSerialize',
+            'shell': 'Y',
+            'description': list_lang['Fastjson']['rce-1-2-62']
+        },
+        {
+            'vul_id': 'rce-1-2-66',
+            'type': 'unSerialize',
+            'shell': 'Y',
+            'description': list_lang['Fastjson']['rce-1-2-66']
         }
     ],
     'Gitea': [
@@ -366,6 +378,14 @@ vul_info = {
             'description': list_lang['Gitlab']['CVE-2021-22214']
         }
     ],
+    'GoCD': [
+        {
+            'vul_id': 'CVE-2021-43287',
+            'type': 'FileRead',
+            'shell': 'Y',
+            'description': list_lang['GoCD']['CVE-2021-43287']
+        },
+    ],
     'Grafana': [
         {
             'vul_id': 'CVE-2021-43798',
@@ -382,13 +402,27 @@ vul_info = {
             'description': list_lang['Influxdb']
         },
     ],
+    'JBoss': [
+        {
+            'vul_id': '(None)',
+            'type': 'unAuth',
+            'shell': '-',
+            'description': list_lang['JBoss']['unAuth']
+        }
+    ],
     'Jenkins': [
         {
             'vul_id': 'CVE-2018-1000861',
             'type': 'RCE',
             'shell': 'Y',
             'description': list_lang['Jenkins']['CVE-2018-1000861']
-        }
+        },
+        {
+            'vul_id': '(None)',
+            'type': 'unAuth',
+            'shell': 'Y',
+            'description': list_lang['Jenkins']['unAuth']
+        },
     ],
     'Jetty': [
         {
@@ -409,6 +443,20 @@ vul_info = {
             'shell': '-',
             'description': list_lang['Jetty']['CVE-2021-34429']
         }
+    ],
+    'Joomla': [
+        {
+            'vul_id': 'CVE-2017-8917',
+            'type': 'SQLinject',
+            'shell': '-',
+            'description': list_lang['Joomla']['CVE-2017-8917']
+        },
+        {
+            'vul_id': 'CVE-2023-23752',
+            'type': 'unAuth',
+            'shell': '-',
+            'description': list_lang['Joomla']['CVE-2023-23752']
+        },
     ],
     'Jupyter': [
         {
@@ -646,13 +694,13 @@ vul_info = {
             'description': list_lang['ThinkPHP']['CNVD-2022-86535']
         },
         {
-            'vul_id': '(None)',
+            'vul_id': 'rce-2-x',
             'type': 'RCE',
             'shell': '-',
             'description': list_lang['ThinkPHP']['2.x RCE']
         },
         {
-            'vul_id': '(None)',
+            'vul_id': 'ids-sqlinject-5',
             'type': 'SQLinject',
             'shell': '-',
             'description': list_lang['ThinkPHP']['5 ids sqlinject']
@@ -704,6 +752,12 @@ vul_info = {
             'type': 'RCE',
             'shell': 'Y',
             'description': list_lang['Oracle Weblogic']['CVE-2020-14882']
+        },
+        {
+            'vul_id': 'CVE-2021-2109',
+            'type': 'RCE',
+            'shell': '-',
+            'description': list_lang['Oracle Weblogic']['CVE-2021-2109']
         }
     ],
     'Webmin': [
@@ -734,19 +788,19 @@ vul_info = {
             'description': list_lang['Yonyou']['CNVD-2021-30167']
         },
         {
-            'vul_id': '(None)',
+            'vul_id': 'nc-fileread',
             'type': 'FileRead',
             'shell': '-',
             'description': list_lang['Yonyou']['NCFindWeb']
         },
         {
-            'vul_id': '(None)',
+            'vul_id': 'u8-oa-getsession',
             'type': 'DSinfo',
             'shell': '-',
             'description': list_lang['Yonyou']['getSessionList.jsp']
         },
         {
-            'vul_id': '(None)',
+            'vul_id': 'u8-oa-test-sql',
             'type': 'SQLinject',
             'shell': '-',
             'description': list_lang['Yonyou']['test.jsp']

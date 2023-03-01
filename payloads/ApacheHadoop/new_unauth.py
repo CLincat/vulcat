@@ -11,14 +11,14 @@ unauth_payloads = [
     {'path': 'cluster/scheduler'},
 ]
 
-def apache_hadoop_unauthorized_scan(self, clients):
+def unauth_scan(clients):
     ''' YARN默认开放REST API, 允许用户直接通过API进行相关的应用创建、任务提交执行等操作, 
         如果配置不当, 将会导致REST API未授权访问, 攻击者可利用其执行远程命令
     '''
     client = clients.get('reqClient')
 
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ApacheHadoop',
         'vul_type': 'unAuthorized',
         'vul_id': 'ApacheHadoop-unAuth',
     }

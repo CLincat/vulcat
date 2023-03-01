@@ -27,14 +27,11 @@ class Nodejs():
 
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2017_14849_scan, clients=clients),
-            thread(target=self.cve_2021_21315_scan, clients=clients)
+            thread(target=cve_2017_14849_scan, clients=clients),
+            thread(target=cve_2021_21315_scan, clients=clients)
         ]
-
-Nodejs.cve_2017_14849_scan = cve_2017_14849_scan
-Nodejs.cve_2021_21315_scan = cve_2021_21315_scan
 
 nodejs = Nodejs()

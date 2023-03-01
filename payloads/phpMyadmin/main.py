@@ -28,14 +28,11 @@ class phpMyadmin():
 
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2018_12613_scan, clients=clients),
-            thread(target=self.wooyun_2016_199433_scan, clients=clients)
+            thread(target=cve_2018_12613_scan, clients=clients),
+            thread(target=wooyun_2016_199433_scan, clients=clients)
         ]
-
-phpMyadmin.cve_2018_12613_scan = cve_2018_12613_scan
-phpMyadmin.wooyun_2016_199433_scan = wooyun_2016_199433_scan
 
 phpmyadmin = phpMyadmin()

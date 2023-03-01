@@ -38,18 +38,13 @@ class ElasticSearch():
 
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2014_3120_scan, clients=clients),
-            thread(target=self.cve_2015_1427_scan, clients=clients),
-            thread(target=self.cve_2015_3337_scan, clients=clients),
-            thread(target=self.cve_2015_5531_scan, clients=clients)
+            thread(target=cve_2014_3120_scan, clients=clients),
+            thread(target=cve_2015_1427_scan, clients=clients),
+            thread(target=cve_2015_3337_scan, clients=clients),
+            thread(target=cve_2015_5531_scan, clients=clients)
         ]
-
-ElasticSearch.cve_2014_3120_scan = cve_2014_3120_scan
-ElasticSearch.cve_2015_1427_scan = cve_2015_1427_scan
-ElasticSearch.cve_2015_3337_scan = cve_2015_3337_scan
-ElasticSearch.cve_2015_5531_scan = cve_2015_5531_scan
 
 elasticsearch = ElasticSearch()

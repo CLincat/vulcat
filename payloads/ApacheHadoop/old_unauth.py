@@ -42,7 +42,7 @@ def apache_hadoop_unauthorized_scan(self, clients):
     client = clients.get('reqClient')
 
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ApacheHadoop',
         'vul_type': 'unAuthorized',
         'vul_id': 'ApacheHadoop-unAuth',
     }

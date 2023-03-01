@@ -26,14 +26,11 @@ class F5_BIG_IP():
 
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2020_5902_scan, clients=clients),
-            thread(target=self.cve_2022_1388_scan, clients=clients)
+            thread(target=cve_2020_5902_scan, clients=clients),
+            thread(target=cve_2022_1388_scan, clients=clients)
         ]
-
-F5_BIG_IP.cve_2020_5902_scan = cve_2020_5902_scan
-F5_BIG_IP.cve_2022_1388_scan = cve_2022_1388_scan
 
 f5bigip = F5_BIG_IP()

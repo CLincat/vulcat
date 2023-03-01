@@ -24,6 +24,9 @@ class Config():
         args.ceye_domain = config_yaml.get('ceye-domain')               # * http://ceye.io/ 平台的域名
         args.ceye_token = config_yaml.get('ceye-token')                 # * http://ceye.io/ 平台的token
 
+        args.dnslog_pw_domain = config_yaml.get('dnslog-pw-domain')     # * http://dnslog.pw/ 平台的域名
+        args.dnslog_pw_token = config_yaml.get('dnslog-pw-token')       # * http://dnslog.pw/ 平台的token
+
         args.lang = language()                                          # * 语言
 
         args.url_list = []                                              # * url列表

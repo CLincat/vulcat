@@ -33,16 +33,12 @@ class Jetty():
 
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2021_28164_scan, clients=clients),
-            thread(target=self.cve_2021_28169_scan, clients=clients),
-            thread(target=self.cve_2021_34429_scan, clients=clients)
+            thread(target=cve_2021_28164_scan, clients=clients),
+            thread(target=cve_2021_28169_scan, clients=clients),
+            thread(target=cve_2021_34429_scan, clients=clients)
         ]
-
-Jetty.cve_2021_28164_scan = cve_2021_28164_scan
-Jetty.cve_2021_28169_scan = cve_2021_28169_scan
-Jetty.cve_2021_34429_scan = cve_2021_34429_scan
 
 jetty = Jetty()

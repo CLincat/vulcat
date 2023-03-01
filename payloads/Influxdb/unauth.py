@@ -9,12 +9,12 @@ influxdb_unauthorized_payloads = [
     },
 ]
 
-def unauth_scan(self, clients):
+def unauth_scan(clients):
     ''' 其使用jwt作为鉴权方式。在用户开启了认证, 但未设置参数shared-secret的情况下, jwt的认证密钥为空字符串, 此时攻击者可以伪造任意用户身份在influxdb中执行SQL语句。 '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'influxdb',
         'vul_type': 'unAuthorized',
         'vul_id': 'influxdb-unAuthorized',
     }

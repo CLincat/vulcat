@@ -18,14 +18,14 @@ cve_2015_1427_payloads = [
     }
 ]
 
-def cve_2015_1427_scan(self, clients):
+def cve_2015_1427_scan(clients):
     ''' ElasticSearch支持使用“在沙盒中的”Groovy语言作为动态脚本, 
         但显然官方的工作并没有做好, lupin和tang3分别提出了两种执行命令的方法
     '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ElasticSearch',
         'vul_type': 'RCE',
         'vul_id': 'CVE-2015-1427',
     }

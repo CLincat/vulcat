@@ -23,12 +23,10 @@ class ApacheSkyWalking():
 
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2020_9483_scan, clients=clients)
+            thread(target=cve_2020_9483_scan, clients=clients)
         ]
-
-ApacheSkyWalking.cve_2020_9483_scan = cve_2020_9483_scan
 
 skywalking = ApacheSkyWalking()

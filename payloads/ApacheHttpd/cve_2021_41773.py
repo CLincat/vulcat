@@ -48,7 +48,7 @@ cve_2021_41773_payloads = [
     },
 ]
 
-def cve_2021_41773_scan(self, clients):
+def cve_2021_41773_scan(clients):
     ''' 在 Apache HTTP Server 2.4.49 中对路径规范化所做的更改中发现了一个缺陷,
         攻击者可以使用路径遍历攻击将URL映射到网站根目录预期之外的文件
             在特定情况下, 攻击者可构造恶意请求执行系统命令
@@ -56,7 +56,7 @@ def cve_2021_41773_scan(self, clients):
     hackClient = clients.get('hackClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ApacheHttpd',
         'vul_type': 'RCE/FileRead',
         'vul_id': 'CVE-2021-41773',
     }

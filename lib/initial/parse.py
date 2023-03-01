@@ -19,7 +19,7 @@ python3 vulcat.py -u https://www.example.com/ -a thinkphp --log 3
 python3 vulcat.py -u https://www.example.com/ -a tomcat -v CVE-2017-12615
 python3 vulcat.py -f url.txt -t 10 -o html
 python3 vulcat.py --list
-''', version='vulcat.py-1.1.9\n')
+''', version='vulcat.py-1.2.0\n')
     # * 指定目标
     target = parser.add_option_group(lang['target_help']['title'], lang['target_help']['name'])
     target.add_option('-u', '--url', type='string', dest='url', default=None, help=lang['target_help']['url'])
@@ -55,7 +55,8 @@ python3 vulcat.py --list
 
     # * 第三方api, 例如dnslog/ceye
     api = parser.add_option_group(lang['api_help']['title'], lang['api_help']['name'])
-    api.add_option('--dns', type='string', dest='dns', default='dnslog/ceye', help=lang['api_help']['dns'])
+    # api.add_option('--dns', type='string', dest='dns', default='dnslog/ceye', help=lang['api_help']['dns'])
+    api.add_option('--dns', dest='dns', default='auto', help=lang['api_help']['dns'], choices=['auto', 'dnslog-cn', 'dnslog-pw', 'ceye'])
 
     # * 保存扫描结果到文件中
     save = parser.add_option_group(lang['save_help']['title'], lang['save_help']['name'])

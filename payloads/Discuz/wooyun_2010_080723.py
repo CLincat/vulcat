@@ -19,7 +19,7 @@ wooyun_2010_080723_payloads = [
     },
 ]
 
-def wooyun_2010_080723_scan(self, clients):
+def wooyun_2010_080723_scan(clients):
     ''' 
         由于php5.3.x版本里php.ini的设置里request_order默认值为GP,
         导致$_REQUEST中不再包含$_COOKIE, 
@@ -28,7 +28,7 @@ def wooyun_2010_080723_scan(self, clients):
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Discuz',
         'vul_type': 'RCE',
         'vul_id': 'wooyun-2010-080723',
     }

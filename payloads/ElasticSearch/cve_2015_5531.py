@@ -18,7 +18,7 @@ cve_2015_5531_payloads = [
     },
 ]
 
-def cve_2015_5531_scan(self, clients):
+def cve_2015_5531_scan(clients):
     ''' elasticsearch 1.5.1及以前, 无需任何配置即可触发该漏洞; 
         之后的新版, 配置文件elasticsearch.yml中必须存在path.repo, 该配置值为一个目录, 且该目录必须可写, 
         等于限制了备份仓库的根位置, 不配置该值, 默认不启动这个功能
@@ -26,7 +26,7 @@ def cve_2015_5531_scan(self, clients):
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ElasticSearch',
         'vul_type': 'FileRead',
         'vul_id': 'CVE-2015-5531',
     }

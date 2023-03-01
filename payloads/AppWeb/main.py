@@ -24,12 +24,10 @@ class AppWeb():
 
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2018_8715_scan, clients=clients)
+            thread(target=cve_2018_8715_scan, clients=clients)
         ]
-
-AppWeb.cve_2018_8715_scan = cve_2018_8715_scan
 
 appweb = AppWeb()

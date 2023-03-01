@@ -40,14 +40,14 @@ cve_2021_29441_payloads = [
     # }
 ]
 
-def cve_2021_29441_scan(self, clients):
+def cve_2021_29441_scan(clients):
     ''' 阿里巴巴Nacos未授权访问漏洞
             可以通过该漏洞添加nacos后台用户, 并登录nacos管理后台
     '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'AlibabaNacos',
         'vul_type': 'unAuthorized',
         'vul_id': 'CVE-2021-29441',
     }

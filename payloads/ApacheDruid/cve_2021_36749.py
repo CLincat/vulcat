@@ -2,7 +2,6 @@
 # -*- coding:utf-8 -*-
 
 from lib.tool import check
-import re
 
 cve_2021_36749_payloads = [
     {
@@ -32,7 +31,7 @@ cve_2021_36749_payloads = [
     },
 ]
 
-def cve_2021_36749_scan(self, clients):
+def cve_2021_36749_scan(clients):
     ''' Apache Druid对用户指定的HTTP InputSource没有做限制, 
         并且Apache Druid默认管理页面是不需要认证即可访问的
             因此未经授权的远程攻击者 可以通过构造恶意参数读取服务器上的任意文件
@@ -42,7 +41,7 @@ def cve_2021_36749_scan(self, clients):
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ApacheDruid',
         'vul_type': 'FileRead',
         'vul_id': 'CVE-2021-36749',
     }

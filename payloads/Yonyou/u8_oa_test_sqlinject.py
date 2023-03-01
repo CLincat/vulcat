@@ -6,12 +6,12 @@ yonyou_u8_oa_test_sqlinject_payloads = [
     {'path': 'test.jsp?doType=101&S1=(SELECT%20MD5(1))'},
 ]
 
-def u8_oa_test_sqlinject_scan(self, clients):
+def u8_oa_test_sqlinject_scan(clients):
     ''' 由于与致远OA使用相同的文件, 于是存在同样的漏洞 '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name + 'U8-OA',
+        'app_name': 'Yonyou-U8-OA',
         'vul_type': 'SQLinject',
         'vul_id': 'Yonyou-u8-test.jsp-sqlinject',
     }

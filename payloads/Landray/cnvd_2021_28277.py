@@ -70,12 +70,12 @@ cnvd_2021_28277_payloads = [
     },
 ]
 
-def cnvd_2021_28277_scan(self, clients):
+def cnvd_2021_28277_scan(clients):
     ''' CNVD-2021-28277, 首次公开日期为2021-04-15, 蓝凌oa存在多个漏洞, 攻击者可利用该漏洞获取服务器控制权 '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Landray-OA',
         'vul_type': 'SSRF',
         'vul_id': 'CNVD-2021-28277',
     }

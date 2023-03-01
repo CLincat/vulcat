@@ -20,12 +20,12 @@ cve_2022_22965_payloads = [
     }
 ]
 
-def cve_2022_22965_scan(self, clients):
+def cve_2022_22965_scan(clients):
     ''' Spring Framework 远程代码执行漏洞(Spring core RCE) '''
     client = clients.get('reqClient')
 
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Spring',
         'vul_type': 'RCE',
         'vul_id': 'CVE-2022-22965',
     }

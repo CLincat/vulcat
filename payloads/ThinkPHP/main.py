@@ -31,8 +31,8 @@
 '''
 
 from lib.tool.thread import thread
-from payloads.ThinkPHP._2_x_rce import _2_x_rce_scan
-from payloads.ThinkPHP._5_ids_sqlinject import _5_ids_sqlinject_scan
+from payloads.ThinkPHP._2_x_rce import rce_2_x_scan
+from payloads.ThinkPHP._5_ids_sqlinject import ids_sqlinject_5_scan
 from payloads.ThinkPHP.cnnvd_201901_445 import cnnvd_201901_445_scan
 from payloads.ThinkPHP.cnvd_2018_24942 import cnvd_2018_24942_scan
 from payloads.ThinkPHP.cve_2018_1002015 import cve_2018_1002015_scan
@@ -81,22 +81,15 @@ class ThinkPHP():
     
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.thinkphp_2_x_rce_scan, clients=clients),
-            thread(target=self.thinkphp_5_ids_sqlinject_scan, clients=clients),
-            thread(target=self.cnnvd_201901_445_scan, clients=clients),
-            thread(target=self.cnvd_2018_24942_scan, clients=clients),
-            thread(target=self.cve_2018_1002015_scan, clients=clients),
-            thread(target=self.cnvd_2022_86535_scan, clients=clients),
+            thread(target=rce_2_x_scan, clients=clients),
+            thread(target=ids_sqlinject_5_scan, clients=clients),
+            thread(target=cnnvd_201901_445_scan, clients=clients),
+            thread(target=cnvd_2018_24942_scan, clients=clients),
+            thread(target=cve_2018_1002015_scan, clients=clients),
+            thread(target=cnvd_2022_86535_scan, clients=clients),
         ]
-
-ThinkPHP.thinkphp_2_x_rce_scan = _2_x_rce_scan
-ThinkPHP.thinkphp_5_ids_sqlinject_scan = _5_ids_sqlinject_scan
-ThinkPHP.cnnvd_201901_445_scan = cnnvd_201901_445_scan
-ThinkPHP.cnvd_2018_24942_scan = cnvd_2018_24942_scan
-ThinkPHP.cve_2018_1002015_scan = cve_2018_1002015_scan
-ThinkPHP.cnvd_2022_86535_scan = cnvd_2022_86535_scan
 
 thinkphp = ThinkPHP()

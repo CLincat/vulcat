@@ -24,13 +24,13 @@ cve_2020_17519_payloads = [
     }
 ]
 
-def cve_2020_17519_scan(self, clients):
+def cve_2020_17519_scan(clients):
     ''' Apache Flink 1.11.0中引入的一个更改(也在1.11.1和1.11.2中发布)
             允许攻击者通过JobManager进程的REST接口, 读取JobManager本地文件系统上的任意文件 '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ApacheFlink',
         'vul_type': 'FileRead',
         'vul_id': 'CVE-2020-17519',
     }

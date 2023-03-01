@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-alibaba_druid_unauthorized_payloads = [
+unauth_payloads = [
     {'path': ''},
     {'path': 'druid/index.html'},
     {'path': 'druid/api.html'},
@@ -14,19 +14,19 @@ alibaba_druid_unauthorized_payloads = [
     
 ]
 
-def alibaba_druid_unauthorized_scan(self, clients):
+def unauth_scan(clients):
     ''' druid未授权访问漏洞
             攻击者可利用druid管理面板, 查看Session信息, 并利用泄露的Session登录后台(有时候可能没有Session)
     '''
     client = clients.get('reqClient')                       # * Requests Client
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'AlibabaDruid',
         'vul_type': 'unAuthorized',
         'vul_id': 'druid-unauth',
     }
 
-    for payload in alibaba_druid_unauthorized_payloads:     # * Payload
+    for payload in unauth_payloads:     # * Payload
         path = payload['path']                              # * Path
 
         res = client.request(

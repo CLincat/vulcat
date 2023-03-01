@@ -57,7 +57,8 @@ lang = {
         'api_help': {
             'title': 'Api',
             'name': 'The third party Api',
-            'dns': 'DNS platform, auxiliary verification without echo vulnerability. dnslog.cn/ceye.io (optional parameter: dnslog/ceye e.g. --dns ceye) (automatically selected by default, ceye is preferred, and dnglog is automatically changed when ceye is unavailable)'
+            'dns': 'DNS platform, auxiliary verification without echo vulnerability. ceye/dnslog-pw/dnslog-cn (e.g. --dns ceye) (Default: auto)',
+            'NotDns': '[WARNING] There is no DNSLOG platform available, please check if the configuration is correct',
         },
         'save_help': {
             'title': 'Save',
@@ -78,7 +79,7 @@ lang = {
         },
         'app_list_help': {
             'title': 'Supported target types(Case insensitive)',
-            'name': 'AliDruid, airflow, apisix, apachedruid, appweb, cisco, confluence, discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab, grafana, influxdb, hadoop, httpd, jenkins, jetty, jupyter, keycloak, landray, minihttpd, mongoexpress, nexus, nacos, nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, solr, spring, supervisor, skywalking, thinkphp, tomcat, ueditor, weblogic, webmin, yonyou, zabbix'
+            'name': 'airflow, AliDruid, apachedruid, apacheunomi, apisix, appweb, cisco, confluence, discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab, grafana, gocd, hadoop, httpd, influxdb, jenkins, jetty, jupyter, joomla, jboss, keycloak, landray, minihttpd, mongoexpress, nacos, nexus, nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, skywalking, solr, spring, supervisor, thinkphp, tomcat, ueditor, uwsgiphp, weblogic, webmin, yonyou, zabbix'
         },
         'core': {
             'start': {
@@ -184,7 +185,8 @@ lang = {
         'api_help': {
             'title': 'Api',
             'name': '第三方api',
-            'dns': 'dns平台, 辅助无回显漏洞的验证, 支持dnslog.cn和ceye.io(可选参数: dnslog/ceye 如: --dns ceye) (默认自动选择, 优先ceye, ceye不可用时自动改为dnslog)'
+            'dns': 'dns平台, 辅助无回显漏洞的验证, 支持dnslog.cn/dnslog.pw/ceye.io(可选参数: dnslog-cn/dnslog-pw/ceye 如: --dns ceye) (默认: 自动)',
+            'NotDns': '[WARNING] 没有可用的DNSLOG平台, 请检查配置是否正确',
         },
         'save_help': {
             'title': 'Save',
@@ -205,7 +207,7 @@ lang = {
         },
         'app_list_help': {
             'title': '支持的目标类型(-a参数, 不区分大小写)',
-            'name': 'AliDruid, airflow, apisix, apachedruid, appweb, cisco, confluence, discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab, grafana, influxdb, hadoop, httpd, jenkins, jetty, jupyter, keycloak, landray, minihttpd, mongoexpress, nexus, nacos, nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, solr, spring, supervisor, skywalking, thinkphp, tomcat, ueditor, weblogic, webmin, yonyou, zabbix'
+            'name': 'airflow, AliDruid, apachedruid, apacheunomi, apisix, appweb, cisco, confluence, discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab, grafana, gocd, hadoop, httpd, influxdb, jenkins, jetty, jupyter, joomla, jboss, keycloak, landray, minihttpd, mongoexpress, nacos, nexus, nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, skywalking, solr, spring, supervisor, thinkphp, tomcat, ueditor, uwsgiphp, weblogic, webmin, yonyou, zabbix'
         },
         'core': {
             'start': {
@@ -335,19 +337,30 @@ lang['zh_cn']['list'] = {
     'Fastjson': {
         'CNVD-2017-02833': 'Fastjson <= 1.2.24 反序列化',
         'CNVD-2019-22238': 'Fastjson <= 1.2.47 反序列化',
+        'rce-1-2-62': 'Fastjson <= 1.2.62 反序列化',
+        'rce-1-2-66': 'Fastjson <= 1.2.66 反序列化',
     },
     'Gitea': 'Gitea 1.4.0 未授权访问',
     'Gitlab': {
         'CVE-2021-22205': 'GitLab Pre-Auth 远程命令执行',
         'CVE-2021-22214': 'Gitlab CI Lint API未授权 SSRF',
     },
+    'GoCD': {'CVE-2021-43287': 'GoCD Business Continuity 任意文件读取',},
     'Grafana': {'CVE-2021-43798': 'Grafana 8.x 插件模块路径遍历',},
     'Influxdb': 'influxdb 未授权访问',
-    'Jenkins': {'CVE-2018-1000861': 'jenkins 远程命令执行',},
+    'JBoss': {'unAuth': 'JBoss 未授权访问',},
+    'Jenkins': {
+        'CVE-2018-1000861': 'jenkins 远程命令执行',
+        'unAuth': 'Jenkins 未授权访问',
+    },
     'Jetty': {
         'CVE-2021-28164': 'jetty 模糊路径信息泄露',
         'CVE-2021-28169': 'jetty Utility Servlets ConcatServlet 双重解码信息泄露',
         'CVE-2021-34429': 'jetty 模糊路径信息泄露',
+    },
+    'Joomla': {
+        'CVE-2017-8917': 'Joomla3.7 Core com_fields组件SQL注入',
+        'CVE-2023-23752': 'Joomla 未授权访问',
     },
     'Jupyter': 'Jupyter 未授权访问',
     'Keycloak': {'CVE-2020-10770': '使用request_uri调用未经验证的URL',},
@@ -406,6 +419,7 @@ lang['zh_cn']['list'] = {
         'CVE-2019-2725': 'Weblogic wls9_async反序列化',
         'CVE-2020-14750': 'Weblogic 权限验证绕过',
         'CVE-2020-14882': 'Weblogic 未授权命令执行',
+        'CVE-2021-2109': 'Weblogic LDAP 远程代码执行',
     },
     'Webmin': {
         'CVE-2019-15107': 'Webmin Pre-Auth 远程代码执行',
@@ -485,19 +499,30 @@ lang['en_us']['list'] = {
     'Fastjson': {
         'CNVD-2017-02833': 'Fastjson <= 1.2.24 deSerialization',
         'CNVD-2019-22238': 'Fastjson <= 1.2.47 deSerialization',
+        'rce-1-2-62': 'Fastjson <= 1.2.62 deSerialization',
+        'rce-1-2-66': 'Fastjson <= 1.2.66 deSerialization',
     },
     'Gitea': 'Gitea 1.4.0 unAuthorized',
     'Gitlab': {
         'CVE-2021-22205': 'GitLab Pre-Auth Remote code execution',
         'CVE-2021-22214': 'Gitlab CI Lint API SSRF',
     },
+    'GoCD': {'CVE-2021-43287': 'GoCD Business Continuity FileRead',},
     'Grafana': {'CVE-2021-43798': 'Grafana 8.x Directory traversal',},
     'Influxdb': 'influxdb unAuthorized',
-    'Jenkins': {'CVE-2018-1000861': 'jenkins Remote code execution',},
+    'JBoss': {'unAuth': 'JBoss unAuthorized',},
+    'Jenkins': {
+        'CVE-2018-1000861': 'jenkins Remote code execution',
+        'unAuth': 'Jenkins unAuthorized',
+    },
     'Jetty': {
         'CVE-2021-28164': 'jetty Disclosure information',
         'CVE-2021-28169': 'jetty Servlets ConcatServlet Disclosure information',
         'CVE-2021-34429': 'jetty Disclosure information',
+    },
+    'Joomla': {
+        'CVE-2017-8917': 'Joomla3.7 Core com_fields SQLinject',
+        'CVE-2023-23752': 'Joomla unAuthorized',
     },
     'Jupyter': 'Jupyter unAuthorized',
     'Keycloak': {'CVE-2020-10770': 'request_uri SSRF',},
@@ -556,6 +581,7 @@ lang['en_us']['list'] = {
         'CVE-2019-2725': 'Weblogic wls9_async deSerialization',
         'CVE-2020-14750': 'Weblogic Authentication bypass',
         'CVE-2020-14882': 'Weblogic Unauthorized command execution',
+        'CVE-2021-2109': 'Weblogic LDAP Remote code execution',
     },
     'Webmin': {
         'CVE-2019-15107': 'Webmin Pre-Auth Remote code execution',

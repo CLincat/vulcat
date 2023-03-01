@@ -41,7 +41,7 @@ cve_2021_25646_payloads = [
     },
 ]
 
-def cve_2021_25646_scan(self, clients):
+def cve_2021_25646_scan(clients):
     ''' Apache Druid 包括执行用户提供的JavaScript的功能嵌入在各种类型请求中的代码, 
         此功能在用于高信任度环境中, 默认已被禁用
             但是, 在 Druid 0.20.0及更低版本中, 
@@ -52,7 +52,7 @@ def cve_2021_25646_scan(self, clients):
     sessid = '244d164411e9b78ca7074ec47f2c4f96'
 
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ApacheDruid',
         'vul_type': 'RCE',
         'vul_id': 'CVE-2021-25646',
     }

@@ -23,14 +23,14 @@ cve_2020_3580_payloads = [
     }
 ]
 
-def cve_2020_3580_scan(self, clients):
+def cve_2020_3580_scan(clients):
     ''' Cisco ASA设备/FTD设备 XSS跨站脚本攻击
             反射型
     '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Cisco',
         'vul_type': 'XSS',
         'vul_id': 'CVE-2020-3580',
     }

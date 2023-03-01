@@ -21,7 +21,7 @@ cve_2022_22947_payloads = [
     },
 ]
 
-def cve_2022_22947_scan(self, clients):
+def cve_2022_22947_scan(clients):
     ''' 在 3.1.0 和 3.0.6 之前的版本中使用 Spring Cloud Gateway 的应用程序
             在启用、暴露和不安全的 Gateway Actuator 端点时容易受到代码注入攻击
             远程攻击者可以发出制作的恶意请求, 在远程主机上进行远程执行任意代码
@@ -29,7 +29,7 @@ def cve_2022_22947_scan(self, clients):
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Spring',
         'vul_type': 'RCE',
         'vul_id': 'CVE-2022-22947',
     }

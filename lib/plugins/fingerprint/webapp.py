@@ -392,6 +392,15 @@ class WebappIdentify():
                 ]
             },
             {
+                'name': 'gocd',
+                'path': '',
+                'data': '',
+                'fingerprint': [
+                    r'<meta name="gocd-params".*<title>.* - Go</title>',
+                    r'data-current-gocd-version=".*"'
+                ]
+            },
+            {
                 'name': 'grafana',
                 'path': '',
                 'data': '',
@@ -415,6 +424,19 @@ class WebappIdentify():
                 ]
             },
             {
+                'name': 'jboss',
+                'path': '',
+                'data': '',
+                'fingerprint': [
+                    r'<title>Welcome to JBoss&trade;</title>',
+                    r'<link rel="StyleSheet" href="jboss.css" type="text/css"/>',
+                    r'<a href="http://www\.jboss\.org">.*<img src="logo\.gif" alt="JBoss" id="logo" width="\d{1,5}" height="\d{1,5}" />',
+                    r'<h3>JBoss Online Resources</h3>.*<h3>JBoss Management</h3>',
+                    r'<li><a href="/web-console/">JBoss Web Console</a></li>',
+                    r'<div id="credits">JBoss&trade; Application Server</div>',
+                ]
+            },
+            {
                 'name': 'jenkins',
                 'path': '',
                 'data': '',
@@ -434,6 +456,15 @@ class WebappIdentify():
                 'fingerprint': [
                     r'<hr><a href="https?://eclipse\.org/jetty">Powered by Jetty:// .{0,30}</a><hr/>',
                     r'<i><small>Powered by Jetty://.{0,30}</small></i>'
+                ]
+            },
+            {
+                'name': 'joomla',
+                'path': '',
+                'data': '',
+                'fingerprint': [
+                    r'<meta name="generator" content="Joomla! - Open Source Content Management" />',
+                    r'<script type="application/json" class="joomla-script-options new">{"system',
                 ]
             },
             {

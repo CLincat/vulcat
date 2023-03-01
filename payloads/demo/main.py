@@ -26,13 +26,11 @@ class 1():                                                      # ! 1: 类名(�
 
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.6_scan, clients=clients)         # ! 6: 同上, POC的名称
+            thread(target=6_scan, clients=clients)              # ! 6: 同上, POC的名称
         ]
-
-1.6_scan = 6_scan                                               # ! 1/6: 同上, 类名/POC名称
 
 13 = 1()                                                        # ! 1: 同上, 类名
 

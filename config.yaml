@@ -5,6 +5,11 @@ language: en-us
 ceye-domain: Null
 ceye-token: Null
 
+# dnslog.pw的域名和token
+# 默认带有试用域名和Token, 会过期, 可以替换为自己的
+dnslog-pw-domain: ykwc2z0d.dnslog.pw
+dnslog-pw-token: cda3499b
+
 # 请求Header
   # 运行时指定--user-agent参数, 会覆盖config.yaml的User-Agent
 headers:
@@ -20,11 +25,10 @@ applist: [
   'discuz', 'django', 'drupal', 
   'elasticsearch', 
   'f5bigip', 'fastjson', 'flink', 
-  'gitea', 'gitlab', 
-  # 'grafana', # 由于该框架的POC请求过多, 会影响扫描速度, 所以默认不会启用 (当指纹识别到Grafana框架, 或-a指定时才会进行扫描)
+  'gitea', 'gitlab', 'grafana', 'gocd', 
   'hadoop', 'httpd', 
   'influxdb', 
-  'jenkins', 'jetty', 'jupyter', 
+  'jenkins', 'jetty', 'jupyter', 'joomla', 'jboss', 
   'keycloak', 
   'landray', 
   'minihttpd', 'mongoexpress', 

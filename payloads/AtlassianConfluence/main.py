@@ -38,18 +38,13 @@ class AtlassianConfluence():
 
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2015_8399_scan, clients=clients),
-            thread(target=self.cve_2019_3396_scan, clients=clients),
-            thread(target=self.cve_2021_26084_scan, clients=clients),
-            thread(target=self.cve_2022_26134_scan, clients=clients)
+            thread(target=cve_2015_8399_scan, clients=clients),
+            thread(target=cve_2019_3396_scan, clients=clients),
+            thread(target=cve_2021_26084_scan, clients=clients),
+            thread(target=cve_2022_26134_scan, clients=clients)
         ]
-
-AtlassianConfluence.cve_2015_8399_scan = cve_2015_8399_scan
-AtlassianConfluence.cve_2019_3396_scan = cve_2019_3396_scan
-AtlassianConfluence.cve_2021_26084_scan = cve_2021_26084_scan
-AtlassianConfluence.cve_2022_26134_scan = cve_2022_26134_scan
 
 confluence = AtlassianConfluence()

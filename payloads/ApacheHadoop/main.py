@@ -13,7 +13,7 @@ file:///C:\Windows\System32\drivers\etc\hosts
 
 # from lib.initial.config import config
 from lib.tool.thread import thread
-from payloads.ApacheHadoop.new_unauth import apache_hadoop_unauthorized_scan
+from payloads.ApacheHadoop.new_unauth import unauth_scan
 
 class ApacheHadoop():
     def __init__(self):
@@ -21,12 +21,10 @@ class ApacheHadoop():
 
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.unauth_scan, clients=clients)
+            thread(target=unauth_scan, clients=clients)
         ]
-
-ApacheHadoop.unauth_scan = apache_hadoop_unauthorized_scan
 
 hadoop = ApacheHadoop()

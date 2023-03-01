@@ -27,14 +27,14 @@ cve_2019_3396_payloads = [
     }
 ]
 
-def cve_2019_3396_scan(self, clients):
+def cve_2019_3396_scan(clients):
     ''' Atlassian Confluence 6.14.2 版本之前存在未经授权的目录遍历漏洞, 
         攻击者可以使用 Velocity 模板注入读取任意文件或执行任意命令
     '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'AtlassianConfluence',
         # 'vul_type' = 'FileRead/RCE',
         'vul_type': 'FileRead',
         'vul_id': 'CVE-2019-3396',

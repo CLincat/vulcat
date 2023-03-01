@@ -23,12 +23,12 @@ cve_2020_17526_payloads = [
     }
 ]
 
-def cve_2020_17526_scan(self, clients):
+def cve_2020_17526_scan(clients):
     ''' Airflow 使用默认会话密钥, 这会导致在启用身份验证时冒充任意用户 '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name,
+        'app_name': 'ApacheAirflow',
         'vul_type': 'unAuthorized',
         'vul_id': 'CVE-2020-17526',
     }

@@ -14,14 +14,14 @@ cnnvd_201610_923_payloads = [
     }
 ]
 
-def cnnvd_201610_923_scan(self, clients):
+def cnnvd_201610_923_scan(clients):
     '''  
         用友GRP-u8存在XXE漏洞, 该漏洞源于应用程序解析XML输入时没有禁止外部实体的加载, 导致可加载外部SQL语句
     '''
     client = clients.get('reqClient')
     
     vul_info = {
-        'app_name': self.app_name + 'GRP-U8',
+        'app_name': 'Yonyou-GRP-U8',
         'vul_type': 'SQLinject/RCE',
         'vul_id': 'CNNVD-201610-923',
     }

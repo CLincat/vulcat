@@ -23,12 +23,10 @@ class Influxdb():
 
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.unauth_scan, clients=clients)
+            thread(target=unauth_scan, clients=clients)
         ]
-
-Influxdb.unauth_scan = unauth_scan
 
 influxdb = Influxdb()

@@ -27,14 +27,11 @@ class Webmin():
 
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cve_2019_15107_scan, clients=clients),
-            thread(target=self.cve_2019_15642_scan, clients=clients)
+            thread(target=cve_2019_15107_scan, clients=clients),
+            thread(target=cve_2019_15642_scan, clients=clients)
         ]
-
-Webmin.cve_2019_15107_scan = cve_2019_15107_scan
-Webmin.cve_2019_15642_scan = cve_2019_15642_scan
 
 webmin = Webmin()

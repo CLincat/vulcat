@@ -23,12 +23,10 @@ class Landray():
 
     def addscan(self, clients, vuln=None):
         if vuln:
-            return eval('thread(target=self.{}_scan, clients=clients)'.format(vuln))
+            return eval('thread(target={}_scan, clients=clients)'.format(vuln))
 
         return [
-            thread(target=self.cnvd_2021_28277_scan, clients=clients)
+            thread(target=cnvd_2021_28277_scan, clients=clients)
         ]
-
-Landray.cnvd_2021_28277_scan = cnvd_2021_28277_scan
 
 landray = Landray()

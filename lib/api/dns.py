@@ -37,7 +37,7 @@ class DNS():
 
         # * http://dnslog.pw
         self.pw_random_prefix = random_md5(4)
-        self.dnslog_pw_domain = self.pw_random_prefix + '.' + config.get('dnslog_pw_domain')
+        self.dnslog_pw_domain = '{prefix}.{domain}'.format(prefix=self.pw_random_prefix, domain=config.get('dnslog_pw_domain'))
         self.dnslog_pw_token = config.get('dnslog_pw_token')
         # self.dnslog_pw_result = 'http://dnslog.pw/api/dns/{username}/{prefix}/?token={token}'
         self.dnslog_pw_result = 'http://dnslog.pw/api/group/dns/{username}/{prefix}/?token={token}'

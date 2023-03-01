@@ -61,6 +61,8 @@ def cve_2015_5531_scan(clients):
             allow_redirects=False,
             vul_info=vul_info
         )
+        if res3 is None:
+            continue
 
         if (('114, 111, 111, 116' in res3.text)
             and ('Failed to derive' in res3.text)

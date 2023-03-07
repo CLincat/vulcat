@@ -4,3 +4,4 @@ flask>=2.0.2
 idna==3.3
 pysocks
 urllib3==1.25.11
+pyyaml

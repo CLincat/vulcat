@@ -5,37 +5,37 @@ from thirdparty.colorama import init, Fore, Back, Style
 
 init()                                 # * 初始化, 使Windows机器也能正常显示颜色
 
-def reset(s):
+def reset(s = ''):
     return Fore.RESET + s
 
-def red(s):                            # * 红色
+def red(s = ''):                            # * 红色
     return Fore.RED + s
 
-def green(s):                          # * 绿色
+def green(s = ''):                          # * 绿色
     return Fore.GREEN + s
 
-def cyan(s):                           # * 青蓝
+def cyan(s = ''):                           # * 青蓝
     return Fore.CYAN + s
 
-def black_ex(s):                       # * 黑色(高亮)
+def black_ex(s = ''):                       # * 黑色(高亮)
     return Fore.LIGHTBLACK_EX + s
 
-def red_ex(s):                         # * 红色(高亮)
+def red_ex(s = ''):                         # * 红色(高亮)
     return Fore.LIGHTRED_EX + s
 
-def green_ex(s):                       # * 绿色(高亮)
+def green_ex(s = ''):                       # * 绿色(高亮)
     return Fore.LIGHTGREEN_EX + s
 
-def yellow_ex(s):                      # * 黄色(高亮)
+def yellow_ex(s = ''):                      # * 黄色(高亮)
     return Fore.LIGHTYELLOW_EX + s
 
-def blue_ex(s):                        # * 蓝色(高亮)
+def blue_ex(s = ''):                        # * 蓝色(高亮)
     return Fore.LIGHTBLUE_EX + s
 
-def magenta_ex(s):                     # * 紫色(高亮)
+def magenta_ex(s = ''):                     # * 紫色(高亮)
     return Fore.LIGHTMAGENTA_EX + s
 
-def cyan_ex(s):                        # * 青蓝(高亮)
+def cyan_ex(s = ''):                        # * 青蓝(高亮)
     return Fore.LIGHTCYAN_EX + s
 
 

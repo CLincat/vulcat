@@ -93,9 +93,9 @@ class WebappIdentify():
                 return dedup_app_list
 
             logger.info('yellow_ex', self.lang['core']['web_finger']['NotFind'])
-            return None
+            return []
         except:
-            return None
+            return []
         
     def __init__(self):
         self.delay = config.get('delay')
@@ -103,6 +103,20 @@ class WebappIdentify():
 
         # * webapp指纹库
         self.webapp_fingerprint = [
+            {
+                'name': '74cms',
+                'path': '',
+                'data': '',
+                'fingerprint': [
+                    r'<title>骑士PHP高端人才系统(www\.74cms\.com)</title>',
+                    r'<meta name="keywords" content="骑士人才系统，74cms，骑士cms，人才网站源码，php人才网程序"/>',
+                    r'<meta name="description" content="骑士CMS是基于PHP\+MYSQL的免费网站管理系统，提供完善的人才招聘网站建设方案"/>',
+                    r'<meta name="author" content="骑士CMS"/>',
+                    r'<meta name="copyright" content="74cms\.com"/>',
+                    r'欢迎登录骑士人才系统！请.{10,70}登录.{10,70}或.{10,70}免费注册',
+                    r'<div class="user_foot font_gray9" id="footer">Copyright © 20\d{2} 74cms\.com All Right Reserved </div>',
+                ]
+            },
             {
                 'name': 'nacos',
                 'path': 'nacos/',
@@ -190,6 +204,15 @@ class WebappIdentify():
                     r'Apache2 server after installation on Debian systems.*it means that the Apache HTTP server installed',
                     r'The configuration layout for an Apache2 web server installation on Debian systems is as follows:',
                     r'Apache2 package with Debian\. However, check.*existing bug reports'
+                ]
+            },
+            {
+                'name': 'httpd',
+                'path': 'qwe',
+                'data': '',
+                'fingerprint': [
+                    r'<title>404 Not Found</title>.*<h1>Not Found</h1>.*<p>The requested URL /qwe was not found on this server\.</p>',
+                    r'<address>Apache/.{1,30} Server at .{1,30} Port \d{0,6}</address>',
                 ]
             },
             {
@@ -429,11 +452,20 @@ class WebappIdentify():
                 'data': '',
                 'fingerprint': [
                     r'<title>Welcome to JBoss&trade;</title>',
+                    r'<title>Welcome to JBoss AS</title>',
                     r'<link rel="StyleSheet" href="jboss.css" type="text/css"/>',
                     r'<a href="http://www\.jboss\.org">.*<img src="logo\.gif" alt="JBoss" id="logo" width="\d{1,5}" height="\d{1,5}" />',
+                    r'<a href="http://www\.jboss\.org">.*<img src="images/logo\.gif" alt="JBoss" id="logo" width="\d{1,5}" height="\d{1,5}" />',
                     r'<h3>JBoss Online Resources</h3>.*<h3>JBoss Management</h3>',
                     r'<li><a href="/web-console/">JBoss Web Console</a></li>',
                     r'<div id="credits">JBoss&trade; Application Server</div>',
+                    r'<li><a href="/jbossws/">JBoss Web Services Console</a></li>',
+                    r'<a href="http://www\.jboss\.org/jbossas">JBoss Application Server</a>',
+                    r'<li><a href="http://www\.jboss\.org/jbossas/docs">JBoss AS Documentation</a></li>',
+                    r'<li><a href="http://community\.jboss\.org/en/wiki">JBoss Wiki</a></li>',
+                    r'<li><a href="http://jira\.jboss\.org/jira/browse/JBAS">JBoss AS JIRA</a></li>',
+                    r'<li><a href="http://community\.jboss\.org/en/jbossas">JBoss Forums</a></li>',
+                    r'<li><a href="https://lists\.jboss\.org/">JBoss Mailing Lists</a></li>',
                 ]
             },
             {
@@ -634,7 +666,15 @@ class WebappIdentify():
                     r'十年磨一剑 - 为API开发设计的高性能框架',
                     r':\)',
                     r'ThinkPHP.*V.*',
-                    r'\d{0,3}载初心不改 - 你值得信赖的PHP框架'
+                    r'\d{0,3}载初心不改 - 你值得信赖的PHP框架',
+                    r'</sup> { Fast & Simple OOP PHP Framework } -- \[ WE CAN DO IT JUST THINK \]</p>',
+                    r'/app/ThinkPHP/Library/Think/App\.class\.php\(',
+                    r'/app/ThinkPHP/ThinkPHP\.php\(',
+                    r'Think\\App::exec\(\)',
+                    r'Think\\App::run\(\)',
+                    r'Think\\Think::start\(\)',
+                    r"require\('/app/ThinkPHP/T\.\.\.'\)",
+                    r'<p><a title="官方网站" href="http://www\.thinkphp\.cn">ThinkPHP</a><sup>',
                 ]
             },
             {
@@ -646,7 +686,15 @@ class WebappIdentify():
                     r'十年磨一剑 - 为API开发设计的高性能框架',
                     r':\)',
                     r'ThinkPHP.*V.*',
-                    r'\d{0,3}载初心不改 - 你值得信赖的PHP框架'
+                    r'\d{0,3}载初心不改 - 你值得信赖的PHP框架',
+                    r'</sup> { Fast & Simple OOP PHP Framework } -- \[ WE CAN DO IT JUST THINK \]</p>',
+                    r'/app/ThinkPHP/Library/Think/App\.class\.php\(',
+                    r'/app/ThinkPHP/ThinkPHP\.php\(',
+                    r'Think\\App::exec\(\)',
+                    r'Think\\App::run\(\)',
+                    r'Think\\Think::start\(\)',
+                    r"require\('/app/ThinkPHP/T\.\.\.'\)",
+                    r'<p><a title="官方网站" href="http://www\.thinkphp\.cn">ThinkPHP</a><sup>',
                 ]
             },
                         {
@@ -669,6 +717,18 @@ class WebappIdentify():
                     r'arr\.push(.*欢迎使用ueditor\'.*)',
                     r'<button onclick="getAllHtml()">获得整个html的内容</button>',
                     r'<button onclick=" UE\.getEditor(\'editor\')\.setHide()">隐藏编辑器</button>'
+                ]
+            },
+            {
+                'name': 'vmware',
+                'path': '',
+                'data': '',
+                'fingerprint': [
+                    r'<meta name="description" content="VMware vSphere is virtual infrastructure software for partitioning, consolidating and managing systems in mission-critical environments',
+                    r'ESX Server provides a highly scalable platform with advanced resource management capabilities, which can be managed by vSphere',
+                    r'<div id="header"><img src="\./header-logo\.png" width="586" height="42" alt="VMware vSphere 6" /></div>',
+                    r'<p><a href="http://www\.vmware\.com/info\?id=1320"><script type="text/javascript">document\.write(ID_DownloadDoc);</script></a></p>',
+                    r'<p><script type="text/javascript">document\.write(\'<a href="http://www\.vmware\.com/info\?id=928">\'\+ ID_DownloadSDK \+\'</a>\');</script></p>',
                 ]
             },
             {

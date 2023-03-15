@@ -8,65 +8,14 @@ from lib.tool.logger import logger
 from lib.tool import check
 from lib.tool import timed
 from lib.report import output
+from lib.tool.thread import thread
 
 from lib.plugins.fingerprint.waf import waf
 from lib.plugins.fingerprint.webapp import webapp
 from lib.plugins.shell import shell
 
-from payloads.AlibabaDruid.main import alidruid
-from payloads.AlibabaNacos.main import nacos
-from payloads.ApacheAirflow.main import airflow
-from payloads.ApacheAPISIX.main import apisix
-from payloads.ApacheDruid.main import apachedruid
-from payloads.ApacheFlink.main import flink
-from payloads.ApacheHadoop.main import hadoop
-from payloads.ApacheHttpd.main import httpd
-# from payloads.ApacheKafka.main import kafka       # 2023/02/22 未测试准确性
-from payloads.ApacheSkyWalking.main import skywalking
-from payloads.ApacheSolr.main import solr
-from payloads.ApacheTomcat.main import tomcat
-from payloads.ApacheUnomi.main import apacheunomi
-# from payloads.ApacheStruts2 import struts2        # 2022/11/04被移除
-from payloads.AppWeb.main import appweb
-from payloads.AtlassianConfluence.main import confluence
-from payloads.Cisco.main import cisco
-from payloads.Discuz.main import discuz
-from payloads.Django.main import django
-from payloads.Drupal.main import drupal
-from payloads.ElasticSearch.main import elasticsearch
-from payloads.F5BIGIP.main import f5bigip
-from payloads.Fastjson.main import fastjson
-from payloads.Gitea.main import gitea
-from payloads.Gitlab.main import gitlab
-from payloads.GoCD.main import gocd
-from payloads.Grafana.main import grafana
-from payloads.Influxdb.main import influxdb
-from payloads.JBoss.main import jboss
-from payloads.Jenkins.main import jenkins
-from payloads.Jetty.main import jetty
-from payloads.Joomla.main import joomla
-from payloads.Jupyter.main import jupyter
-from payloads.Keycloak.main import keycloak
-# from payloads.Kindeditor.main import kindeditor        # 还未测试poc准确性
-from payloads.Landray.main import landray
-from payloads.MiniHttpd.main import minihttpd
-from payloads.MongoExpress.main import mongoexpress
-from payloads.Nexus.main import nexus
-from payloads.Nodejs.main import nodejs
-from payloads.NodeRED.main import nodered
-from payloads.phpMyadmin.main import phpmyadmin
-from payloads.phpUint.main import phpunit
-from payloads.RubyOnRails.main import rails
-from payloads.ShowDoc.main import showdoc
-from payloads.Spring.main import spring
-from payloads.Supervisor.main import supervisor
-from payloads.ThinkPHP.main import thinkphp
-from payloads.Ueditor.main import ueditor
-from payloads.uWSGIPHP.main import uwsgiphp
-from payloads.Weblogic.main import weblogic
-from payloads.Webmin.main import webmin
-from payloads.Yonyou.main import yonyou
-from payloads.Zabbix.main import zabbix
+from PluginManager import PluginManager
+from PluginManager import __ALLMODEL__
 
 from thirdparty.tqdm import tqdm
 from queue import Queue
@@ -81,9 +30,7 @@ class coreScan():
         self.thread = config.get('thread')                                                          # * 线程数
         self.delay = config.get('delay')                                                            # * 延时
         self.url_list = config.get('url_list')                                                      # * url列表
-        self.default_apps = config.get('app_list')                                                      # * 框架列表
-        self.application = config.get('application')
-        self.vuln = config.get('vuln')                                                              # * 是否扫描单个漏洞
+        self.vulns = config.get('vulns')                                                              # * 是否扫描单个漏洞
         self.batch = config.get('batch')                                                            # * 是否启用默认选项
         self.no_waf = config.get('no_waf')                                                          # * 是否启用WAF指纹识别
         self.no_poc = config.get('no_poc')                                                          # * 是否启用WAF指纹识别
@@ -109,7 +56,7 @@ class coreScan():
                 logger.info('red_ex', self.lang['core']['start']['url_error'].format(u))
                 continue
 
-            if self.shell and (not self.vuln):
+            if self.shell and (not self.vulns):
                 logger.info('yellow_ex', self.lang['core']['start']['shell'])                          # ? 提示, 使用shell之前 请先使用-a和-v参数指定一个漏洞
                 break
 
@@ -144,12 +91,10 @@ class coreScan():
                         continue
 
                 # * --------------------框架指纹识别--------------------
-                self.apps = []                  # * 要扫描的框架列表
-                self.identify_apps = []         # * 成功识别出的框架列表
+                self.identify_apps = []
                 
-                if ((self.application == 'auto') and (not self.vuln)):
+                if ((not self.vulns)):
                     webapp.stop = self.stop                                                         # * 添加暂停机制
-                    
                     self.identify_apps = webapp.identify(self.client)                               # * 传递客户端client进行框架指纹识别
             else:
                 logger.info('red', self.lang['core']['start']['unable'] + u)                        # ? 提示, 无法访问当前url
@@ -172,36 +117,20 @@ class coreScan():
                 如果指纹识别列表有内容, 则扫描识别出的框架
                 否则使用默认的框架列表
         '''
-        try:
-            # * 生成扫描的框架列表
-            if self.identify_apps:
-                for app in self.identify_apps:
-                    self.apps.append(eval(app.lower()))                                             # todo eval将 框架字符串 转为 import导入的框架对象
-            else:
-                for app in self.default_apps:
-                    self.apps.append(eval(app.lower()))
+        # * 加载Payloads
+        logger.info('yellow_ex', self.lang['core']['start']['loadPayload'])
         
-            # * -v/--vuln 参数, 扫描单个漏洞
-            if self.vuln:
-                if len(self.apps) == 1:
-                    app = self.apps[0]                                                              # * 获取第一个框架
-                    poc = app.addscan(self.clients, self.vuln)                                      # * 获取POC线程
-                    self.queue.put(poc)                                                             # * 加入线程
-                    return
-                else:
-                    logger.info('red_ex', self.lang['core']['addpoc']['vuln_error_1'])              # ? 日志, 使用-v/--vuln参数时出现错误
-                    logger.info('reset', '', notime=True, print_end='')                             # * 重置文字颜色
-                    _exit(0)
-
-            # * 扫描多个漏洞
-            for app in self.apps:                                                                   # * 根据框架列表self.apps, 获取相应poc
-                pocs = app.addscan(self.clients)
-                for poc in pocs:                                                                    # * 将每个poc加入线程池
-                    self.queue.put(poc)
-        except NameError:
-            logger.info('red_ex', self.lang['core']['addpoc']['notfound'] + app)                    # ? 出错, 未找到该框架
-            logger.info('reset', '', notime=True, print_end='')                                     # * 重置文字颜色
-            _exit(0)
+        if (self.vulns) and ('all' not in self.vulns):
+            PluginManager.LoadAllPlugin(self.vulns)
+        else:
+            PluginManager.LoadAllPlugin(self.identify_apps)
+        
+        # * 为每个Payload添加线程
+        try:
+            for SingleModel in __ALLMODEL__:
+                plugins = SingleModel.GetPluginObject()
+                for item in plugins:
+                    self.queue.put(thread(target=item.Start, clients=self.clients))
         except:
             logger.info('red_ex', self.lang['core']['addpoc']['Error-1'])                           # ? 出错, 添加poc时出现错误
             logger.info('reset', '', notime=True, print_end='')                                     # * 重置文字颜色
@@ -214,21 +143,21 @@ class coreScan():
         
         logger.info('yellow_ex', '', notime=True, print_end='')                                         # * 重置文字颜色
         for q in tqdm(range(queue_thread), ncols=50):                                               # * 单个url的扫描进度条
-            try:
-                for i in range(self.thread):                                                        # * 根据线程数, 每次运行相应次数的poc
+            for i in range(self.thread):                                                        # * 根据线程数, 每次运行相应次数的poc
+                try:
                     if not self.queue.empty():                                                      # * 如果线程池不为空, 开始扫描
                         t = self.queue.get()                                                        # * 从线程池取出一个poc
                         t.start()                                                                   # * 运行一个poc
                         self.thread_list.append(t)                                                  # * 往线程列表添加一个已经运行的poc
                     else:                                                                       
                         break                                                                       # * 如果线程池为空, 结束扫描
-                sleep(self.delay)                                                              # * 扫描时间间隔
-            except KeyboardInterrupt:
-                if self.stop():
-                    continue
-                else:
-                    self.queue.queue.clear()                                                        # * 清空当前url的扫描队列
-                    break                                                                           # * 停止当前url的扫描, 并扫描下一个url
+                    sleep(self.delay)                                                              # * 扫描时间间隔
+                except KeyboardInterrupt:
+                    if self.stop():
+                        continue
+                    else:
+                        self.queue.queue.clear()                                                        # * 清空当前url的扫描队列
+                        break                                                                           # * 停止当前url的扫描, 并扫描下一个url
 
     def stop(self):
         ''' # ! 功能还没完善
@@ -268,8 +197,12 @@ class coreScan():
         ''' 结束扫描, 等待所有线程运行完毕, 生成漏洞结果并输出/保存'''
         logger.info('cyan_ex', self.lang['core']['end']['wait'])                                    # ? 日志, 等待所有线程运行完毕, 时间长短取决于timeout参数
         for t in self.thread_list:                                                                  # * 遍历线程列表
-            t.join()                                                                                # * 阻塞未完成的子线程, 等待主线程运行完毕
-            self.results.append(t.get_result())                                                     # * 添加扫描结果
+            try:
+                t.join()                                                                                # * 阻塞未完成的子线程, 等待主线程运行完毕
+                self.results.append(t.get_result())                                                     # * 添加扫描结果
+            except KeyboardInterrupt:
+                continue
+        
         output.output_info(self.results, self.lang)                                                 # * output处理扫描结果, 在命令行输出结果信息
 
         # * 保存扫描结果, .html / .json / .txt
@@ -280,7 +213,7 @@ class coreScan():
         elif (self.output_file == 'txt'):
             output.output_text(self.results, self.lang)
 
-        if self.shell and self.vuln:                                                                # * 是否使用Shell
+        if self.shell and self.vulns:                                                                # * 是否使用Shell
             self.start_shell()
 
         self.endTime = timed.getTime()                                                              # * 结束时间

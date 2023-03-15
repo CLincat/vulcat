@@ -14,12 +14,13 @@ def parse():
 
     parser = OptionParser('\n' + lang['disclaimer'] + '''Usage: python3 vulcat.py <options>
 Examples: 
-python3 vulcat.py -u https://www.example.com/
-python3 vulcat.py -u https://www.example.com/ -a thinkphp --log 3
-python3 vulcat.py -u https://www.example.com/ -a tomcat -v CVE-2017-12615
-python3 vulcat.py -f url.txt -t 10 -o html
+python3 vulcat.py -h
 python3 vulcat.py --list
-''', version='vulcat.py-1.2.0\n')
+python3 vulcat.py -u https://www.example.com/
+python3 vulcat.py -f url.txt -o html
+python3 vulcat.py -u https://www.example.com/ -v httpd --log 3
+python3 vulcat.py -u https://www.example.com/ -v cnvd-2018-24942 --shell
+''', version='vulcat.py-v2.0.0\n')
     # * 指定目标
     target = parser.add_option_group(lang['target_help']['title'], lang['target_help']['name'])
     target.add_option('-u', '--url', type='string', dest='url', default=None, help=lang['target_help']['url'])
@@ -29,7 +30,7 @@ python3 vulcat.py --list
     # * 可选参数
     optional = parser.add_option_group(lang['optional_help']['title'], lang['optional_help']['name'])
     optional.add_option('-t', '--thread', type='int', dest='thread', default=3, help=lang['optional_help']['thread'])
-    optional.add_option('--delay', type='float', dest='delay', default=1, help=lang['optional_help']['delay'])
+    optional.add_option('--delay', type='float', dest='delay', default=0.7, help=lang['optional_help']['delay'])
     optional.add_option('--timeout', type='float', dest='timeout', default=10, help=lang['optional_help']['timeout'])
     optional.add_option('--user-agent', type='string', dest='ua', default=None, help=lang['optional_help']['user_agent'])
     optional.add_option('--cookie', type='string', dest='cookie', default=None, help=lang['optional_help']['cookie'])
@@ -48,7 +49,7 @@ python3 vulcat.py --list
 
     # * 指定目标类型
     application = parser.add_option_group(lang['application_help']['title'], lang['application_help']['name'])
-    application.add_option('-a', '--application', type='string', dest='application', default='auto', help=lang['application_help']['application'])
+    # application.add_option('-a', '--application', type='string', dest='application', default='auto', help=lang['application_help']['application'])
     application.add_option('-v', '--vuln', type='string', dest='vuln', default=None, help=lang['application_help']['vuln'])
     application.add_option('--shell', dest='shell', action='store_true', help=lang['application_help']['shell'])
     application.add_option('--type', type='string', dest='vulnType', default=None, help=lang['application_help']['type'])
@@ -72,6 +73,6 @@ python3 vulcat.py --list
     lists = parser.add_option_group(lang['lists_help']['title'], lang['lists_help']['name'])
     lists.add_option('--list', dest='list', help=lang['lists_help']['list'], action='store_true')
 
-    app_list = parser.add_option_group(lang['app_list_help']['title'], lang['app_list_help']['name'])
+    # app_list = parser.add_option_group(lang['app_list_help']['title'], lang['app_list_help']['name'])
 
     return parser.parse_args()

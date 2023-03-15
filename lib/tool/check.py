@@ -4,10 +4,11 @@
 '''
     检查
         无法连接至目标url
-        连接目标url超时
+            连接目标url超时
         检查poc误报
             例如直接输出payload在页面中的情况
             参考: https://github.com/zhzyker/vulmap/blob/main/core/verify.py
+        检查文件读取漏洞
 '''
 
 from lib.initial.config import config
@@ -46,26 +47,29 @@ def check_res(resText, md, command='echo'):
 
 def check_res_fileread(resText, resHeaders=None):
     ''' 检查回显, 判断是否存在 FileRead(任意文件读取) 漏洞
-        :param resText: 响应文本Response.text
-        :param resHeaders(可选参数): 响应头, 有时候回显可能在 响应Headers 里 而不在 响应Body 里
-        
+        :param resText: 要检测的响应内容
+        :param resHeaders(可选参数): 要检测的响应头
+
         * /etc/passwd
             r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root'
         * C:/Windows/System32/drivers/etc/hosts
             'Microsoft Corp' and 'Microsoft TCP/IP for Windows'
+        * C:/Windows/win.ini
+            '; for 16-bit app support
     '''
 
-    if (
+    if ( # * 检查响应Body
         re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', resText, re.I|re.M|re.S)
-        or (('Microsoft Corp' in resText) 
-            and ('Microsoft TCP/IP for Windows' in resText))
+        or (('Microsoft Corp' in resText) and ('Microsoft TCP/IP for Windows' in resText))
+        or ('; for 16-bit app support' in resText)
     ):
-        return True         # * 文件回显在 响应Body里, 存在FileRead漏洞
-    elif (
+        return True
+
+    elif ( # * 检查响应Headers
         re.search(r'root:(x{1}|.*):\d{1,7}:\d{1,7}:root', str(resHeaders), re.I|re.M|re.S)
-        or (('Microsoft Corp' in str(resHeaders)) 
-            and ('Microsoft TCP/IP for Windows' in str(resHeaders)))
+        or (('Microsoft Corp' in str(resHeaders)) and ('Microsoft TCP/IP for Windows' in str(resHeaders)))
+        or ('; for 16-bit app support' in str(resHeaders))
     ):
-        return True         # * 文件回显在 响应Headers里, 存在FileRead漏洞
-    
+        return True
+
     return False            # * 没有找到文件回显, 不存在FileRead漏洞

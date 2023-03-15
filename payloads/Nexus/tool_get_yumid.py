@@ -12,7 +12,7 @@ get_yumID_payloads = [
     {'path': 'capabilities/'},
 ]
 
-def get_yumID(self, client, vul_info):
+def get_yumID(client, vul_info):
     ''' 获取Nexus Yum: Configuration的id '''
     headers = {
         'Content-Type': 'application/json',

@@ -13,6 +13,7 @@ from lib.initial.config import config
 from lib.api.dnslog_cn import *
 from lib.api.dnslog_pw import *
 from lib.api.ceye_io import *
+from time import sleep
 
 class DNS():
     def __init__(self):
@@ -56,8 +57,10 @@ class DNS():
         except:
             return 'dnslogGetError'
 
-    def result(self, md, sessid):
+    def result(self, md, sessid, waitTime=5):
         try:
+            sleep(waitTime)
+            
             if (('ceye' in self.dns_platform) and (self.ceye_domain)):
                 return self.get_ceye_result(md)
             elif (('dnslog-pw' in self.dns_platform) and (self.dnslog_pw_domain)):

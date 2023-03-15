@@ -3,7 +3,7 @@
 
 import re
 
-def get_urlconf(self, client, vul_info):
+def get_urlconf(client, vul_info):
     ''' 获取Django定义的URL路径 '''
     path = 'abcdefg'
     
@@ -38,5 +38,5 @@ def get_urlconf(self, client, vul_info):
                 urlConfList[i] = urlPath.replace(delete_str, '').strip('/')
             else:
                 urlConfList[i] = urlPath.strip('/')
-    
+
     return urlConfList

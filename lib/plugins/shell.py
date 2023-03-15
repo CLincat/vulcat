@@ -57,6 +57,10 @@ class Shell():
                 'System32(\\|%5c|%5C)?'\
                 'drivers(\\|%5c|%5C)?'\
                     'etc(\\|%5c|%5C)?hosts',
+            r'C:(/|%2f|%2F)?'\
+                    'Windows(/|%2f|%2F)?win.ini',
+            r'C:(\\|%5c|%5C)?'\
+                    'Windows(\\|%5c|%5C)?win.ini',
         ]
         
         self.ssrf_old_payload_re_list = [

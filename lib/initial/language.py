@@ -77,17 +77,18 @@ lang = {
             'name': 'Vulnerability list',
             'list': 'View all payload'
         },
-        'app_list_help': {
-            'title': 'Supported target types(Case insensitive)',
-            'name': 'airflow, AliDruid, apachedruid, apacheunomi, apisix, appweb, cisco, confluence, discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab, grafana, gocd, hadoop, httpd, influxdb, jenkins, jetty, jupyter, joomla, jboss, keycloak, landray, minihttpd, mongoexpress, nacos, nexus, nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, skywalking, solr, spring, supervisor, thinkphp, tomcat, ueditor, uwsgiphp, weblogic, webmin, yonyou, zabbix'
-        },
+        # 'app_list_help': {
+        #     'title': 'Supported target types(Case insensitive)',
+        #     'name': 'airflow, AliDruid, apachedruid, apacheunomi, apisix, appweb, cisco, confluence, discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab, grafana, gocd, hadoop, httpd, influxdb, jenkins, jetty, jupyter, joomla, jboss, keycloak, landray, minihttpd, mongoexpress, nacos, nexus, nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, skywalking, solr, spring, supervisor, thinkphp, tomcat, ueditor, uwsgiphp, weblogic, webmin, yonyou, zabbix'
+        # },
         'core': {
             'start': {
                 'start': '[INFO] Start scanning target ',
                 'unable': '[WARN] Unable to connect to ',
                 'url_error': '[WARN] The destination {} is incorrect and needs to start with http:// or https://',
                 'no_poc': '[No-POC] Disable Vulnerability scanning',
-                'shell': 'When using --shell, specify a vulnerability with -a and -v first(e.g. -a httpd -v cve-2021-41773 -x)'
+                'shell': '[WARN] When using --shell, specify a vulnerability with -v/--vuln first(e.g. -v cve-2021-41773 --shell)',
+                'loadPayload': '[INFO] Loading payloads...',
             },
             'waf_finger': {
                 'start': '[INFO] The WAF detection for the current URL starts',
@@ -205,17 +206,18 @@ lang = {
             'name': '漏洞列表',
             'list': '查看所有Payload'
         },
-        'app_list_help': {
-            'title': '支持的目标类型(-a参数, 不区分大小写)',
-            'name': 'airflow, AliDruid, apachedruid, apacheunomi, apisix, appweb, cisco, confluence, discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab, grafana, gocd, hadoop, httpd, influxdb, jenkins, jetty, jupyter, joomla, jboss, keycloak, landray, minihttpd, mongoexpress, nacos, nexus, nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, skywalking, solr, spring, supervisor, thinkphp, tomcat, ueditor, uwsgiphp, weblogic, webmin, yonyou, zabbix'
-        },
+        # 'app_list_help': {
+        #     'title': '支持的目标类型(-a参数, 不区分大小写)',
+        #     'name': 'airflow, AliDruid, apachedruid, apacheunomi, apisix, appweb, cisco, confluence, discuz, django, drupal, elasticsearch, f5bigip, fastjson, flink, gitea, gitlab, grafana, gocd, hadoop, httpd, influxdb, jenkins, jetty, jupyter, joomla, jboss, keycloak, landray, minihttpd, mongoexpress, nacos, nexus, nodejs, nodered, phpmyadmin, phpunit, rails, showdoc, skywalking, solr, spring, supervisor, thinkphp, tomcat, ueditor, uwsgiphp, weblogic, webmin, yonyou, zabbix'
+        # },
         'core': {
             'start': {
                 'start': '[INFO] 开始扫描目标 ',
                 'unable': '[WARN] 无法连接到 ',
                 'url_error': '[WARN] 目标{}好像不对哦, 需要以http://或https://开头',
                 'no_poc': '[No-POC] 不进行漏洞扫描',
-                'shell': '使用--shell时请先使用-a和-v指定一个漏洞, 例如-a httpd -v cve-2021-41773 --shell'
+                'shell': '[WARN] 使用--shell时请先使用-v/--vuln指定一个漏洞, 例如-v cve-2021-41773 --shell',
+                'loadPayload': '[INFO] 正在加载Payloads...',
             },
             'waf_finger': {
                 'start': '[INFO] 对当前url进行WAF检测, 请稍等...',
@@ -279,6 +281,10 @@ lang['zh_cn']['disclaimer'] = '''使用本工具, 代表您同意"vulcat/README.
 
 # * --list的中文
 lang['zh_cn']['list'] = {
+    '74cms': {
+        'v5.0.1-sqlinject': '74cms v5.0.1 前台AjaxPersonalController.class.php存在SQL注入',
+        'v6.0.4-xss': '74cms v6.0.4 帮助中心搜索框XSS',
+    },
     'Alibaba Druid': '阿里巴巴Druid未授权访问',
     'Alibaba Nacos': {'CVE-2021-29441': '阿里巴巴Nacos未授权访问'},
     'Apache Airflow': {'CVE-2020-17526': 'Airflow身份验证绕过'},
@@ -332,7 +338,7 @@ lang['zh_cn']['list'] = {
     },
     'F5 BIG-IP': {
         'CVE-2020-5902': 'BIG-IP远程代码执行',
-        'CVE-2022-1388': 'BIG-IP身份认证绕过',
+        'CVE-2022-1388': 'BIG-IP身份认证绕过RCE',
     },
     'Fastjson': {
         'CNVD-2017-02833': 'Fastjson <= 1.2.24 反序列化',
@@ -413,6 +419,10 @@ lang['zh_cn']['list'] = {
     },
     'Ueditor': 'Ueditor编辑器SSRF',
     'uWSGI-PHP': 'uWSGI-PHP目录穿越',
+    'VMware': {
+        '2020-10-fileread': '2020年 VMware vCenter 6.5任意文件读取',
+        'CVE-2021-21972': 'VMware vSphere Client 远程代码执行',
+    },
     'Oracle Weblogic': {
         'CVE-2014-4210': 'Weblogic 服务端请求伪造',
         'CVE-2017-10271': 'Weblogic XMLDecoder反序列化',
@@ -441,6 +451,10 @@ lang['zh_cn']['list'] = {
 
 # * --list的英文
 lang['en_us']['list'] = {
+    '74cms': {
+        'v5.0.1-sqlinject': 'v5.0.1 AjaxPersonalController.class.php SQLinject',
+        'v6.0.4-xss': 'v6.0.4 help center search box-XSS',
+    },
     'Alibaba Druid': 'Alibaba Druid unAuthorized',
     'Alibaba Nacos': {'CVE-2021-29441': 'Alibaba Nacos unAuthorized'},
     'Apache Airflow': {'CVE-2020-17526': 'Apache Airflow Authentication bypass'},
@@ -494,7 +508,7 @@ lang['en_us']['list'] = {
     },
     'F5 BIG-IP': {
         'CVE-2020-5902': 'BIG-IP Remote code execution',
-        'CVE-2022-1388': 'BIG-IP Authentication bypass',
+        'CVE-2022-1388': 'BIG-IP Authentication bypass RCE',
     },
     'Fastjson': {
         'CNVD-2017-02833': 'Fastjson <= 1.2.24 deSerialization',
@@ -575,6 +589,10 @@ lang['en_us']['list'] = {
     },
     'Ueditor': 'Ueditor SSRF',
     'uWSGI-PHP': 'uWSGI-PHP Directory traversal',
+    'VMware': {
+        '2020-10-fileread': 'In 2020 VMware vCenter 6.5 Any file read',
+        'CVE-2021-21972': 'VMware vSphere Client RCE',
+    },
     'Oracle Weblogic': {
         'CVE-2014-4210': 'Weblogic SSRF',
         'CVE-2017-10271': 'Weblogic XMLDecoder deSerialization',
@@ -605,7 +623,7 @@ lang['zh_cn']['shell'] = {
     'identify': '[+] 识别为"{}"漏洞, 进入Shell交互模式:',
     'not_shell': '[-] 没有识别到漏洞类型, 或该漏洞类型不支持Shell',
     'not_request': '[-] POC结果没有返回Request(HTTP请求数据包), 无法使用Shell',
-    'input_command': '根据漏洞类型 输入相应的内容(例如"whoami"或"/etc/passwd"): ',
+    'input_command': '根据漏洞类型 输入相应的Payload(例如whoami): ',
     'not_command': '请输入命令 (可以输入“exit”退出)',
     'faild_command': '[Faild] 使用该命令时发生错误',
     'not_search_command': '[INFO] 替换新payload失败, 没有在旧的HTTP数据包中检测到旧的payload',
@@ -620,7 +638,7 @@ lang['en_us']['shell'] = {
     'identify': '[+] Identified as "{}" vulnerability, Enter the Shell interactive mode:',
     'not_shell': '[-] The vulnerability type is not identified, or Shell is not supported by the vulnerability type',
     'not_request': '[-] The poc result did not return the Request(HTTP Request), Unable to use Shell',
-    'input_command': 'Enter the value according to the vulnerability type(e.g. "whoami"or"/etc/passwd"): ',
+    'input_command': 'Enter the value according to the vulnerability type(e.g. whoami): ',
     'not_command': 'Please enter the command(You can enter "exit" to exit)',
     'faild_command': '[Faild] An error occurred while using the command',
     'not_search_command': '[INFO] Description Failed to replace the new payload, No old payload was detected in the old HTTP packet',

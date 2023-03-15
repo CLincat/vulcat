@@ -5,6 +5,7 @@
     参数配置
 '''
 
+from PluginManager import PluginManager
 from lib.initial.language import language
 from lib.initial.load import load_yaml
 from thirdparty.requests import packages
@@ -28,6 +29,9 @@ class Config():
         args.dnslog_pw_token = config_yaml.get('dnslog-pw-token')       # * http://dnslog.pw/ 平台的token
 
         args.lang = language()                                          # * 语言
+
+        payloads_path = config_yaml.get('payloads-path')                # * 攻击载荷路径
+        PluginManager.SetPluginPath(payloads_path)                      # * 设置载荷路径
 
         args.url_list = []                                              # * url列表
         if args.url:
@@ -107,20 +111,15 @@ class Config():
 
         if args.vuln:
             args.vuln = args.vuln.lower()
-            args.vuln = args.vuln.replace('-', '_')
-            args.vuln = args.vuln.replace('.', '_')
-
-        app_list = config_yaml.get('applist')
-
-        if args.application in ['auto', 'all']:                         # * -a参数
-            args.app_list = app_list
-        else:
-            args.app_list = args.application.split(',')
+            args.vuln = args.vuln.replace('_', '-')
+            # args.vuln = args.vuln.replace('.', '')
+            args.vulns = args.vuln.split(',')
 
         self.global_args = vars(args)                                   # * 转为字典
 
-    def get(self, arg):
-        return self.global_args[arg]
+    def get(self, arg, default=''):
+        return self.global_args.get(arg, default)
+        # return self.global_args[arg]
 
     def set(self, arg, value):
         self.global_args[arg] = value

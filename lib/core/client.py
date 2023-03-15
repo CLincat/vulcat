@@ -57,8 +57,8 @@ class RequestsClient():
         self.timeout = timeout
         self.headers = headers
         self.proxies = proxies
-        self.domain = logger.get_domain(base_url)
-        self.protocol_domain = logger.get_domain(base_url, protocol=True)
+        self.domain = logger.get_domain(base_url)                           # * 域名
+        self.protocol_domain = logger.get_domain(base_url, protocol=True)   # * 协议://域名
         
         self.delay = config.get('delay')
 
@@ -111,6 +111,8 @@ class RequestsClient():
                 logger.logging(vul_info, 'Error')
                 self.print_error_info(errors.get('Error'))
                 return None
+        except KeyboardInterrupt:
+            raise KeyboardInterrupt
         except:
             logger.logging('Error', 'Error')
             return None

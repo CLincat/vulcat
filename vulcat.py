@@ -20,10 +20,11 @@ try:
     else:
         print('''Please specify parameters, example:
     python3 vulcat.py -h
-    python3 vulcat.py -u http://www.example.com/
-    python3 vulcat.py -f url.txt
     python3 vulcat.py --list
-    python3 vulcat.py --version
+    python3 vulcat.py -u https://www.example.com/
+    python3 vulcat.py -f url.txt -o html
+    python3 vulcat.py -u https://www.example.com/ -v httpd --log 3
+    python3 vulcat.py -u https://www.example.com/ -v cnvd-2018-24942 --shell
 ''')
 except KeyboardInterrupt:
     print(color.reset('CTRL + C exit the scan'))

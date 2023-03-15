@@ -9,9 +9,10 @@ list_lang = language()['list']
 description_t = '\t\t'            # * 中英文标题的长度不一样, 中文需要添加\t才能对齐
 
 # * ---横线长度---
-Target_len_ = '-' * 22
-Vul_id_len_ = '-' * 20
-Type_len_ = '-' * 14
+Target_len_ = '-' * 58
+# Target_len_ = '-' * 22
+# Vul_id_len_ = '-' * 20
+# Type_len_ = '-' * 14
 Shell_len_ = '-' * 5
 Description_len_ = '-' * 70
 
@@ -26,22 +27,24 @@ def list():
     shell_num = 0
     vul_list = ''
     
-    vul_list += '+' + Target_len_ + '+' + Vul_id_len_ + '+' + Type_len_ + '+' + Shell_len_ + '+' + Description_len_ + '+\n'
+    vul_list += '+' + Target_len_ + '+' + Shell_len_ + '+' + Description_len_ + '+\n'
+    # vul_list += '+' + Target_len_ + '+' + Vul_id_len_ + '+' + Type_len_ + '+' + Shell_len_ + '+' + Description_len_ + '+\n'
 
     for vul in vul_info:
         for info in vul_info[vul]:
             vul_num += 1
             if info['shell'] in ['Y', 'M']:
                 shell_num += 1
-            vul_list += '| {}|'.format(vul.ljust(21))
-            vul_list += ' {}|'.format(info['vul_id'].ljust(19))
-            vul_list += ' {}|'.format(info['type'].ljust(13))
+            vul_list += '| {}|'.format(info['payload'].ljust(57))
+            # vul_list += ' {}|'.format(info['vul_id'].ljust(19))
+            # vul_list += ' {}|'.format(info['type'].ljust(13))
             vul_list += ' {}|'.format(info['shell'].center(4))
             vul_list += ' {}\t\t|'.format(info['description'].ljust(51))
             vul_list += '\n'
-        vul_list += '+' + Target_len_ + '+' + Vul_id_len_ + '+' + Type_len_ + '+' + Shell_len_ + '+' + Description_len_ + '+\n'
+        # vul_list += '+' + Target_len_ + '+' + Vul_id_len_ + '+' + Type_len_ + '+' + Shell_len_ + '+' + Description_len_ + '+\n'
+        vul_list += '+' + Target_len_ + '+' + Shell_len_ + '+' + Description_len_ + '+\n'
 
-    print(color.cyan(vul_list + 'vulcat-1.2.0/2023.03.01'))    # * 2023-03-01 09:00:00
+    print(color.cyan(vul_list + 'vulcat-2.0.0/2023.03.15'))    # * 2023-03-15 09:00:00
     print(color.cyan(str(vul_num - 1) + '/Poc'))               # * 有一个是标题, 所以要-1
     print(color.cyan(str(shell_num) + '/Shell'))
     # print(vul_num)
@@ -50,433 +53,385 @@ def list():
 vul_info = {
     'Target': [
         {
-            'vul_id': 'Vuln id',
-            'type': 'Vuln Type',
+            'payload': 'Payloads',
             'shell': 'Sh ',
             'description': 'Description' + description_t
         }
     ],
+    '74cms': [
+        {
+            'payload': '74cms-v5.0.1-sqlinject',
+            'shell': '-',
+            'description': list_lang['74cms']['v5.0.1-sqlinject']
+        },
+        {
+            'payload': '74cms-v6.0.4-xss',
+            'shell': '-',
+            'description': list_lang['74cms']['v6.0.4-xss']
+        }
+    ],
     'Alibaba Druid': [
         {
-            'vul_id': '(None)',
-            'type': 'unAuth',
+            'payload': 'alibaba-druid-unauth',
             'shell': '-',
             'description': list_lang['Alibaba Druid']
         }
     ],
     'Alibaba Nacos': [
         {
-            'vul_id': 'CVE-2021-29441',
-            'type': 'unAuth',
+            'payload': 'alibaba-nacos-cve-2021-29441-unauth',
             'shell': '-',
             'description': list_lang['Alibaba Nacos']['CVE-2021-29441']
         }
     ],
     'Apache Airflow': [
         {
-            'vul_id': 'CVE-2020-17526',
-            'type': 'unAuth',
+            'payload': 'apache-airflow-cve-2020-17526-unauth',
             'shell': '-',
             'description': list_lang['Apache Airflow']['CVE-2020-17526']
         }
     ],
     'Apache APISIX': [
         {
-            'vul_id': 'CVE-2020-13945',
-            'type': 'unAuth',
+            'payload': 'apache-apisix-cve-2020-13945-unauth',
             'shell': '-',
             'description': list_lang['Apache APISIX']['CVE-2020-13945']
         }
     ],
     'Apache Druid': [
         {
-            'vul_id': 'CVE-2021-25646',
-            'type': 'RCE',
+            'payload': 'apache-druid-cve-2021-25646-rce',
             'shell': 'Y',
             'description': list_lang['Apache Druid']['CVE-2021-25646']
         },
         {
-            'vul_id': 'CVE-2021-36749',
-            'type': 'FileRead',
+            'payload': 'apache-druid-cve-2021-36749-fileread',
             'shell': 'Y',
             'description': list_lang['Apache Druid']['CVE-2021-36749']
         },
     ],
     'Apache Flink': [
         {
-            'vul_id': 'CVE-2020-17519',
-            'type': 'FileRead',
+            'payload': 'apache-flink-cve-2020-17519-fileread',
             'shell': 'Y',
             'description': list_lang['Apache Flink']['CVE-2020-17519']
         }
     ],
     'Apache Hadoop': [
         {
-            'vul_id': '(None)',
-            'type': 'unAuth',
+            'payload': 'apache-hadoop-unauth',
             'shell': '-',
             'description': list_lang['Apache Hadoop']
         }
     ],
     'Apache Httpd': [
         {
-            'vul_id': 'CVE-2021-40438',
-            'type': 'SSRF',
+            'payload': 'apache-httpd-cve-2021-40438-ssrf',
             'shell': '-',
             'description': list_lang['Apache Httpd']['CVE-2021-40438']
         },
         {
-            'vul_id': 'CVE-2021-41773',
-            'type': 'FileRead/RCE',
+            'payload': 'apache-httpd-cve-2021-41773-rce-fileread',
             'shell': 'Y',
             'description': list_lang['Apache Httpd']['CVE-2021-41773']
         },
         {
-            'vul_id': 'CVE-2021-42013',
-            'type': 'FileRead/RCE',
+            'payload': 'apache-httpd-cve-2021-42013-rce-fileread',
             'shell': 'Y',
             'description': list_lang['Apache Httpd']['CVE-2021-42013']
         }
     ],
     'Apache SkyWalking': [
         {
-            'vul_id': 'CVE-2020-9483',
-            'type': 'SQLinject',
+            'payload': 'apache-skywalking-cve-2020-9483-sqlinject',
             'shell': '-',
             'description': list_lang['Apache SkyWalking']['CVE-2020-9483']
         }
     ],
     'Apache Solr': [
         {
-            'vul_id': 'CVE-2017-12629',
-            'type': 'RCE',
+            'payload': 'apache-solr-cve-2017-12629-rce',
             'shell': '-',
             'description': list_lang['Apache Solr']['CVE-2017-12629']
         },
         {
-            'vul_id': 'CVE-2019-17558',
-            'type': 'RCE',
+            'payload': 'apache-solr-cve-2019-17558-rce',
             'shell': 'Y',
             'description': list_lang['Apache Solr']['CVE-2019-17558']
         },
         {
-            'vul_id': 'CVE-2021-27905',
-            'type': 'SSRF/FileRead',
+            'payload': 'apache-solr-cve-2021-27905-ssrf-fileread',
             'shell': 'Y',
             'description': list_lang['Apache Solr']['CVE-2021-27905']
         },
     ],
     'Apache Tomcat': [
         {
-            'vul_id': 'CVE-2017-12615',
-            'type': 'FileUpload',
+            'payload': 'apache-tomcat-cve-2017-12615-fileupload',
             'shell': '-',
             'description': list_lang['Apache Tomcat']['CVE-2017-12615']
         }
     ],
     'Apache Unomi': [
         {
-            'vul_id': 'CVE-2020-13942',
-            'type': 'RCE',
+            'payload': 'apache-unomi-cve-2020-13942-rce',
             'shell': 'Y',
             'description': list_lang['Apache Unomi']['CVE-2020-13942']
         }
     ],
     'AppWeb': [
         {
-            'vul_id': 'CVE-2018-8715',
-            'type': 'unAuth',
+            'payload': 'appweb-cve-2018-8715-unauth',
             'shell': '-',
             'description': list_lang['AppWeb']['CVE-2018-8715']
         }
     ],
     'Atlassian Confluence': [
         {
-            'vul_id': 'CVE-2015-8399',
-            'type': 'FileRead',
+            'payload': 'atlassian-confluence-cve-2015-8399-fileread-fileinclude',
             'shell': 'Y',
             'description': list_lang['Atlassian Confluence']['CVE-2015-8399']
         },
         {
-            'vul_id': 'CVE-2019-3396',
-            'type': 'FileRead',
+            'payload': 'atlassian-confluence-cve-2019-3396-fileread',
             'shell': 'Y',
             'description': list_lang['Atlassian Confluence']['CVE-2019-3396']
         },
         {
-            'vul_id': 'CVE-2021-26084',
-            'type': 'RCE',
+            'payload': 'atlassian-confluence-cve-2021-26084-rce',
             'shell': 'Y',
             'description': list_lang['Atlassian Confluence']['CVE-2021-26084']
         },
         {
-            'vul_id': 'CVE-2022-26134',
-            'type': 'RCE',
+            'payload': 'atlassian-confluence-cve-2022-26134-rce',
             'shell': 'Y',
             'description': list_lang['Atlassian Confluence']['CVE-2022-26134']
         }
     ],
     'Cisco': [
         {
-            'vul_id': 'CVE-2020-3580',
-            'type': 'XSS',
+            'payload': 'cisco-cve-2020-3580-xss',
             'shell': '-',
             'description': list_lang['Cisco']['CVE-2020-3580']
         }
     ],
     'Discuz': [
         {
-            'vul_id': 'wooyun-2010-080723',
-            'type': 'RCE',
+            'payload': 'discuz-wooyun-2010-080723-rce',
             'shell': 'Y',
             'description': list_lang['Discuz']['wooyun-2010-080723']
         }
     ],
     'Django': [
         {
-            'vul_id': 'CVE-2017-12794',
-            'type': 'XSS',
+            'payload': 'django-cve-2017-12794-xss',
             'shell': '-',
             'description': list_lang['Django']['CVE-2017-12794']
         },
         {
-            'vul_id': 'CVE-2018-14574',
-            'type': 'Redirect',
+            'payload': 'django-cve-2018-14574-redirect',
             'shell': '-',
             'description': list_lang['Django']['CVE-2018-14574']
         },
         {
-            'vul_id': 'CVE-2019-14234',
-            'type': 'SQLinject',
+            'payload': 'django-cve-2019-14234-sqlinject',
             'shell': '-',
             'description': list_lang['Django']['CVE-2019-14234']
         },
         {
-            'vul_id': 'CVE-2020-9402',
-            'type': 'SQLinject',
+            'payload': 'django-cve-2020-9402-sqlinject',
             'shell': '-',
             'description': list_lang['Django']['CVE-2020-9402']
         },
         {
-            'vul_id': 'CVE-2021-35042',
-            'type': 'SQLinject',
+            'payload': 'django-cve-2021-35042-sqlinject',
             'shell': '-',
             'description': list_lang['Django']['CVE-2021-35042']
         }
     ],
     'Drupal': [
         {
-            'vul_id': 'CVE-2014-3704',
-            'type': 'SQLinject',
+            'payload': 'drupal-cve-2014-3704-sqlinject',
             'shell': '-',
             'description': list_lang['Drupal']['CVE-2014-3704']
         },
         {
-            'vul_id': 'CVE-2017-6920',
-            'type': 'RCE',
+            'payload': 'drupal-cve-2017-6920-rce',
             'shell': '-',
             'description': list_lang['Drupal']['CVE-2017-6920']
         },
         {
-            'vul_id': 'CVE-2018-7600',
-            'type': 'RCE',
+            'payload': 'drupal-cve-2018-7600-rce',
             'shell': 'Y',
             'description': list_lang['Drupal']['CVE-2018-7600']
         },
         {
-            'vul_id': 'CVE-2018-7602',
-            'type': 'RCE',
+            'payload': 'drupal-cve-2018-7602-rce',
             'shell': '-',
             'description': list_lang['Drupal']['CVE-2018-7602']
         }
     ],
     'ElasticSearch': [
         {
-            'vul_id': 'CVE-2014-3120',
-            'type': 'RCE',
+            'payload': 'elasticsearch-cve-2014-3120-rce',
             'shell': 'Y',
             'description': list_lang['ElasticSearch']['CVE-2014-3120']
         },
         {
-            'vul_id': 'CVE-2015-1427',
-            'type': 'RCE',
+            'payload': 'elasticsearch-cve-2015-1427-rce',
             'shell': 'Y',
             'description': list_lang['ElasticSearch']['CVE-2015-1427']
         },
         {
-            'vul_id': 'CVE-2015-3337',
-            'type': 'FileRead',
+            'payload': 'elasticsearch-cve-2015-3337-fileread',
             'shell': 'Y',
             'description': list_lang['ElasticSearch']['CVE-2015-3337']
         },
         {
-            'vul_id': 'CVE-2015-5531',
-            'type': 'FileRead',
+            'payload': 'elasticsearch-cve-2015-5531-fileread',
             'shell': 'Y',
             'description': list_lang['ElasticSearch']['CVE-2015-5531']
         },
     ],
     'F5 BIG-IP': [
         {
-            'vul_id': 'CVE-2020-5902',
-            'type': 'RCE',
+            'payload': 'f5bigip-cve-2020-5902-rce-fileread',
             'shell': '-',
             'description': list_lang['F5 BIG-IP']['CVE-2020-5902']
         },
         {
-            'vul_id': 'CVE-2022-1388',
-            'type': 'unAuth/RCE',
+            'payload': 'f5bigip-cve-2022-1388-unauth-rce',
             'shell': 'Y',
-            'description': list_lang['F5 BIG-IP']['CVE-2020-5902']
+            'description': list_lang['F5 BIG-IP']['CVE-2022-1388']
         }
     ],
     'Fastjson': [
         {
-            'vul_id': 'CNVD-2017-02833',
-            'type': 'unSerialize',
+            'payload': 'fastjson-cnvd-2017-02833-rce',
             'shell': 'Y',
             'description': list_lang['Fastjson']['CNVD-2017-02833']
         },
         {
-            'vul_id': 'CNVD-2019-22238',
-            'type': 'unSerialize',
+            'payload': 'fastjson-cnvd-2019-22238-rce',
             'shell': 'Y',
             'description': list_lang['Fastjson']['CNVD-2019-22238']
         },
         {
-            'vul_id': 'rce-1-2-62',
-            'type': 'unSerialize',
+            'payload': 'fastjson-v1.2.62-rce',
             'shell': 'Y',
             'description': list_lang['Fastjson']['rce-1-2-62']
         },
         {
-            'vul_id': 'rce-1-2-66',
-            'type': 'unSerialize',
+            'payload': 'fastjson-v1.2.66-rce',
             'shell': 'Y',
             'description': list_lang['Fastjson']['rce-1-2-66']
         }
     ],
     'Gitea': [
         {
-            'vul_id': '(None)',
-            'type': 'unAuth',
+            'payload': 'gitea-unauth-fileread-rce',
             'shell': '-',
             'description': list_lang['Gitea']
         },
     ],
     'Gitlab': [
         {
-            'vul_id': 'CVE-2021-22205',
-            'type': 'RCE',
+            'payload': 'gitlab-cve-2021-22205-rce.py',
             'shell': '-',
             'description': list_lang['Gitlab']['CVE-2021-22205']
         },
         {
-            'vul_id': 'CVE-2021-22214',
-            'type': 'SSRF',
+            'payload': 'gitlab-cve-2021-22214-ssrf',
             'shell': 'Y',
             'description': list_lang['Gitlab']['CVE-2021-22214']
         }
     ],
     'GoCD': [
         {
-            'vul_id': 'CVE-2021-43287',
-            'type': 'FileRead',
+            'payload': 'gocd-cve-2021-43287-fileread',
             'shell': 'Y',
             'description': list_lang['GoCD']['CVE-2021-43287']
         },
     ],
     'Grafana': [
         {
-            'vul_id': 'CVE-2021-43798',
-            'type': 'FileRead',
+            'payload': 'grafana-cve-2021-43798-fileread',
             'shell': 'Y',
             'description': list_lang['Grafana']['CVE-2021-43798']
         },
     ],
     'Influxdb': [
         {
-            'vul_id': '(None)',
-            'type': 'unAuth',
+            'payload': 'influxdb-unauth',
             'shell': '-',
             'description': list_lang['Influxdb']
         },
     ],
     'JBoss': [
         {
-            'vul_id': '(None)',
-            'type': 'unAuth',
+            'payload': 'jboss-unauth',
             'shell': '-',
             'description': list_lang['JBoss']['unAuth']
         }
     ],
     'Jenkins': [
         {
-            'vul_id': 'CVE-2018-1000861',
-            'type': 'RCE',
+            'payload': 'jenkins-cve-2018-1000861-rce',
             'shell': 'Y',
             'description': list_lang['Jenkins']['CVE-2018-1000861']
         },
         {
-            'vul_id': '(None)',
-            'type': 'unAuth',
+            'payload': 'jenkins-unauth',
             'shell': 'Y',
             'description': list_lang['Jenkins']['unAuth']
         },
     ],
     'Jetty': [
         {
-            'vul_id': 'CVE-2021-28164',
-            'type': 'DSinfo',
+            'payload': 'jetty-cve-2021-28164-dsinfo',
             'shell': '-',
             'description': list_lang['Jetty']['CVE-2021-28164']
         },
         {
-            'vul_id': 'CVE-2021-28169',
-            'type': 'DSinfo',
+            'payload': 'jetty-cve-2021-28169-dsinfo',
             'shell': '-',
             'description': list_lang['Jetty']['CVE-2021-28169']
         },
         {
-            'vul_id': 'CVE-2021-34429',
-            'type': 'DSinfo',
+            'payload': 'jetty-cve-2021-34429-dsinfo',
             'shell': '-',
             'description': list_lang['Jetty']['CVE-2021-34429']
         }
     ],
     'Joomla': [
         {
-            'vul_id': 'CVE-2017-8917',
-            'type': 'SQLinject',
+            'payload': 'joomla-cve-2017-8917-sqlinject',
             'shell': '-',
             'description': list_lang['Joomla']['CVE-2017-8917']
         },
         {
-            'vul_id': 'CVE-2023-23752',
-            'type': 'unAuth',
+            'payload': 'joomla-cve-2023-23752-unauth',
             'shell': '-',
             'description': list_lang['Joomla']['CVE-2023-23752']
         },
     ],
     'Jupyter': [
         {
-            'vul_id': '(None)',
-            'type': 'unAuth',
+            'payload': 'jupyter-unauth',
             'shell': '-',
             'description': list_lang['Jupyter']
         }
     ],
     'Keycloak': [
         {
-            'vul_id': 'CVE-2020-10770',
-            'type': 'SSRF',
+            'payload': 'keycloak-cve-2020-10770-ssrf',
             'shell': '-',
             'description': list_lang['Keycloak']['CVE-2020-10770']
         }
     ],
     # 'Kindeditor': [
     #     {
-    #         'vul_id': 'CVE-2018-18950',
+    #         'payload': '',
     #         'type': 'FileRead',
     #         'method': 'GET',
     #         'description': list_lang['']['']
@@ -484,332 +439,295 @@ vul_info = {
     # ],
     'Landray': [
         {
-            'vul_id': 'CNVD-2021-28277',
-            'type': 'FileRead/SSRF',
+            'payload': 'landray-oa-cnvd-2021-28277-ssrf-fileread',
             'shell': 'Y',
             'description': list_lang['Landray']['CNVD-2021-28277']
         }
     ],
     'Mini Httpd': [
         {
-            'vul_id': 'CVE-2018-18778',
-            'type': 'FileRead',
+            'payload': 'minihttpd-cve-2018-18778-fileread',
             'shell': '-',
             'description': list_lang['Mini Httpd']['CVE-2018-18778']
         }
     ],
     'mongo-express': [
         {
-            'vul_id': 'CVE-2019-10758',
-            'type': 'RCE',
+            'payload': 'mongoexpress-cve-2019-10758-rce',
             'shell': 'Y',
             'description': list_lang['mongo-express']['CVE-2019-10758']
         }
     ],
     'Nexus Repository': [
         {
-            'vul_id': 'CVE-2019-5475',
-            'type': 'RCE',
+            'payload': 'nexus-cve-2019-5475-rce',
             'shell': 'Y',
             'description': list_lang['Nexus Repository']['CVE-2019-5475']
         },
         {
-            'vul_id': 'CVE-2019-7238',
-            'type': 'RCE',
+            'payload': 'nexus-cve-2019-7238-rce',
             'shell': 'Y',
             'description': list_lang['Nexus Repository']['CVE-2019-7238']
         },
         {
-            'vul_id': 'CVE-2019-15588',
-            'type': 'RCE',
+            'payload': 'nexus-cve-2019-15588-rce',
             'shell': 'Y',
             'description': list_lang['Nexus Repository']['CVE-2019-15588']
         },
         {
-            'vul_id': 'CVE-2020-10199',
-            'type': 'RCE',
+            'payload': 'nexus-cve-2020-10199-rce',
             'shell': 'Y',
             'description': list_lang['Nexus Repository']['CVE-2020-10199']
         },
         {
-            'vul_id': 'CVE-2020-10204',
-            'type': 'RCE',
+            'payload': 'nexus-cve-2020-10204-rce',
             'shell': 'Y',
             'description': list_lang['Nexus Repository']['CVE-2020-10204']
         }
     ],
     'Nodejs': [
         {
-            'vul_id': 'CVE-2017-14849',
-            'type': 'FileRead',
+            'payload': 'nodejs-cve-2017-14849-fileread',
             'shell': 'Y',
             'description': list_lang['Nodejs']['CVE-2017-14849']
         },
         {
-            'vul_id': 'CVE-2021-21315',
-            'type': 'RCE',
+            'payload': 'nodejs-cve-2021-21315-rce',
             'shell': 'Y',
             'description': list_lang['Nodejs']['CVE-2021-21315']
         }
     ],
     'NodeRED': [
         {
-            'vul_id': 'CVE-2021-3223',
-            'type': 'FileRead',
+            'payload': 'nodered-cve-2021-3223-fileread',
             'shell': 'Y',
             'description': list_lang['NodeRED']['CVE-2021-3223']
         }
     ],
     'phpMyadmin': [
         {
-            'vul_id': 'WooYun-2016-199433',
-            'type': 'unSerialize',
+            'payload': 'phpmyadmin-cve-2018-12613-fileinclude-fileread',
             'shell': '-',
             'description': list_lang['phpMyadmin']['WooYun-2016-199433']
         },
         {
-            'vul_id': 'CVE-2018-12613',
-            'type': 'FileInclude',
+            'payload': 'phpmyadmin-wooyun-2016-199433-unserialize',
             'shell': 'Y',
             'description': list_lang['phpMyadmin']['CVE-2018-12613']
         },
     ],
     'PHPUnit': [
         {
-            'vul_id': 'CVE-2017-9841',
-            'type': 'RCE',
+            'payload': 'phpunit-cve-2017-9841-rce',
             'shell': 'Y',
             'description': list_lang['PHPUnit']['CVE-2017-9841']
         }
     ],
     'Ruby on Rails': [
         {
-            'vul_id': 'CVE-2018-3760',
-            'type': 'FileRead',
+            'payload': 'ruby-on-rails-cve-2018-3760-fileread',
             'shell': 'Y',
             'description': list_lang['Ruby on Rails']['CVE-2018-3760']
         },
         {
-            'vul_id': 'CVE-2019-5418',
-            'type': 'FileRead',
+            'payload': 'ruby-on-rails-cve-2019-5418-fileread',
             'shell': 'Y',
             'description': list_lang['Ruby on Rails']['CVE-2019-5418']
         },
         {
-            'vul_id': 'CVE-2020-8163',
-            'type': 'RCE',
+            'payload': 'ruby-on-rails-cve-2020-8163-rce',
             'shell': '-',
             'description': list_lang['Ruby on Rails']['CVE-2020-8163']
         }
     ],
     'ShowDoc': [
         {
-            'vul_id': 'CNVD-2020-26585',
-            'type': 'FileUpload',
+            'payload': 'showdoc-cnvd-2020-26585-fileupload',
             'shell': '-',
             'description': list_lang['ShowDoc']['CNVD-2020-26585']
         }
     ],
     'Spring': [
         {
-            'vul_id': 'CVE-2016-4977',
-            'type': 'RCE',
+            'payload': 'spring-security-oauth-cve-2016-4977-rce',
             'shell': '-',
             'description': list_lang['Spring']['CVE-2016-4977']
         },
         {
-            'vul_id': 'CVE-2017-8046',
-            'type': 'RCE',
+            'payload': 'spring-data-rest-cve-2017-8046-rce',
             'shell': '-',
             'description': list_lang['Spring']['CVE-2017-8046']
         },
         {
-            'vul_id': 'CVE-2018-1273',
-            'type': 'RCE',
+            'payload': 'spring-data-commons-cve-2018-1273-rce',
             'shell': 'Y',
             'description': list_lang['Spring']['CVE-2018-1273']
         },
         {
-            'vul_id': 'CVE-2020-5410',
-            'type': 'FileRead',
+            'payload': 'spring-cloud-config-cve-2020-5410-fileread',
             'shell': 'Y',
             'description': list_lang['Spring']['CVE-2020-5410']
         },
         {
-            'vul_id': 'CVE-2021-21234',
-            'type': 'FileRead',
+            'payload': 'spring-boot-cve-2021-21234-fileread',
             'shell': 'Y',
             'description': list_lang['Spring']['CVE-2021-21234']
         },
         {
-            'vul_id': 'CVE-2022-22947',
-            'type': 'RCE',
+            'payload': 'spring-cloud-gateway-cve-2022-22947-rce',
             'shell': '-',
             'description': list_lang['Spring']['CVE-2022-22947']
         },
         {
-            'vul_id': 'CVE-2022-22963',
-            'type': 'RCE',
+            'payload': 'spring-cloud-function-cve-2022-22963-rce',
             'shell': 'Y',
             'description': list_lang['Spring']['CVE-2022-22963']
         },
         {
-            'vul_id': 'CVE-2022-22965',
-            'type': 'RCE',
+            'payload': 'spring-cve-2022-22965-rce',
             'shell': '-',
             'description': list_lang['Spring']['CVE-2022-22965']
         },
     ],
     'Supervisor': [
         {
-            'vul_id': 'CVE-2017-11610',
-            'type': 'RCE',
+            'payload': 'supervisor-cve-2017-11610-rce',
             'shell': '-',
             'description': list_lang['Supervisor']['CVE-2017-11610']
         }
     ],
     'ThinkPHP': [
         {
-            'vul_id': 'CVE-2018-1002015',
-            'type': 'RCE',
+            'payload': 'thinkphp-cve-2018-1002015-rce',
             'shell': 'Y',
             'description': list_lang['ThinkPHP']['CVE-2018-1002015']
         },
         {
-            'vul_id': 'CNVD-2018-24942',
-            'type': 'RCE',
+            'payload': 'thinkphp-cnvd-2018-24942-rce',
             'shell': 'Y',
             'description': list_lang['ThinkPHP']['CNVD-2018-24942']
         },
         {
-            'vul_id': 'CNNVD-201901-445',
-            'type': 'RCE',
+            'payload': 'thinkphp-cnnvd-201901-445-rce',
             'shell': 'Y',
             'description': list_lang['ThinkPHP']['CNNVD-201901-445']
         },
                 {
-            'vul_id': 'CNVD-2022-86535',
-            'type': 'RCE',
+            'payload': 'thinkphp-cnvd-2022-86535-rce',
             'shell': '-',
             'description': list_lang['ThinkPHP']['CNVD-2022-86535']
         },
         {
-            'vul_id': 'rce-2-x',
-            'type': 'RCE',
+            'payload': 'thinkphp-2.x-rce',
             'shell': '-',
             'description': list_lang['ThinkPHP']['2.x RCE']
         },
         {
-            'vul_id': 'ids-sqlinject-5',
-            'type': 'SQLinject',
+            'payload': 'thinkphp-5-ids-sqlinject',
             'shell': '-',
             'description': list_lang['ThinkPHP']['5 ids sqlinject']
         }
     ],
     'Ueditor': [
         {
-            'vul_id': '(None)',
-            'type': 'SSRF',
+            'payload': 'ueditor-ssrf',
             'shell': '-',
             'description': list_lang['Ueditor']
         }
     ],
     'uWSGI-PHP': [
         {
-            'vul_id': 'CVE-2018-7490',
-            'type': 'FileRead',
+            'payload': 'uwsgiphp-cve-2018-7490-fileread',
             'shell': 'Y',
             'description': list_lang['uWSGI-PHP']
         }
     ],
+    'VMware': [
+        {
+            'payload': 'vmware-vcenter-2020-10-fileread',
+            'shell': 'Y',
+            'description': list_lang['VMware']['2020-10-fileread']
+        },
+        {
+            'payload': 'vmware-vcenter-cve-2021-21972-fileupload-rce',
+            'shell': '-',
+            'description': list_lang['VMware']['CVE-2021-21972']
+        }
+    ],
     'Oracle Weblogic': [
         {
-            'vul_id': 'CVE-2014-4210',
-            'type': 'SSRF',
+            'payload': 'oracle-weblogic-cve-2014-4210-ssrf',
             'shell': '-',
             'description': list_lang['Oracle Weblogic']['CVE-2014-4210']
         },
         {
-            'vul_id': 'CVE-2017-10271',
-            'type': 'unSerialize',
+            'payload': 'oracle-weblogic-cve-2017-10271-unserialize',
             'shell': '-',
             'description': list_lang['Oracle Weblogic']['CVE-2017-10271']
         },
         {
-            'vul_id': 'CVE-2019-2725',
-            'type': 'unSerialize',
+            'payload': 'oracle-weblogic-cve-2019-2725-unserialize',
             'shell': '-',
             'description': list_lang['Oracle Weblogic']['CVE-2019-2725']
         },
         {
-            'vul_id': 'CVE-2020-14750',
-            'type': 'unAuth',
+            'payload': 'oracle-weblogic-cve-2020-14750-bypass',
             'shell': '-',
             'description': list_lang['Oracle Weblogic']['CVE-2020-14750']
         },
         {
-            'vul_id': 'CVE-2020-14882',
-            'type': 'RCE',
+            'payload': 'oracle-weblogic-cve-2020-14882-rce-unauth',
             'shell': 'Y',
             'description': list_lang['Oracle Weblogic']['CVE-2020-14882']
         },
         {
-            'vul_id': 'CVE-2021-2109',
-            'type': 'RCE',
+            'payload': 'oracle-weblogic-cve-2021-2109-rce',
             'shell': '-',
             'description': list_lang['Oracle Weblogic']['CVE-2021-2109']
         }
     ],
     'Webmin': [
         {
-            'vul_id': 'CVE-2019-15107',
-            'type': 'RCE',
+            'payload': 'webmin-cve-2019-15107-rce',
             'shell': 'Y',
             'description': list_lang['Webmin']['CVE-2019-15107']
         },
         {
-            'vul_id': 'CVE-2019-15642',
-            'type': 'RCE',
+            'payload': 'webmin-cve-2019-15642-rce',
             'shell': 'Y',
             'description': list_lang['Webmin']['CVE-2019-15642']
         }
     ],
     'Yonyou': [
         {
-            'vul_id': 'CNNVD-201610-923',
-            'type': 'SQLinject',
+            'payload': 'yonyou-grp-u8-cnnvd-201610-923-sqlinject',
             'shell': '-',
             'description': list_lang['Yonyou']['CNNVD-201610-923']
         },
         {
-            'vul_id': 'CNVD-2021-30167',
-            'type': 'RCE',
+            'payload': 'yonyou-nc-cnvd-2021-30167-rce',
             'shell': 'Y',
             'description': list_lang['Yonyou']['CNVD-2021-30167']
         },
         {
-            'vul_id': 'nc-fileread',
-            'type': 'FileRead',
+            'payload': 'yonyou-erp-nc-ncfindweb-fileread',
             'shell': '-',
             'description': list_lang['Yonyou']['NCFindWeb']
         },
         {
-            'vul_id': 'u8-oa-getsession',
-            'type': 'DSinfo',
+            'payload': 'yonyou-u8-oa-getsession-dsinfo',
             'shell': '-',
             'description': list_lang['Yonyou']['getSessionList.jsp']
         },
         {
-            'vul_id': 'u8-oa-test-sql',
-            'type': 'SQLinject',
+            'payload': 'yonyou-u8-oa-test.jsp-sqlinject',
             'shell': '-',
             'description': list_lang['Yonyou']['test.jsp']
         }
     ],
     'Zabbix': [
         {
-            'vul_id': 'CVE-2016-10134',
-            'type': 'SQLinject',
+            'payload': 'zabbix-cve-2016-10134-sqlinject',
             'shell': '-',
             'description': list_lang['Zabbix']['CVE-2016-10134']
         }

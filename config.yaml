@@ -7,8 +7,8 @@ ceye-token: Null
 
 # dnslog.pw的域名和token
 # 默认带有试用域名和Token, 会过期, 可以替换为自己的
-dnslog-pw-domain: ykwc2z0d.dnslog.pw
-dnslog-pw-token: cda3499b
+dnslog-pw-domain: im4v3kv9.dnslog.pw
+dnslog-pw-token: 1221dd92
 
 # 请求Header
   # 运行时指定--user-agent参数, 会覆盖config.yaml的User-Agent
@@ -18,27 +18,4 @@ headers:
   Accept: "*/*"
   Connection: "close"
 
-# 当指定-a参数为all时, 或框架指纹识别失败时, 将会使用以下框架的POC进行扫描, 可以控制开关
-applist: [
-  'airflow', 'alidruid', 'apachedruid', 'apacheunomi', 'apisix', 'appweb', 
-  'cisco', 'confluence', 
-  'discuz', 'django', 'drupal', 
-  'elasticsearch', 
-  'f5bigip', 'fastjson', 'flink', 
-  'gitea', 'gitlab', 'grafana', 'gocd', 
-  'hadoop', 'httpd', 
-  'influxdb', 
-  'jenkins', 'jetty', 'jupyter', 'joomla', 'jboss', 
-  'keycloak', 
-  'landray', 
-  'minihttpd', 'mongoexpress', 
-  'nacos', 'nexus', 'nodejs', 'nodered', 
-  'phpmyadmin', 'phpunit', 
-  'rails', 
-  'showdoc', 'skywalking', 'solr', 'spring', 'supervisor', 
-  'thinkphp', 'tomcat', 
-  'ueditor', 'uwsgiphp',
-  'weblogic', 'webmin', 
-  'yonyou', 
-  'zabbix'
-]
+payloads-path: ./payloads/

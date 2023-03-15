@@ -3,7 +3,7 @@
 
 import re
 
-def get_form_token(self, client, path, vul_info):
+def get_form_token(client, path, vul_info):
     ''' 获取drupal的form_token '''
     
     res = client.request(

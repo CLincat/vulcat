@@ -8,7 +8,7 @@
 
 **[中文版本(Chinese version)](/README.md)**
 
-* **document：https://clincat.github.io/vulcat-docs/**
+* **document：https://carsaid.github.io/docs/vulcat/**
 
 (Monthly update)<br>
 * Vulcat can be used to scan for vulnerabilities on the Web side. When a vulnerability is discovered, the target URL and Payload are prompted. Users can manually verify the vulnerability according to the prompt<br/>
@@ -368,7 +368,7 @@ vulcat-2.0.0/2023.03.15
 
 ## Document
 
-[document](https://clincat.github.io/vulcat-docs/)
+[document](https://carsaid.github.io/docs/vulcat/)
 
 ## Star History
 [![Star History Chart](https://api.star-history.com/svg?repos=CLincat/vulcat&type=Timeline)](https://star-history.com/#Ashutosh00710/github-readme-activity-graph&Timeline)

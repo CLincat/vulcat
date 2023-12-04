@@ -8,7 +8,7 @@
 
 **[English version(英文版本)](/README.en-us.md)**
 
-[官方文档](https://clincat.github.io/vulcat-docs/)
+[官方文档](https://carsaid.github.io/docs/vulcat/)
 (本工具随缘更新)<br>
 除了代码写得有亿点点烂, BUG有亿点点多, 有亿点点不好用, 等亿点点小问题以外，还是阔以的......吧
 
@@ -19,7 +19,7 @@
 
 ## 官方文档
 
-[官方文档](https://clincat.github.io/vulcat-docs/)
+[官方文档](https://carsaid.github.io/docs/vulcat/)
 
 ## 行为规范和免责声明
 * **在使用本工具前, 请确保您的行为符合当地法律法规, 并且已经取得了相关授权。**

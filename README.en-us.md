@@ -8,7 +8,7 @@
 
 **[中文版本(Chinese version)](/README.md)**
 
-* **document：https://carsaid.github.io/docs/vulcat/**
+* **document：https://e23yyy.github.io/docs/vulcat/**
 
 (Monthly update)<br>
 * Vulcat can be used to scan for vulnerabilities on the Web side. When a vulnerability is discovered, the target URL and Payload are prompted. Users can manually verify the vulnerability according to the prompt<br/>
